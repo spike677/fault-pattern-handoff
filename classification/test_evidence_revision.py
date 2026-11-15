@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import unittest
 
-from classify import classify
+from classify import classify, classify_package
 
 
 CATALOG = json.loads(Path(__file__).with_name("catalog.json").read_text(encoding="utf-8-sig"))
@@ -121,6 +121,22 @@ class EvidenceRevision(unittest.TestCase):
         del untyped["claim_state"]
         with self.assertRaisesRegex(ValueError, "claim_state"):
             self.result(untyped)
+
+    def test_batch_reports_each_invalid_case(self):
+        second_case = {**self.case, "case_id": "second"}
+        packets = [
+            {**self.packet, "actions": [{**self.action, "role": "invented"}]},
+            {**self.packet, "case_id": "second", "actions": [{**self.action, "upstream_id": "action"}]},
+        ]
+        with self.assertRaises(ValueError) as context:
+            classify_package({"cases": [self.case, second_case]}, packets, CATALOG)
+        self.assertIn("control: Each action needs one of", str(context.exception))
+        self.assertIn("second: Only downstream actions", str(context.exception))
+
+    def test_batch_inventory_reports_missing_and_extra_cases(self):
+        packet = {**self.packet, "case_id": "unexpected"}
+        with self.assertRaisesRegex(ValueError, "missing facts: control; unexpected facts: unexpected"):
+            classify_package({"cases": [self.case]}, [packet], CATALOG)
 
     def test_protocol_does_not_change_unmarked_historical_replay(self):
         del self.packet["fact_protocol"]

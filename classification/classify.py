@@ -599,9 +599,25 @@ def classify_package(view, packets, catalog):
         raise ValueError("A material package must contain only cases")
     cases = by_id(view["cases"], "material cases", "case_id")
     facts = by_id(packets, "case fact packets", "case_id")
-    if not cases or set(cases) != set(facts):
-        raise ValueError("Material cases and fact packet IDs must match")
-    return [classify(case, facts[case_id], catalog) for case_id, case in cases.items()]
+    if not cases:
+        raise ValueError("A material package needs at least one case")
+    if cases.keys() != facts.keys():
+        missing = ", ".join(sorted(cases.keys() - facts.keys())) or "none"
+        unexpected = ", ".join(sorted(facts.keys() - cases.keys())) or "none"
+        raise ValueError(
+            f"Material cases and fact packet IDs must match "
+            f"(missing facts: {missing}; unexpected facts: {unexpected})"
+        )
+
+    results, errors = [], []
+    for case_id, case in cases.items():
+        try:
+            results.append(classify(case, facts[case_id], catalog))
+        except ValueError as error:
+            errors.append(f"{case_id}: {error}")
+    if errors:
+        raise ValueError("Invalid cases:\n" + "\n".join(errors))
+    return results
 
 
 def main(argv=None):
