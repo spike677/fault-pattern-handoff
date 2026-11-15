@@ -10,6 +10,10 @@ import sys
 
 DECISION_VERSION = "0.3.0"
 LEGACY_DECISION_VERSION = "0.2.1"
+EVIDENCE_DECISION_VERSION = "0.3.1"
+FACT_PROTOCOL = "classification_facts/0.3.1"
+CLAIM_STATES = {"observation", "hypothesis", "confirmed_report", "derived", "verified_runtime"}
+ANCHOR_USES = {"context", "confirmation", "requirement", "behavior", "runtime"}
 LEGACY_COMBINATIONS = [{
     "modes": ["C1", "C2"],
     "parent": "contribution",
@@ -215,7 +219,58 @@ def check_calculation(fact):
     return None if observed is fact["value"] else "calculation_disagrees"
 
 
-def collect_facts(action, sources, scope):
+def evidence_basis(fact, sources, scope, decisive):
+    """Check the declared relationship between the quoted evidence and the assertion."""
+    state = fact["claim_state"]
+    anchors = fact["anchors"]
+    claim = scope.get("claim")
+    if state in {"observation", "hypothesis"}:
+        return False, False, None
+    if not nonempty(fact.get("explanation")):
+        return False, False, "missing_evidence_explanation"
+
+    def anchors_used_as(use):
+        return [(anchor, sources[anchor["source_id"]]) for anchor in anchors if anchor["use"] == use]
+
+    if state == "confirmed_report":
+        confirmed = claim == "reported" and any(
+            source["kind"] in {"report", "issue"} and scoped_source(source, scope)
+            for _, source in anchors_used_as("confirmation")
+        )
+        return confirmed, confirmed, None if confirmed else "missing_scoped_confirmation"
+
+    if state == "verified_runtime":
+        verified = claim == "runtime" and any(
+            source["kind"] == "runtime" and scoped_source(source, scope)
+            for _, source in anchors_used_as("runtime")
+        )
+        return verified, verified, None if verified else "missing_bound_runtime_evidence"
+
+    def old_behavior(anchor, source):
+        if source["kind"] == "code":
+            return True
+        if source["kind"] != "diff":
+            return False
+        lines = source["text"].splitlines()[anchor["start_line"] - 1:anchor["end_line"]]
+        return any(line.startswith((" ", "-")) and line[1:].strip() for line in lines) and not any(
+            line.startswith(("+", "---")) for line in lines
+        )
+
+    requirement = any(
+        source["kind"] != "runtime" and (source["kind"] != "diff" or old_behavior(anchor, source))
+        for anchor, source in anchors_used_as("requirement")
+    )
+    behavior = any(
+        scoped_source(source, scope) and old_behavior(anchor, source)
+        for anchor, source in anchors_used_as("behavior")
+    )
+    sufficient = requirement and behavior if decisive else requirement or behavior
+    if claim not in {"reported", "static"} or not sufficient:
+        return False, False, "missing_derivation_basis"
+    return True, behavior, None
+
+
+def collect_facts(action, sources, scope, decisive_keys=None):
     arguments = defaultdict(set)
     scoped_facts = set()
     facts, issues = [], []
@@ -224,12 +279,28 @@ def collect_facts(action, sources, scope):
         if not nonempty(key) or type(fact.get("value")) is not bool:
             issues.append({"code": "invalid_fact"})
             continue
+        revised = decisive_keys is not None
+        if revised and (not nonempty(fact.get("claim_state")) or fact["claim_state"] not in CLAIM_STATES):
+            raise ValueError(f"Fact {key} needs a recognized claim_state")
         anchors = fact.get("anchors")
         if not isinstance(anchors, list) or not anchors:
             issues.append({"fact": key, "code": "missing_anchors"})
             continue
+        if revised and any(
+            isinstance(anchor, dict) and (not nonempty(anchor.get("use")) or anchor["use"] not in ANCHOR_USES)
+            for anchor in anchors
+        ):
+            raise ValueError(f"Fact {key} needs a recognized anchor use")
         errors = {error for anchor in anchors if (error := check_anchor(anchor, sources, scope))}
         bound = not errors and any(scoped_source(sources[a["source_id"]], scope) for a in anchors)
+        admitted = True
+        if revised and not errors:
+            admitted, bound, basis_error = evidence_basis(fact, sources, scope, key in decisive_keys)
+            if basis_error:
+                issues.append({"fact": key, "code": basis_error})
+        if not admitted:
+            facts.append(fact)
+            continue
         if not errors and (error := check_calculation(fact)):
             if error == "calculation_disagrees":
                 arguments[key].update((True, False))
@@ -243,7 +314,8 @@ def collect_facts(action, sources, scope):
         if fact["value"] and bound:
             scoped_facts.add(key)
         preserved = {name: fact[name] for name in ("key", "value", "anchors")}
-        for name in ("explanation", "calculation"):
+        fields = ("explanation", "calculation", "claim_state") if revised else ("explanation", "calculation")
+        for name in fields:
             if name in fact:
                 preserved[name] = fact[name]
         facts.append(preserved)
@@ -281,7 +353,7 @@ def explained_scoped_fact(key, facts, sources, scope):
     )
 
 
-def verdict(action, sources, catalog):
+def verdict(action, sources, catalog, revised=False):
     scope = action.get("scope")
     scope_missing = validate_scope(scope)
     namespace = f"MECH-v{catalog['version']}"
@@ -293,7 +365,20 @@ def verdict(action, sources, catalog):
     operations = LEGACY_OPERATION_FACTS if legacy else {
         mode: card["operation_fact"] for mode, card in modes.items()
     }
-    facts, true, false, scoped, issues, conflicts = collect_facts(action, sources, scope)
+    decisive_keys = None
+    if revised:
+        decisive_keys = set(operations.values()) | set(parent_facts.values()) | set(OUTSIDE)
+        decisive_keys.update(("implementation_action", "causal_role"))
+        decisive_keys.update(item["required_fact"] for item in combinations)
+        decisive_keys.update(key for card in modes.values() for key in card.get("excluded_by", ()))
+    facts, true, false, scoped, issues, conflicts = collect_facts(action, sources, scope, decisive_keys)
+    insufficient_participation = (
+        revised and "participation_violation" in true
+        and not ({"actual_contribution"} <= true and {"actual_contribution"} <= scoped)
+    )
+    if insufficient_participation:
+        true.remove("participation_violation")
+        issues.append({"fact": "participation_violation", "code": "actual_participation_unproven"})
     disputed = set(conflicts)
     comparisons = mode_comparisons(modes, operations, true, false, scoped, disputed)
     supported = [mode for mode, check in comparisons.items()
@@ -405,6 +490,8 @@ def verdict(action, sources, catalog):
         for check in neighbors
     ]
     missing = set(scope_missing)
+    if insufficient_participation and "actual_contribution" not in false:
+        missing.add("actual_contribution")
     if required_fact and not compatible and required_fact not in false:
         missing.add(required_fact)
     if result["status"] in {"insufficient", "parent"} and not result.get("combination"):
@@ -433,9 +520,17 @@ def verdict(action, sources, catalog):
             if not action_supported:
                 if action_key not in false and action_key not in disputed:
                     missing.add(action_key)
-                if action["role"] in ROOT_ROLES:
+                if not revised and action["role"] in ROOT_ROLES:
                     result.update(role="unknown", proposed_role=action["role"])
         result["action_resolution"] = "supported" if action_supported else "unresolved"
+    if revised and action["role"] != "unknown" and (
+        not action_supported or "causal_role" not in true or "causal_role" not in scoped
+    ):
+        result.update(role="unknown", proposed_role=action["role"])
+        if "upstream_id" in result:
+            result["proposed_upstream_id"] = result.pop("upstream_id")
+        if action_supported and "causal_role" not in false and "causal_role" not in disputed:
+            missing.add("causal_role")
     result["missing"] = sorted(missing)
     result["count_as_independent"] = result["role"] in ROOT_ROLES and action_supported
     return result
@@ -480,17 +575,21 @@ def classify(case, packet, catalog):
     if not actions:
         raise ValueError("Submit an explicit insufficient action if the materials do not establish an action")
     legacy = catalog["version"] == "0.2"
+    revised = "fact_protocol" in packet
+    if revised and (packet["fact_protocol"] != FACT_PROTOCOL or legacy):
+        raise ValueError(f"fact_protocol must be {FACT_PROTOCOL} with catalog 0.3")
     validate_links(actions, LEGACY_ROLES if legacy else ROLES)
+    version = EVIDENCE_DECISION_VERSION if revised else DECISION_VERSION
     return {
         "case_id": case["case_id"],
         "case_sha256": digest(case),
         "facts_sha256": digest(packet),
         "catalog_version": catalog["version"],
-        "decision_version": LEGACY_DECISION_VERSION if legacy else DECISION_VERSION,
+        "decision_version": LEGACY_DECISION_VERSION if legacy else version,
         "mechanism_namespace": f"MECH-v{catalog['version']}",
         "operator": operator,
         "roles": roles,
-        "actions": [verdict(action, sources, catalog) for action in actions.values()],
+        "actions": [verdict(action, sources, catalog, revised) for action in actions.values()],
     }
 
 
