@@ -1,0 +1,163 @@
+{
+  "scope": "deterministic replays of known development material, not a holdout",
+  "base_commit": "44b827ab842781804e79185a267402d0703b05c9",
+  "catalog_version": "0.3",
+  "decision_version": "0.3.0",
+  "files": {
+    "classification/development_cases.json": "6de2bf6ecce995b798066cfbcc76cc121e64ced8e6034414774f4d335befbe63",
+    "classification/development_verdicts.json": "b27f96a5a6b49cb3b4102f0e282d6abb874089be446468c5c6de2b6f8d2d430b",
+    "classification/development_facts.json": "ae3171bbca986d28e556ccbe082fd23f0f46b8e870f7ed22b7d9307beae2213f",
+    "classification/validation_0_3/development_facts_0_3.json": "23a37d13062c92140d1c72bc2325d55a843ae03d44e685dcfd396fdf5f1fa052",
+    "classification/catalog.json": "119a52ac3a8830e030161d1f4f5a2b6ffdfcb9ad6abd1230fdd9b103c1c9dac5"
+  },
+  "reviewed_cases": 11,
+  "same_status_and_label_as_historical_development_cases_each_round": 11,
+  "rounds": [
+    {
+      "input": "classification/development_facts.json",
+      "focus": [
+        {
+          "case_id": "dev-07",
+          "actions": [
+            {
+              "id": "a1",
+              "status": "leaf",
+              "pattern_id": "C2",
+              "group_id": "item_multiplicity",
+              "scope": {
+                "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+                "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+                "claim": "static"
+              },
+              "role": "unknown",
+              "action_resolution": "unresolved",
+              "count_as_independent": false
+            }
+          ]
+        },
+        {
+          "case_id": "dev-08",
+          "actions": [
+            {
+              "id": "a1",
+              "status": "leaf",
+              "pattern_id": "C1",
+              "group_id": "item_participation",
+              "scope": {
+                "version": "ed426adf23521673f218d3858cc19c270776d565",
+                "path": "docs/en/user/precision/01-cases.md",
+                "claim": "reported"
+              },
+              "role": "unknown",
+              "action_resolution": "unresolved",
+              "count_as_independent": false
+            }
+          ]
+        },
+        {
+          "case_id": "dev-09",
+          "actions": [
+            {
+              "id": "a1",
+              "status": "leaf",
+              "pattern_id": "C3",
+              "group_id": "item_multiplicity",
+              "scope": {
+                "version": "SGLang 0.5.18 author report",
+                "path": "sgl-project/sglang#37199",
+                "claim": "reported"
+              },
+              "role": "unknown",
+              "action_resolution": "unresolved",
+              "count_as_independent": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "input": "classification/validation_0_3/development_facts_0_3.json",
+      "focus": [
+        {
+          "case_id": "dev-07",
+          "actions": [
+            {
+              "id": "a1",
+              "status": "leaf",
+              "pattern_id": "C2",
+              "group_id": "item_multiplicity",
+              "scope": {
+                "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+                "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+                "claim": "static"
+              },
+              "role": "primary",
+              "action_resolution": "supported",
+              "count_as_independent": true
+            }
+          ]
+        },
+        {
+          "case_id": "dev-08",
+          "actions": [
+            {
+              "id": "a1",
+              "status": "leaf",
+              "pattern_id": "C1",
+              "group_id": "item_participation",
+              "scope": {
+                "version": "ed426adf23521673f218d3858cc19c270776d565",
+                "path": "docs/en/user/precision/01-cases.md",
+                "claim": "reported"
+              },
+              "role": "primary",
+              "action_resolution": "supported",
+              "count_as_independent": true
+            }
+          ]
+        },
+        {
+          "case_id": "dev-09",
+          "actions": [
+            {
+              "id": "a1",
+              "status": "leaf",
+              "pattern_id": "C3",
+              "group_id": "item_multiplicity",
+              "scope": {
+                "version": "SGLang 0.5.18 author report",
+                "path": "sgl-project/sglang#37199",
+                "claim": "reported"
+              },
+              "role": "unknown",
+              "action_resolution": "unresolved",
+              "count_as_independent": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "semantic_replay": {
+    "input_source": "classification/reviews/0.2/input.json",
+    "model_output_source": "classification/reviews/0.2/model_output.json",
+    "current_subject_definition": "相对于同一目标结果，同一逻辑来源及语义角色的计算项实际计入次数超过该操作的约定。",
+    "assessment": {
+      "subject_id": "card-C3",
+      "cache_key": "b759402f93bf15bcfc3afcfbb52f07e18ffb77a9b1754672d7156d22fbd41f0f",
+      "review_sha256": "be9a1b713dd5a39c0fd21659ba1873fbd9ad7eca7d557ea9f13924e8f728febc",
+      "decision": "uncertain",
+      "relation_supported": true,
+      "reviewer": "0.3 scoped Work source audit",
+      "reason": "The quoted author report shows the same original partials counted again. The role of the earliest incorrect stage and the independent obligations of the two collectives remain open."
+    },
+    "recommendation": "retain_relation",
+    "case_role": "unknown",
+    "relation_supported": true,
+    "validation_issues": [
+      "semantic_review_uncertain"
+    ],
+    "counted_independent": false,
+    "independent_action_count": 0
+  }
+}

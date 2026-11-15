@@ -8,32 +8,36 @@ import evaluate
 
 LEAF = {"status": "leaf", "pattern_id": "P1"}
 PARENT = {"status": "parent", "parent_id": "parameter"}
-COMBO = {"status": "parent", "parent_id": "contribution", "supported_pattern_ids": ["C1", "C2"]}
-LEAF_REF = "leaf:MECH-v0.2:P1"
-PARENT_REF = "parent:MECH-v0.2:parameter"
-COMBO_REF = "parent:MECH-v0.2:contribution[MECH-v0.2:C1,MECH-v0.2:C2]"
+COMBO = {"status": "parent", "parent_id": "calculation_item", "supported_pattern_ids": ["C1", "C2"]}
+LEAF_REF = "leaf:MECH-v0.3:P1"
+PARENT_REF = "parent:MECH-v0.3:parameter"
+COMBO_REF = "parent:MECH-v0.3:calculation_item[MECH-v0.3:C1,MECH-v0.3:C2]"
 
 
 class BoundaryScoringTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         catalog = evaluate.read_json(evaluate.ROOT / "catalog.json")
-        cls.standard = {
-            "catalog_version": catalog["version"],
-            "parents": {mode: card["parent"] for mode, card in catalog["modes"].items()},
-        }
+        cls.standard = evaluate.catalog_standard(catalog)
 
-    def grade(self, actual, allowed, *, primary=None, facts_supported=True, error=None):
-        expected = {"id": "gold", "role": "primary", "allowed": allowed}
+    def grade(self, actual, allowed, *, primary=None, facts_supported=True, error=None,
+              predicted_role="primary", expected_role="primary", resolution="supported"):
+        expected = {"id": "gold", "role": expected_role, "allowed": allowed}
         if primary is not None:
             expected["primary"] = primary
         answer = {"family_id": "example-family", "operator": "example-op", "actions": [expected]}
-        pred = {"id": "prediction", "role": "primary", **actual}
+        pred = {"id": "prediction", "role": predicted_role, "action_resolution": resolution, **actual}
+        pred["count_as_independent"] = (
+            predicted_role in ("primary", "independent") and resolution == "supported"
+            and actual["status"] in ("leaf", "parent")
+        )
         if actual["status"] == "leaf":
-            pred["pattern_ref"] = f"MECH-v0.2:{actual['pattern_id']}"
+            pred["pattern_ref"] = f"MECH-v0.3:{actual['pattern_id']}"
+        if actual["status"] == "parent":
+            pred["parent_ref"] = f"MECH-v0.3:{actual['parent_id']}"
         if "supported_pattern_ids" in actual:
             pred["combination"] = "compatible"
-            pred["supported_pattern_refs"] = [f"MECH-v0.2:{mode}" for mode in actual["supported_pattern_ids"]]
+            pred["supported_pattern_refs"] = [f"MECH-v0.3:{mode}" for mode in actual["supported_pattern_ids"]]
         result = {"case_id": "example", "actions": [pred]}
         review = {
             "actions": [{"prediction_id": "prediction", "expected_id": "gold",
@@ -54,12 +58,12 @@ class BoundaryScoringTest(unittest.TestCase):
         self.assertEqual(metrics["strict_primary_verdicts"], {})
         self.assertEqual(metrics["accepted_alternatives"],
                          [{"primary_expected": LEAF_REF, "actual": PARENT_REF, "count": 1, "strict": 1}])
-        mode_coverage = metrics["coverage"]["MECH-v0.2:P1"]
+        mode_coverage = metrics["coverage"]["MECH-v0.3:P1"]
         self.assertEqual((mode_coverage["eligible_families"], mode_coverage["supported_families"]), (1, 0))
 
     def test_alternative_leaf_does_not_pad_leaf_coverage(self):
         _, metrics = self.grade(LEAF, [LEAF, PARENT], primary=PARENT)
-        actual = metrics["coverage"]["MECH-v0.2:P1"]
+        actual = metrics["coverage"]["MECH-v0.3:P1"]
         self.assertEqual((actual["eligible_families"], actual["supported_families"]), (0, 0))
         self.assertEqual(metrics["expected_verdict_counts"], {PARENT_REF: 1})
 
@@ -75,7 +79,7 @@ class BoundaryScoringTest(unittest.TestCase):
         wrong = {"status": "leaf", "pattern_id": "P2"}
         _, metrics = self.grade(wrong, [PARENT, LEAF], primary=LEAF, error="rule_execution")
         self.assertEqual(metrics["confusion"],
-                         [{"expected": LEAF_REF, "actual": "leaf:MECH-v0.2:P2", "count": 1}])
+                         [{"expected": LEAF_REF, "actual": "leaf:MECH-v0.3:P2", "count": 1}])
         self.assertEqual(metrics["accepted_alternatives"], [])
 
     def test_gold_primary_required_for_distinct_alternatives(self):
@@ -93,14 +97,15 @@ class BoundaryScoringTest(unittest.TestCase):
         self.assertEqual(metrics["families_strict"], 1)
         self.assertEqual(metrics["expected_verdict_counts"], {COMBO_REF: 1})
         self.assertEqual(metrics["action_counts"]["predicted_actions"], 1)
+        self.assertEqual(metrics["action_counts"]["strict_independent_defects"], 1)
         self.assertEqual(metrics["strict_primary_verdicts"], {COMBO_REF: 1})
-        self.assertEqual(metrics["coverage"]["MECH-v0.2:C1"]["eligible_families"], 0)
-        self.assertEqual(metrics["coverage"]["MECH-v0.2:C2"]["eligible_families"], 0)
+        self.assertEqual(metrics["coverage"]["MECH-v0.3:C1"]["eligible_families"], 0)
+        self.assertEqual(metrics["coverage"]["MECH-v0.3:C2"]["eligible_families"], 0)
         with self.assertRaisesRegex(ValueError, "must be distinct"):
             evaluate.answer_verdicts({"allowed": [COMBO, reversed_combo]}, self.standard)
 
     def test_plain_parent_does_not_match_combo_without_an_explicit_alternative(self):
-        ordinary = {"status": "parent", "parent_id": "contribution"}
+        ordinary = {"status": "parent", "parent_id": "calculation_item"}
         _, metrics = self.grade(ordinary, [COMBO], error="rule_execution")
         self.assertEqual(metrics["families_strict"], 0)
         self.assertEqual(metrics["action_counts"]["misclassified_actions"], 1)
@@ -111,11 +116,59 @@ class BoundaryScoringTest(unittest.TestCase):
     def test_gold_combo_rejects_unsupported_components_or_shape(self):
         wrong = deepcopy(COMBO)
         wrong["supported_pattern_ids"][1] = "C3"
-        with self.assertRaisesRegex(ValueError, "compatible C1"):
+        with self.assertRaisesRegex(ValueError, "declared in the catalog"):
             evaluate.answer_verdicts({"allowed": [wrong]}, self.standard)
         wrong = {**LEAF, "supported_pattern_ids": ["C1", "C2"]}
-        with self.assertRaisesRegex(ValueError, "contribution parent"):
+        with self.assertRaisesRegex(ValueError, "declared in the catalog"):
             evaluate.answer_verdicts({"allowed": [wrong]}, self.standard)
+        wrong = {**COMBO, "parent_id": "item_participation"}
+        with self.assertRaisesRegex(ValueError, "declared in the catalog"):
+            evaluate.answer_verdicts({"allowed": [wrong]}, self.standard)
+
+    def test_parent_fallback_follows_ancestry_and_rejects_crossing_to_sibling(self):
+        c1 = {"status": "leaf", "pattern_id": "C1"}
+        participation = {"status": "parent", "parent_id": "item_participation"}
+        multiplicity = {"status": "parent", "parent_id": "item_multiplicity"}
+        umbrella = {"status": "parent", "parent_id": "calculation_item"}
+        for coarse, preferred in ((participation, c1), (umbrella, c1), (umbrella, participation)):
+            with self.subTest(coarse=coarse, preferred=preferred):
+                graded, _ = self.grade(coarse, [preferred], error="insufficient_evidence")
+                self.assertTrue(graded["actions"][0]["partial_parent"])
+                self.assertFalse(graded["strict"])
+        graded, _ = self.grade(multiplicity, [c1], error="class_definition")
+        self.assertFalse(graded["actions"][0]["partial_parent"])
+        graded, _ = self.grade(COMBO, [c1], error="class_definition")
+        self.assertFalse(graded["actions"][0]["partial_parent"])
+
+    def test_correct_relation_with_unknown_implementation_counts_no_root(self):
+        c2 = {"status": "leaf", "pattern_id": "C2"}
+        graded, metrics = self.grade(c2, [c2], predicted_role="unknown",
+                                     expected_role="unknown", resolution="unresolved")
+        counts = metrics["action_counts"]
+        self.assertEqual(metrics["families_strict"], 1)
+        self.assertEqual(metrics["coverage"]["MECH-v0.3:C2"]["supported_families"], 1)
+        self.assertEqual(counts["strict_independent_defects"], 0)
+        self.assertEqual(counts["strict_unresolved_implementation_actions"], 1)
+        self.assertFalse(graded["actions"][0]["count_as_independent"])
+
+        graded, metrics = self.grade(c2, [c2], predicted_role="unknown", expected_role="primary",
+                                     resolution="unresolved", error="insufficient_evidence")
+        self.assertFalse(graded["strict"])
+        self.assertTrue(graded["actions"][0]["label_correct"])
+        self.assertEqual(metrics["action_counts"]["strict_unresolved_implementation_actions"], 0)
+
+    def test_unknown_implementation_may_anchor_a_downstream_relation_without_a_root(self):
+        actions = {
+            "statement": {"id": "statement", "role": "unknown"},
+            "effect": {"id": "effect", "role": "downstream", "upstream_id": "statement"},
+        }
+        evaluate.relationships(actions)
+        malformed = {
+            **actions["statement"], "status": "leaf",
+            "action_resolution": "unresolved", "count_as_independent": True,
+        }
+        with self.assertRaisesRegex(ValueError, "Independent defect count disagrees"):
+            evaluate.prediction_resolution(malformed)
 
 
 if __name__ == "__main__":

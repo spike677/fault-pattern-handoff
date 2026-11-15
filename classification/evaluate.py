@@ -11,9 +11,10 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parent
-PROTOCOL = "classification_only/0.2.1"
+PROTOCOL = "classification_only/0.3"
 ARTIFACTS = ("catalog.json", "classify.py", "evaluate.py", "WORKFLOW.md")
-ROLES = ("primary", "independent", "downstream")
+ROOT_ROLES = ("primary", "independent")
+ROLES = (*ROOT_ROLES, "downstream", "unknown")
 LABEL_FIELDS = {"leaf": "pattern_id", "parent": "parent_id", "outside": "outside_reason"}
 OUTSIDE_REASONS = ("compliant", "inapplicable", "outside_catalog")
 FAILURES = (
@@ -87,6 +88,34 @@ def artifact_digest(name):
     return digest(candidate)
 
 
+def parent_ancestors(parent, hierarchy):
+    ancestors = set()
+    while parent in hierarchy:
+        parent = hierarchy[parent]
+        require(parent not in ancestors, "The parent hierarchy contains a cycle")
+        ancestors.add(parent)
+    return ancestors
+
+
+def catalog_standard(catalog):
+    parents = {mode: card["parent"] for mode, card in catalog["modes"].items()}
+    parent_ids = sorted(catalog["parents"])
+    hierarchy = catalog["parent_hierarchy"]
+    combinations = catalog["combinations"]
+    require(set(parents.values()) | set(hierarchy) | set(hierarchy.values()) <= set(parent_ids),
+            "Every parent in a mode or hierarchy must be declared")
+    for parent in hierarchy:
+        parent_ancestors(parent, hierarchy)
+    return {
+        "catalog_version": catalog["version"],
+        "mechanism_namespace": f"MECH-v{catalog['version']}",
+        "parents": parents,
+        "parent_ids": parent_ids,
+        "parent_hierarchy": hierarchy,
+        "combinations": combinations,
+    }
+
+
 def freeze(config, exposures, out, artifact=()):
     execution = read_json(config)
     require(isinstance(execution, dict)
@@ -102,9 +131,7 @@ def freeze(config, exposures, out, artifact=()):
         "config_sha256": digest(config),
         "exposure_manifest_sha256": digest(exposures),
         "development_lineage": sorted(set(lineage)),
-        "catalog_version": catalog["version"],
-        "mechanism_namespace": f"MECH-v{catalog['version']}",
-        "parents": {key: value["parent"] for key, value in catalog["modes"].items()},
+        **catalog_standard(catalog),
         "artifacts": {name: artifact_digest(name) for name in sorted(set(ARTIFACTS) | set(artifact))},
         "created_at": utc_now(),
     }
@@ -118,6 +145,9 @@ def frozen(path):
             "Wrong evaluation protocol or incomplete freeze")
     require(all(artifact_digest(name) == sha for name, sha in record["artifacts"].items()),
             "A frozen implementation artifact changed")
+    catalog = catalog_standard(read_json(ROOT / "catalog.json"))
+    require(all(record.get(key) == value for key, value in catalog.items()),
+            "Frozen label metadata differs from its catalog")
     return record
 
 
@@ -164,11 +194,12 @@ def verdict(action, standard, exact_shape=False):
     components = ()
     if "supported_pattern_ids" in action:
         ids = action["supported_pattern_ids"]
-        require(status == "parent" and action.get("parent_id") == "contribution"
-                and isinstance(ids, list) and len(ids) == 2 and all(isinstance(i, str) for i in ids)
-                and set(ids) == {"C1", "C2"}
-                and all(standard["parents"].get(i) == "contribution" for i in ids),
-                "Only a contribution parent may carry the compatible C1+C2 pair")
+        require(status == "parent" and isinstance(ids, list)
+                and all(isinstance(mode, str) for mode in ids)
+                and len(ids) == len(set(ids))
+                and any(rule["parent"] == action.get("parent_id") and set(rule["modes"]) == set(ids)
+                        for rule in standard["combinations"]),
+                "Combination must match a compatible mode set and parent declared in the catalog")
         components = tuple(sorted(ids))
         elements.add("supported_pattern_ids")
     if exact_shape:
@@ -178,7 +209,7 @@ def verdict(action, standard, exact_shape=False):
         allow_parent = status == "outside" and action.get("outside_reason") == "outside_catalog"
         extras = (set(LABEL_FIELDS.values()) - elements).intersection(action)
         require(not extras or (allow_parent and extras == {"parent_id"}
-                              and action["parent_id"] in standard["parents"].values()),
+                              and action["parent_id"] in standard["parent_ids"]),
                 "A prediction contains incompatible label fields")
         require((action.get("combination") == "compatible" if components
                  else "combination" not in action and "supported_pattern_refs" not in action),
@@ -187,13 +218,26 @@ def verdict(action, standard, exact_shape=False):
             refs = [f"{mechanism_namespace(standard)}:{mode}" for mode in action["supported_pattern_ids"]]
             require(action.get("supported_pattern_refs") == refs, "Combination references must match its attributes")
     value = action[field] if field else ""
-    valid = {"leaf": standard["parents"], "parent": set(standard["parents"].values()),
+    valid = {"leaf": standard["parents"], "parent": standard["parent_ids"],
              "outside": OUTSIDE_REASONS, "insufficient": ("",)}
     require(isinstance(value, str) and value in valid[status], "Unknown classification label")
     if not exact_shape and status == "leaf":
         require(action.get("pattern_ref") == f"{mechanism_namespace(standard)}:{value}",
                 "The leaf reference must match its catalog version")
+    if not exact_shape and "parent_id" in action:
+        require(action.get("parent_ref") == f"{mechanism_namespace(standard)}:{action['parent_id']}",
+                "The parent reference must match its catalog version")
     return status, value, components
+
+
+def partial_parent(actual, wanted, standard):
+    if actual[0] != "parent" or actual[2]:
+        return False
+    hierarchy = standard["parent_hierarchy"]
+    if wanted[0] == "leaf":
+        parent = standard["parents"][wanted[1]]
+        return actual[1] == parent or actual[1] in parent_ancestors(parent, hierarchy)
+    return wanted[0] == "parent" and actual[1] in parent_ancestors(wanted[1], hierarchy)
 
 
 def answer_verdicts(action, standard):
@@ -223,9 +267,24 @@ def relationships(actions):
                     break
                 parent = ancestor.get("upstream_id")
             else:
-                raise ValueError("A downstream chain needs an upstream root without cycles")
+                raise ValueError("A downstream chain needs an upstream action without cycles")
         else:
-            require(action.get("upstream_id") is None, "A root has a downstream relationship")
+            require(action.get("upstream_id") is None, "Only a downstream action can reference an upstream action")
+
+
+def positive_verdict(action):
+    return action["status"] in ("leaf", "parent") or action.get("outside_reason") == "outside_catalog"
+
+
+def prediction_resolution(action):
+    resolution = action.get("action_resolution")
+    independent = action.get("count_as_independent")
+    require(resolution in ("supported", "unresolved") and type(independent) is bool,
+            "A prediction must record the implementation action resolution and independent defect count")
+    require(independent == (action["role"] in ROOT_ROLES and resolution == "supported"
+                            and positive_verdict(action)),
+            "Independent defect count disagrees with the resolution, role, or verdict")
+    return resolution, independent
 
 
 def b_cases(answer, cases, standard, kind):
@@ -339,6 +398,7 @@ def verify_results(predictions, fact_packets, cases, standard):
         relationships(actions)
         for action in actions.values():
             verdict(action, standard)
+            prediction_resolution(action)
     return results
 
 
@@ -421,15 +481,18 @@ def grade_case(result, answer, review, standard):
                 and all(cause in FAILURES for cause in entry["failure_causes"]),
                 "Judge each action against A and record failure attribution or an empty list")
         actual = verdict(action, standard)
+        resolution, independent = prediction_resolution(action)
         expected_id = mapping[key]
         primary, allowed = gold_verdicts.get(expected_id, (None, []))
+        expected_role = None
         relationship = False
         double_count = entry.get("double_count") is True
         if expected_id is not None:
             gold = expected[expected_id]
-            relationship = (action["role"] == gold["role"]
+            expected_role = gold["role"]
+            relationship = (action["role"] == expected_role
                             and mapping.get(action.get("upstream_id")) == gold.get("upstream_id"))
-            double_count = double_count or (gold["role"] == "downstream" and action["role"] != "downstream")
+            double_count = double_count or (expected_role == "downstream" and independent)
         label_correct = actual in allowed
         primary_hit = actual == primary
         alternative_hit = label_correct and not primary_hit
@@ -443,8 +506,10 @@ def grade_case(result, answer, review, standard):
             "facts_supported": entry["facts_supported"], "relationship_correct": relationship,
             "strict": strict, "rationale": entry["rationale"], "failure_causes": entry["failure_causes"],
             "double_count": double_count,
-            "partial_parent": actual[0] == "parent" and not label_correct and any(
-                want[0] == "leaf" and standard["parents"][want[1]] == actual[1] for want in allowed),
+            "predicted_role": action["role"], "expected_role": expected_role,
+            "action_resolution": resolution, "count_as_independent": independent,
+            "unresolved_implementation_action": resolution == "unresolved" and positive_verdict(action),
+            "partial_parent": not label_correct and any(partial_parent(actual, want, standard) for want in allowed),
             "over_abstention": actual[0] == "insufficient" and bool(allowed) and not label_correct,
             "unsupported_attribution": (actual[0] in ("leaf", "parent") and not entry["facts_supported"]),
         })
@@ -455,7 +520,8 @@ def grade_case(result, answer, review, standard):
                     for item in omissions.values()), "Judge must document each omitted expected action")
     signature = sorted(
         (mapping[key] or "", label_text(verdict(action, standard), standard), action["role"],
-         mapping.get(action.get("upstream_id")) or "") for key, action in predicted.items()
+         mapping.get(action.get("upstream_id")) or "", *prediction_resolution(action))
+        for key, action in predicted.items()
     )
     return {
         "case_id": result["case_id"], "family_id": answer["family_id"], "operator": answer["operator"],
@@ -473,7 +539,9 @@ def grade_case(result, answer, review, standard):
 
 def summarize(cases, standard):
     families, cross_op = defaultdict(list), defaultdict(set)
-    confusion, metric, outcomes, failures = Counter(), Counter(), Counter(), Counter()
+    confusion, outcomes, failures = Counter(), Counter(), Counter()
+    metric = Counter(independent_defects_claimed=0, strict_independent_defects=0,
+                     unresolved_implementation_actions=0, strict_unresolved_implementation_actions=0)
     primary_outcomes, alternatives, strict_alternatives = Counter(), Counter(), Counter()
     denominators, eligible_families = Counter(), defaultdict(set)
     leaf_refs = {label_text(("leaf", mode, ()), standard): mode for mode in standard["parents"]}
@@ -507,6 +575,10 @@ def summarize(cases, standard):
                                            "partial_parent", "over_abstention", "unsupported_attribution",
                                            "primary_label_hit", "accepted_alternative_label") if row[key])
             metric["label_match_with_failed_evidence"] += row["label_correct"] and not row["facts_supported"]
+            metric["independent_defects_claimed"] += row["count_as_independent"]
+            metric["strict_independent_defects"] += row["strict"] and row["count_as_independent"]
+            metric["unresolved_implementation_actions"] += row["unresolved_implementation_action"]
+            metric["strict_unresolved_implementation_actions"] += row["strict"] and row["unresolved_implementation_action"]
             metric["predicted_actions"] += 1
             metric["unexpected_actions"] += row["expected_id"] is None
             metric["misclassified_actions"] += row["expected_id"] is not None and not row["label_correct"]

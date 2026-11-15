@@ -1,0 +1,37 @@
+{
+  "scope": "candidate_artifact_freeze",
+  "branch": "codex/mechanism-classification-pilot",
+  "base_sha": "44b827ab842781804e79185a267402d0703b05c9",
+  "catalog_status": "pilot_candidate",
+  "catalog_version": "0.3",
+  "decision_version": "0.3.0",
+  "protocol": "classification_only/0.3",
+  "mode_review_protocol": "mode_semantic_review/0.2",
+  "mechanism_namespace": "MECH-v0.3",
+  "leaf_ids": [
+    "C1",
+    "C2",
+    "C3",
+    "L1",
+    "L2",
+    "P1",
+    "P2"
+  ],
+  "real_batch_execution_freeze": null,
+  "real_holdout_evaluated": false,
+  "code_regressions_passed_locally": 56,
+  "sha256": {
+    "classification/catalog.json": "119a52ac3a8830e030161d1f4f5a2b6ffdfcb9ad6abd1230fdd9b103c1c9dac5",
+    "classification/classify.py": "3aafd1f0a7f9ddee1aa52a8ece93c67b9ed622fb7c9fa3d110fb4c852c1b5cda",
+    "classification/evaluate.py": "9b8e3a2c5b41e92277f6fa496b6a039fb810c623b87201cd92fe47bbac47e835",
+    "classification/mode_review.py": "329523e5999763c2fedc4cfd6dd85f74d39e4d9af605f6735aee92fdb12f78bf",
+    "classification/WORKFLOW.md": "477b17cc4025c0b99a944fa817d2b79ba77e675e8b778bb850b0a2abbfb50e34",
+    "classification/MODE_REVIEW.md": "ea329c4e4a817dec00c3f8ec287d4bb4ff6db0829f6b09686eb8a18657c4f4fb",
+    "classification/TERMS_AND_REFERENCES.md": "2d6bb154c5cbcee02ff86220a66be7d1c754c73535640c3a6a9423f0788694ed",
+    "classification/development_lineage.json": "3d7d70234a90de6a6b9f8638aaccd3c982be9a1c199983e864937af7fec24c3e",
+    "classification/validation_0_3/PROMPT.md": "a441f6214e80def8db580074375a8bc635c3f4b9ed91602154df6b263d89e924",
+    "classification/validation_0_3/development_facts_0_3.json": "23a37d13062c92140d1c72bc2325d55a843ae03d44e685dcfd396fdf5f1fa052",
+    "classification/validation_0_3/development_rounds.json": "277fb0aa8680d7742f12af0b9410a759693493fbe809f99393d484f4a2029e76",
+    "classification/validation_0_3/readback_execution.json": "1ef7868e3730237cdb53a7e7b7ffa4e05bc9ad08c5b7916df32c4397202622f5"
+  }
+}

@@ -71,6 +71,17 @@ class EvaluationTest(unittest.TestCase):
         evaluation.capture(self.freeze, self.a, self.seal, results, context, facts, log, output)
         return output
 
+    def test_freeze_binds_hierarchy_and_combinations_to_catalog(self):
+        standard = evaluation.frozen(self.freeze)
+        self.assertEqual(standard["protocol"], "classification_only/0.3")
+        self.assertIn("calculation_item", standard["parent_ids"])
+        self.assertEqual(standard["parent_hierarchy"]["item_participation"], "calculation_item")
+        self.assertEqual(standard["combinations"][0]["required_fact"], "distinct_members_for_replacement")
+        standard["parent_hierarchy"]["item_participation"] = "address"
+        put(self.freeze, standard)
+        with self.assertRaisesRegex(ValueError, "Frozen label metadata differs"):
+            evaluation.frozen(self.freeze)
+
     def test_score_rejects_unlocked_predictions_before_opening_b(self):
         with patch.object(evaluation, "digest", wraps=evaluation.digest) as observed:
             first = self.capture("one", "context-1")

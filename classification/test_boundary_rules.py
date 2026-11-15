@@ -1,4 +1,4 @@
-"""Regressions for layered disputes and one-action membership combinations."""
+"""Regressions for layered findings, disputes, and independent-action counts."""
 
 import json
 from pathlib import Path
@@ -11,23 +11,26 @@ CATALOG = json.loads(Path(__file__).with_name("catalog.json").read_text(encoding
 
 
 class BoundaryRules(unittest.TestCase):
-    def decide(self, pairs):
+    def decide(self, pairs, alternate_scope=(), no_explanation=(), role="primary"):
         lines = [f"{key} = {value!r}" for key, value in pairs]
         source = {"id": "control", "version": "v-pinned", "path": "op.py", "kind": "code",
                   "text": "\n".join(lines)}
-        case = {"case_id": "synthetic-control", "sources": [source]}
+        alternate = {**source, "id": "other", "path": "other.py"}
+        case = {"case_id": "synthetic-control", "sources": [source, alternate]}
         facts = [
-            {"key": key, "value": value, "explanation": "Synthetic membership map: x3 is new, x2 was dropped.",
-             "anchors": [{"source_id": "control", "start_line": i, "end_line": i, "quote": lines[i - 1]}]}
+            {"key": key, "value": value,
+             "explanation": "" if key in no_explanation else f"Synthetic evidence for {key}.",
+             "anchors": [{"source_id": "other" if key in alternate_scope else "control",
+                          "start_line": i, "end_line": i, "quote": lines[i - 1]}]}
             for i, (key, value) in enumerate(pairs, 1)
         ]
         packet = {"case_id": case["case_id"], "actions": [{
-            "id": "a", "role": "primary", "scope": {
+            "id": "a", "role": role, "scope": {
                 "version": "v-pinned", "path": "op.py", "claim": "static"},
             "facts": facts,
         }]}
         result = classify(case, packet, CATALOG)
-        self.assertEqual(result["decision_version"], "0.2.1")
+        self.assertEqual(result["decision_version"], "0.3.0")
         output, = result["actions"]
         return output
 
@@ -35,21 +38,75 @@ class BoundaryRules(unittest.TestCase):
         return sorted({(key, True) for mode in modes for key in CATALOG["modes"][mode]["necessary"]})
 
     def test_membership_replacement_has_one_root_and_two_compatible_attributes(self):
-        output = self.decide(self.confirmed("C1", "C2") + [("distinct_members_for_replacement", True)])
-        self.assertEqual((output["status"], output["parent_id"]), ("parent", "contribution"))
+        evidence = self.confirmed("C1", "C2") + [("distinct_members_for_replacement", True)]
+        output = self.decide(evidence + [("implementation_action", True)])
+        self.assertEqual((output["status"], output["parent_id"]), ("parent", "calculation_item"))
         self.assertEqual(output["combination"], "compatible")
         self.assertEqual(output["supported_pattern_ids"], ["C1", "C2"])
-        self.assertEqual(output["supported_pattern_refs"], ["MECH-v0.2:C1", "MECH-v0.2:C2"])
-        self.assertEqual(output["parent_ref"], "MECH-v0.2:contribution")
+        self.assertEqual(output["supported_pattern_refs"], ["MECH-v0.3:C1", "MECH-v0.3:C2"])
+        self.assertEqual(output["parent_ref"], "MECH-v0.3:calculation_item")
+        self.assertEqual(output["action_resolution"], "supported")
         self.assertTrue(output["count_as_independent"])
         self.assertFalse(output["conflicts"])
 
+        unresolved = self.decide(evidence)
+        self.assertEqual(unresolved["combination"], "compatible")
+        self.assertEqual(unresolved["role"], "unknown")
+        self.assertFalse(unresolved["count_as_independent"])
+
     def test_membership_overlap_without_distinction_keeps_ordinary_parent(self):
         output = self.decide(self.confirmed("C1", "C2"))
-        self.assertEqual((output["status"], output["parent_id"]), ("parent", "contribution"))
+        self.assertEqual((output["status"], output["parent_id"]), ("parent", "calculation_item"))
         self.assertNotIn("combination", output)
         self.assertNotIn("supported_pattern_ids", output)
         self.assertIn("distinct_members_for_replacement", output["missing"])
+        self.assertFalse(output["conflict_details"]["core"])
+
+    def test_broad_fact_keeps_shared_parent_and_agrees_with_narrower_fact(self):
+        broad = [("applicable_contract", True), ("contribution_violation", True)]
+        self.assertEqual(self.decide(broad)["parent_id"], "calculation_item")
+        for fact, group, name in (
+            ("participation_violation", "item_participation", "计算项的参与范围问题"),
+            ("multiplicity_violation", "item_multiplicity", "计算项重复／遗漏问题"),
+        ):
+            with self.subTest(fact=fact):
+                specific = self.decide(broad + [(fact, True)])
+                self.assertEqual(specific["parent_id"], group)
+                self.assertEqual(specific["parent_name"], name)
+                self.assertFalse(specific["conflicts"])
+        both = self.decide(broad + [("participation_violation", True), ("multiplicity_violation", True)])
+        self.assertEqual(both["parent_id"], "calculation_item")
+        self.assertFalse(both["conflicts"])
+        leaf_and_sibling = self.decide(self.confirmed("C1") + [("multiplicity_violation", True)])
+        self.assertEqual((leaf_and_sibling["status"], leaf_and_sibling["parent_id"]),
+                         ("parent", "calculation_item"))
+        self.assertFalse(leaf_and_sibling["conflicts"])
+        other = self.decide(broad + [("address_violation", True)])
+        self.assertIn("multiple_violation_groups_for_one_action", other["conflict_details"]["core"])
+
+    def test_relation_leaf_can_remain_usable_when_action_is_unresolved(self):
+        evidence = self.confirmed("C3")
+        for alternate_scope, no_explanation in (
+            (("implementation_action",), ()),
+            ((), ("implementation_action",)),
+        ):
+            with self.subTest(alternate_scope=alternate_scope, no_explanation=no_explanation):
+                result = self.decide(evidence + [("implementation_action", True)],
+                                     alternate_scope=alternate_scope, no_explanation=no_explanation)
+                self.assertEqual(result["pattern_id"], "C3")
+                self.assertEqual(result["definition_level"], "mechanism_relation")
+                self.assertEqual(result["group_id"], "item_multiplicity")
+                self.assertEqual(result["group_ref"], "MECH-v0.3:item_multiplicity")
+                self.assertEqual(result["role"], "unknown")
+                self.assertEqual(result["proposed_role"], "primary")
+                self.assertEqual(result["action_resolution"], "unresolved")
+                self.assertIn("implementation_action", result["missing"])
+                self.assertFalse(result["count_as_independent"])
+        explicit = self.decide(evidence + [("implementation_action", True)], role="unknown")
+        self.assertEqual(explicit["role"], "unknown")
+        self.assertNotIn("proposed_role", explicit)
+        self.assertEqual(explicit["action_resolution"], "supported")
+        self.assertFalse(explicit["count_as_independent"])
 
     def test_leaf_dispute_preserves_independently_proven_address_parent(self):
         output = self.decide(self.confirmed("L2") + [
@@ -77,7 +134,9 @@ class BoundaryRules(unittest.TestCase):
             ("wrong_conversion", True), ("wrong_conversion", False),
         ])
         self.assertEqual((output["status"], output["pattern_id"], output["pattern_ref"]),
-                         ("leaf", "P1", "MECH-v0.2:P1"))
+                         ("leaf", "P1", "MECH-v0.3:P1"))
+        self.assertEqual(output["mode_name"], CATALOG["modes"]["P1"]["title"])
+        self.assertEqual(output["definition_level"], "implementation_error")
         self.assertEqual(output["conflict_details"]["unrelated"], ["wrong_conversion"])
         self.assertFalse(output["conflict_details"]["leaf"])
 

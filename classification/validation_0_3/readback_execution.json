@@ -1,0 +1,20 @@
+{
+  "scope": "one new development context, shared filesystem with restricted reading by instruction",
+  "input_policy": "A, PROMPT, catalog only",
+  "model": "same inherited Codex Work configuration; service deployment identifier not exposed",
+  "tooling": [
+    "local read/write under specified paths"
+  ],
+  "sha256": {
+    "classification/validation_0_3/readback_A.json": "24ffbe2f954f2865c7a6c8773405feed26edc33c617993f30d5e8982e0b727f5",
+    "classification/validation_0_3/PROMPT.md": "a441f6214e80def8db580074375a8bc635c3f4b9ed91602154df6b263d89e924",
+    "classification/catalog.json": "119a52ac3a8830e030161d1f4f5a2b6ffdfcb9ad6abd1230fdd9b103c1c9dac5",
+    "classification/validation_0_3/readback_1_facts.json": "e027abbf519073dca2cd7f71be5d563e2d83a6bfe3b44c95ac7878b86b90479d",
+    "classification/validation_0_3/readback_1_log.md": "dd4389fe59c1d1c935faf5452e8df7110fbe49dc63552ff238f3b16ea0d51d1a",
+    "classification/validation_0_3/readback_1_results.json": "399cd3c1466a64b0c9cde0a908ba521280aad9ca18fb4c70dff431a54b3282a0"
+  },
+  "requested_new_contexts": 2,
+  "completed_new_contexts": 1,
+  "second_context": "agent thread limit reached",
+  "real_holdout": false
+}

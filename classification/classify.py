@@ -8,15 +8,21 @@ from pathlib import Path
 import sys
 
 
-DECISION_VERSION = "0.2.1"
-COMPATIBLE_MEMBERSHIP_MODES = {"C1", "C2"}
-DISTINCT_MEMBERS = "distinct_members_for_replacement"
+DECISION_VERSION = "0.3.0"
+LEGACY_DECISION_VERSION = "0.2.1"
+LEGACY_COMBINATIONS = [{
+    "modes": ["C1", "C2"],
+    "parent": "contribution",
+    "required_fact": "distinct_members_for_replacement",
+}]
 SOURCE_KINDS = {"issue", "contract", "code", "diff", "report", "runtime"}
 CLAIMS = {"reported", "static", "runtime"}
-ROLES = {"primary", "independent", "downstream"}
+ROOT_ROLES = {"primary", "independent"}
+LEGACY_ROLES = ROOT_ROLES | {"downstream"}
+ROLES = LEGACY_ROLES | {"unknown"}
 UNPINNED = {"unknown", "unavailable", "unpinned", "unspecified", "unverified",
             "n/a", "?", "head", "latest", "main", "master", "develop"}
-OPERATION_FACTS = {
+LEGACY_OPERATION_FACTS = {
     "P1": "actual_source",
     "P2": "wrong_state_treatment",
     "L1": "contiguous_formula",
@@ -25,7 +31,7 @@ OPERATION_FACTS = {
     "C2": "omitted_contribution",
     "C3": "excess_multiplicity",
 }
-VIOLATIONS = {
+LEGACY_PARENT_FACTS = {
     "parameter": "parameter_violation",
     "address": "address_violation",
     "contribution": "contribution_violation",
@@ -66,21 +72,74 @@ def by_id(rows, label, key="id"):
     return indexed
 
 
+def parent_lineage(parent, hierarchy):
+    lineage = [parent]
+    while parent in hierarchy:
+        parent = hierarchy[parent]
+        if parent in lineage:
+            raise ValueError("Catalog parent hierarchy cannot be cyclic")
+        lineage.append(parent)
+    return lineage
+
+
+def nearest_shared_parent(parents, hierarchy):
+    """Keep the most specific asserted branches, then find their common group."""
+    if not parents:
+        return None
+    paths = {parent: parent_lineage(parent, hierarchy) for parent in sorted(parents)}
+    ancestors = {ancestor for path in paths.values() for ancestor in path[1:]}
+    specific = [path for parent, path in paths.items() if parent not in ancestors]
+    shared = set.intersection(*(set(path) for path in specific))
+    return next((parent for parent in specific[0] if parent in shared), None)
+
+
 def validate_catalog(catalog):
-    if not isinstance(catalog, dict) or not nonempty(catalog.get("version")):
-        raise ValueError("The catalog requires a version")
+    if not isinstance(catalog, dict) or catalog.get("version") not in ("0.2", "0.3"):
+        raise ValueError("The catalog requires version 0.2 or 0.3")
+    legacy = catalog["version"] == "0.2"
     parents, modes = catalog.get("parents"), catalog.get("modes")
-    if not isinstance(parents, dict) or set(parents) != set(VIOLATIONS):
-        raise ValueError("The pilot catalog requires its three parent groups")
-    if not isinstance(modes, dict) or set(modes) != set(OPERATION_FACTS):
+    parent_facts = LEGACY_PARENT_FACTS if legacy else catalog.get("parent_facts")
+    if (not isinstance(parents, dict) or not parents
+            or not isinstance(parent_facts, dict) or set(parents) != set(parent_facts)
+            or not all(nonempty(key) and nonempty(value) for key, value in parents.items())
+            or not all(map(nonempty, parent_facts.values()))
+            or len(set(parent_facts.values())) != len(parents)):
+        raise ValueError("Each catalog parent requires a title and a unique violation fact")
+    if not isinstance(modes, dict) or set(modes) != set(LEGACY_OPERATION_FACTS):
         raise ValueError("The pilot catalog requires its seven mode cards")
+    hierarchy = {} if legacy else catalog.get("parent_hierarchy")
+    if (not isinstance(hierarchy, dict)
+            or any(child not in parents or not nonempty(parent) or parent not in parents
+                   for child, parent in hierarchy.items())):
+        raise ValueError("Catalog parent hierarchy must link declared parent groups")
+    for parent in hierarchy:
+        parent_lineage(parent, hierarchy)
     for mode_id, card in modes.items():
         if (not isinstance(card, dict) or not nonempty(card.get("parent"))
                 or card["parent"] not in parents or not strings(card.get("necessary"))
                 or not strings(card.get("excluded_by", []))
-                or "applicable_contract" not in card["necessary"]
-                or OPERATION_FACTS[mode_id] not in card["necessary"]):
+                or "applicable_contract" not in card["necessary"]):
             raise ValueError(f"Invalid scope or requirements in mode {mode_id}")
+        operation = LEGACY_OPERATION_FACTS[mode_id] if legacy else card.get("operation_fact")
+        if (not nonempty(operation) or operation not in card["necessary"]
+                or (not legacy and (
+                    not nonempty(card.get("title"))
+                    or card.get("definition_level") not in ("implementation_error", "mechanism_relation")
+                ))):
+            raise ValueError(f"Invalid scope or requirements in mode {mode_id}")
+    combinations = LEGACY_COMBINATIONS if legacy else catalog.get("combinations")
+    seen = set()
+    for combination in records(combinations, "Catalog combinations"):
+        members = combination.get("modes")
+        parent = combination.get("parent")
+        if (not strings(members) or len(members) < 2 or len(set(members)) != len(members)
+                or any(mode not in modes for mode in members)
+                or not nonempty(parent) or parent not in parents
+                or not nonempty(combination.get("required_fact"))
+                or nearest_shared_parent({modes[mode]["parent"] for mode in members}, hierarchy) != parent
+                or frozenset(members) in seen):
+            raise ValueError("Invalid catalog combination")
+        seen.add(frozenset(members))
 
 
 def validate_scope(scope):
@@ -194,14 +253,14 @@ def collect_facts(action, sources, scope):
     return facts, positives, negatives, scoped_facts, issues, conflicts
 
 
-def mode_comparisons(modes, positives, negatives, scoped, disputed):
+def mode_comparisons(modes, operations, positives, negatives, scoped, disputed):
     results = {}
     for mode, card in sorted(modes.items()):
         needed = set(card["necessary"])
         exclusions = set(card.get("excluded_by", []))
         missing = sorted(needed - positives - negatives)
         excluded = sorted((needed & negatives) | (exclusions & positives))
-        operation = OPERATION_FACTS[mode]
+        operation = operations[mode]
         if operation in positives and operation not in scoped:
             missing.append(f"{operation}:scope")
         results[mode] = {
@@ -214,20 +273,42 @@ def mode_comparisons(modes, positives, negatives, scoped, disputed):
     return results
 
 
+def explained_scoped_fact(key, facts, sources, scope):
+    return any(
+        fact["key"] == key and fact["value"] and nonempty(fact.get("explanation"))
+        and any(scoped_source(sources[anchor["source_id"]], scope) for anchor in fact["anchors"])
+        for fact in facts
+    )
+
+
 def verdict(action, sources, catalog):
     scope = action.get("scope")
     scope_missing = validate_scope(scope)
     namespace = f"MECH-v{catalog['version']}"
+    legacy = catalog["version"] == "0.2"
     modes = catalog["modes"]
+    hierarchy = {} if legacy else catalog["parent_hierarchy"]
+    parent_facts = LEGACY_PARENT_FACTS if legacy else catalog["parent_facts"]
+    combinations = LEGACY_COMBINATIONS if legacy else catalog["combinations"]
+    operations = LEGACY_OPERATION_FACTS if legacy else {
+        mode: card["operation_fact"] for mode, card in modes.items()
+    }
     facts, true, false, scoped, issues, conflicts = collect_facts(action, sources, scope)
     disputed = set(conflicts)
-    comparisons = mode_comparisons(modes, true, false, scoped, disputed)
+    comparisons = mode_comparisons(modes, operations, true, false, scoped, disputed)
     supported = [mode for mode, check in comparisons.items()
                  if not (check["missing"] or check["contrary"] or check["disputed"])]
-    explicit_parents = {parent for parent, key in VIOLATIONS.items()
+    explicit_parents = {parent for parent, key in parent_facts.items()
                         if "applicable_contract" in true and key in true and key in scoped}
     parents = explicit_parents | {modes[mode]["parent"] for mode in supported}
-    nearest_parent = next(iter(parents)) if len(parents) == 1 else None
+    nearest_parent = nearest_shared_parent(parents, hierarchy)
+    relevant_parents = {ancestor for parent in parents for ancestor in parent_lineage(parent, hierarchy)}
+    if nearest_parent:
+        family = parent_lineage(nearest_parent, hierarchy)[-1]
+        related_modes = {mode for mode, card in modes.items()
+                         if parent_lineage(card["parent"], hierarchy)[-1] == family}
+    else:
+        related_modes = set(modes)
     outside = [key for key in OUTSIDE if key in true]
     established = "established_other_defect"
     if established in outside and not any(
@@ -240,34 +321,33 @@ def verdict(action, sources, catalog):
     # A settled fact about the current parent and a conflict about a finer
     # distinction have different effects on the verdict.
     core = disputed & ({"applicable_contract"} | set(OUTSIDE))
-    core.update(VIOLATIONS[parent] for parent in (parents or VIOLATIONS)
-                if VIOLATIONS[parent] in disputed)
-    if len(parents) > 1:
+    core.update(parent_facts[parent] for parent in (relevant_parents or parent_facts)
+                if parent_facts[parent] in disputed)
+    if parents and nearest_parent is None:
         core.add("multiple_violation_groups_for_one_action")
     if len(outside) > 1 or (outside and supported):
         core.add("competing_verdicts")
     if ("contract_inapplicable" in true and "applicable_contract" in true
-            or (true & {"compliant", "contract_inapplicable"} and true & set(VIOLATIONS.values()))):
+            or (true & {"compliant", "contract_inapplicable"} and true & set(parent_facts.values()))):
         core.add("scope_or_outcome_contradiction")
 
     leaf = set()
     for mode, card in modes.items():
-        if parents and card["parent"] not in parents:
+        if mode not in related_modes or (legacy and parents and card["parent"] not in parents):
             continue
         check = comparisons[mode]
-        if not check["contrary"] and OPERATION_FACTS[mode] in scoped:
+        if not check["contrary"] and operations[mode] in scoped:
             leaf.update(check["disputed"])
         if set(card["necessary"]) <= true and set(card.get("excluded_by", [])) & true:
             leaf.add(f"contraindicated:{mode}")
-    replacement = set(supported) == COMPATIBLE_MEMBERSHIP_MODES and nearest_parent == "contribution"
-    distinct = (DISTINCT_MEMBERS in true and DISTINCT_MEMBERS in scoped and any(
-        fact["key"] == DISTINCT_MEMBERS and fact["value"] and nonempty(fact.get("explanation"))
-        and any(scoped_source(sources[anchor["source_id"]], scope) for anchor in fact["anchors"])
-        for fact in facts
-    ))
-    compatible = replacement and distinct
-    if replacement and DISTINCT_MEMBERS in disputed:
-        leaf.add(DISTINCT_MEMBERS)
+    required_fact = next(
+        (row["required_fact"] for row in combinations
+         if row["parent"] == nearest_parent and set(row["modes"]) == set(supported)),
+        None,
+    )
+    compatible = required_fact in true and explained_scoped_fact(required_fact, facts, sources, scope)
+    if required_fact in disputed:
+        leaf.add(required_fact)
     if len(supported) > 1 and not compatible:
         leaf.add("multiple_leaf_modes_for_one_action")
     leaf -= core
@@ -294,9 +374,15 @@ def verdict(action, sources, catalog):
             result.update(status="outside", outside_reason=OUTSIDE[outside[0]])
             if nearest_parent and outside[0] == established:
                 result["parent_id"] = nearest_parent
-        elif len(supported) == 1 and not leaf:
+        elif len(supported) == 1 and not leaf and modes[supported[0]]["parent"] == nearest_parent:
             mode = supported[0]
             result.update(status="leaf", pattern_id=mode, pattern_ref=f"{namespace}:{mode}")
+            if not legacy:
+                group = modes[mode]["parent"]
+                result.update(
+                    definition_level=modes[mode]["definition_level"], mode_name=modes[mode]["title"],
+                    group_id=group, group_ref=f"{namespace}:{group}", group_name=catalog["parents"][group],
+                )
         elif nearest_parent:
             result.update(status="parent", parent_id=nearest_parent)
             if compatible and not leaf:
@@ -304,10 +390,12 @@ def verdict(action, sources, catalog):
                               supported_pattern_refs=[f"{namespace}:{mode}" for mode in supported])
     if "parent_id" in result:
         result["parent_ref"] = f"{namespace}:{result['parent_id']}"
+        if not legacy:
+            result["parent_name"] = catalog["parents"][result["parent_id"]]
 
     confirmed = set(result.get("supported_pattern_ids", ())) | {result.get("pattern_id")}
     neighbors = [check for mode, check in comparisons.items()
-                 if mode not in confirmed and (nearest_parent is None or modes[mode]["parent"] == nearest_parent)]
+                 if mode not in confirmed and mode in related_modes]
     strongest = max((check["support_count"] for check in neighbors), default=0)
     if nearest_parent is None and strongest:
         neighbors = [check for check in neighbors if check["support_count"] == strongest]
@@ -317,8 +405,8 @@ def verdict(action, sources, catalog):
         for check in neighbors
     ]
     missing = set(scope_missing)
-    if replacement and not distinct and DISTINCT_MEMBERS not in false:
-        missing.add(DISTINCT_MEMBERS)
+    if required_fact and not compatible and required_fact not in false:
+        missing.add(required_fact)
     if result["status"] in {"insufficient", "parent"} and not result.get("combination"):
         if strongest or nearest_parent:
             viable = [check for check in neighbors if not check["contrary"]]
@@ -330,17 +418,33 @@ def verdict(action, sources, catalog):
             missing.add("observed_implementation_action")
             if "applicable_contract" not in true:
                 missing.add("applicable_contract")
-    result["missing"] = sorted(missing)
-    result["count_as_independent"] = action["role"] != "downstream" and (
+    positive_verdict = (
         result["status"] in {"leaf", "parent"} or result.get("outside_reason") == "outside_catalog"
     )
+    action_supported = positive_verdict
+    if not legacy:
+        relation_parents = {
+            ancestor for card in modes.values() if card["definition_level"] == "mechanism_relation"
+            for ancestor in parent_lineage(card["parent"], hierarchy)
+        }
+        if positive_verdict and nearest_parent in relation_parents:
+            action_key = "implementation_action"
+            action_supported = action_key in true and explained_scoped_fact(action_key, facts, sources, scope)
+            if not action_supported:
+                if action_key not in false and action_key not in disputed:
+                    missing.add(action_key)
+                if action["role"] in ROOT_ROLES:
+                    result.update(role="unknown", proposed_role=action["role"])
+        result["action_resolution"] = "supported" if action_supported else "unresolved"
+    result["missing"] = sorted(missing)
+    result["count_as_independent"] = result["role"] in ROOT_ROLES and action_supported
     return result
 
 
-def validate_links(actions):
+def validate_links(actions, allowed_roles):
     for action in actions.values():
-        if not nonempty(action.get("role")) or action["role"] not in ROLES:
-            raise ValueError("Each action needs a primary, independent, or downstream role")
+        if not nonempty(action.get("role")) or action["role"] not in allowed_roles:
+            raise ValueError(f"Each action needs one of these roles: {', '.join(sorted(allowed_roles))}")
         if action["role"] != "downstream" and "upstream_id" in action:
             raise ValueError("Only downstream actions can name an upstream action")
         if action["role"] == "downstream" and (
@@ -375,13 +479,14 @@ def classify(case, packet, catalog):
     actions = by_id(packet.get("actions"), "actions")
     if not actions:
         raise ValueError("Submit an explicit insufficient action if the materials do not establish an action")
-    validate_links(actions)
+    legacy = catalog["version"] == "0.2"
+    validate_links(actions, LEGACY_ROLES if legacy else ROLES)
     return {
         "case_id": case["case_id"],
         "case_sha256": digest(case),
         "facts_sha256": digest(packet),
         "catalog_version": catalog["version"],
-        "decision_version": DECISION_VERSION,
+        "decision_version": LEGACY_DECISION_VERSION if legacy else DECISION_VERSION,
         "mechanism_namespace": f"MECH-v{catalog['version']}",
         "operator": operator,
         "roles": roles,

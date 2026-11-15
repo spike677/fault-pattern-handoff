@@ -1,0 +1,461 @@
+[
+  {
+    "case_id": "r03-1",
+    "case_sha256": "e47fa23b73dc761f6aada1f68b3f54522648540b7cf92e1c7d5356accae53476",
+    "facts_sha256": "3c29ea21cd3b5080a3df1f5932356ad960e9ec21b8f929e69640b75f9fc6dbb9",
+    "catalog_version": "0.3",
+    "decision_version": "0.3.0",
+    "mechanism_namespace": "MECH-v0.3",
+    "operator": "PadV3Grad edge",
+    "roles": [
+      "目标输入梯度 outputGM[idx]",
+      "中心坐标 inIndex",
+      "edge 复制的贡献区间 scopeIndex",
+      "区间内的上游梯度项 inputGM[a0]"
+    ],
+    "actions": [
+      {
+        "id": "edge-cut-zero",
+        "scope": {
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+          "claim": "static"
+        },
+        "role": "primary",
+        "status": "leaf",
+        "facts": [
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "issue",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": "修复padv3grad edge模板pad为负值刚好裁剪到inshape大小的计算错误"
+              },
+              {
+                "source_id": "shared-coordinate",
+                "start_line": 12,
+                "end_line": 15,
+                "quote": "    // 当前输出位置再输入的索引\n    for (uint8_t i = 0; i < DIM_NUM; i++) {\n        inIndex[i] = outIndex[i] + leftPads[i];\n    }"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 20,
+                "end_line": 37,
+                "quote": "+        flag = 0;\n+        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n+            flag = 1;\n+        }\n         // 判断起始范围\n         if (outIndex[i] == 0) {\n             scopeIndex[i][0] = 0;\n         } else {\n-            scopeIndex[i][0] = inIndex[i];\n+            scopeIndex[i][0] = inIndex[i] + flag;\n         }\n         // 判断结束范围\n         if (outIndex[i] == outShapes[i] - 1) {\n             scopeIndex[i][1] = inIndex[i] + rightPads[i];\n         } else {\n-            scopeIndex[i][1] = inIndex[i];\n+            scopeIndex[i][1] = inIndex[i] - flag;\n         }"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 64,
+                "end_line": 76,
+                "quote": "+        CastType total = 0;\n+        for (U a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n+            GmOffsetType inputOffset = static_cast<GmOffsetType>(a0);\n+            CastType tmpVal;\n+            if constexpr (std::is_same_v<T, bfloat16_t>) {\n+                tmpVal = __bfloat162float(inputGM[inputOffset]);\n+            } else if constexpr (std::is_same_v<T, float16_t>) {\n+                tmpVal = __half2float(inputGM[inputOffset]);\n+            } else {\n+                tmpVal = inputGM[inputOffset];\n             }\n-            CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);\n+            total += tmpVal;"
+              }
+            ],
+            "explanation": "限定在旧版一维 edge 及负 pad 裁剪到输入大小的边界条件。CalPos 用 outIndex 加 leftPads 得出中心，目标梯度由映射到该位置的上游梯度贡献组成。diff 中边界区间分别保留起点 0 或末点 inIndex + rightPads，且按闭区间累加。修订部分用于复算区间语义。"
+          },
+          {
+            "key": "required_member",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "shared-coordinate",
+                "start_line": 12,
+                "end_line": 15,
+                "quote": "    // 当前输出位置再输入的索引\n    for (uint8_t i = 0; i < DIM_NUM; i++) {\n        inIndex[i] = outIndex[i] + leftPads[i];\n    }"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 20,
+                "end_line": 37,
+                "quote": "+        flag = 0;\n+        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n+            flag = 1;\n+        }\n         // 判断起始范围\n         if (outIndex[i] == 0) {\n             scopeIndex[i][0] = 0;\n         } else {\n-            scopeIndex[i][0] = inIndex[i];\n+            scopeIndex[i][0] = inIndex[i] + flag;\n         }\n         // 判断结束范围\n         if (outIndex[i] == outShapes[i] - 1) {\n             scopeIndex[i][1] = inIndex[i] + rightPads[i];\n         } else {\n-            scopeIndex[i][1] = inIndex[i];\n+            scopeIndex[i][1] = inIndex[i] - flag;\n         }"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 64,
+                "end_line": 76,
+                "quote": "+        CastType total = 0;\n+        for (U a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n+            GmOffsetType inputOffset = static_cast<GmOffsetType>(a0);\n+            CastType tmpVal;\n+            if constexpr (std::is_same_v<T, bfloat16_t>) {\n+                tmpVal = __bfloat162float(inputGM[inputOffset]);\n+            } else if constexpr (std::is_same_v<T, float16_t>) {\n+                tmpVal = __half2float(inputGM[inputOffset]);\n+            } else {\n+                tmpVal = inputGM[inputOffset];\n             }\n-            CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);\n+            total += tmpVal;"
+              }
+            ],
+            "explanation": "以区间公式复算一维条件：inShapes[0]=2、outShapes[0]=3、leftPads[0]=-3、rightPads[0]=2、outIndex[0]=2。中心是 -1，裁剪标记为 1；该目标的边界区间从中心加 1 到中心加右 pad，即 [0,1]。上游梯度 inputGM[0] 和 inputGM[1] 各应贡献一次。"
+          },
+          {
+            "key": "omitted_contribution",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "diff",
+                "start_line": 3,
+                "end_line": 9,
+                "quote": "-    // 判断当前输入位置是否被裁剪\n-    for (uint8_t i = 0; i < DIM; i++) {\n-        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n-            return true;\n-        }\n-    }\n-    return false;"
+              },
+              {
+                "source_id": "old-edge",
+                "start_line": 4,
+                "end_line": 11,
+                "quote": "        GmOffsetType scopeIndex[DIM][2]; // 每个维度的padding范围\n        if (IsCut<DIM, U>(inIndex, inShapes)) {\n            outputGM[idx] = 0;\n        } else {\n            CalScope<DIM, U, GmOffsetType>(scopeIndex, inIndex, outIndex, rightPads, outShapes);\n\n            CastType total = 0;\n            for (GmOffsetType a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 52,
+                "end_line": 63,
+                "quote": "-            CastType total = 0;\n-            for (GmOffsetType a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n-                GmOffsetType inputOffset = a0;\n-                CastType tmpVal;\n-                if constexpr (std::is_same_v<T, bfloat16_t>) {\n-                    tmpVal = __bfloat162float(inputGM[inputOffset]);\n-                } else if constexpr (std::is_same_v<T, float16_t>) {\n-                    tmpVal = __half2float(inputGM[inputOffset]);\n-                } else {\n-                    tmpVal = inputGM[inputOffset];\n-                }\n-                total += tmpVal;"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 74,
+                "end_line": 78,
+                "quote": "             }\n-            CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);\n+            total += tmpVal;\n         }\n+        CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);"
+              }
+            ],
+            "explanation": "同组条件的中心 -1 命中 IsCut 的小于零判定。旧分支对该目标直接写零，CalScope、读取并累加以及累加结果写出都在另一分支，因而该分支没有等价路径保留 [0,1] 对目标的贡献。"
+          },
+          {
+            "key": "implementation_action",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "diff",
+                "start_line": 40,
+                "end_line": 48,
+                "quote": "@@ -100,27 +94,23 @@ __simt_vf__ LAUNCH_BOUND(EDGE_THREAD_DIM) __aicore__ void SimtComputeEdgeDimOne(\n         // 计算输入输出索引\n         CalPos<DIM, U, GmOffsetType>(yIdx, inIndex, outIndex, outStrides, leftPads, magics, shifts);\n \n-        GmOffsetType scopeIndex[DIM][2]; // 每个维度的padding范围\n-        if (IsCut<DIM, U>(inIndex, inShapes)) {\n-            outputGM[idx] = 0;\n-        } else {\n-            CalScope<DIM, U, GmOffsetType>(scopeIndex, inIndex, outIndex, rightPads, outShapes);"
+              },
+              {
+                "source_id": "old-edge",
+                "start_line": 4,
+                "end_line": 11,
+                "quote": "        GmOffsetType scopeIndex[DIM][2]; // 每个维度的padding范围\n        if (IsCut<DIM, U>(inIndex, inShapes)) {\n            outputGM[idx] = 0;\n        } else {\n            CalScope<DIM, U, GmOffsetType>(scopeIndex, inIndex, outIndex, rightPads, outShapes);\n\n            CastType total = 0;\n            for (GmOffsetType a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {"
+              }
+            ],
+            "explanation": "固定版的一维 edge 内核以中心越界的 IsCut 结果触发 outputGM[idx] = 0，绕过该目标的贡献区间和累加。"
+          }
+        ],
+        "issues": [],
+        "conflicts": [],
+        "description": "一维 edge 路径 SimtComputeEdgeDimOne 中，旧实现以 IsCut 检出中心坐标越界后直接写零，并跳过 CalScope 和梯度累加。在中心越界而边界复制贡献区间仍非空时，此分支遗漏必需梯度项。",
+        "pattern_id": "C2",
+        "pattern_ref": "MECH-v0.3:C2",
+        "definition_level": "mechanism_relation",
+        "mode_name": "必需计算项遗漏",
+        "group_id": "item_multiplicity",
+        "group_ref": "MECH-v0.3:item_multiplicity",
+        "group_name": "计算项重复／遗漏问题",
+        "neighbors": [
+          {
+            "pattern_id": "C1",
+            "missing": [
+              "actual_contribution",
+              "ineligible_member"
+            ],
+            "contrary": [],
+            "disputed": [],
+            "pattern_ref": "MECH-v0.3:C1"
+          },
+          {
+            "pattern_id": "C3",
+            "missing": [
+              "excess_multiplicity",
+              "expected_multiplicity",
+              "original_contribution_identity"
+            ],
+            "contrary": [],
+            "disputed": [],
+            "pattern_ref": "MECH-v0.3:C3"
+          }
+        ],
+        "action_resolution": "supported",
+        "missing": [],
+        "count_as_independent": true
+      }
+    ]
+  },
+  {
+    "case_id": "r03-2",
+    "case_sha256": "b11eb71073420df00190d09984f6448e8e5e758efd21a4a579e65e1a0b094822",
+    "facts_sha256": "60cc53bf28de780e6e29dc70065a098e9467fb4c2400f55f80afa3be6f10e716",
+    "catalog_version": "0.3",
+    "decision_version": "0.3.0",
+    "mechanism_namespace": "MECH-v0.3",
+    "operator": "PyPTO row_max",
+    "roles": [
+      "每行的最大值",
+      "valid_shape 限定的有效域",
+      "部分块填充零",
+      "max 中性填充值 PadValue.min"
+    ],
+    "actions": [
+      {
+        "id": "row-max-raw-padding",
+        "scope": {
+          "version": "ed426adf23521673f218d3858cc19c270776d565",
+          "path": "docs/en/user/precision/01-cases.md",
+          "claim": "reported"
+        },
+        "role": "unknown",
+        "status": "leaf",
+        "facts": [
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "tutorial",
+                "start_line": 3,
+                "end_line": 8,
+                "quote": "**Symptom.** Row maxima come back `0.0` for data that is entirely negative. The kernel is\ncorrect on shapes that divide evenly into tiles.\n\n**Located by.** Step 2, then reading the kernel: a `pl.load(..., valid_shape=[64, vlen])`\nfeeding `row_max`. The padding participates in the reduction, and zero beats every negative\nvalue."
+              },
+              {
+                "source_id": "tutorial",
+                "start_line": 10,
+                "end_line": 12,
+                "quote": "**Change.** `pl.fillpad(..., pl.PadValue.min)` before the reduction — pad with the identity\nof the operation you are about to apply. `PadValue.zero` for `row_sum`, `max` for a min\nreduction."
+              },
+              {
+                "source_id": "tutorial",
+                "start_line": 14,
+                "end_line": 15,
+                "quote": "**Confirmed by.** The partial-tile case now matches. Note the full-tile case never failed,\nwhich is why this survives casual testing — see"
+              }
+            ],
+            "explanation": "部分块每行的最大值在 valid_shape 的有效位置上求取。教程记录整块对照，并指出归约前应填入对应运算的中性值。"
+          },
+          {
+            "key": "ineligible_member",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "tutorial",
+                "start_line": 3,
+                "end_line": 8,
+                "quote": "**Symptom.** Row maxima come back `0.0` for data that is entirely negative. The kernel is\ncorrect on shapes that divide evenly into tiles.\n\n**Located by.** Step 2, then reading the kernel: a `pl.load(..., valid_shape=[64, vlen])`\nfeeding `row_max`. The padding participates in the reduction, and zero beats every negative\nvalue."
+              },
+              {
+                "source_id": "tutorial",
+                "start_line": 10,
+                "end_line": 12,
+                "quote": "**Change.** `pl.fillpad(..., pl.PadValue.min)` before the reduction — pad with the identity\nof the operation you are about to apply. `PadValue.zero` for `row_sum`, `max` for a min\nreduction."
+              }
+            ],
+            "explanation": "部分块的零填充值位于 valid_shape 的有效列以外，语义上不应成为本行最大值候选。"
+          },
+          {
+            "key": "actual_contribution",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "tutorial",
+                "start_line": 3,
+                "end_line": 8,
+                "quote": "**Symptom.** Row maxima come back `0.0` for data that is entirely negative. The kernel is\ncorrect on shapes that divide evenly into tiles.\n\n**Located by.** Step 2, then reading the kernel: a `pl.load(..., valid_shape=[64, vlen])`\nfeeding `row_max`. The padding participates in the reduction, and zero beats every negative\nvalue."
+              }
+            ],
+            "explanation": "教程明确说填充参与 row_max。对全负有效输入，零大于所有有效行成员并成为输出 0.0，表明零填充在该运算中未被中性化。"
+          },
+          {
+            "key": "implementation_action",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "tutorial",
+                "start_line": 6,
+                "end_line": 8,
+                "quote": "**Located by.** Step 2, then reading the kernel: a `pl.load(..., valid_shape=[64, vlen])`\nfeeding `row_max`. The padding participates in the reduction, and zero beats every negative\nvalue."
+              }
+            ],
+            "explanation": "教程直接把故障内核的 pl.load(..., valid_shape=[64, vlen]) 与消费其结果的 row_max 绑定，并明确报告填充值进入归约。可定位的动作是对仍含可参与零填充值的负载结果调用 row_max。"
+          }
+        ],
+        "issues": [],
+        "conflicts": [],
+        "description": "教程报告部分块的 pl.load(..., valid_shape=[64, vlen]) 将零填充位置带进 row_max。全负有效数据的目标行最大值因此被零主导。具体调用链有报告证据，责任归属仍未知。",
+        "pattern_id": "C1",
+        "pattern_ref": "MECH-v0.3:C1",
+        "definition_level": "mechanism_relation",
+        "mode_name": "无效计算项纳入",
+        "group_id": "item_participation",
+        "group_ref": "MECH-v0.3:item_participation",
+        "group_name": "计算项的参与范围问题",
+        "neighbors": [
+          {
+            "pattern_id": "C2",
+            "missing": [
+              "omitted_contribution",
+              "required_member"
+            ],
+            "contrary": [],
+            "disputed": [],
+            "pattern_ref": "MECH-v0.3:C2"
+          },
+          {
+            "pattern_id": "C3",
+            "missing": [
+              "excess_multiplicity",
+              "expected_multiplicity",
+              "original_contribution_identity"
+            ],
+            "contrary": [],
+            "disputed": [],
+            "pattern_ref": "MECH-v0.3:C3"
+          }
+        ],
+        "action_resolution": "supported",
+        "missing": [],
+        "count_as_independent": false
+      }
+    ]
+  },
+  {
+    "case_id": "r03-3",
+    "case_sha256": "bfb8f4386685216d7d41408c1d8f7c3360529c525794c5b3e44db76d2e128a58",
+    "facts_sha256": "c846581a305b3e62540a1dd44bf29fdbe16c4708ce5a20ccf5ffddd1d5935d2f",
+    "catalog_version": "0.3",
+    "decision_version": "0.3.0",
+    "mechanism_namespace": "MECH-v0.3",
+    "operator": "SGLang MoE",
+    "roles": [
+      "同组 rank 原始专家部分量 m_i",
+      "TP 全规约完整和 s",
+      "DP-attention 后处理的同组 s 副本",
+      "目标 MoE 输出"
+    ],
+    "actions": [
+      {
+        "id": "postprocess-sum-replicas",
+        "scope": {
+          "version": "SGLang 0.5.18 author report",
+          "path": "sgl-project/sglang#37199",
+          "claim": "reported"
+        },
+        "role": "unknown",
+        "status": "leaf",
+        "facts": [
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "pr-report",
+                "start_line": 3,
+                "end_line": 10,
+                "quote": "With MoE A2A disabled and `TP == attention DP == EP`, every TP rank initially\nproduces an expert partial `m_i`.\n\n`GptOssSparseMoeBlock.forward_normal()` first performed a TP all-reduce, so\nevery rank held:\n\n```text\ns = m0 + m1 + ... + m(TP-1)"
+              },
+              {
+                "source_id": "pr-report",
+                "start_line": 13,
+                "end_line": 24,
+                "quote": "DP-attention postprocessing then called `reduce_scatterv` over the same TP\ngroup. Since reduce-scatter also sums its inputs, it combined TP replicated\ncopies of `s`, producing approximately:\n\n```text\nTP * s\n```\n\nOn TP4, the MoE output was therefore scaled by approximately 4x.\n\nThe residual branch was not scaled, so the following residual addition and\nnormalization could not cancel this error."
+              }
+            ],
+            "explanation": "限定在报告所述的 MoE A2A 关闭与三个并行度相等的同组路径。目标 MoE 输出的专家量由各 rank 的专家部分量之和确定。报告将再次加和完整和副本产生的缩放识别为该目标的错误。"
+          },
+          {
+            "key": "original_contribution_identity",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "pr-report",
+                "start_line": 3,
+                "end_line": 15,
+                "quote": "With MoE A2A disabled and `TP == attention DP == EP`, every TP rank initially\nproduces an expert partial `m_i`.\n\n`GptOssSparseMoeBlock.forward_normal()` first performed a TP all-reduce, so\nevery rank held:\n\n```text\ns = m0 + m1 + ... + m(TP-1)\n```\n\nDP-attention postprocessing then called `reduce_scatterv` over the same TP\ngroup. Since reduce-scatter also sums its inputs, it combined TP replicated\ncopies of `s`, producing approximately:"
+              }
+            ],
+            "explanation": "第一次 TP all-reduce 后，每个 rank 持有同一个完整和 s，含相同逻辑来源和相同专家部分量角色的 m_i。后处理在同一组接收这些副本，故每个副本中的同一个 m_i 对应同一个原始贡献。"
+          },
+          {
+            "key": "expected_multiplicity",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "pr-report",
+                "start_line": 6,
+                "end_line": 11,
+                "quote": "`GptOssSparseMoeBlock.forward_normal()` first performed a TP all-reduce, so\nevery rank held:\n\n```text\ns = m0 + m1 + ... + m(TP-1)\n```"
+              },
+              {
+                "source_id": "pr-report",
+                "start_line": 13,
+                "end_line": 24,
+                "quote": "DP-attention postprocessing then called `reduce_scatterv` over the same TP\ngroup. Since reduce-scatter also sums its inputs, it combined TP replicated\ncopies of `s`, producing approximately:\n\n```text\nTP * s\n```\n\nOn TP4, the MoE output was therefore scaled by approximately 4x.\n\nThe residual branch was not scaled, so the following residual addition and\nnormalization could not cancel this error."
+              }
+            ],
+            "explanation": "目标结果的完整专家和 s 对每个原始 m_i 计入一次。报告把在 TP4 将这个目标缩放为约四倍标为错误。"
+          },
+          {
+            "key": "excess_multiplicity",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "pr-report",
+                "start_line": 6,
+                "end_line": 11,
+                "quote": "`GptOssSparseMoeBlock.forward_normal()` first performed a TP all-reduce, so\nevery rank held:\n\n```text\ns = m0 + m1 + ... + m(TP-1)\n```"
+              },
+              {
+                "source_id": "pr-report",
+                "start_line": 13,
+                "end_line": 21,
+                "quote": "DP-attention postprocessing then called `reduce_scatterv` over the same TP\ngroup. Since reduce-scatter also sums its inputs, it combined TP replicated\ncopies of `s`, producing approximately:\n\n```text\nTP * s\n```\n\nOn TP4, the MoE output was therefore scaled by approximately 4x."
+              }
+            ],
+            "explanation": "报告明确后处理的 reduce_scatterv 加和同组多个 s 副本。由于每个副本包含所有 m_i，各原始部分量被再次计入额外副本，TP4 的结果约为正常专家和的四倍。"
+          },
+          {
+            "key": "implementation_action",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "pr-report",
+                "start_line": 6,
+                "end_line": 11,
+                "quote": "`GptOssSparseMoeBlock.forward_normal()` first performed a TP all-reduce, so\nevery rank held:\n\n```text\ns = m0 + m1 + ... + m(TP-1)\n```"
+              },
+              {
+                "source_id": "pr-report",
+                "start_line": 13,
+                "end_line": 15,
+                "quote": "DP-attention postprocessing then called `reduce_scatterv` over the same TP\ngroup. Since reduce-scatter also sums its inputs, it combined TP replicated\ncopies of `s`, producing approximately:"
+              }
+            ],
+            "explanation": "报告直接说明 DP-attention 后处理对第一次规约的同一 TP 组调用 reduce_scatterv，实际加和该组内的完整和 s 的副本。"
+          }
+        ],
+        "issues": [],
+        "conflicts": [],
+        "description": "作者报告在 MoE A2A 关闭且 TP == attention DP == EP 时，DP-attention 后处理对同一 TP 组调用 reduce_scatterv 并加和 TP 已规约出的完整和副本。该消费动作有直接陈述，最早错误动作与应承担责任的阶段仍未知。",
+        "pattern_id": "C3",
+        "pattern_ref": "MECH-v0.3:C3",
+        "definition_level": "mechanism_relation",
+        "mode_name": "同源计算项重复计入",
+        "group_id": "item_multiplicity",
+        "group_ref": "MECH-v0.3:item_multiplicity",
+        "group_name": "计算项重复／遗漏问题",
+        "neighbors": [
+          {
+            "pattern_id": "C1",
+            "missing": [
+              "actual_contribution",
+              "ineligible_member"
+            ],
+            "contrary": [],
+            "disputed": [],
+            "pattern_ref": "MECH-v0.3:C1"
+          },
+          {
+            "pattern_id": "C2",
+            "missing": [
+              "omitted_contribution",
+              "required_member"
+            ],
+            "contrary": [],
+            "disputed": [],
+            "pattern_ref": "MECH-v0.3:C2"
+          }
+        ],
+        "action_resolution": "supported",
+        "missing": [],
+        "count_as_independent": false
+      }
+    ]
+  }
+]

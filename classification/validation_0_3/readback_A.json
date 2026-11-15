@@ -1,0 +1,73 @@
+{
+  "cases": [
+    {
+      "case_id": "r03-1",
+      "sources": [
+        {
+          "id": "issue",
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "PadV3Grad Issue",
+          "kind": "issue",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N23/issue_description.md",
+          "original_start_line": 9,
+          "text": "修复padv3grad edge模板pad为负值刚好裁剪到inshape大小的计算错误"
+        },
+        {
+          "id": "diff",
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+          "kind": "diff",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N23/pr_1.patch",
+          "original_start_line": 8,
+          "text": "-__simt_callee__ __aicore__ bool IsCut(U* inIndex, __ubuf__ U* inShapes)\n-{\n-    // 判断当前输入位置是否被裁剪\n-    for (uint8_t i = 0; i < DIM; i++) {\n-        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n-            return true;\n-        }\n-    }\n-    return false;\n-}\n-\n-template <uint8_t DIM, typename U, typename GmOffsetType>\n __simt_callee__ __aicore__ void CalScope(\n-    GmOffsetType (*scopeIndex)[2], U* inIndex, U* outIndex, __ubuf__ U* rightPads, __ubuf__ U* outShapes)\n+    U (*scopeIndex)[2], U* inIndex, U* outIndex, __ubuf__ U* rightPads, __ubuf__ U* inShapes, __ubuf__ U* outShapes)\n {\n+    int8_t flag = 0;\n     for (uint8_t i = 0; i < DIM; i++) {\n+        // 判断是否被裁剪\n+        flag = 0;\n+        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n+            flag = 1;\n+        }\n         // 判断起始范围\n         if (outIndex[i] == 0) {\n             scopeIndex[i][0] = 0;\n         } else {\n-            scopeIndex[i][0] = inIndex[i];\n+            scopeIndex[i][0] = inIndex[i] + flag;\n         }\n         // 判断结束范围\n         if (outIndex[i] == outShapes[i] - 1) {\n             scopeIndex[i][1] = inIndex[i] + rightPads[i];\n         } else {\n-            scopeIndex[i][1] = inIndex[i];\n+            scopeIndex[i][1] = inIndex[i] - flag;\n         }\n     }\n }\n@@ -100,27 +94,23 @@ __simt_vf__ LAUNCH_BOUND(EDGE_THREAD_DIM) __aicore__ void SimtComputeEdgeDimOne(\n         // 计算输入输出索引\n         CalPos<DIM, U, GmOffsetType>(yIdx, inIndex, outIndex, outStrides, leftPads, magics, shifts);\n \n-        GmOffsetType scopeIndex[DIM][2]; // 每个维度的padding范围\n-        if (IsCut<DIM, U>(inIndex, inShapes)) {\n-            outputGM[idx] = 0;\n-        } else {\n-            CalScope<DIM, U, GmOffsetType>(scopeIndex, inIndex, outIndex, rightPads, outShapes);\n+        U scopeIndex[DIM][2]; // 每个维度的padding范围\n+        CalScope<DIM, U>(scopeIndex, inIndex, outIndex, rightPads, inShapes, outShapes);\n \n-            CastType total = 0;\n-            for (GmOffsetType a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n-                GmOffsetType inputOffset = a0;\n-                CastType tmpVal;\n-                if constexpr (std::is_same_v<T, bfloat16_t>) {\n-                    tmpVal = __bfloat162float(inputGM[inputOffset]);\n-                } else if constexpr (std::is_same_v<T, float16_t>) {\n-                    tmpVal = __half2float(inputGM[inputOffset]);\n-                } else {\n-                    tmpVal = inputGM[inputOffset];\n-                }\n-                total += tmpVal;\n+        CastType total = 0;\n+        for (U a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n+            GmOffsetType inputOffset = static_cast<GmOffsetType>(a0);\n+            CastType tmpVal;\n+            if constexpr (std::is_same_v<T, bfloat16_t>) {\n+                tmpVal = __bfloat162float(inputGM[inputOffset]);\n+            } else if constexpr (std::is_same_v<T, float16_t>) {\n+                tmpVal = __half2float(inputGM[inputOffset]);\n+            } else {\n+                tmpVal = inputGM[inputOffset];\n             }\n-            CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);\n+            total += tmpVal;\n         }\n+        CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);\n     }"
+        },
+        {
+          "id": "old-edge",
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N23/raw_history/be281ed951b1522a4d3d894a9b62030addb02074/conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+          "original_start_line": 100,
+          "text": "        // 计算输入输出索引\n        CalPos<DIM, U, GmOffsetType>(yIdx, inIndex, outIndex, outStrides, leftPads, magics, shifts);\n\n        GmOffsetType scopeIndex[DIM][2]; // 每个维度的padding范围\n        if (IsCut<DIM, U>(inIndex, inShapes)) {\n            outputGM[idx] = 0;\n        } else {\n            CalScope<DIM, U, GmOffsetType>(scopeIndex, inIndex, outIndex, rightPads, outShapes);\n\n            CastType total = 0;\n            for (GmOffsetType a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {"
+        },
+        {
+          "id": "shared-coordinate",
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_circular_simt.h",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N23/raw_history/be281ed951b1522a4d3d894a9b62030addb02074/conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_circular_simt.h",
+          "original_start_line": 65,
+          "text": "template <uint8_t DIM_NUM, typename U, typename GmOffsetType>\n__simt_callee__ __aicore__ void CalPos(\n    GmOffsetType yIdx, U* inIndex, U* outIndex, __ubuf__ U* outStrides, __ubuf__ U* leftPads,\n    __ubuf__ GmOffsetType* magics, __ubuf__ GmOffsetType* shifts)\n{\n    for (uint8_t i = 0; i < DIM_NUM - 1; i++) {\n        outIndex[i] = static_cast<U>(Simt::UintDiv(yIdx, magics[i], shifts[i])); // outIndex[i] = yIdx / outStrides[i];\n        yIdx -= outIndex[i] * outStrides[i];                                     // yIdx = yIdx % outStrides[i];\n    }\n    outIndex[DIM_NUM - 1] = yIdx;\n\n    // 当前输出位置再输入的索引\n    for (uint8_t i = 0; i < DIM_NUM; i++) {\n        inIndex[i] = outIndex[i] + leftPads[i];\n    }"
+        }
+      ]
+    },
+    {
+      "case_id": "r03-2",
+      "sources": [
+        {
+          "id": "tutorial",
+          "version": "ed426adf23521673f218d3858cc19c270776d565",
+          "path": "docs/en/user/precision/01-cases.md",
+          "kind": "report",
+          "origin": "https://github.com/hw-native-sys/pypto/blob/ed426adf23521673f218d3858cc19c270776d565/docs/en/user/precision/01-cases.md#L49-L63",
+          "original_start_line": 49,
+          "text": "## Case 3: padding contaminated a reduction\n\n**Symptom.** Row maxima come back `0.0` for data that is entirely negative. The kernel is\ncorrect on shapes that divide evenly into tiles.\n\n**Located by.** Step 2, then reading the kernel: a `pl.load(..., valid_shape=[64, vlen])`\nfeeding `row_max`. The padding participates in the reduction, and zero beats every negative\nvalue.\n\n**Change.** `pl.fillpad(..., pl.PadValue.min)` before the reduction — pad with the identity\nof the operation you are about to apply. `PadValue.zero` for `row_sum`, `max` for a min\nreduction.\n\n**Confirmed by.** The partial-tile case now matches. Note the full-tile case never failed,\nwhich is why this survives casual testing — see"
+        }
+      ]
+    },
+    {
+      "case_id": "r03-3",
+      "sources": [
+        {
+          "id": "pr-report",
+          "version": "SGLang 0.5.18 author report",
+          "path": "sgl-project/sglang#37199",
+          "kind": "report",
+          "origin": "https://github.com/sgl-project/sglang/pull/37199",
+          "original_start_line": 18,
+          "text": "### Root cause\n\nWith MoE A2A disabled and `TP == attention DP == EP`, every TP rank initially\nproduces an expert partial `m_i`.\n\n`GptOssSparseMoeBlock.forward_normal()` first performed a TP all-reduce, so\nevery rank held:\n\n```text\ns = m0 + m1 + ... + m(TP-1)\n```\n\nDP-attention postprocessing then called `reduce_scatterv` over the same TP\ngroup. Since reduce-scatter also sums its inputs, it combined TP replicated\ncopies of `s`, producing approximately:\n\n```text\nTP * s\n```\n\nOn TP4, the MoE output was therefore scaled by approximately 4x.\n\nThe residual branch was not scaled, so the following residual addition and\nnormalization could not cancel this error."
+        }
+      ]
+    }
+  ]
+}

@@ -97,6 +97,24 @@ class ModeReviewTest(unittest.TestCase):
         self.assertEqual(result["recommendation"], "retain_candidate")
         self.assertEqual(result["proposed_recommendation"], "reuse")
 
+    def test_relation_survives_uncertain_action_with_bound_partial_review(self):
+        case = self.subject(text="The same original partial is counted twice; stage ownership is unresolved.")
+        row = self.model(case, "retain_relation", level="mechanism_relation")
+        inputs = {"catalog_version": CATALOG["version"], "subjects": [case]}
+        models = {"reviews": [row]}
+        first, = review_catalog(inputs, models, CATALOG)["records"]
+        review = {"reviews": [{"subject_id": case["id"], "review_sha256": digest(row),
+                               "cache_key": first["cache_key"], "decision": "uncertain",
+                               "relation_supported": True, "reviewer": "fixture",
+                               "reason": "The local relation is supported. The exact action is undecided."}]}
+        result, = review_catalog(inputs, models, CATALOG, review)["records"]
+        self.assertEqual(result["recommendation"], "retain_relation")
+        self.assertEqual(result["case_role"], "unknown")
+        self.assertFalse(result["counted_independent"])
+        review["reviews"][0]["cache_key"] = "stale"
+        stale, = review_catalog(inputs, models, CATALOG, review)["records"]
+        self.assertEqual(stale["recommendation"], "retain_candidate")
+
     def test_concrete_early_return_can_support_omission(self):
         case = self.subject(text="Before counting required boundary members the routine returns zero.")
         result = self.single(case, self.reuse(case, "C2", level="mechanism_relation"))

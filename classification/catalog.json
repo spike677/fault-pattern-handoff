@@ -1,17 +1,32 @@
 {
-  "version": "0.2",
+  "version": "0.3",
   "status": "pilot_candidate",
   "parents": {
     "parameter": "参数语义",
     "address": "寻址映射",
-    "contribution": "成员与贡献"
+    "calculation_item": "计算项问题",
+    "item_participation": "计算项的参与范围问题",
+    "item_multiplicity": "计算项重复／遗漏问题"
+  },
+  "parent_hierarchy": {
+    "item_participation": "calculation_item",
+    "item_multiplicity": "calculation_item"
+  },
+  "parent_facts": {
+    "parameter": "parameter_violation",
+    "address": "address_violation",
+    "calculation_item": "contribution_violation",
+    "item_participation": "participation_violation",
+    "item_multiplicity": "multiplicity_violation"
   },
   "parent_definitions": {
     "parameter": "有依据地确认参数的来源、值或状态解释违反同版本、同路径的参数约定。",
     "address": "有依据地确认有效逻辑位置与实现读写的实际存储地址违反适用映射约定。",
-    "contribution": "有依据地确认某计算边界的实际贡献集合或重数违反适用的成员语义。"
+    "calculation_item": "有依据地确认适用计算约定下，某个目标结果的逻辑计算项出现资格或计入次数失配。当前证据无法进一步区分时可保留本上位类。",
+    "item_participation": "检查逻辑计算项按当前操作和目标结果的语义是否有资格被纳入。已证无资格的项实际参与计算，支持本组。",
+    "item_multiplicity": "检查有资格且按约定应参与的逻辑计算项是否达到规定的计入次数。未达规定次数或超出规定次数，支持本组。"
   },
-  "classification_unit": "一个特定版本及路径上可独立举证的错误动作。",
+  "classification_unit": "在明确版本和作用域内可举证的实现错误或局部失效关系。逻辑计算项是相对于目标结果按来源和语义角色区分的一项逻辑输入。局部失效关系与具体实现动作、因果角色分别记录。独立缺陷按有独立证据的错误动作计数。",
   "evidence_policy": {
     "reported": "保留原作者对行为、错误动作及其作用范围的明确陈述。分类限于报告描述。",
     "static": "绑定固定源码、同版本语义与可复算路径。结论限于源码中的动作及适用条件。",
@@ -28,19 +43,31 @@
       "所选合同不适用",
       "已证缺陷超出试点叶级目录"
     ],
-    "causality": "上游错误动作和由其解释的下游关系分别登记；证明另一个动作本身有独立错误时才新增独立缺陷。"
+    "causality": "P／L 叶级描述实现错误。C 叶级描述局部失效关系，由同作用域的语义和行为证据支持。记录已证实的具体动作、上游原因和责任阶段，缺证处标明未知。同一替换动作可以造成两个有证据的局部关系，并按一个独立动作计数。只有另一个缺陷动作有独立证据时才增加独立缺陷计数。"
   },
+  "combinations": [
+    {
+      "modes": [
+        "C1",
+        "C2"
+      ],
+      "parent": "calculation_item",
+      "required_fact": "distinct_members_for_replacement"
+    }
+  ],
   "modes": {
     "P1": {
-      "version": "0.2",
+      "version": "0.3",
       "parent": "parameter",
-      "title": "参数来源绑定错误",
+      "title": "参数来源误读",
+      "definition_level": "implementation_error",
       "definition": "适用路径从语义不等价的槽位、字段或参数取得值。",
       "object_roles": [
         "请求的参数",
         "实际参数来源"
       ],
       "applicability": "预期和实际来源能绑定同版本、同动作及同一参数角色。",
+      "operation_fact": "actual_source",
       "necessary": [
         "applicable_contract",
         "expected_source",
@@ -92,13 +119,15 @@
         }
       },
       "changes": [
-        "0.2 建立候选边界。独立验证状态为待验证。"
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 采用新展示名，保留实际来源及来源语义等价性边界。"
       ]
     },
     "P2": {
-      "version": "0.2",
+      "version": "0.3",
       "parent": "parameter",
-      "title": "特殊参数状态解释错误",
+      "title": "特殊参数状态误解释",
+      "definition_level": "implementation_error",
       "definition": "正确取得特殊状态后，套用不适用的有效值处理，改变状态语义。",
       "object_roles": [
         "可选状态",
@@ -106,6 +135,7 @@
         "合法数据值"
       ],
       "applicability": "正确来源、历史状态定义和处理分支可绑定到目标版本及路径。",
+      "operation_fact": "wrong_state_treatment",
       "necessary": [
         "applicable_contract",
         "correct_source",
@@ -159,21 +189,24 @@
         }
       },
       "changes": [
-        "0.2 建立候选边界。独立验证状态为待验证。"
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 采用新展示名，保留正确来源和不当状态处理的必要条件。"
       ]
     },
     "L1": {
-      "version": "0.2",
+      "version": "0.3",
       "parent": "address",
-      "title": "错误套用连续布局寻址",
-      "definition": "应支持原视图的路径未经正确连续化却用连续地址公式访问。",
+      "title": "错误采用连续布局寻址",
+      "definition_level": "implementation_error",
+      "definition": "路径应按原视图寻址且地址被消费前没有正确连续化，实际地址映射的至少一个必要项错误采用连续布局假设，导致映射偏离原视图。",
       "object_roles": [
         "张量视图",
         "逻辑坐标",
         "基址",
         "实际步长"
       ],
-      "applicability": "在固定路径确认受支持的视图、实际映射公式及连续化处理情况。",
+      "applicability": "绑定固定版本的受支持视图、实际读写路径、被消费的寻址项及连续化情况。",
+      "operation_fact": "contiguous_formula",
       "necessary": [
         "applicable_contract",
         "supported_view",
@@ -181,10 +214,10 @@
         "contiguous_formula"
       ],
       "decisive_facts": {
-        "applicable_contract": "版本语义名称与读取/写回路径清楚。",
-        "supported_view": "目标路径须接纳带该 stride 或偏移的原视图。",
-        "no_correct_contiguous_conversion": "使用该地址前仍应按原视图寻址。",
-        "contiguous_formula": "实现用密排 shape/步长或基址公式代替实际视图映射。"
+        "applicable_contract": "版本、视图约定及实际读写路径明确。",
+        "supported_view": "目标路径须接纳该 stride、基址或偏移的原视图。",
+        "no_correct_contiguous_conversion": "消费者实际使用的地址仍需遵守原视图映射。",
+        "contiguous_formula": "定位至少一个被消费者用于寻址的必要项，证明密排假设代替了原视图映射。其余地址项可用正确 stride。"
       },
       "accepted_evidence": [
         "来源明确陈述的缺陷",
@@ -197,9 +230,9 @@
         "view_formula_correct"
       ],
       "exclude": [
-        "明确不支持并合法拒绝的视图。",
+        "路径按约定不接纳原视图，或正确拒绝、转换该输入。",
         "正确连续化后使用密排公式。",
-        "与连续布局假设无关的地址公式缺项。"
+        "与连续布局假设无关的地址坐标或基址项遗漏。"
       ],
       "near_neighbors": {
         "L2": "L2 区分式是单位或存储宽度转换，公式可以保留正确 stride。",
@@ -215,7 +248,7 @@
         "positive": {
           "case": "N20 Concat",
           "scope": "源码缺陷",
-          "why": "非连续视图支持路径的实际行跨度被 shape 列数代替。"
+          "why": "固定旧版用逻辑列数 sameShapeTensorDim1 计算分块内源行起点，实际块基址和行间拷贝设置虽分别取 dim0stride，该必要寻址项仍偏离受支持的原视图。"
         },
         "negative": {
           "case": "N06",
@@ -228,13 +261,15 @@
         }
       },
       "changes": [
-        "0.2 建立候选边界。独立验证状态为待验证。"
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 将判定范围明确到被消费的必要寻址项，纳入 N20 混合正确 stride 的同公式正例。"
       ]
     },
     "L2": {
-      "version": "0.2",
+      "version": "0.3",
       "parent": "address",
-      "title": "地址计算中单位换算错误",
+      "title": "寻址单位换算错误",
+      "definition_level": "implementation_error",
       "definition": "地址运算在 element、bit 与 byte 间的转换遗漏、重复或落在错误位置。",
       "object_roles": [
         "逻辑偏移",
@@ -242,6 +277,7 @@
         "寻址单位"
       ],
       "applicability": "同一偏移、长度或位打包边界可追溯来源与消费者的单位。",
+      "operation_fact": "wrong_conversion",
       "necessary": [
         "applicable_contract",
         "expected_units",
@@ -293,21 +329,24 @@
         }
       },
       "changes": [
-        "0.2 建立候选边界。独立验证状态为待验证。"
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 采用新展示名，保留地址单位转换和布局公式的边界。"
       ]
     },
     "C1": {
-      "version": "0.2",
-      "parent": "contribution",
-      "title": "无效成员被纳入",
-      "definition": "不具成员资格的值在给定计算边界形成实质上不允许的贡献。",
+      "version": "0.3",
+      "parent": "item_participation",
+      "title": "无效计算项纳入",
+      "definition_level": "mechanism_relation",
+      "definition": "按当前计算约定无资格参与的逻辑计算项，实际进入目标计算，且未按该运算语义中性化或排除。",
       "object_roles": [
-        "成员资格",
-        "有效域",
-        "mask",
-        "实际贡献"
+        "目标结果",
+        "运算有效域",
+        "逻辑计算项",
+        "排除或中性化处理"
       ],
-      "applicability": "同一计算边界、运算语义、排除规则及成员身份明确。",
+      "applicability": "同一计算边界的目标结果、运算语义、资格条件和计算项来源明确。",
+      "operation_fact": "actual_contribution",
       "necessary": [
         "applicable_contract",
         "ineligible_member",
@@ -315,8 +354,8 @@
       ],
       "decisive_facts": {
         "applicable_contract": "确定运算边界及有效域约定。",
-        "ineligible_member": "该逻辑成员按语义必须排除。",
-        "actual_contribution": "该成员实际影响候选贡献，未在计算前被有效中性化。"
+        "ineligible_member": "该逻辑计算项按同一边界的语义必须排除。",
+        "actual_contribution": "有证据显示无资格项实际参与运算，且对该语义没有被有效中性化。只见 padding、读取或写入不足以证明参与。"
       },
       "accepted_evidence": [
         "来源明确陈述的缺陷",
@@ -328,13 +367,12 @@
         "contribution_neutralized"
       ],
       "exclude": [
-        "读到了 padding 但正确 mask 或用对当前运算的中性元素。",
-        "属于有效集合的合法扩充。",
-        "上游错误导致的下游异常，只在有独立成员处理错误证据时另判。"
+        "读取域外数据后，执行了正确的屏蔽或采用了对本运算有效的中性填充。",
+        "计算约定允许该逻辑计算项参与。"
       ],
       "near_neighbors": {
-        "C2": "C2 缺少应纳入成员。",
-        "C3": "C3 同一应有原始贡献的次数超约定。"
+        "C2": "C2 确认另一个本应计入的项被遗漏。若同一替换动作同时满足两项独立判据，按一个动作保留 C1、C2。",
+        "C3": "C3 核对本来有效的同源计算项是否超过计入次数。"
       },
       "retrieval_clues": [
         "padding 读取",
@@ -345,8 +383,8 @@
       "examples": {
         "positive": {
           "case": "PyPTO row_max 教程 Case 3",
-          "scope": "来源报告",
-          "why": "有效范围外零值进入全负块的 max，作者改为 max 中性填充值后恢复。"
+          "scope": "作者报告的局部失效关系",
+          "why": "教程记录 valid_shape 之外的零进入全负部分块的 max 并主导结果，修订为 max 的中性填充后恢复。报告支持无效项已参与的局部关系，故障内核构建及全链路责任位置仍待核。"
         },
         "negative": {
           "case": "PyPTO 中性填充对照",
@@ -359,20 +397,23 @@
         }
       },
       "changes": [
-        "0.2 建立候选边界。独立验证状态为待验证。"
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 按参与资格归组，明确作者报告可支持的局部关系和未验证构建的范围。"
       ]
     },
     "C2": {
-      "version": "0.2",
-      "parent": "contribution",
-      "title": "有效贡献被遗漏",
-      "definition": "某语义上必须保留的贡献在其目标计算边界未出现。",
+      "version": "0.3",
+      "parent": "item_multiplicity",
+      "title": "必需计算项遗漏",
+      "definition_level": "mechanism_relation",
+      "definition": "在给定计算语义下，至少一次必须保留的逻辑计算项未到达目标结果，且该次贡献未由等价路径保留。",
       "object_roles": [
-        "应参与的成员",
+        "必需逻辑计算项",
         "贡献区间",
-        "输出接收边界"
+        "目标结果"
       ],
-      "applicability": "成员资格与实际消失的计算边界能对应。",
+      "applicability": "绑定同一版本及计算边界的适用条件，核对必需计算项与其在实际路径上的去向。",
+      "operation_fact": "omitted_contribution",
       "necessary": [
         "applicable_contract",
         "required_member",
@@ -380,8 +421,8 @@
       ],
       "decisive_facts": {
         "applicable_contract": "确定运算语义与受评计算边界。",
-        "required_member": "指出必须保留的成员、区域或分片与其应到达的结果。",
-        "omitted_contribution": "源码或原件证据显示该贡献未到达语义等价的计算结果。"
+        "required_member": "指出目标结果所要求的逻辑计算项、区域或分片及其至少一次必需的计入。",
+        "omitted_contribution": "限定于适用路径，证明语义要求的计入实际缺失，且无等价路径补足。已有具体动作时另记其实现位置与条件，例如提前写零绕过累加。"
       },
       "accepted_evidence": [
         "来源明确陈述的缺陷",
@@ -393,9 +434,8 @@
         "omission_permitted"
       ],
       "exclude": [
-        "允许的 mask、稀疏过滤、分片分工。",
-        "另一路完成相同语义贡献的优化。",
-        "上游参数错读的派生遗漏。"
+        "运算允许的 mask、稀疏过滤或分片职责。",
+        "另一路完成相同语义贡献的优化。"
       ],
       "near_neighbors": {
         "C1": "C1 需要证明额外的无效成员贡献。",
@@ -411,8 +451,8 @@
       "examples": {
         "positive": {
           "case": "N23 PadV3Grad edge",
-          "scope": "源码缺陷",
-          "why": "中心坐标越界却仍有应累加的边界复制梯度，旧 IsCut 写零绕过了 CalScope。"
+          "scope": "固定源码的条件性分析",
+          "why": "当适用的 edge 路径中中心坐标越界且边界复制梯度区间仍非空，旧 IsCut 分支直接写零并跳过 CalScope 与累加。必需梯度项遗漏是共性关系，提前写零是本案具体动作。结论限于满足这些静态条件的路径。"
         },
         "negative": {
           "case": "N23 真正裁剪的内部坐标对照",
@@ -425,21 +465,24 @@
         }
       },
       "changes": [
-        "0.2 建立候选边界。独立验证状态为待验证。"
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 按有效项计入次数归组。分开描述必需项遗漏关系、具体动作和路径适用条件。"
       ]
     },
     "C3": {
-      "version": "0.2",
-      "parent": "contribution",
-      "title": "原始贡献被重复计入",
-      "definition": "同一原始贡献的实际入账次数超过对应运算边界的语义要求。",
+      "version": "0.3",
+      "parent": "item_multiplicity",
+      "title": "同源计算项重复计入",
+      "definition_level": "mechanism_relation",
+      "definition": "相对于同一目标结果，同一逻辑来源及语义角色的计算项实际计入次数超过该操作的约定。",
       "object_roles": [
-        "逻辑原始贡献",
-        "partial",
-        "完整副本",
-        "规约接收边界"
+        "逻辑计算项的来源",
+        "独立部分结果",
+        "完整结果副本",
+        "目标规约结果"
       ],
-      "applicability": "有证据区分原始贡献来源、独立 partial 与共享完整副本，并固定受评计算边界。",
+      "applicability": "绑定目标结果及受评计算边界，有证据区分同源逻辑项、独立部分结果和完整副本。",
+      "operation_fact": "excess_multiplicity",
       "necessary": [
         "applicable_contract",
         "original_contribution_identity",
@@ -447,10 +490,10 @@
         "excess_multiplicity"
       ],
       "decisive_facts": {
-        "applicable_contract": "确定目标结果、成员与规约职责。",
-        "original_contribution_identity": "映射到同一逻辑原始贡献，相同数值不足以建立同源。",
-        "expected_multiplicity": "明确该原始贡献按特定模式允许计入几次。",
-        "excess_multiplicity": "映射后的实际入账次数超过约定，并影响目标计算语义。"
+        "applicable_contract": "确定目标结果、逻辑来源和各输入对该结果承担的语义角色。",
+        "original_contribution_identity": "证明这些计算项映射到同一逻辑来源及角色。相同值、地址、读取次数或 rank 数都不足以建立同源。",
+        "expected_multiplicity": "确定该计算项在相应目标结果中依语义允许计入的次数。",
+        "excess_multiplicity": "按已证同源关系，证明实际计入超过约定。实际计算关系与引入重复的最早实现动作分别举证。"
       },
       "accepted_evidence": [
         "来源明确陈述的缺陷",
@@ -462,9 +505,10 @@
         "repeat_semantics_permitted"
       ],
       "exclude": [
-        "重复读取且未重复入账。",
-        "合法的分层归约或重复索引语义。",
-        "非独立入账的广播结果副本。"
+        "重复物理读取但未重复计入目标结果。",
+        "各自独立的部分结果按约定作分层归约。",
+        "语义允许的重复索引、同一输入承担多个合法角色或参与不同结果。",
+        "完整结果副本仅被广播或分发，且未再次合并为同一结果。"
       ],
       "near_neighbors": {
         "C1": "C1 成员本身不应出现在该边界。",
@@ -479,8 +523,8 @@
       "examples": {
         "positive": {
           "case": "SGLang MoE #37187 / #37199",
-          "scope": "来源报告",
-          "why": "来源说明同组已完整规约的多个副本被后处理重新加和，原始贡献超重数。"
+          "scope": "作者报告的局部失效关系",
+          "why": "报告描述同一 TP 组已完整规约的多个副本由后处理再次加和，据此支持同源项超额计入。最早错误动作、具体阶段职责和逐 rank 运行缓冲各自仍待核。"
         },
         "negative": {
           "case": "合法分层归约对照",
@@ -493,7 +537,8 @@
         }
       },
       "changes": [
-        "0.2 建立候选边界。独立验证状态为待验证。"
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 按有效项计入次数归组。来源报告可支持重复计入关系，职责未明时保留相应未决项。"
       ]
     }
   },
@@ -527,7 +572,7 @@
         "各输入行 stride",
         "分块源起点"
       ],
-      "contract_context": "支持的非连续视图，应使用当前输入的实际行 stride。",
+      "contract_context": "支持的非连续视图应使用各输入实际行 stride，同时核对块基址、块内行起点及行间拷贝间隔各自使用的量。",
       "reference": "N20"
     },
     {
@@ -568,7 +613,7 @@
         "部分块 padding",
         "max 的中性填充值"
       ],
-      "contract_context": "成员集合按 valid_shape 限定，非成员读取只有在发生非法实际贡献时才构成 C1。",
+      "contract_context": "valid_shape 限定候选元素。核对无效位置是否通过屏蔽或 max 的中性值退出本次结果的候选集合。",
       "reference": "PyPTO 教程 Case 3"
     },
     {
@@ -578,7 +623,7 @@
         "边界复制",
         "反向贡献区间"
       ],
-      "contract_context": "中心索引越界仍可能有应当累加的复制梯度，实际空贡献区间才允许输出零。",
+      "contract_context": "目标梯度的贡献区间由边界复制语义决定。中心索引越界时仍应检查区间是否非空，区间为空才允许按空和写零。",
       "reference": "N23"
     },
     {
@@ -588,7 +633,7 @@
         "TP 完整和",
         "ReduceScatterV 接收副本"
       ],
-      "contract_context": "按同组逻辑源辨别 partial 和完整副本，分别核对第一道职责动作与实际重复合并。",
+      "contract_context": "从目标结果追溯每个逻辑 TP 来源，区别独立部分结果和同组完整副本。实际重复合并及责任阶段需要各自证据。",
       "reference": "SGLang #37187 / #37199"
     }
   ],
@@ -596,6 +641,10 @@
     {
       "version": "0.2",
       "change": "确立三组上位、七条候选及独立根因计数。P1 与 P2 拆分来源和状态处理，L1 与 L2 按地址错误操作区分，C1–C3 按成员及重数区分。没有把旧寻址上位机理直接迁为叶级。"
+    },
+    {
+      "version": "0.3",
+      "change": "保留七个模式 ID，采纳新展示名。旧 contribution 粗粒度判断对应 calculation_item，旧记录维持原目录版本。C1 迁入 item_participation，C2／C3 迁入 item_multiplicity。细化上位结论须有相应事实。同一替换允许 C1、C2 组合，前提是两个有证据的不同逻辑计算项。标明实现错误和局部失效关系，细化 L1 及 C 类边界。本版本保留试点候选状态。"
     }
   ]
 }

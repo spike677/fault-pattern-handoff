@@ -13,7 +13,7 @@ else:
                           nonempty, scoped_source, strings, validate_scope)
 
 
-PROTOCOL = "mode_semantic_review/0.1"
+PROTOCOL = "mode_semantic_review/0.2"
 STATE = "SUGGESTION_ONLY"
 RETAIN = "retain_candidate"
 STRONG = {"reuse", "propose_addition", "exclude_scoped"}
@@ -277,18 +277,23 @@ def review_catalog(inputs, model_output, catalog, evidence_review=None, previous
             bound = check_model(row, subject, scope, sources, catalog["modes"], issues)
         if in_set(proposed, STRONG) and semantic != "supported" and semantic != "unsupported":
             issues.append("semantic_review_required_for_strong_suggestion")
+        relation_only = (proposed == "retain_relation" and level == "mechanism_relation"
+                         and semantic == "uncertain" and assessment.get("relation_supported") is True
+                         and bound.get("actual_action") and set(issues) == {"semantic_review_uncertain"})
         entry = {
             "subject_id": identity, "state": STATE, "retained": True,
             "scope": subject.get("scope"),
             "definition_level": level if in_set(level, LEVELS) else None,
-            "case_role": role if in_set(role, ROLES) else "unknown",
-            "recommendation": RETAIN if issues or proposed is None else proposed,
+            "case_role": role if in_set(role, ROLES) and not relation_only else "unknown",
+            "recommendation": proposed if relation_only or not issues else RETAIN,
             "proposed_recommendation": proposed, "semantic_status": semantic,
             "validation_issues": sorted(set(issues)), "cache_key": cache_key,
             "review_sha256": review_sha, "reused": reused,
             "model_review": row, "evidence_review": assessment,
             "counted_independent": False,
         }
+        if relation_only:
+            entry["relation_supported"] = True
         entries.append(entry)
         if (not issues and semantic == "supported" and level in ("implementation_error", "mechanism_relation")
                 and proposed != "exclude_scoped" and bound.get("case_role") and bound.get("actual_action")):

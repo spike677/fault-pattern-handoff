@@ -1,4 +1,4 @@
-# 模式语义轻量复核 0.1
+# 模式语义轻量复核 0.2
 
 这是分类工作流的新增旁路。当前目录版本和正式执行配置可由既有候选冻结记录复核。此流程检查候选定义或目录变更的建议，日常案件仍使用固定分类入口。
 
@@ -47,3 +47,5 @@ python -B -X utf8 classification/mode_review.py INPUT.json MODEL_OUTPUT.json --e
 核对旧复核时传入 `--previous`。 如本轮只复用，模型输出文件使用空的 reviews 列表 JSON。内容、证据、参考或目录变化会改变上下文键。
 
 程序验证内容绑定、引用和版本，保留问题及原模型建议。真实引用只是来源标记。复核证据语义时，先运行不带证据复核参数的命令取得候选上下文键和原模型输出哈希，再填写 `EVIDENCE_REVIEW.json`。其中 `reviews` 列表每条含 `subject_id`、`cache_key`、`review_sha256`、`decision`（`supported`、`unsupported`、`uncertain`）、`reviewer`、`reason`。这项复查可由人或当前 Work 对照原件完成，保留实际判读范围。对已证新增、复用或排除的建议，程序要求正面原件及语义复查依据。范围匹配后仍由采纳另行记录处理正式变更。普通保留与修订建议无需先作强结论。
+
+若复核确认局部机理关系，具体实现责任仍待核，`uncertain` 记录可附 `relation_supported: true`。当前目录下，原模型建议为 `retain_relation`，且实际关系有同作用域原件锚点时，程序保留该关系，将案件角色记为未知，独立动作数计零。旧协议的复核记录按原版本回放。

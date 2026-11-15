@@ -42,6 +42,25 @@ class DevelopmentClassification(unittest.TestCase):
                 self.assertFalse(output["issues"])
                 self.assertTrue(all(f["anchors"] and f["explanation"] for f in output["facts"]))
 
+    def test_calculation_item_facts_can_establish_relation_without_implementation(self):
+        packets = {row["case_id"]: row for row in load("validation_0_3/development_facts_0_3.json")}
+        for case_id, mode, group, supported in (
+            ("dev-07", "C2", "item_multiplicity", True),
+            ("dev-08", "C1", "item_participation", True),
+            ("dev-09", "C3", "item_multiplicity", False),
+        ):
+            with self.subTest(case_id=case_id):
+                archived, = self.trial(case_id)["actions"]
+                self.assertEqual(archived["pattern_id"], mode)
+                self.assertEqual(archived["action_resolution"], "unresolved")
+                self.assertFalse(archived["count_as_independent"])
+                review, = self.trial(case_id, packets[case_id])["actions"]
+                self.assertEqual(review["pattern_id"], mode)
+                self.assertEqual(review["group_id"], group)
+                self.assertEqual(review["definition_level"], "mechanism_relation")
+                self.assertEqual(review["action_resolution"], "supported" if supported else "unresolved")
+                self.assertEqual(review["count_as_independent"], supported)
+
     def test_batch_matches_cases_by_id(self):
         batch = load("development_cases.json")
         packets = list(reversed(load("development_facts.json")))
@@ -126,6 +145,17 @@ class DevelopmentClassification(unittest.TestCase):
         self.assertEqual([a["count_as_independent"] for a in actions], [True, False])
         c1.pop("upstream_id")
         c1["role"] = "independent"
+        actions = classify(case, packet, self.catalog)["actions"]
+        self.assertEqual(actions[1]["role"], "unknown")
+        self.assertEqual(actions[1]["proposed_role"], "independent")
+        self.assertEqual([a["count_as_independent"] for a in actions], [True, False])
+        extra = {**source, "id": "specific-action",
+                 "text": "Synthetic control: a separate hard-coded guard admits a padded member."}
+        case["sources"].append(extra)
+        c1["facts"].append({
+            "key": "implementation_action", "value": True, "explanation": extra["text"],
+            "anchors": [{"source_id": extra["id"], "start_line": 1, "end_line": 1, "quote": extra["text"]}],
+        })
         actions = classify(case, packet, self.catalog)["actions"]
         self.assertEqual([a["count_as_independent"] for a in actions], [True, True])
 
