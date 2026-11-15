@@ -22,7 +22,8 @@ class BoundaryScoringTest(unittest.TestCase):
 
     def grade(self, actual, allowed, *, primary=None, facts_supported=True, error=None,
               predicted_role="primary", expected_role="primary", resolution="supported"):
-        expected = {"id": "gold", "role": expected_role, "allowed": allowed}
+        expected = {"id": "gold", "role": expected_role, "allowed": allowed,
+                    "specific_action": "Expected concrete action" if resolution == "supported" else None}
         if primary is not None:
             expected["primary"] = primary
         answer = {"family_id": "example-family", "operator": "example-op", "actions": [expected]}
@@ -42,6 +43,7 @@ class BoundaryScoringTest(unittest.TestCase):
         review = {
             "actions": [{"prediction_id": "prediction", "expected_id": "gold",
                          "facts_supported": facts_supported, "rationale": "Synthetic boundary",
+                         "action_correct": True, "action_rationale": "Synthetic action is aligned",
                          "failure_causes": [error] if error else []}],
         }
         graded = evaluate.grade_case(result, answer, review, self.standard)

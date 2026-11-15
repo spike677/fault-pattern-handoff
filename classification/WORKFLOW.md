@@ -1,4 +1,4 @@
-# 算子故障机理分类试点 0.3
+# 算子故障机理分类试点 0.3.1
 
 本流程接受已知 Bug 材料，输出可追溯的实现缺陷分类。模式卡和算子语义索引在 `catalog.json`。历史诊断入口在 `diagnosis_mvp`。实验的模型回复、工具配置和事实包需要留档，便于将抽取差异与规则差异分开复核。
 
@@ -52,7 +52,7 @@ C 类的叶级裁决记录局部机制。要主张具体独立错误，事实包
 
 有多个允许结果时，金标准以显式 primary 决定分母，替代结果另计。组层级和 C1+C2 组合随目录冻结。机理持久化用 MECH-v0.3，API42、V4 保留输入构造的轴及各自分母。术语、参考关系及例外边界见 TERMS_AND_REFERENCES.md。
 
-历史 0.2 和 0.2.1 的配置、事实和已出评分按原 Git 快照复跑。0.3 的资料视图可复用原件，金标准按可见证据先审责任范围与组层级，再冻结。配置、提示或模式变化后的未见复验使用新事件家族。
+历史配置、事实和评分按原 Git 快照复跑。首批 0.3 开发试测的可执行快照为 `064a872082b6f0c2eb549558148ad3a5acf7028e`。修订版沿用 0.3 目录和 `MECH-v0.3`，冻结协议为 `classification_only/0.3.1`。历史 A 可以再次用于开发回归，配置、提示或模式变化后的未见复验使用新事件家族。
 
 ## 独立样本交接
 
@@ -67,7 +67,7 @@ A 只含原始材料的评估视图及追溯元数据。B 在执行者不可访�
 运行文件使用 JSON。文件路径指向对应角色可访问的存储位置，A 与 B 实际分开放置。以下命令从交接仓根目录运行。
 
 ```powershell
-python -B -X utf8 classification/evaluate.py freeze execution.json development_lineage.json freeze.json --artifact validation_0_3/PROMPT.md --artifact TERMS_AND_REFERENCES.md
+python -B -X utf8 classification/evaluate.py freeze execution.json development_lineage.json freeze.json --artifact validation_0_3_1/PROMPT.md --artifact TERMS_AND_REFERENCES.md
 python -B -X utf8 classification/evaluate.py seal freeze.json A.json B.json seal.json --kind real
 python -B -X utf8 classification/evaluate.py probe SENTINEL probe-1.json
 python -B -X utf8 classification/evaluate.py capture freeze.json A.json seal.json results-1.json context-1.json facts-1.json execution-1.log run-1.json --probe probe-1.json
@@ -79,10 +79,12 @@ python -B -X utf8 classification/evaluate.py score freeze.json A.json seal.json 
 
 `freeze` 由开发者操作，冻结当前规则文件、读件流程、详细执行提示、模型和工具配置以及开发暴露键。实际执行配置 `execution.json` 含 `model`、`prompt` 和 `tools`。命令中的暴露清单应使用本批实审版本，可从随仓的 `classification/development_lineage.json` 扩展。键使用 `event:平台/组织/仓库#Issue号`、`patch:平台/组织/仓库!PR号` 和经对照的补丁、源码、镜像或答案键。别名需按实际事件连通关系归并。
 
-`seal` 在整理者可查看双包的环境执行。A 为 `{"cases":[...]}`，每案的多个来源保留原件片段。B 记录整理者和独立答案复核者 ID、筛选说明及全部案例。每案含原件和暴露复核、事件家族、来源键、算子及期望动作。期望动作记录可接受状态、模式或上位类、关键事实、近邻和上下游关系。每个状态可有多个可接受结果，前提是这些结果都满足 A 的可见事实。
+`seal` 在整理者可查看双包的环境执行。A 为 `{"cases":[...]}`，每案的多个来源保留原件片段。B 记录整理者和独立答案复核者 ID、筛选说明及全部案例。每案含原件和暴露复核、事件家族、来源键、算子及期望动作。期望动作记录可接受状态、模式或上位类、关键事实、近邻和上下游关系。`specific_action` 写 A 所支持的具体错误操作，证据不足时用 `null`。允许集合有多个不同裁决时显式指定 `primary`。如果 A 支持至少两个根动作且没有确定主次，在案级设置 `root_order_unspecified: true` 并填写 `root_order_rationale`。评分仍核对每条下游边对应的上游动作。
 
 `probe`、读件、分类和 `capture` 分别从两个隔离执行上下文运行。两个 `facts` 文件各是该次独立提取的事实包列表，两个 `results` 文件各可用 `classify.py --batch A.json facts-1.json` 生成，第二次使用其独立事实包。保留实际执行日志。上下文记录执行者、上下文、外部见证人、隔离方式、实际冻结配置、哨兵哈希，以及独立保管、只读已批准输入、新上下文、无先前结果四项见证。整理者与见证人确认被拒绝或未挂载的哨兵确实部署在待验证边界。
 
-`lock` 锁定两轮输出。判卷者随后持锁定记录及 B 运行 `score`。复核记录逐轮、逐案给出预测动作与答案动作对应、事实语义是否获支持、理由及失败原因。记录遗漏动作，使用原件和固定版本判卷。分歧无法解消时保留有据层级。答案错误走版本化修订，使用同两份已封存预测统一重评。需要本地合成流程演练时使用 `seal --kind exercise`，输出范围为演练。
+`lock` 锁定两轮输出。判卷者随后持锁定记录及 B 运行 `score`。按错误操作、对象、源码位置与作用域对齐预测与参考动作。每项 `facts_supported` 核查裁决所需的证据，另以 `action_correct` 和 `action_rationale` 核查具体操作或应保留的未知。逐动作登记失败成因及遗漏，重复断言可标 `double_count: true`。判卷记录的 `stability` 数组逐案包含 `case_id`、`same_decisive_facts`、`same_specific_action` 和 `rationale`。严格标签和允许集合内的一致性分别计算，因果结构按对齐的动作身份与边比较。答案修订使用 `score --revision` 并绑定原 B 哈希，保留原结果。
+
+评分文件分别给出有据机理与状态、按家族的叶级覆盖、具体动作及未知动作误确认、因果关系和完整案件。独立动作按身份对账 `claimed`、`expected`、`true_positive`、`false_positive`、`false_negative` 和 `duplicates`，可回溯到动作或遗漏项。两个执行上下文都记录冻结的 `execution` 配置。共享权限边界中的开发试测使用 `seal --kind exercise`。
 
 与命令对应的最小 JSON 构造和失败回归见 `test_evaluate.py`。实际原件不得与其答案存放在同一可读目录或分发包。

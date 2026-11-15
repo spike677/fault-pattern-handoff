@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from classify import classify
+from classify import FACT_PROTOCOL, classify
 import evaluate as evaluation
 
 
@@ -26,18 +26,23 @@ class EvaluationTest(unittest.TestCase):
         self.freeze = self.root / "freeze.json"
         evaluation.freeze(put(self.root / "config.json", self.execution),
                           put(self.root / "exposures.json", ["event:development-only"]), self.freeze)
-        self.case = {"case_id": "opaque-case", "sources": [{
-            "id": "source", "version": "v-fixture", "path": "kernel.py", "kind": "code",
-            "text": "expected parameter is attr_a; kernel reads attr_b with another role",
-        }]}
+        self.case = {"case_id": "opaque-case", "sources": [
+            {"id": "contract", "version": "v-fixture", "path": "API.md", "kind": "contract",
+             "text": "The argument must be taken from attr_a."},
+            {"id": "source", "version": "v-fixture", "path": "kernel.py", "kind": "code",
+             "text": "The first action reads attr_b with a different semantic role."},
+        ]}
+        anchors = [{"source_id": source["id"], "start_line": 1, "end_line": 1, "quote": source["text"],
+                    "use": use}
+                   for source, use in zip(self.case["sources"], ("requirement", "behavior"))]
         self.packet = {
             "case_id": self.case["case_id"], "operator": "toy", "roles": ["argument"],
+            "fact_protocol": FACT_PROTOCOL,
             "actions": [{"id": "pred-action", "role": "primary",
                          "scope": {"version": "v-fixture", "path": "kernel.py", "claim": "static"},
-                         "facts": [{"key": key, "value": True, "anchors": [{
-                             "source_id": "source", "start_line": 1, "end_line": 1,
-                             "quote": self.case["sources"][0]["text"],
-                         }]} for key in self.catalog["modes"]["P1"]["necessary"]]}],
+                         "facts": [{"key": key, "value": True, "anchors": anchors,
+                                    "claim_state": "derived", "explanation": "API and old code differ"}
+                                   for key in [*self.catalog["modes"]["P1"]["necessary"], "causal_role"]]}],
         }
         self.prediction = classify(self.case, self.packet, self.catalog)
         self.assertEqual(self.prediction["actions"][0]["pattern_id"], "P1")
@@ -51,6 +56,7 @@ class EvaluationTest(unittest.TestCase):
                 "actions": [{"id": "expected-action", "role": "primary",
                              "allowed": [{"status": "leaf", "pattern_id": "P1"}],
                              "rationale": "Attribute source differs", "near_neighbor": "P2",
+                             "specific_action": "Read attr_b in place of attr_a",
                              "decisive_facts": ["Expected and actual source differ"]}],
             }],
         }
@@ -61,7 +67,7 @@ class EvaluationTest(unittest.TestCase):
 
     def capture(self, name, context_id, prediction=None):
         context = put(self.root / f"context-{name}.json", {
-            "context_id": context_id, "executor_id": "executor",
+            "context_id": context_id, "executor_id": "executor", "execution": self.execution,
         })
         results = put(self.root / f"results-{name}.json", [prediction or self.prediction])
         facts = put(self.root / f"facts-{name}.json", [self.packet])
@@ -73,7 +79,7 @@ class EvaluationTest(unittest.TestCase):
 
     def test_freeze_binds_hierarchy_and_combinations_to_catalog(self):
         standard = evaluation.frozen(self.freeze)
-        self.assertEqual(standard["protocol"], "classification_only/0.3")
+        self.assertEqual(standard["protocol"], "classification_only/0.3.1")
         self.assertIn("calculation_item", standard["parent_ids"])
         self.assertEqual(standard["parent_hierarchy"]["item_participation"], "calculation_item")
         self.assertEqual(standard["combinations"][0]["required_fact"], "distinct_members_for_replacement")
@@ -108,10 +114,12 @@ class EvaluationTest(unittest.TestCase):
                     "case_id": self.case["case_id"], "actions": [{
                         "prediction_id": "pred-action", "expected_id": "expected-action",
                         "facts_supported": False, "rationale": "Decisive assertion not supported",
+                        "action_correct": True, "action_rationale": "Action's identity is supported",
                         "failure_causes": ["material_understanding"],
                     }],
                 }]} for run in (first, second)
-            ],
+            ], "stability": [{"case_id": self.case["case_id"], "same_decisive_facts": True,
+                             "same_specific_action": True, "rationale": "Identical synthetic inputs"}],
         })
         output = self.root / "score.json"
         evaluation.score(self.freeze, self.a, self.seal, first, second, lock, self.b, reviewed, output)
@@ -159,6 +167,18 @@ class EvaluationTest(unittest.TestCase):
         mismatched["actions"][0]["pattern_id"] = "P2"
         with self.assertRaisesRegex(ValueError, "replay of the frozen"):
             self.capture("one", "context-1", mismatched)
+
+    def test_current_capture_rejects_legacy_facts_and_results(self):
+        self.packet.pop("fact_protocol")
+        self.prediction = classify(self.case, self.packet, self.catalog)
+        self.assertEqual(self.prediction["decision_version"], "0.3.0")
+        with self.assertRaisesRegex(ValueError, "frozen decision version"):
+            self.capture("one", "context-1")
+
+    def test_freeze_rejects_context_with_different_execution(self):
+        context = {"context_id": "other", "executor_id": "executor", "execution": {"model": "different"}}
+        with self.assertRaisesRegex(ValueError, "differ from the freeze"):
+            evaluation.verify_context(context, {"kind": "exercise"}, None, {"execution": self.execution})
 
 
 if __name__ == "__main__":
