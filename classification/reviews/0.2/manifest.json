@@ -1,0 +1,26 @@
+{
+  "base": "c34e562538b4a95655184f37279df07c349e89ef",
+  "branch": "codex/mechanism-classification-pilot",
+  "protocol": "mode_semantic_review/0.1",
+  "scope": "development_semantic_review",
+  "catalog_version": "0.2",
+  "real_holdout_evaluated": false,
+  "classification_regressions": 48,
+  "new_gate_regressions": 19,
+  "model_review_count": 7,
+  "model_anchor_count": 125,
+  "bounded_independent_actions": 6,
+  "sha256": {
+    "classification/MODE_REVIEW.md": "1201d327ef1d5b883a5e83e280edd014423b96ab4357bd3693c74808cf223b59",
+    "classification/mode_review.py": "f6be50ded7caacfff3bd850da2e76756cfc04ee8a9336621ac03f44809c4186e",
+    "classification/test_mode_review.py": "6fd02f3c6e93f0c8a5906f20c2a8f814984783de83cd4466266e581b8b741962",
+    "handoff/MODE_SEMANTIC_REVIEW_0_1.md": "b34337fd5960641cf5425bb783b43211d5688c90fd7b3c51a3e34973d579e122",
+    "classification/reviews/0.2/evidence_review.json": "a547b62ac6ba44c047b9d3adb1c5e75072a553fec5709cb297362b30d65a6194",
+    "classification/reviews/0.2/execution.json": "36ca6129ab8295bab6818550ef87deb3acc4d465e3a5b01613e725fcc1220fd2",
+    "classification/reviews/0.2/input.json": "2a1dc03ddf7148cd138caa644b5203a8a74f30e7f5b406b76d40ed6ad06a263b",
+    "classification/reviews/0.2/model_log.md": "fec7fb9f8dc2dd016bc5fce43dcf9203f9c0c577567ebb530be347744bd4f994",
+    "classification/reviews/0.2/model_output.json": "7124bca45ff7c95fc05ab81f1affda9b51747f0225b407a625a5c36e2264e06a",
+    "classification/reviews/0.2/model_prompt.md": "495696dda51e9ff67d59fd842a20331c94a2acf40e197f14504e3fd7a901e006",
+    "classification/reviews/0.2/verification.json": "7fdadf915b66618d126d98ce4da49533e1ef34f4d6c999deb67dfc2a1042b08b"
+  }
+}

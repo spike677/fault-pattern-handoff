@@ -1,0 +1,13 @@
+{
+  "scope": "development semantic review",
+  "base": "c34e562538b4a95655184f37279df07c349e89ef",
+  "model": "inherited Codex Work runtime; exact deployment ID not disclosed by the host",
+  "tooling": "read-only input/catalog/prompt inspection and JSON/log creation",
+  "input_sha256": "2a1dc03ddf7148cd138caa644b5203a8a74f30e7f5b406b76d40ed6ad06a263b",
+  "prompt_sha256": "495696dda51e9ff67d59fd842a20331c94a2acf40e197f14504e3fd7a901e006",
+  "catalog_sha256": "bcd3793a579e34ca4cd1d8ca631ef5f99480cad3dd78ee2c2d437cce4db27974",
+  "review_context": "fresh, shared local development filesystem",
+  "prompt_snapshot": "classification/reviews/0.2/model_prompt.md",
+  "model_output_sha256": "7124bca45ff7c95fc05ab81f1affda9b51747f0225b407a625a5c36e2264e06a",
+  "model_log_sha256": "fec7fb9f8dc2dd016bc5fce43dcf9203f9c0c577567ebb530be347744bd4f994"
+}

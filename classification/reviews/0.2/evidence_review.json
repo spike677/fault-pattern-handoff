@@ -1,0 +1,60 @@
+{
+  "reviews": [
+    {
+      "subject_id": "card-P1",
+      "cache_key": "4803d7b3e81ea9ba423fea48f516db3c3063088b948c4158a5f1949ae3cd7bb2",
+      "review_sha256": "489f83f8247fce0c32659f651c4d3ee22dfae89b7fbbd586e870615d8c570831",
+      "decision": "supported",
+      "reviewer": "Work current session source audit",
+      "reason": "同版本槽常量、Host fixture 和实际赋值显示槽 3 与槽 4 不等价。结论限于修订版 Host 读入。"
+    },
+    {
+      "subject_id": "card-P2",
+      "cache_key": "2d6092568a22d866c6c13187be4e97936596693bbaa14ae9d6576e059ed481ac",
+      "review_sha256": "a3335045b29b8dac2c48c0c8036733c9364a2098ba05a071fd5fa6532d8d7b1d",
+      "decision": "supported",
+      "reviewer": "Work current session source audit",
+      "reason": "历史 Issue 与同版本夹具给出 None/-1 语义，旧读取槽正确，负值归一化把 -1 转为 N-1。后续实际过滤尚未据此认定。"
+    },
+    {
+      "subject_id": "card-L1",
+      "cache_key": "928dc3427a466a51f3587f1b3ccf39a6888fb9bd5aca1b4ca6641f245b76c181",
+      "review_sha256": "303388f1154846caff1dc00e8569d08bdd103fa10087383f495cd1ee61fd16f5",
+      "decision": "supported",
+      "reviewer": "Work current session source audit",
+      "reason": "同版本行起点预乘逻辑列数，之后直接作为输入读取偏移。非连续路径的真实跨度由源码和原作者修订说明交代。该限定支持局部项的澄清，FP-B16 仅提供受限类比。"
+    },
+    {
+      "subject_id": "card-L2",
+      "cache_key": "49f85d63f17e7732e20403b192b843ed7054afe0870a67975182f8ae93699c8f",
+      "review_sha256": "c2b297465f1f99e1c6e6722adf8e35aede47a88e492b1f444efe763620ec2d85",
+      "decision": "supported",
+      "reviewer": "Work current session source audit",
+      "reason": "同偏移步进用于元素下标和 uint8_t 掩码下标，Issue 说明位单位。固定路径的非零字节对齐起点足以复算缺少除 8。"
+    },
+    {
+      "subject_id": "card-C1",
+      "cache_key": "2d2732062564cbb43b1286261502843af4065ebc3e1347b6502b6750a5b544aa",
+      "review_sha256": "0a4b18bfadb27e6e40caabd3ae6d59bf65061d5a6c02a52cfa2e5485f7914cb3",
+      "decision": "supported",
+      "reviewer": "Work current session source audit",
+      "reason": "作者明确记载有效域之外的零参与 max，预填单位元后对照恢复。接受作者报告范围内的输入准备及消费边界，未升格为固定构建或设备结论。"
+    },
+    {
+      "subject_id": "card-C2",
+      "cache_key": "5841f9c175f2255b4ce85cabf675060bbe9505578bf98b730e43f1c0c9c76d66",
+      "review_sha256": "6308e6938c8f81f57316960c1b959fb2e8a20059390bba6cd1ed2cbe8e7947f5",
+      "decision": "supported",
+      "reviewer": "Work current session source audit",
+      "reason": "固定源码中边界 CalScope 与旧早退直接对应。模型按符号条件给出非空范围推导，注明合法实参和分支可达待证，支持澄清动作边界的建议。"
+    },
+    {
+      "subject_id": "card-C3",
+      "cache_key": "9f428a52e418270995c1c055775e237231f718a482d198bc126d42a4a2771cfb",
+      "review_sha256": "be9a1b713dd5a39c0fd21659ba1873fbd9ad7eca7d557ea9f13924e8f728febc",
+      "decision": "uncertain",
+      "reviewer": "Work current session source audit",
+      "reason": "作者报告支持同源贡献重数异常与局部关系；当前摘取材料未确认具体哪一阶段违反本应遵守的独立规约职责。保留模型关系建议和原件，独立缺陷计数暂缓。"
+    }
+  ]
+}
