@@ -1,0 +1,251 @@
+{
+  "protocol": "classification_only/0.3",
+  "candidate_commit": "064a872082b6f0c2eb549558148ad3a5acf7028e",
+  "evaluation_scope": "exercise_only",
+  "independent_holdout_evaluated": false,
+  "date": "2026-11-16",
+  "timezone": "Asia/Shanghai",
+  "event_families": 8,
+  "source_views": 36,
+  "read_contexts": 2,
+  "isolation_preflight": {
+    "external_sentinels": {
+      "answer": "readable",
+      "prior_prediction": "readable",
+      "history": "readable"
+    },
+    "filesystem_read_isolation_verified": false
+  },
+  "local_regression": {
+    "passed": 56,
+    "total": 56
+  },
+  "development_lineage": {
+    "baseline_keys": 87,
+    "additional_keys": 26,
+    "total_keys": 113
+  },
+  "runs": [
+    {
+      "run_sha256": "a08657129f92f032fda6d4f6f4db734db1d038efd97f7a915afd15bee0b7c4d5",
+      "mechanism_per_case": {
+        "correct": 6,
+        "eligible": 8
+      },
+      "mechanism_per_expected_action": {
+        "correct": 8,
+        "eligible": 10
+      },
+      "retained_insufficient_evidence": {
+        "correct": 0,
+        "eligible": 2
+      },
+      "specific_concrete_action": {
+        "correct": 9,
+        "eligible": 9
+      },
+      "correctly_retained_action_unknown": {
+        "correct": 0,
+        "eligible": 1
+      },
+      "causal_role_all_expected_actions": {
+        "correct": 6,
+        "eligible": 10
+      },
+      "causal_role_determined_expected_actions": {
+        "correct": 6,
+        "eligible": 8
+      },
+      "causal_structure_all_expected_actions": {
+        "correct": 8,
+        "eligible": 10
+      },
+      "full_case": {
+        "correct": 5,
+        "eligible": 8
+      },
+      "full_case_causal_structure": {
+        "correct": 6,
+        "eligible": 8
+      },
+      "official_strict_cases": {
+        "correct": 5,
+        "eligible": 8
+      },
+      "independent_actions_claimed": 10,
+      "confirmed_independent_actions": 8,
+      "supported_leaf_mechanisms": 2,
+      "supported_parent_mechanisms": 1,
+      "supported_outside_catalog_defects": 5,
+      "cases_with_unresolved_role": 0,
+      "leaf_coverage": {
+        "P1": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "P2": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "L1": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "L2": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "C1": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "C2": {
+          "eligible_families": 1,
+          "supported_families": 1,
+          "accepted_alternative_families": 0,
+          "status": "observed_in_batch"
+        },
+        "C3": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        }
+      }
+    },
+    {
+      "run_sha256": "c2f0952c70bf48d8fa974f8e0b650ff309b74b2a5a0da45612d6ffaaea4ea028",
+      "mechanism_per_case": {
+        "correct": 8,
+        "eligible": 8
+      },
+      "mechanism_per_expected_action": {
+        "correct": 10,
+        "eligible": 10
+      },
+      "retained_insufficient_evidence": {
+        "correct": 2,
+        "eligible": 2
+      },
+      "specific_concrete_action": {
+        "correct": 9,
+        "eligible": 9
+      },
+      "correctly_retained_action_unknown": {
+        "correct": 1,
+        "eligible": 1
+      },
+      "causal_role_all_expected_actions": {
+        "correct": 7,
+        "eligible": 10
+      },
+      "causal_role_determined_expected_actions": {
+        "correct": 6,
+        "eligible": 8
+      },
+      "causal_structure_all_expected_actions": {
+        "correct": 9,
+        "eligible": 10
+      },
+      "full_case": {
+        "correct": 6,
+        "eligible": 8
+      },
+      "full_case_causal_structure": {
+        "correct": 7,
+        "eligible": 8
+      },
+      "official_strict_cases": {
+        "correct": 6,
+        "eligible": 8
+      },
+      "independent_actions_claimed": 8,
+      "confirmed_independent_actions": 8,
+      "supported_leaf_mechanisms": 2,
+      "supported_parent_mechanisms": 2,
+      "supported_outside_catalog_defects": 4,
+      "cases_with_unresolved_role": 1,
+      "leaf_coverage": {
+        "P1": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "P2": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "L1": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "L2": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "C1": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        },
+        "C2": {
+          "eligible_families": 1,
+          "supported_families": 1,
+          "accepted_alternative_families": 0,
+          "status": "observed_in_batch"
+        },
+        "C3": {
+          "eligible_families": 0,
+          "supported_families": 0,
+          "accepted_alternative_families": 0,
+          "status": "unverified"
+        }
+      }
+    }
+  ],
+  "stability": {
+    "same_labels": {
+      "correct": 5,
+      "eligible": 8
+    },
+    "same_decisive_facts": {
+      "correct": 6,
+      "eligible": 8
+    },
+    "same_specific_action": {
+      "correct": 7,
+      "eligible": 8
+    },
+    "same_labels_facts_and_action": {
+      "correct": 5,
+      "eligible": 8
+    }
+  },
+  "local_artifact_sha256": {
+    "a": "e8c2b3422af710c1f046e0a5cba91a14b40a37a69945caa994d3ac3c708ff279",
+    "b": "3de12a9231871c90f04fd5dd00668ee21a3fe0bbec4ad20dcf082c192e326564",
+    "execution_freeze": "7cdb70b175a03d1900b9faa2fa35a46f564d46ddec8aa1ebdb252312617600f5",
+    "seal": "5300e3e2adb35bc45cf597db6ee7f4740650e3b11d710fb4d65d5cb7e4ec2304",
+    "lock": "c354e722febc6d0411c24327d07ef2b09af11aef11411aac2710447e6cb66914",
+    "score": "68f3f03bde4072e673063747ea3a082f68d408aa3bcbe7a1bfb8d72b60610687",
+    "supplemental_score": "3a652490214d3c11ec466a0cae2e6c38c55b997f8e54953926401c1c12243acf"
+  }
+}
