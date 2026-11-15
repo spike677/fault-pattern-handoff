@@ -1,0 +1,472 @@
+[
+  {
+    "case_id": "reader-1",
+    "operator": "foreach_lerp_list",
+    "roles": [
+      "逻辑元素偏移",
+      "Select 位打包掩码",
+      "UB 掩码字节地址"
+    ],
+    "actions": [
+      {
+        "id": "select-mask-offset",
+        "description": "旧版完整批次循环用张量数据的元素偏移直接下标访问 Select 的位打包掩码，在批次偏移非零时取到错误掩码位置。",
+        "role": "root",
+        "scope": {
+          "version": "0916b11b47d62ce70e387d0a0a81106905ccfc67",
+          "path": "foreach/foreach_lerp_list/op_kernel/foreach_lerp_list.h",
+          "claim": "static"
+        },
+        "facts": [
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "explanation": "报告指出该 Select 路径按位使用 maskLocal，并要求将批次偏移除以 8。差异的旧侧显示此处为实际 Select 调用，同版本声明显示它操作的是 uint8_t 掩码张量。",
+            "anchors": [
+              {
+                "source_id": "issue",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": "foreach_lerp_list 中 maskLocal 偏移量使用存在问题，Select用的maskLocal按bit位生效，但offset偏移没有除8，导致UB地址偏移取到错误mask"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 11,
+                "end_line": 15,
+                "quote": "-            Select(\n-                float32Tensor[maxCastDataCount * FACTOR_NUMBER_THREE + offset], maskLocal[offset],\n-                float32Tensor[maxCastDataCount + offset],\n-                float32Tensor[maxCastDataCount * FACTOR_NUMBER_THREE + offset], SELMODE::VSEL_TENSOR_TENSOR_MODE,\n-                ELEMENT_PER_REPEAT, MAX_REPEATS, {1, 1, 1, 8, 8, 8});"
+              },
+              {
+                "source_id": "mask-storage",
+                "start_line": 3,
+                "end_line": 3,
+                "quote": "    LocalTensor<uint8_t> maskLocal = maskBuf.Get<uint8_t>();"
+              }
+            ]
+          },
+          {
+            "key": "expected_units",
+            "value": true,
+            "explanation": "循环以 MAX_REPEATS × ELEMENT_PER_REPEAT 推进 offset，且同一 offset 索引 float32Tensor 数据，因此 offset 计数逻辑元素。每个逻辑位置占一个掩码位，maskLocal 的 uint8_t 下标计数存储字节。",
+            "anchors": [
+              {
+                "source_id": "diff",
+                "start_line": 11,
+                "end_line": 17,
+                "quote": "-            Select(\n-                float32Tensor[maxCastDataCount * FACTOR_NUMBER_THREE + offset], maskLocal[offset],\n-                float32Tensor[maxCastDataCount + offset],\n-                float32Tensor[maxCastDataCount * FACTOR_NUMBER_THREE + offset], SELMODE::VSEL_TENSOR_TENSOR_MODE,\n-                ELEMENT_PER_REPEAT, MAX_REPEATS, {1, 1, 1, 8, 8, 8});\n-            PipeBarrier<PIPE_V>();\n-            offset += MAX_REPEATS * ELEMENT_PER_REPEAT;"
+              },
+              {
+                "source_id": "issue",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": "foreach_lerp_list 中 maskLocal 偏移量使用存在问题，Select用的maskLocal按bit位生效，但offset偏移没有除8，导致UB地址偏移取到错误mask"
+              },
+              {
+                "source_id": "mask-storage",
+                "start_line": 3,
+                "end_line": 3,
+                "quote": "    LocalTensor<uint8_t> maskLocal = maskBuf.Get<uint8_t>();"
+              }
+            ]
+          },
+          {
+            "key": "storage_width",
+            "value": true,
+            "explanation": "maskLocal 的张量元素是 uint8_t，每个元素为 8 位。结合报告的按位掩码约定，连续 8 个逻辑位对应一个掩码存储元素。",
+            "anchors": [
+              {
+                "source_id": "mask-storage",
+                "start_line": 3,
+                "end_line": 3,
+                "quote": "    LocalTensor<uint8_t> maskLocal = maskBuf.Get<uint8_t>();"
+              },
+              {
+                "source_id": "issue",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": "foreach_lerp_list 中 maskLocal 偏移量使用存在问题，Select用的maskLocal按bit位生效，但offset偏移没有除8，导致UB地址偏移取到错误mask"
+              }
+            ]
+          },
+          {
+            "key": "wrong_conversion",
+            "value": true,
+            "explanation": "旧式 maskLocal[offset] 对非零的逻辑起点 E 访问第 E 个掩码字节。相应的掩码起始字节应以整数除法换算成 E/8，完整批次旧分支没有这一步。",
+            "anchors": [
+              {
+                "source_id": "diff",
+                "start_line": 11,
+                "end_line": 17,
+                "quote": "-            Select(\n-                float32Tensor[maxCastDataCount * FACTOR_NUMBER_THREE + offset], maskLocal[offset],\n-                float32Tensor[maxCastDataCount + offset],\n-                float32Tensor[maxCastDataCount * FACTOR_NUMBER_THREE + offset], SELMODE::VSEL_TENSOR_TENSOR_MODE,\n-                ELEMENT_PER_REPEAT, MAX_REPEATS, {1, 1, 1, 8, 8, 8});\n-            PipeBarrier<PIPE_V>();\n-            offset += MAX_REPEATS * ELEMENT_PER_REPEAT;"
+              },
+              {
+                "source_id": "mask-storage",
+                "start_line": 3,
+                "end_line": 3,
+                "quote": "    LocalTensor<uint8_t> maskLocal = maskBuf.Get<uint8_t>();"
+              },
+              {
+                "source_id": "issue",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": "foreach_lerp_list 中 maskLocal 偏移量使用存在问题，Select用的maskLocal按bit位生效，但offset偏移没有除8，导致UB地址偏移取到错误mask"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "case_id": "reader-2",
+    "operator": "EmbeddingBag",
+    "roles": [
+      "padding_idx",
+      "可选状态 None / -1",
+      "include_last_offset",
+      "末行行号"
+    ],
+    "actions": [
+      {
+        "id": "normalize-padding-sentinel",
+        "description": "旧版 RegBase tiling 读取 padding_idx 后，对包括 None 哨兵 -1 在内的负值统一加上 numEmbeddings_。",
+        "role": "root",
+        "scope": {
+          "version": "a6b00134936bbe2ed90f35c2897217e8224526e2",
+          "path": "index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp",
+          "claim": "static"
+        },
+        "facts": [
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "explanation": "问题报告明确给出传入 None 时 ATen 默认值 -1 不参与 padding 计算的约定。同版本 host 单测构造了 int64_t(-1) 的 padding_idx 属性，目标 tiling 代码读取该属性。",
+            "anchors": [
+              {
+                "source_id": "issue",
+                "start_line": 4,
+                "end_line": 4,
+                "quote": "预期padIdx仅支持正数类型，在传入值为None时，aten中的默认值-1不参与计算"
+              },
+              {
+                "source_id": "host-fixture",
+                "start_line": 2,
+                "end_line": 3,
+                "quote": "                           {\"include_last_offset\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"padding_idx\", Ops::NN::AnyValue::CreateFrom<int64_t>(-1)}})"
+              },
+              {
+                "source_id": "action",
+                "start_line": 1,
+                "end_line": 3,
+                "quote": "    inclueLastOfst_ = *(attrs->GetAttrPointer<bool>)(ATTR_INCLUDE_LAST_OFFSET);\n    paddingIdx_ = *(attrs->GetAttrPointer<int64_t>)(ATTR_PADD_INDEX);\n    paddingIdx_ = paddingIdx_ < 0 ? paddingIdx_ + numEmbeddings_ : paddingIdx_;"
+              }
+            ]
+          },
+          {
+            "key": "correct_source",
+            "value": true,
+            "explanation": "tiling 以 int64_t 读取名为 ATTR_PADD_INDEX 的第 4 槽。第 3 槽单独作为 bool 的 include_last_offset 读取，同版本夹具亦分别构造这两个属性。",
+            "anchors": [
+              {
+                "source_id": "slots",
+                "start_line": 1,
+                "end_line": 2,
+                "quote": "constexpr int64_t ATTR_INCLUDE_LAST_OFFSET = 3;\nconstexpr int64_t ATTR_PADD_INDEX = 4;"
+              },
+              {
+                "source_id": "action",
+                "start_line": 1,
+                "end_line": 2,
+                "quote": "    inclueLastOfst_ = *(attrs->GetAttrPointer<bool>)(ATTR_INCLUDE_LAST_OFFSET);\n    paddingIdx_ = *(attrs->GetAttrPointer<int64_t>)(ATTR_PADD_INDEX);"
+              },
+              {
+                "source_id": "host-fixture",
+                "start_line": 2,
+                "end_line": 3,
+                "quote": "                           {\"include_last_offset\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"padding_idx\", Ops::NN::AnyValue::CreateFrom<int64_t>(-1)}})"
+              }
+            ]
+          },
+          {
+            "key": "special_state",
+            "value": true,
+            "explanation": "接口输入为 None 时，报告将底层 -1 明确解释为默认未指定状态。同版本夹具显示传入 host 属性的 -1 可由 int64_t 表示。",
+            "anchors": [
+              {
+                "source_id": "issue",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": "接口传入padindx为None时必现"
+              },
+              {
+                "source_id": "issue",
+                "start_line": 4,
+                "end_line": 4,
+                "quote": "预期padIdx仅支持正数类型，在传入值为None时，aten中的默认值-1不参与计算"
+              },
+              {
+                "source_id": "host-fixture",
+                "start_line": 3,
+                "end_line": 3,
+                "quote": "                           {\"padding_idx\", Ops::NN::AnyValue::CreateFrom<int64_t>(-1)}})"
+              }
+            ]
+          },
+          {
+            "key": "wrong_state_treatment",
+            "value": true,
+            "explanation": "paddingIdx_ < 0 包含 -1，因此分支得到 numEmbeddings_ - 1。对非空权重表，此值是末行索引，未指定状态在本动作中被当作普通负索引转换。",
+            "anchors": [
+              {
+                "source_id": "action",
+                "start_line": 2,
+                "end_line": 3,
+                "quote": "    paddingIdx_ = *(attrs->GetAttrPointer<int64_t>)(ATTR_PADD_INDEX);\n    paddingIdx_ = paddingIdx_ < 0 ? paddingIdx_ + numEmbeddings_ : paddingIdx_;"
+              },
+              {
+                "source_id": "issue",
+                "start_line": 4,
+                "end_line": 4,
+                "quote": "预期padIdx仅支持正数类型，在传入值为None时，aten中的默认值-1不参与计算"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "case_id": "reader-3",
+    "operator": "PadV3Grad edge",
+    "roles": [
+      "中心映射",
+      "边界复制",
+      "反向贡献区间",
+      "边界梯度输出"
+    ],
+    "actions": [
+      {
+        "id": "cut-centre-zeroes-edge-grad",
+        "description": "旧版一维 edge SIMT 在中心索引越界时直接把对应输出梯度置零，跳过边界贡献范围的计算和累加。",
+        "role": "root",
+        "scope": {
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+          "claim": "static"
+        },
+        "facts": [
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "explanation": "报告限定问题发生在 edge 路径的负 pad 恰裁到 inshape 大小时。该路径的贡献以每维区间求和确定，输出首尾边界使用单独的端点规则。中心越界时仍须依据端点规则判断区间。",
+            "anchors": [
+              {
+                "source_id": "issue",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": "修复padv3grad edge模板pad为负值刚好裁剪到inshape大小的计算错误"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 19,
+                "end_line": 37,
+                "quote": "+        // 判断是否被裁剪\n+        flag = 0;\n+        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n+            flag = 1;\n+        }\n         // 判断起始范围\n         if (outIndex[i] == 0) {\n             scopeIndex[i][0] = 0;\n         } else {\n-            scopeIndex[i][0] = inIndex[i];\n+            scopeIndex[i][0] = inIndex[i] + flag;\n         }\n         // 判断结束范围\n         if (outIndex[i] == outShapes[i] - 1) {\n             scopeIndex[i][1] = inIndex[i] + rightPads[i];\n         } else {\n-            scopeIndex[i][1] = inIndex[i];\n+            scopeIndex[i][1] = inIndex[i] - flag;\n         }"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 64,
+                "end_line": 78,
+                "quote": "+        CastType total = 0;\n+        for (U a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n+            GmOffsetType inputOffset = static_cast<GmOffsetType>(a0);\n+            CastType tmpVal;\n+            if constexpr (std::is_same_v<T, bfloat16_t>) {\n+                tmpVal = __bfloat162float(inputGM[inputOffset]);\n+            } else if constexpr (std::is_same_v<T, float16_t>) {\n+                tmpVal = __half2float(inputGM[inputOffset]);\n+            } else {\n+                tmpVal = inputGM[inputOffset];\n             }\n-            CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);\n+            total += tmpVal;\n         }\n+        CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);"
+              }
+            ]
+          },
+          {
+            "key": "required_member",
+            "value": true,
+            "explanation": "取一维 outShapes[0]=2、inShapes[0]=2、leftPads[0]=-2、rightPads[0]=2，代表一侧裁剪两个位置、另一侧复制两个位置。末端 outIndex[0]=1 由 CalPos 得中心 inIndex[0]=-1。按 edge 区间规则，越界 flag=1 给起点 -1+1=0，末端分支给终点 -1+2=1。两个有效梯度位置 0、1 都应累加到末端输出。",
+            "anchors": [
+              {
+                "source_id": "issue",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": "修复padv3grad edge模板pad为负值刚好裁剪到inshape大小的计算错误"
+              },
+              {
+                "source_id": "old-edge",
+                "start_line": 1,
+                "end_line": 2,
+                "quote": "        // 计算输入输出索引\n        CalPos<DIM, U, GmOffsetType>(yIdx, inIndex, outIndex, outStrides, leftPads, magics, shifts);"
+              },
+              {
+                "source_id": "shared-coordinate",
+                "start_line": 12,
+                "end_line": 15,
+                "quote": "    // 当前输出位置再输入的索引\n    for (uint8_t i = 0; i < DIM_NUM; i++) {\n        inIndex[i] = outIndex[i] + leftPads[i];\n    }"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 19,
+                "end_line": 37,
+                "quote": "+        // 判断是否被裁剪\n+        flag = 0;\n+        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n+            flag = 1;\n+        }\n         // 判断起始范围\n         if (outIndex[i] == 0) {\n             scopeIndex[i][0] = 0;\n         } else {\n-            scopeIndex[i][0] = inIndex[i];\n+            scopeIndex[i][0] = inIndex[i] + flag;\n         }\n         // 判断结束范围\n         if (outIndex[i] == outShapes[i] - 1) {\n             scopeIndex[i][1] = inIndex[i] + rightPads[i];\n         } else {\n-            scopeIndex[i][1] = inIndex[i];\n+            scopeIndex[i][1] = inIndex[i] - flag;\n         }"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 64,
+                "end_line": 78,
+                "quote": "+        CastType total = 0;\n+        for (U a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n+            GmOffsetType inputOffset = static_cast<GmOffsetType>(a0);\n+            CastType tmpVal;\n+            if constexpr (std::is_same_v<T, bfloat16_t>) {\n+                tmpVal = __bfloat162float(inputGM[inputOffset]);\n+            } else if constexpr (std::is_same_v<T, float16_t>) {\n+                tmpVal = __half2float(inputGM[inputOffset]);\n+            } else {\n+                tmpVal = inputGM[inputOffset];\n             }\n-            CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);\n+            total += tmpVal;\n         }\n+        CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);"
+              }
+            ]
+          },
+          {
+            "key": "omitted_contribution",
+            "value": true,
+            "explanation": "同一例的中心 -1 满足旧 IsCut 的 inIndex < 0 条件。旧 edge 分支直接把 outputGM[idx] 写为 0，绕过 CalScope 和区间循环，所需的两项边界复制梯度没有累加。",
+            "anchors": [
+              {
+                "source_id": "diff",
+                "start_line": 1,
+                "end_line": 10,
+                "quote": "-__simt_callee__ __aicore__ bool IsCut(U* inIndex, __ubuf__ U* inShapes)\n-{\n-    // 判断当前输入位置是否被裁剪\n-    for (uint8_t i = 0; i < DIM; i++) {\n-        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n-            return true;\n-        }\n-    }\n-    return false;\n-}"
+              },
+              {
+                "source_id": "old-edge",
+                "start_line": 1,
+                "end_line": 11,
+                "quote": "        // 计算输入输出索引\n        CalPos<DIM, U, GmOffsetType>(yIdx, inIndex, outIndex, outStrides, leftPads, magics, shifts);\n\n        GmOffsetType scopeIndex[DIM][2]; // 每个维度的padding范围\n        if (IsCut<DIM, U>(inIndex, inShapes)) {\n            outputGM[idx] = 0;\n        } else {\n            CalScope<DIM, U, GmOffsetType>(scopeIndex, inIndex, outIndex, rightPads, outShapes);\n\n            CastType total = 0;\n            for (GmOffsetType a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 52,
+                "end_line": 63,
+                "quote": "-            CastType total = 0;\n-            for (GmOffsetType a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n-                GmOffsetType inputOffset = a0;\n-                CastType tmpVal;\n-                if constexpr (std::is_same_v<T, bfloat16_t>) {\n-                    tmpVal = __bfloat162float(inputGM[inputOffset]);\n-                } else if constexpr (std::is_same_v<T, float16_t>) {\n-                    tmpVal = __half2float(inputGM[inputOffset]);\n-                } else {\n-                    tmpVal = inputGM[inputOffset];\n-                }\n-                total += tmpVal;"
+              },
+              {
+                "source_id": "diff",
+                "start_line": 75,
+                "end_line": 75,
+                "quote": "-            CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "case_id": "reader-4",
+    "operator": "EmbeddingBag",
+    "roles": [
+      "请求的 padding_idx",
+      "第 4 槽",
+      "实际读取的 include_last_offset",
+      "第 3 槽"
+    ],
+    "actions": [
+      {
+        "id": "read-padding-from-last-offset",
+        "description": "该版本 RegBase tiling 初始化 paddingIdx_ 时读取 bool 的 ATTR_INCLUDE_LAST_OFFSET，并把读出的值赋给 paddingIdx_。",
+        "role": "root",
+        "scope": {
+          "version": "4bdd6c479637259cac0c3c23fd745d572efe71ed",
+          "path": "index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp",
+          "claim": "static"
+        },
+        "facts": [
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "explanation": "同版本常量区分 padding_idx 与 include_last_offset，夹具为前者提供 int64_t，为后者提供 bool。待评动作是填充 tiling 的 paddingIdx_，其约定来源为 padding_idx。",
+            "anchors": [
+              {
+                "source_id": "slots",
+                "start_line": 1,
+                "end_line": 2,
+                "quote": "constexpr int64_t ATTR_INCLUDE_LAST_OFFSET = 3;\nconstexpr int64_t ATTR_PADD_INDEX = 4;"
+              },
+              {
+                "source_id": "host-fixture",
+                "start_line": 4,
+                "end_line": 5,
+                "quote": "                           {\"include_last_offset\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"padding_idx\", Ops::NN::AnyValue::CreateFrom<int64_t>(-1)}})"
+              },
+              {
+                "source_id": "action",
+                "start_line": 5,
+                "end_line": 7,
+                "quote": "    auto paddingIdxPtr = attrs->GetAttrPointer<bool>(ATTR_INCLUDE_LAST_OFFSET);\n    OP_CHECK_NULL_WITH_CONTEXT(context_, paddingIdxPtr);\n    paddingIdx_ = *paddingIdxPtr;"
+              }
+            ]
+          },
+          {
+            "key": "expected_source",
+            "value": true,
+            "explanation": "从 ATTR_PADD_INDEX=4 与夹具中的独立 int64_t padding_idx 可定位预期的第 4 槽。",
+            "anchors": [
+              {
+                "source_id": "slots",
+                "start_line": 1,
+                "end_line": 2,
+                "quote": "constexpr int64_t ATTR_INCLUDE_LAST_OFFSET = 3;\nconstexpr int64_t ATTR_PADD_INDEX = 4;"
+              },
+              {
+                "source_id": "host-fixture",
+                "start_line": 4,
+                "end_line": 5,
+                "quote": "                           {\"include_last_offset\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"padding_idx\", Ops::NN::AnyValue::CreateFrom<int64_t>(-1)}})"
+              }
+            ]
+          },
+          {
+            "key": "actual_source",
+            "value": true,
+            "explanation": "paddingIdxPtr 实际调用 GetAttrPointer<bool>(ATTR_INCLUDE_LAST_OFFSET)，使用第 3 槽。通过空指针检查后把该值赋给 paddingIdx_。",
+            "anchors": [
+              {
+                "source_id": "slots",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": "constexpr int64_t ATTR_INCLUDE_LAST_OFFSET = 3;"
+              },
+              {
+                "source_id": "action",
+                "start_line": 5,
+                "end_line": 7,
+                "quote": "    auto paddingIdxPtr = attrs->GetAttrPointer<bool>(ATTR_INCLUDE_LAST_OFFSET);\n    OP_CHECK_NULL_WITH_CONTEXT(context_, paddingIdxPtr);\n    paddingIdx_ = *paddingIdxPtr;"
+              }
+            ]
+          },
+          {
+            "key": "non_equivalent_source",
+            "value": true,
+            "explanation": "第 3 槽的 bool 表示是否包含末偏移，第 4 槽承载 padding 行号或未指定状态。夹具可同时提供第 3 槽 false 和第 4 槽 -1，两个属性具备不同的类型、值和语义。",
+            "anchors": [
+              {
+                "source_id": "slots",
+                "start_line": 1,
+                "end_line": 2,
+                "quote": "constexpr int64_t ATTR_INCLUDE_LAST_OFFSET = 3;\nconstexpr int64_t ATTR_PADD_INDEX = 4;"
+              },
+              {
+                "source_id": "host-fixture",
+                "start_line": 4,
+                "end_line": 5,
+                "quote": "                           {\"include_last_offset\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"padding_idx\", Ops::NN::AnyValue::CreateFrom<int64_t>(-1)}})"
+              },
+              {
+                "source_id": "issue",
+                "start_line": 4,
+                "end_line": 4,
+                "quote": "预期padIdx仅支持正数类型，在传入值为None时，aten中的默认值-1不参与计算"
+              },
+              {
+                "source_id": "action",
+                "start_line": 1,
+                "end_line": 7,
+                "quote": "    auto inclueLastOfstPtr = attrs->GetAttrPointer<bool>(ATTR_INCLUDE_LAST_OFFSET);\n    OP_CHECK_NULL_WITH_CONTEXT(context_, inclueLastOfstPtr);\n    inclueLastOfst_ = *inclueLastOfstPtr;\n\n    auto paddingIdxPtr = attrs->GetAttrPointer<bool>(ATTR_INCLUDE_LAST_OFFSET);\n    OP_CHECK_NULL_WITH_CONTEXT(context_, paddingIdxPtr);\n    paddingIdx_ = *paddingIdxPtr;"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

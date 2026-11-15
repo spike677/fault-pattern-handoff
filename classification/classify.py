@@ -8,6 +8,9 @@ from pathlib import Path
 import sys
 
 
+DECISION_VERSION = "0.2.1"
+COMPATIBLE_MEMBERSHIP_MODES = {"C1", "C2"}
+DISTINCT_MEMBERS = "distinct_members_for_replacement"
 SOURCE_KINDS = {"issue", "contract", "code", "diff", "report", "runtime"}
 CLAIMS = {"reported", "static", "runtime"}
 ROLES = {"primary", "independent", "downstream"}
@@ -167,15 +170,18 @@ def collect_facts(action, sources, scope):
             issues.append({"fact": key, "code": "missing_anchors"})
             continue
         errors = {error for anchor in anchors if (error := check_anchor(anchor, sources, scope))}
+        bound = not errors and any(scoped_source(sources[a["source_id"]], scope) for a in anchors)
         if not errors and (error := check_calculation(fact)):
             if error == "calculation_disagrees":
                 arguments[key].update((True, False))
+                if bound:
+                    scoped_facts.add(key)
             errors.add(error)
         if errors:
             issues.extend({"fact": key, "code": error} for error in sorted(errors))
             continue
         arguments[key].add(fact["value"])
-        if fact["value"] and any(scoped_source(sources[a["source_id"]], scope) for a in anchors):
+        if fact["value"] and bound:
             scoped_facts.add(key)
         preserved = {name: fact[name] for name in ("key", "value", "anchors")}
         for name in ("explanation", "calculation"):
@@ -188,12 +194,13 @@ def collect_facts(action, sources, scope):
     return facts, positives, negatives, scoped_facts, issues, conflicts
 
 
-def mode_comparisons(modes, positives, negatives, scoped):
+def mode_comparisons(modes, positives, negatives, scoped, disputed):
     results = {}
     for mode, card in sorted(modes.items()):
         needed = set(card["necessary"])
+        exclusions = set(card.get("excluded_by", []))
         missing = sorted(needed - positives - negatives)
-        excluded = sorted((needed & negatives) | (set(card.get("excluded_by", [])) & positives))
+        excluded = sorted((needed & negatives) | (exclusions & positives))
         operation = OPERATION_FACTS[mode]
         if operation in positives and operation not in scoped:
             missing.append(f"{operation}:scope")
@@ -201,6 +208,7 @@ def mode_comparisons(modes, positives, negatives, scoped):
             "pattern_id": mode,
             "missing": missing,
             "contrary": excluded,
+            "disputed": sorted((needed | exclusions) & disputed),
             "support_count": len((needed & positives) - {"applicable_contract"}),
         }
     return results
@@ -209,31 +217,62 @@ def mode_comparisons(modes, positives, negatives, scoped):
 def verdict(action, sources, catalog):
     scope = action.get("scope")
     scope_missing = validate_scope(scope)
+    namespace = f"MECH-v{catalog['version']}"
     modes = catalog["modes"]
     facts, true, false, scoped, issues, conflicts = collect_facts(action, sources, scope)
-    comparisons = mode_comparisons(modes, true, false, scoped)
-    supported = [mode for mode, check in comparisons.items() if not check["missing"] and not check["contrary"]]
-    parents = [parent for parent, key in VIOLATIONS.items()
-               if "applicable_contract" in true and key in true and key in scoped]
+    disputed = set(conflicts)
+    comparisons = mode_comparisons(modes, true, false, scoped, disputed)
+    supported = [mode for mode, check in comparisons.items()
+                 if not (check["missing"] or check["contrary"] or check["disputed"])]
+    explicit_parents = {parent for parent, key in VIOLATIONS.items()
+                        if "applicable_contract" in true and key in true and key in scoped}
+    parents = explicit_parents | {modes[mode]["parent"] for mode in supported}
+    nearest_parent = next(iter(parents)) if len(parents) == 1 else None
     outside = [key for key in OUTSIDE if key in true]
     established = "established_other_defect"
     if established in outside and not any(
             fact["key"] == established and fact["value"] and nonempty(fact.get("explanation")) for fact in facts):
         issues.append({"fact": established, "code": "missing_specific_other_defect"})
         scope_missing.append(f"{established}:detail")
+    if outside and not any(key in scoped for key in outside):
+        scope_missing.append("outside_fact:scope")
 
-    if len(supported) > 1:
-        conflicts.append("multiple_leaf_modes_for_one_action")
-    if len(parents) > 1 or (supported and parents and modes[supported[0]]["parent"] not in parents):
-        conflicts.append("multiple_violation_groups_for_one_action")
+    # A settled fact about the current parent and a conflict about a finer
+    # distinction have different effects on the verdict.
+    core = disputed & ({"applicable_contract"} | set(OUTSIDE))
+    core.update(VIOLATIONS[parent] for parent in (parents or VIOLATIONS)
+                if VIOLATIONS[parent] in disputed)
+    if len(parents) > 1:
+        core.add("multiple_violation_groups_for_one_action")
     if len(outside) > 1 or (outside and supported):
-        conflicts.append("competing_verdicts")
+        core.add("competing_verdicts")
     if ("contract_inapplicable" in true and "applicable_contract" in true
             or (true & {"compliant", "contract_inapplicable"} and true & set(VIOLATIONS.values()))):
-        conflicts.append("scope_or_outcome_contradiction")
+        core.add("scope_or_outcome_contradiction")
+
+    leaf = set()
     for mode, card in modes.items():
+        if parents and card["parent"] not in parents:
+            continue
+        check = comparisons[mode]
+        if not check["contrary"] and OPERATION_FACTS[mode] in scoped:
+            leaf.update(check["disputed"])
         if set(card["necessary"]) <= true and set(card.get("excluded_by", [])) & true:
-            conflicts.append(f"contraindicated:{mode}")
+            leaf.add(f"contraindicated:{mode}")
+    replacement = set(supported) == COMPATIBLE_MEMBERSHIP_MODES and nearest_parent == "contribution"
+    distinct = (DISTINCT_MEMBERS in true and DISTINCT_MEMBERS in scoped and any(
+        fact["key"] == DISTINCT_MEMBERS and fact["value"] and nonempty(fact.get("explanation"))
+        and any(scoped_source(sources[anchor["source_id"]], scope) for anchor in fact["anchors"])
+        for fact in facts
+    ))
+    compatible = replacement and distinct
+    if replacement and DISTINCT_MEMBERS in disputed:
+        leaf.add(DISTINCT_MEMBERS)
+    if len(supported) > 1 and not compatible:
+        leaf.add("multiple_leaf_modes_for_one_action")
+    leaf -= core
+    unrelated = disputed - core - leaf
+    all_conflicts = sorted(core | leaf | unrelated)
 
     result = {
         "id": action["id"],
@@ -242,44 +281,52 @@ def verdict(action, sources, catalog):
         "status": "insufficient",
         "facts": facts,
         "issues": issues,
-        "conflicts": sorted(set(conflicts)),
+        "conflicts": all_conflicts,
     }
+    if all_conflicts:
+        result["conflict_details"] = {"core": sorted(core), "leaf": sorted(leaf),
+                                      "unrelated": sorted(unrelated)}
     for name in ("description", "upstream_id"):
         if name in action:
             result[name] = action[name]
-    if outside and not any(key in scoped for key in outside):
-        scope_missing.append("outside_fact:scope")
-
-    nearest_parent = parents[0] if len(parents) == 1 else None
-    if not scope_missing and not conflicts:
+    if not scope_missing and not core:
         if outside and outside[0] in scoped:
             result.update(status="outside", outside_reason=OUTSIDE[outside[0]])
             if nearest_parent and outside[0] == established:
                 result["parent_id"] = nearest_parent
-        elif supported:
+        elif len(supported) == 1 and not leaf:
             mode = supported[0]
-            result.update(status="leaf", pattern_id=mode)
-            nearest_parent = modes[mode]["parent"]
+            result.update(status="leaf", pattern_id=mode, pattern_ref=f"{namespace}:{mode}")
         elif nearest_parent:
             result.update(status="parent", parent_id=nearest_parent)
+            if compatible and not leaf:
+                result.update(combination="compatible", supported_pattern_ids=supported,
+                              supported_pattern_refs=[f"{namespace}:{mode}" for mode in supported])
+    if "parent_id" in result:
+        result["parent_ref"] = f"{namespace}:{result['parent_id']}"
 
+    confirmed = set(result.get("supported_pattern_ids", ())) | {result.get("pattern_id")}
     neighbors = [check for mode, check in comparisons.items()
-                 if mode != result.get("pattern_id") and (nearest_parent is None or modes[mode]["parent"] == nearest_parent)]
+                 if mode not in confirmed and (nearest_parent is None or modes[mode]["parent"] == nearest_parent)]
     strongest = max((check["support_count"] for check in neighbors), default=0)
     if nearest_parent is None and strongest:
         neighbors = [check for check in neighbors if check["support_count"] == strongest]
     result["neighbors"] = [
-        {k: check[k] for k in ("pattern_id", "missing", "contrary")} for check in neighbors
+        {**{key: check[key] for key in ("pattern_id", "missing", "contrary", "disputed")},
+         "pattern_ref": f"{namespace}:{check['pattern_id']}"}
+        for check in neighbors
     ]
     missing = set(scope_missing)
-    if result["status"] in {"insufficient", "parent"}:
+    if replacement and not distinct and DISTINCT_MEMBERS not in false:
+        missing.add(DISTINCT_MEMBERS)
+    if result["status"] in {"insufficient", "parent"} and not result.get("combination"):
         if strongest or nearest_parent:
             viable = [check for check in neighbors if not check["contrary"]]
             fewest = min((len(check["missing"]) for check in viable), default=None)
             for check in viable:
                 if len(check["missing"]) == fewest:
                     missing.update(check["missing"])
-        if not missing and not conflicts:
+        if not missing and not (core or leaf):
             missing.add("observed_implementation_action")
             if "applicable_contract" not in true:
                 missing.add("applicable_contract")
@@ -334,6 +381,8 @@ def classify(case, packet, catalog):
         "case_sha256": digest(case),
         "facts_sha256": digest(packet),
         "catalog_version": catalog["version"],
+        "decision_version": DECISION_VERSION,
+        "mechanism_namespace": f"MECH-v{catalog['version']}",
         "operator": operator,
         "roles": roles,
         "actions": [verdict(action, sources, catalog) for action in actions.values()],

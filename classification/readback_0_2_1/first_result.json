@@ -1,0 +1,7 @@
+{
+  "outcome": "rejected_at_cli",
+  "exit_code": 2,
+  "stderr": "Invalid classification input: Each action needs a primary, independent, or downstream role",
+  "reason": "Readback prompt said role without its permitted values; the reader chose root.",
+  "original_facts_sha256": "f00b435305153ed32e996c4cd1c11f50b5346eaf4123f56cc1aa735088634398"
+}

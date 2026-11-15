@@ -11,7 +11,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parent
-PROTOCOL = "classification_only/0.2"
+PROTOCOL = "classification_only/0.2.1"
 ARTIFACTS = ("catalog.json", "classify.py", "evaluate.py", "WORKFLOW.md")
 ROLES = ("primary", "independent", "downstream")
 LABEL_FIELDS = {"leaf": "pattern_id", "parent": "parent_id", "outside": "outside_reason"}
@@ -103,6 +103,7 @@ def freeze(config, exposures, out, artifact=()):
         "exposure_manifest_sha256": digest(exposures),
         "development_lineage": sorted(set(lineage)),
         "catalog_version": catalog["version"],
+        "mechanism_namespace": f"MECH-v{catalog['version']}",
         "parents": {key: value["parent"] for key, value in catalog["modes"].items()},
         "artifacts": {name: artifact_digest(name) for name in sorted(set(ARTIFACTS) | set(artifact))},
         "created_at": utc_now(),
@@ -112,7 +113,8 @@ def freeze(config, exposures, out, artifact=()):
 
 def frozen(path):
     record = read_json(path)
-    require(record["protocol"] == PROTOCOL and set(ARTIFACTS) <= set(record["artifacts"]),
+    require(record["protocol"] == PROTOCOL and set(ARTIFACTS) <= set(record["artifacts"])
+            and record["mechanism_namespace"] == mechanism_namespace(record),
             "Wrong evaluation protocol or incomplete freeze")
     require(all(artifact_digest(name) == sha for name, sha in record["artifacts"].items()),
             "A frozen implementation artifact changed")
@@ -149,11 +151,26 @@ def a_cases(path):
     return cases
 
 
+def mechanism_namespace(standard):
+    return f"MECH-v{standard['catalog_version']}"
+
+
 def verdict(action, standard, exact_shape=False):
+    require(isinstance(action, dict), "A verdict must be an object")
     status = action["status"]
     field = LABEL_FIELDS.get(status)
     elements = {"status", field} if field else {"status"}
     require(status == "insufficient" or field is not None, "Unknown classification status")
+    components = ()
+    if "supported_pattern_ids" in action:
+        ids = action["supported_pattern_ids"]
+        require(status == "parent" and action.get("parent_id") == "contribution"
+                and isinstance(ids, list) and len(ids) == 2 and all(isinstance(i, str) for i in ids)
+                and set(ids) == {"C1", "C2"}
+                and all(standard["parents"].get(i) == "contribution" for i in ids),
+                "Only a contribution parent may carry the compatible C1+C2 pair")
+        components = tuple(sorted(ids))
+        elements.add("supported_pattern_ids")
     if exact_shape:
         require(set(action) == elements, "An allowed label contains inconsistent fields")
     else:
@@ -163,11 +180,34 @@ def verdict(action, standard, exact_shape=False):
         require(not extras or (allow_parent and extras == {"parent_id"}
                               and action["parent_id"] in standard["parents"].values()),
                 "A prediction contains incompatible label fields")
+        require((action.get("combination") == "compatible" if components
+                 else "combination" not in action and "supported_pattern_refs" not in action),
+                "Combination metadata must belong to a compatible parent")
+        if components:
+            refs = [f"{mechanism_namespace(standard)}:{mode}" for mode in action["supported_pattern_ids"]]
+            require(action.get("supported_pattern_refs") == refs, "Combination references must match its attributes")
     value = action[field] if field else ""
     valid = {"leaf": standard["parents"], "parent": set(standard["parents"].values()),
              "outside": OUTSIDE_REASONS, "insufficient": ("",)}
     require(isinstance(value, str) and value in valid[status], "Unknown classification label")
-    return status, value
+    if not exact_shape and status == "leaf":
+        require(action.get("pattern_ref") == f"{mechanism_namespace(standard)}:{value}",
+                "The leaf reference must match its catalog version")
+    return status, value, components
+
+
+def answer_verdicts(action, standard):
+    choices = action.get("allowed")
+    require(isinstance(choices, list) and choices, "An answer needs at least one acceptable verdict")
+    allowed = {verdict(label, standard, exact_shape=True) for label in choices}
+    require(len(allowed) == len(choices), "Allowed verdicts must be distinct")
+    if "primary" in action:
+        primary = verdict(action["primary"], standard, exact_shape=True)
+        require(primary in allowed, "The primary verdict must be in the allowed set")
+    else:
+        require(len(allowed) == 1, "Multiple allowed verdicts need an explicit primary verdict")
+        primary = next(iter(allowed))
+    return primary, sorted(allowed)
 
 
 def relationships(actions):
@@ -213,10 +253,7 @@ def b_cases(answer, cases, standard, kind):
         require(bool(actions), "An answer must declare an expected action or an explicit insufficient verdict")
         relationships(actions)
         for action in actions.values():
-            allowed = action["allowed"]
-            require(isinstance(allowed, list) and allowed, "An answer needs at least one acceptable verdict")
-            for label in allowed:
-                verdict(label, standard, exact_shape=True)
+            answer_verdicts(action, standard)
             require(nonempty(action.get("rationale")) and nonempty(action.get("near_neighbor"))
                     and isinstance(action.get("decisive_facts"), list), "Record answer facts and nearest boundary")
     return records
@@ -355,13 +392,21 @@ def lock(freeze_path, a_path, seal_path, run1, run2, out):
                        "run_sha256": [digest(path) for path in (run1, run2)], "locked_at": utc_now()})
 
 
-def label_text(label):
-    return ":".join(label).rstrip(":")
+def label_text(label, standard):
+    status, value, components = label
+    namespace = mechanism_namespace(standard)
+    if status in ("leaf", "parent"):
+        text = f"{status}:{namespace}:{value}"
+        if components:
+            text += "[" + ",".join(f"{namespace}:{mode}" for mode in components) + "]"
+        return text
+    return f"{status}:{value}" if value else status
 
 
 def grade_case(result, answer, review, standard):
     predicted = index(result["actions"], "id", "predicted actions")
     expected = index(answer["actions"], "id", "expected actions")
+    gold_verdicts = {key: answer_verdicts(action, standard) for key, action in expected.items()}
     entries = index(review["actions"], "prediction_id", "fact-review actions")
     require(set(entries) == set(predicted), "Judge must review every predicted action")
     mapping = {key: entry["expected_id"] for key, entry in entries.items()}
@@ -377,21 +422,24 @@ def grade_case(result, answer, review, standard):
                 "Judge each action against A and record failure attribution or an empty list")
         actual = verdict(action, standard)
         expected_id = mapping[key]
-        allowed = []
+        primary, allowed = gold_verdicts.get(expected_id, (None, []))
         relationship = False
         double_count = entry.get("double_count") is True
         if expected_id is not None:
             gold = expected[expected_id]
-            allowed = [verdict(label, standard) for label in gold["allowed"]]
             relationship = (action["role"] == gold["role"]
                             and mapping.get(action.get("upstream_id")) == gold.get("upstream_id"))
             double_count = double_count or (gold["role"] == "downstream" and action["role"] != "downstream")
         label_correct = actual in allowed
+        primary_hit = actual == primary
+        alternative_hit = label_correct and not primary_hit
         strict = label_correct and relationship and entry["facts_supported"] and not double_count
         require(strict or entry["failure_causes"], "Judge must attribute each failed prediction")
         rows.append({
-            "prediction_id": key, "expected_id": expected_id, "actual": label_text(actual),
-            "expected": [label_text(item) for item in allowed], "label_correct": label_correct,
+            "prediction_id": key, "expected_id": expected_id, "actual": label_text(actual, standard),
+            "primary_expected": label_text(primary, standard) if primary is not None else None,
+            "expected": [label_text(item, standard) for item in allowed], "label_correct": label_correct,
+            "primary_label_hit": primary_hit, "accepted_alternative_label": alternative_hit,
             "facts_supported": entry["facts_supported"], "relationship_correct": relationship,
             "strict": strict, "rationale": entry["rationale"], "failure_causes": entry["failure_causes"],
             "double_count": double_count,
@@ -405,18 +453,18 @@ def grade_case(result, answer, review, standard):
     require(isinstance(omissions, dict) and set(omissions) == missing
             and all(nonempty(item.get("rationale")) and item.get("failure_cause") in FAILURES
                     for item in omissions.values()), "Judge must document each omitted expected action")
-    family = answer["family_id"]
     signature = sorted(
-        (mapping[key] or "", label_text(verdict(action, standard)), action["role"],
+        (mapping[key] or "", label_text(verdict(action, standard), standard), action["role"],
          mapping.get(action.get("upstream_id")) or "") for key, action in predicted.items()
     )
     return {
-        "case_id": result["case_id"], "family_id": family, "operator": answer["operator"],
+        "case_id": result["case_id"], "family_id": answer["family_id"], "operator": answer["operator"],
         "strict": not missing and all(item["strict"] for item in rows),
         "actions": rows, "omissions": omissions,
         "expected_verdicts": {
-            action_id: [label_text(verdict(label, standard)) for label in action["allowed"]]
-            for action_id, action in expected.items()
+            action_id: {"primary": label_text(primary, standard),
+                        "allowed": [label_text(label, standard) for label in allowed]}
+            for action_id, (primary, allowed) in gold_verdicts.items()
         },
         "missing_independent_actions": sum(expected[key]["role"] == "independent" for key in missing),
         "signature": signature,
@@ -426,40 +474,49 @@ def grade_case(result, answer, review, standard):
 def summarize(cases, standard):
     families, cross_op = defaultdict(list), defaultdict(set)
     confusion, metric, outcomes, failures = Counter(), Counter(), Counter(), Counter()
+    primary_outcomes, alternatives, strict_alternatives = Counter(), Counter(), Counter()
     denominators, eligible_families = Counter(), defaultdict(set)
+    leaf_refs = {label_text(("leaf", mode, ()), standard): mode for mode in standard["parents"]}
     for case in cases:
         families[case["family_id"]].append(case["strict"])
         metric["missing_actions"] += len(case["omissions"])
         metric["missing_independent_actions"] += case["missing_independent_actions"]
         failures.update(item["failure_cause"] for item in case["omissions"].values())
-        for labels in case["expected_verdicts"].values():
-            denominators[labels[0]] += 1
-            for label in labels:
-                if label.startswith("leaf:"):
-                    eligible_families[label.split(":", 1)[1]].add(case["family_id"])
+        for gold in case["expected_verdicts"].values():
+            primary = gold["primary"]
+            denominators[primary] += 1
+            if primary in leaf_refs:
+                eligible_families[leaf_refs[primary]].add(case["family_id"])
         for key in case["omissions"]:
-            confusion[(case["expected_verdicts"][key][0], "missing_action")] += 1
+            confusion[(case["expected_verdicts"][key]["primary"], "missing_action")] += 1
         for row in case["actions"]:
             actual = row["actual"]
-            expected = row["expected"][0] if row["expected"] else "unexpected_action"
-            confusion[(expected, actual)] += 1
+            expected = row["primary_expected"] or "unexpected_action"
+            if row["accepted_alternative_label"]:
+                alternatives[(expected, actual)] += 1
+                strict_alternatives[(expected, actual)] += row["strict"]
+            else:
+                confusion[(expected, actual)] += 1
             outcomes[actual] += row["strict"]
+            if row["primary_label_hit"]:
+                primary_outcomes[actual] += row["strict"]
+                if row["strict"] and actual in leaf_refs:
+                    cross_op[leaf_refs[actual]].add((case["family_id"], case["operator"]))
             failures.update(row["failure_causes"])
             metric.update(key for key in ("strict", "label_correct", "facts_supported", "double_count",
-                                           "partial_parent", "over_abstention", "unsupported_attribution") if row[key])
+                                           "partial_parent", "over_abstention", "unsupported_attribution",
+                                           "primary_label_hit", "accepted_alternative_label") if row[key])
             metric["label_match_with_failed_evidence"] += row["label_correct"] and not row["facts_supported"]
             metric["predicted_actions"] += 1
             metric["unexpected_actions"] += row["expected_id"] is None
             metric["misclassified_actions"] += row["expected_id"] is not None and not row["label_correct"]
-            if row["strict"] and actual.startswith("leaf:"):
-                cross_op[actual.split(":", 1)[1]].add((case["family_id"], case["operator"]))
     coverage = {}
-    for mode in standard["parents"]:
+    for namespaced_label, mode in leaf_refs.items():
         pairs = cross_op[mode]
         families_for_mode = {family for family, _ in pairs}
         operators = {operator for _, operator in pairs}
         # Distinct families and multiple operators imply at least one pair differs on both.
-        coverage[mode] = {
+        coverage[namespaced_label.removeprefix("leaf:")] = {
             "eligible_families": len(eligible_families[mode]),
             "supported_families": len(families_for_mode), "operators": sorted(operators),
             "cross_operator_observed": len(families_for_mode) > 1 and len(operators) > 1,
@@ -470,11 +527,16 @@ def summarize(cases, standard):
         "families": len(families),
         "families_strict": sum(all(values) for values in families.values()),
         "cases": len(cases), "case_strict": sum(case["strict"] for case in cases),
-        "action_counts": dict(metric), "strict_verdicts": dict(outcomes), "coverage": coverage,
+        "action_counts": dict(metric), "strict_verdicts": dict(outcomes),
+        "strict_primary_verdicts": dict(primary_outcomes), "coverage": coverage,
         "expected_verdict_counts": dict(denominators),
         "failure_counts": dict(failures),
         "confusion": [{"expected": wanted, "actual": actual, "count": count}
                       for (wanted, actual), count in sorted(confusion.items())],
+        "accepted_alternatives": [
+            {"primary_expected": key[0], "actual": key[1], "count": count, "strict": strict_alternatives[key]}
+            for key, count in sorted(alternatives.items())
+        ],
     }
 
 
@@ -525,7 +587,8 @@ def score(freeze_path, a_path, seal_path, run1, run2, lock_path, b_path, review_
         stability.append({"case_id": left["case_id"], "family_id": left["family_id"], "same": same,
                           "same_and_both_incorrect": same and not left["strict"] and not right["strict"]})
     write_record(out, {
-        "protocol": PROTOCOL, "scope": "real_with_external_custody_attestation"
+        "protocol": PROTOCOL, "mechanism_namespace": mechanism_namespace(standard),
+        "catalog_version": standard["catalog_version"], "scope": "real_with_external_custody_attestation"
         if package["kind"] == "real" else "exercise_only",
         "note": "Hashes preserve bytes. Human attestation, not the evaluator, establishes isolation and exposure.",
         "lock_sha256": digest(lock_path), "answer_sha256": answer_hash, "review_sha256": digest(review_path),

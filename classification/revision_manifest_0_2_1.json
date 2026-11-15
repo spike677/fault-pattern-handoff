@@ -1,0 +1,28 @@
+{
+  "base": "857199d3c37bb26253786a7c1049e6497ad18038",
+  "catalog_version": "0.2",
+  "decision_version": "0.2.1",
+  "protocol": "classification_only/0.2.1",
+  "scope": "development_snapshot",
+  "branch": "codex/mechanism-classification-pilot",
+  "real_holdout_evaluated": false,
+  "sha256": {
+    "classification/catalog.json": "bcd3793a579e34ca4cd1d8ca631ef5f99480cad3dd78ee2c2d437cce4db27974",
+    "classification/classify.py": "077092c7be5a5ee74b2b9c37eeb82d46553bcba121c8e8251d1434ac371ac9d4",
+    "classification/evaluate.py": "79a432d307f480c14d71879b5649848fbcc3c167b4585aabd7e626803a3f64a7",
+    "classification/readback_0_2_1/A.json": "50e34f7fb86cb4fb6991af9e4f21e864144d9e9aff1c106ad6e3613c089e0034",
+    "classification/readback_0_2_1/execution.json": "91f048eed632ed509d34caba2973a4d31bfc541625745dfa311d84d51696697b",
+    "classification/readback_0_2_1/facts.json": "f00b435305153ed32e996c4cd1c11f50b5346eaf4123f56cc1aa735088634398",
+    "classification/readback_0_2_1/first_result.json": "7fc4519c00d8c7dfb5949d95ef6ed36f78b0827ef81cb98d05dd84eb641e4f02",
+    "classification/readback_0_2_1/PROMPT.md": "a2738a7a819f63776f88a689232d79bda289f3e5ab24df7270dd33c1082b0935",
+    "classification/readback_0_2_1/reader_log.md": "56e38da41a394aff071d30f16572bd8507f08258d843adf9e4614794c5ef3fa3",
+    "classification/readback_0_2_1/retry/execution.json": "5461a1a207aa03926ec17d0bb377a1b3bec2c335541dcef7d9d5bb4f63a64aba",
+    "classification/readback_0_2_1/retry/facts.json": "6a5c758b2d7c0292beb2754346e4e8793f2d79f62a58d75b041614067ea5edfc",
+    "classification/readback_0_2_1/retry/PROMPT.md": "8f65b44f2c2b44f779aba7f3e0265336f6a37c884b2c8386cc0bd28950c33154",
+    "classification/readback_0_2_1/retry/reader_log.md": "443a93379a96da8b7a58a9fae725b38e94d4b2b6aa2dcaa2d5e45b646312ee61",
+    "classification/readback_0_2_1/retry/results.json": "2d4d874d82660e011f09bfd474a314e0dde104296320dffc14d3e770c06c52d4",
+    "classification/test_boundary_rules.py": "86cf6426669ac0a09f373a7609756cbcd1c2c1d54ca30f85c085a2d465abc7c1",
+    "classification/test_boundary_scoring.py": "434195f371284b874021f6affd515e779d13b15a302836a06076a050a6cc6653",
+    "classification/WORKFLOW.md": "1ea5770638fdb71d55297fbbd5c94e9e2e08a421710697b5904a6e7c8c3562c2"
+  }
+}

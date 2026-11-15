@@ -1,0 +1,12 @@
+{
+  "purpose": "development original-material readback",
+  "model": "inherited Codex runtime; exact deployment ID not exposed",
+  "prompt_sha256": "8f65b44f2c2b44f779aba7f3e0265336f6a37c884b2c8386cc0bd28950c33154",
+  "catalog_sha256": "bcd3793a579e34ca4cd1d8ca631ef5f99480cad3dd78ee2c2d437cce4db27974",
+  "tools": [
+    "exec_command"
+  ],
+  "fork_turns": "none",
+  "isolation": "new context, shared development filesystem",
+  "A_sha256": "50e34f7fb86cb4fb6991af9e4f21e864144d9e9aff1c106ad6e3613c089e0034"
+}
