@@ -1,0 +1,293 @@
+{
+  "cases": [
+    {
+      "case_id": "dev-01",
+      "sources": [
+        {
+          "id": "issue",
+          "version": "a6b00134936bbe2ed90f35c2897217e8224526e2",
+          "path": "EmbeddingBag Issue",
+          "kind": "issue",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N24/issue_description.md",
+          "original_start_line": 13,
+          "text": "接口传入padindx为None时必现\n### Describe the expected behavior / 预期结果 (Mandatory / 必填)\n            \n预期padIdx仅支持正数类型，在传入值为None时，aten中的默认值-1不参与计算"
+        },
+        {
+          "id": "slots",
+          "version": "a6b00134936bbe2ed90f35c2897217e8224526e2",
+          "path": "index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp",
+          "kind": "code",
+          "origin": "https://gitcode.com/cann/ops-nn/blob/a6b00134936bbe2ed90f35c2897217e8224526e2/index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp#L34-L35",
+          "original_start_line": 34,
+          "text": "constexpr int64_t ATTR_INCLUDE_LAST_OFFSET = 3;\nconstexpr int64_t ATTR_PADD_INDEX = 4;"
+        },
+        {
+          "id": "action",
+          "version": "a6b00134936bbe2ed90f35c2897217e8224526e2",
+          "path": "index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp",
+          "kind": "code",
+          "origin": "https://gitcode.com/cann/ops-nn/blob/a6b00134936bbe2ed90f35c2897217e8224526e2/index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp#L147",
+          "original_start_line": 147,
+          "text": "    inclueLastOfst_ = *(attrs->GetAttrPointer<bool>)(ATTR_INCLUDE_LAST_OFFSET);\n    paddingIdx_ = *(attrs->GetAttrPointer<int64_t>)(ATTR_PADD_INDEX);\n    paddingIdx_ = paddingIdx_ < 0 ? paddingIdx_ + numEmbeddings_ : paddingIdx_;\n"
+        },
+        {
+          "id": "host-fixture",
+          "version": "a6b00134936bbe2ed90f35c2897217e8224526e2",
+          "path": "index/embedding_bag/tests/ut/op_host/test_embedding_bag_regbase_tiling.cpp",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N24/raw_history/a6b00134936bbe2ed90f35c2897217e8224526e2/index/embedding_bag/tests/ut/op_host/test_embedding_bag_regbase_tiling.cpp",
+          "original_start_line": 115,
+          "text": "                           {\"sparse\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"include_last_offset\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"padding_idx\", Ops::NN::AnyValue::CreateFrom<int64_t>(-1)}})\n                      .PlatformInfo(reinterpret_cast<char*>(&platform_info))\n                      .NodeInputTd(0, ge::DT_FLOAT, ge::FORMAT_ND, ge::FORMAT_ND)"
+        }
+      ]
+    },
+    {
+      "case_id": "dev-02",
+      "sources": [
+        {
+          "id": "issue",
+          "version": "4bdd6c479637259cac0c3c23fd745d572efe71ed",
+          "path": "EmbeddingBag Issue",
+          "kind": "issue",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N24/issue_description.md",
+          "original_start_line": 13,
+          "text": "接口传入padindx为None时必现\n### Describe the expected behavior / 预期结果 (Mandatory / 必填)\n            \n预期padIdx仅支持正数类型，在传入值为None时，aten中的默认值-1不参与计算"
+        },
+        {
+          "id": "slots",
+          "version": "4bdd6c479637259cac0c3c23fd745d572efe71ed",
+          "path": "index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp",
+          "kind": "code",
+          "origin": "https://gitcode.com/cann/ops-nn/blob/4bdd6c479637259cac0c3c23fd745d572efe71ed/index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp#L34-L35",
+          "original_start_line": 34,
+          "text": "constexpr int64_t ATTR_INCLUDE_LAST_OFFSET = 3;\nconstexpr int64_t ATTR_PADD_INDEX = 4;"
+        },
+        {
+          "id": "action",
+          "version": "4bdd6c479637259cac0c3c23fd745d572efe71ed",
+          "path": "index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp",
+          "kind": "code",
+          "origin": "https://gitcode.com/cann/ops-nn/blob/4bdd6c479637259cac0c3c23fd745d572efe71ed/index/embedding_bag/op_host/embedding_bag_regbase_tiling.cpp#L147",
+          "original_start_line": 147,
+          "text": "    auto inclueLastOfstPtr = attrs->GetAttrPointer<bool>(ATTR_INCLUDE_LAST_OFFSET);\n    OP_CHECK_NULL_WITH_CONTEXT(context_, inclueLastOfstPtr);\n    inclueLastOfst_ = *inclueLastOfstPtr;\n\n    auto paddingIdxPtr = attrs->GetAttrPointer<bool>(ATTR_INCLUDE_LAST_OFFSET);\n    OP_CHECK_NULL_WITH_CONTEXT(context_, paddingIdxPtr);\n    paddingIdx_ = *paddingIdxPtr;\n\n    if (embeddingDim_ * weightTypeSize_ <= MAX_SIMT_EMBDDING_BYTES) {"
+        },
+        {
+          "id": "host-fixture",
+          "version": "4bdd6c479637259cac0c3c23fd745d572efe71ed",
+          "path": "index/embedding_bag/tests/ut/op_host/test_embedding_bag_regbase_tiling.cpp",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N24/raw_history/4bdd6c479637259cac0c3c23fd745d572efe71ed/index/embedding_bag/tests/ut/op_host/test_embedding_bag_regbase_tiling.cpp",
+          "original_start_line": 115,
+          "text": "                          {{\"mode\", Ops::NN::AnyValue::CreateFrom<std::string>(\"sum\")},\n                           {\"scale_grad_by_freq\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"sparse\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"include_last_offset\", Ops::NN::AnyValue::CreateFrom<bool>(false)},\n                           {\"padding_idx\", Ops::NN::AnyValue::CreateFrom<int64_t>(-1)}})"
+        }
+      ]
+    },
+    {
+      "case_id": "dev-03",
+      "sources": [
+        {
+          "id": "issue",
+          "version": "24029e45423a4e639c8df775e9c3719155f92bef",
+          "path": "ops-transformer#1952",
+          "kind": "issue",
+          "origin": "https://gitcode.com/cann/ops-transformer/issues/1952",
+          "original_start_line": 25,
+          "text": "qkv_rms_norm_rope_cache在aclnn侧没有把传入的epsilon从double转换成float，导致在特定场景下会有精度问题。"
+        },
+        {
+          "id": "diff",
+          "version": "24029e45423a4e639c8df775e9c3719155f92bef",
+          "path": "posembedding/qkv_rms_norm_rope_cache/op_host/op_api/qkv_rms_norm_rope_cache.cpp",
+          "kind": "diff",
+          "origin": "https://gitcode.com/cann/ops-transformer/pull/4385/diffs",
+          "original_start_line": 1,
+          "text": "diff --git a/posembedding/qkv_rms_norm_rope_cache/op_host/op_api/qkv_rms_norm_rope_cache.cpp b/posembedding/qkv_rms_norm_rope_cache/op_host/op_api/qkv_rms_norm_rope_cache.cpp\n--- a/posembedding/qkv_rms_norm_rope_cache/op_host/op_api/qkv_rms_norm_rope_cache.cpp\n+++ b/posembedding/qkv_rms_norm_rope_cache/op_host/op_api/qkv_rms_norm_rope_cache.cpp\n@@ -54,7 +54,7 @@ const std::tuple<aclTensor*, aclTensor*, aclTensor*> QkvRmsNormRopeCache(\n         QkvRmsNormRopeCache,\n         OP_INPUT(qkv, qGamma, kGamma, cos, sin, index, qOut, kCache, vCache, kScaleOptional, vScaleOptional, kOffsetOptional, vOffsetOptional),\n         OP_OUTPUT(qOut, kCache, vCache, qOutBeforeQuant, kOutBeforeQuant, vOutBeforeQuant), \n-        OP_ATTR(qkvSize, headNums, epsilon, cacheModeOptional, isOutputQkv));\n+        OP_ATTR(qkvSize, headNums, static_cast<float>(epsilon), cacheModeOptional, isOutputQkv));\n     if (ret != ACLNN_SUCCESS) {"
+        }
+      ]
+    },
+    {
+      "case_id": "dev-04",
+      "sources": [
+        {
+          "id": "discussion",
+          "version": "955138fb0e365a196eb33e94e60d0a4d26de8aad",
+          "path": "ops-math Concat 修订说明",
+          "kind": "report",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N20/pr_1_description.md",
+          "original_start_line": 3,
+          "text": "1. 修改在非连续场景下，concat算子部分模板偏移地址计算问题，之前计算地址为shape，应为stride"
+        },
+        {
+          "id": "old-formula",
+          "version": "955138fb0e365a196eb33e94e60d0a4d26de8aad",
+          "path": "conversion/concat/op_kernel/arch35/one_axis_concat_no_align_same_shape_copy.h",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N20/raw_history/955138fb0e365a196eb33e94e60d0a4d26de8aad/conversion/concat/op_kernel/arch35/one_axis_concat_no_align_same_shape_copy.h",
+          "original_start_line": 174,
+          "text": "        curColNum = 0;\n        splitInfo = {0, 0, 0, 0};\n        while (curColOffset < tilingData_.catDim1) {\n            curColNum = CopyInSplitDim1(\n                tilingData_.tensorNum - 1, tilingData_.sameShapeTensorDim1,\n                i * tilingData_.ubFactorDim0 * tilingData_.sameShapeTensorDim1, tilingData_.ubFactorDim0, splitInfo);\n            ComputeSplitDim1Copy(tilingData_.ubFactorDim0, curColNum, splitInfo);\n            CopyOut(\n                i * tilingData_.ubFactorDim0 * tilingData_.catDim1 + curColOffset, tilingData_.ubFactorDim0, curColNum);\n            curColOffset += curColNum;\n        }\n    }\n\n    if (blockIdx_ == GetBlockNum() - 1) {\n        curColOffset = 0;\n        curColNum = 0;\n        splitInfo = {0, 0, 0, 0};\n        while (curColOffset < tilingData_.catDim1) {\n            curColNum = CopyInSplitDim1(\n                tilingData_.tensorNum - 1, tilingData_.sameShapeTensorDim1,\n                loopSizeDim0 * tilingData_.ubFactorDim0 * tilingData_.sameShapeTensorDim1, tilingData_.tailUbFactorDim0,\n                splitInfo);\n            ComputeSplitDim1Copy(tilingData_.tailUbFactorDim0, curColNum, splitInfo);\n            CopyOut("
+        },
+        {
+          "id": "consumption",
+          "version": "955138fb0e365a196eb33e94e60d0a4d26de8aad",
+          "path": "conversion/concat/op_kernel/arch35/one_axis_concat_no_align_same_shape_copy.h",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N20/raw_history/955138fb0e365a196eb33e94e60d0a4d26de8aad/conversion/concat/op_kernel/arch35/one_axis_concat_no_align_same_shape_copy.h",
+          "original_start_line": 358,
+          "text": "        splitInfo.startIdx += 1;\n        splitInfo.startOffset = 0;\n    }\n    if (splitInfo.startIdx == endIdx) {\n        copyCols = splitInfo.startOffset + limitCols > endOffset ? endOffset - splitInfo.startOffset : limitCols;\n        dim0stride = GetTensorDim0Stride<TILINGDATA>(tilingData_, splitInfo.startIdx, tilingData_.sameShapeTensorDim1);\n        SetCopyInparam(rows, copyCols, dim0stride - copyCols, copyCols);\n        splitInfo.endOffset = splitInfo.startOffset + copyCols;\n        splitInfo.endIdx = splitInfo.startIdx;\n        CopyInSingleTensor(srcLocal, splitInfo.startIdx, srcOffset + splitInfo.startOffset, copyInParam_);\n        inQueue_.EnQue(srcLocal);\n        return copyCols;"
+        },
+        {
+          "id": "input-buffer",
+          "version": "955138fb0e365a196eb33e94e60d0a4d26de8aad",
+          "path": "conversion/concat/op_kernel/arch35/one_axis_concat_no_align_same_shape_copy.h",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N20/raw_history/955138fb0e365a196eb33e94e60d0a4d26de8aad/conversion/concat/op_kernel/arch35/one_axis_concat_no_align_same_shape_copy.h",
+          "original_start_line": 424,
+          "text": "__aicore__ inline void OneAxisConcatNoAlignCopy<T, TILINGDATA>::CopyInSingleTensor(\n    const LocalTensor<T>& dstLocal, int64_t tensorIdx, int64_t srcOffset, const DataCopyExtParams& params)\n{\n    int64_t dim0stride = GetTensorDim0Stride<TILINGDATA>(tilingData_, tensorIdx, tilingData_.sameShapeTensorDim1);\n    srcGlobal_.SetGlobalBuffer(GetTensorAddr(tensorIdx, blockOffset_ * dim0stride));\n    DataCopyPadExtParams<T> padParams = {false, 0, 0, 0};\n    DataCopyPad<T, PaddingMode::Compact>(dstLocal, srcGlobal_[srcOffset], params, padParams);\n}"
+        }
+      ]
+    },
+    {
+      "case_id": "dev-05",
+      "sources": [
+        {
+          "id": "issue",
+          "version": "0916b11b47d62ce70e387d0a0a81106905ccfc67",
+          "path": "ForeachLerpList Issue",
+          "kind": "issue",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N10/00_public.txt",
+          "original_start_line": 25,
+          "text": "foreach_lerp_list 中 maskLocal 偏移量使用存在问题，Select用的maskLocal按bit位生效，但offset偏移没有除8，导致UB地址偏移取到错误mask"
+        },
+        {
+          "id": "diff",
+          "version": "0916b11b47d62ce70e387d0a0a81106905ccfc67",
+          "path": "foreach/foreach_lerp_list/op_kernel/foreach_lerp_list.h",
+          "kind": "diff",
+          "origin": "https://gitcode.com/cann/ops-nn/pull/5544/diffs",
+          "original_start_line": 33,
+          "text": "@@ -89,43 +111,21 @@ private:\n         uint32_t repeatBatchCnt = totalRepeatCnt / MAX_REPEATS;            // limit by L0 API, should calc\n         uint32_t repeatBatchCntRemainder = totalRepeatCnt % MAX_REPEATS;   // should calc\n         uint32_t offset = 0;\n+        uint32_t batchElementCount = MAX_REPEATS * ELEMENT_PER_REPEAT;\n         for (uint32_t i = 0; i < repeatBatchCnt; i++) {\n-            event_t eventIDVToS = static_cast<event_t>(GetTPipePtr()->FetchEventID(HardEvent::V_S));\n-            SetFlag<HardEvent::V_S>(eventIDVToS);\n-            WaitFlag<HardEvent::V_S>(eventIDVToS);\n-            PipeBarrier<PIPE_V>();\n-            Select(\n-                float32Tensor[maxCastDataCount * FACTOR_NUMBER_THREE + offset], maskLocal[offset],\n-                float32Tensor[maxCastDataCount + offset],\n-                float32Tensor[maxCastDataCount * FACTOR_NUMBER_THREE + offset], SELMODE::VSEL_TENSOR_TENSOR_MODE,\n-                ELEMENT_PER_REPEAT, MAX_REPEATS, {1, 1, 1, 8, 8, 8});\n-            PipeBarrier<PIPE_V>();\n-            offset += MAX_REPEATS * ELEMENT_PER_REPEAT;\n+            SelectBatch(float32Tensor, lerpLocal1, lerpLocal2, maskLocal, maxCastDataCount, offset,\n+                batchElementCount, MAX_REPEATS);"
+        },
+        {
+          "id": "mask-storage",
+          "version": "0916b11b47d62ce70e387d0a0a81106905ccfc67",
+          "path": "foreach/foreach_lerp_list/op_kernel/foreach_lerp_list.h",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N10/raw_history/0916b11b47d62ce70e387d0a0a81106905ccfc67/foreach/foreach_lerp_list/op_kernel/foreach_lerp_list.h",
+          "original_start_line": 489,
+          "text": "    LocalTensor<T> yLocal = yQueue.AllocTensor<T>();\n\n    LocalTensor<uint8_t> maskLocal = maskBuf.Get<uint8_t>();\n    LocalTensor<float> lerpLocal = lerpBuf.Get<float>();\n    LocalTensor<float> lerpLocal1 = lerpLocal;"
+        }
+      ]
+    },
+    {
+      "case_id": "dev-06",
+      "sources": [
+        {
+          "id": "diff",
+          "version": "6742815953ed5dbe27e053598936cb90d974123b",
+          "path": "conv/conv3d_backprop_input_v2/op_kernel/arch35/conv3d_backprop_input_v2/conv3d_backprop_input_v2.h",
+          "kind": "diff",
+          "origin": "https://gitcode.com/cann/ops-nn/pull/4616/diffs",
+          "original_start_line": 1,
+          "text": "diff --git a/conv/conv3d_backprop_input_v2/op_kernel/arch35/conv3d_backprop_input_v2/conv3d_backprop_input_v2.h b/conv/conv3d_backprop_input_v2/op_kernel/arch35/conv3d_backprop_input_v2/conv3d_backprop_input_v2.h\n--- a/conv/conv3d_backprop_input_v2/op_kernel/arch35/conv3d_backprop_input_v2/conv3d_backprop_input_v2.h\n+++ b/conv/conv3d_backprop_input_v2/op_kernel/arch35/conv3d_backprop_input_v2/conv3d_backprop_input_v2.h\n@@ -395,11 +395,11 @@ protected:\n         preOffsetBias_ = offsetBias_;\n     }\n \n-    __aicore__ inline void CalcScaleOffset()\n+    __aicore__ inline void CalcScaleOffset(uint32_t groupIdx)\n     {\n         if constexpr (GetScaleFormat<filterType>(scaleFormat) != Convolution3DBackprop::CubeFormat::UNSUPPORT) {\n             if (tiling_->quantMode == static_cast<uint8_t>(Convolution3DBackprop::QuantMode::VECTOR_QUANT)) {\n-                offsetScale_ = static_cast<uint64_t>(nCoreIdx_) * tiling_->singleCoreCin;\n+                offsetScale_ = static_cast<uint64_t>(nCoreIdx_) * tiling_->singleCoreCin + groupIdx * tiling_->cinG;\n             } else if (tiling_->quantMode == static_cast<uint8_t>(Convolution3DBackprop::QuantMode::SCALAR_QUANT)) {\n                 offsetScale_ = 0;\n             }            \n@@ -413,7 +413,7 @@ protected:\n         CalcGroupBlockOffset(groupIdx);\n \n         CalcBiasOffset(groupIdx);\n-        CalcScaleOffset();\n+        CalcScaleOffset(groupIdx);\n     }\n "
+        }
+      ]
+    },
+    {
+      "case_id": "dev-07",
+      "sources": [
+        {
+          "id": "issue",
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "PadV3Grad Issue",
+          "kind": "issue",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N23/issue_description.md",
+          "original_start_line": 9,
+          "text": "修复padv3grad edge模板pad为负值刚好裁剪到inshape大小的计算错误"
+        },
+        {
+          "id": "diff",
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+          "kind": "diff",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N23/pr_1.patch",
+          "original_start_line": 8,
+          "text": "-__simt_callee__ __aicore__ bool IsCut(U* inIndex, __ubuf__ U* inShapes)\n-{\n-    // 判断当前输入位置是否被裁剪\n-    for (uint8_t i = 0; i < DIM; i++) {\n-        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n-            return true;\n-        }\n-    }\n-    return false;\n-}\n-\n-template <uint8_t DIM, typename U, typename GmOffsetType>\n __simt_callee__ __aicore__ void CalScope(\n-    GmOffsetType (*scopeIndex)[2], U* inIndex, U* outIndex, __ubuf__ U* rightPads, __ubuf__ U* outShapes)\n+    U (*scopeIndex)[2], U* inIndex, U* outIndex, __ubuf__ U* rightPads, __ubuf__ U* inShapes, __ubuf__ U* outShapes)\n {\n+    int8_t flag = 0;\n     for (uint8_t i = 0; i < DIM; i++) {\n+        // 判断是否被裁剪\n+        flag = 0;\n+        if (inIndex[i] < 0 || inIndex[i] >= inShapes[i]) {\n+            flag = 1;\n+        }\n         // 判断起始范围\n         if (outIndex[i] == 0) {\n             scopeIndex[i][0] = 0;\n         } else {\n-            scopeIndex[i][0] = inIndex[i];\n+            scopeIndex[i][0] = inIndex[i] + flag;\n         }\n         // 判断结束范围\n         if (outIndex[i] == outShapes[i] - 1) {\n             scopeIndex[i][1] = inIndex[i] + rightPads[i];\n         } else {\n-            scopeIndex[i][1] = inIndex[i];\n+            scopeIndex[i][1] = inIndex[i] - flag;\n         }\n     }\n }\n@@ -100,27 +94,23 @@ __simt_vf__ LAUNCH_BOUND(EDGE_THREAD_DIM) __aicore__ void SimtComputeEdgeDimOne(\n         // 计算输入输出索引\n         CalPos<DIM, U, GmOffsetType>(yIdx, inIndex, outIndex, outStrides, leftPads, magics, shifts);\n \n-        GmOffsetType scopeIndex[DIM][2]; // 每个维度的padding范围\n-        if (IsCut<DIM, U>(inIndex, inShapes)) {\n-            outputGM[idx] = 0;\n-        } else {\n-            CalScope<DIM, U, GmOffsetType>(scopeIndex, inIndex, outIndex, rightPads, outShapes);\n+        U scopeIndex[DIM][2]; // 每个维度的padding范围\n+        CalScope<DIM, U>(scopeIndex, inIndex, outIndex, rightPads, inShapes, outShapes);\n \n-            CastType total = 0;\n-            for (GmOffsetType a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n-                GmOffsetType inputOffset = a0;\n-                CastType tmpVal;\n-                if constexpr (std::is_same_v<T, bfloat16_t>) {\n-                    tmpVal = __bfloat162float(inputGM[inputOffset]);\n-                } else if constexpr (std::is_same_v<T, float16_t>) {\n-                    tmpVal = __half2float(inputGM[inputOffset]);\n-                } else {\n-                    tmpVal = inputGM[inputOffset];\n-                }\n-                total += tmpVal;\n+        CastType total = 0;\n+        for (U a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {\n+            GmOffsetType inputOffset = static_cast<GmOffsetType>(a0);\n+            CastType tmpVal;\n+            if constexpr (std::is_same_v<T, bfloat16_t>) {\n+                tmpVal = __bfloat162float(inputGM[inputOffset]);\n+            } else if constexpr (std::is_same_v<T, float16_t>) {\n+                tmpVal = __half2float(inputGM[inputOffset]);\n+            } else {\n+                tmpVal = inputGM[inputOffset];\n             }\n-            CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);\n+            total += tmpVal;\n         }\n+        CopyOut<T, CastType, GmOffsetType>(idx, outputGM, total);\n     }"
+        },
+        {
+          "id": "old-edge",
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N23/raw_history/be281ed951b1522a4d3d894a9b62030addb02074/conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_edge_simt.h",
+          "original_start_line": 100,
+          "text": "        // 计算输入输出索引\n        CalPos<DIM, U, GmOffsetType>(yIdx, inIndex, outIndex, outStrides, leftPads, magics, shifts);\n\n        GmOffsetType scopeIndex[DIM][2]; // 每个维度的padding范围\n        if (IsCut<DIM, U>(inIndex, inShapes)) {\n            outputGM[idx] = 0;\n        } else {\n            CalScope<DIM, U, GmOffsetType>(scopeIndex, inIndex, outIndex, rightPads, outShapes);\n\n            CastType total = 0;\n            for (GmOffsetType a0 = scopeIndex[0][0]; a0 <= scopeIndex[0][1]; ++a0) {"
+        },
+        {
+          "id": "shared-coordinate",
+          "version": "be281ed951b1522a4d3d894a9b62030addb02074",
+          "path": "conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_circular_simt.h",
+          "kind": "code",
+          "origin": "D:/project/精度/CANN25_review/results/evidence/N23/raw_history/be281ed951b1522a4d3d894a9b62030addb02074/conversion/pad_v3_grad/op_kernel/arch35/pad_v3_grad_circular_simt.h",
+          "original_start_line": 65,
+          "text": "template <uint8_t DIM_NUM, typename U, typename GmOffsetType>\n__simt_callee__ __aicore__ void CalPos(\n    GmOffsetType yIdx, U* inIndex, U* outIndex, __ubuf__ U* outStrides, __ubuf__ U* leftPads,\n    __ubuf__ GmOffsetType* magics, __ubuf__ GmOffsetType* shifts)\n{\n    for (uint8_t i = 0; i < DIM_NUM - 1; i++) {\n        outIndex[i] = static_cast<U>(Simt::UintDiv(yIdx, magics[i], shifts[i])); // outIndex[i] = yIdx / outStrides[i];\n        yIdx -= outIndex[i] * outStrides[i];                                     // yIdx = yIdx % outStrides[i];\n    }\n    outIndex[DIM_NUM - 1] = yIdx;\n\n    // 当前输出位置再输入的索引\n    for (uint8_t i = 0; i < DIM_NUM; i++) {\n        inIndex[i] = outIndex[i] + leftPads[i];\n    }"
+        }
+      ]
+    },
+    {
+      "case_id": "dev-08",
+      "sources": [
+        {
+          "id": "tutorial",
+          "version": "ed426adf23521673f218d3858cc19c270776d565",
+          "path": "docs/en/user/precision/01-cases.md",
+          "kind": "report",
+          "origin": "https://github.com/hw-native-sys/pypto/blob/ed426adf23521673f218d3858cc19c270776d565/docs/en/user/precision/01-cases.md#L49-L63",
+          "original_start_line": 49,
+          "text": "## Case 3: padding contaminated a reduction\n\n**Symptom.** Row maxima come back `0.0` for data that is entirely negative. The kernel is\ncorrect on shapes that divide evenly into tiles.\n\n**Located by.** Step 2, then reading the kernel: a `pl.load(..., valid_shape=[64, vlen])`\nfeeding `row_max`. The padding participates in the reduction, and zero beats every negative\nvalue.\n\n**Change.** `pl.fillpad(..., pl.PadValue.min)` before the reduction — pad with the identity\nof the operation you are about to apply. `PadValue.zero` for `row_sum`, `max` for a min\nreduction.\n\n**Confirmed by.** The partial-tile case now matches. Note the full-tile case never failed,\nwhich is why this survives casual testing — see"
+        }
+      ]
+    },
+    {
+      "case_id": "dev-09",
+      "sources": [
+        {
+          "id": "pr-report",
+          "version": "SGLang 0.5.18 author report",
+          "path": "sgl-project/sglang#37199",
+          "kind": "report",
+          "origin": "https://github.com/sgl-project/sglang/pull/37199",
+          "original_start_line": 18,
+          "text": "### Root cause\n\nWith MoE A2A disabled and `TP == attention DP == EP`, every TP rank initially\nproduces an expert partial `m_i`.\n\n`GptOssSparseMoeBlock.forward_normal()` first performed a TP all-reduce, so\nevery rank held:\n\n```text\ns = m0 + m1 + ... + m(TP-1)\n```\n\nDP-attention postprocessing then called `reduce_scatterv` over the same TP\ngroup. Since reduce-scatter also sums its inputs, it combined TP replicated\ncopies of `s`, producing approximately:\n\n```text\nTP * s\n```\n\nOn TP4, the MoE output was therefore scaled by approximately 4x.\n\nThe residual branch was not scaled, so the following residual addition and\nnormalization could not cancel this error."
+        }
+      ]
+    },
+    {
+      "case_id": "dev-10",
+      "sources": [
+        {
+          "id": "issue",
+          "version": "ops-nn#8663 report revision 2026-11-12",
+          "path": "ops-nn#8663",
+          "kind": "issue",
+          "origin": "https://gitcode.com/cann/ops-nn/issues/8663",
+          "original_start_line": 1,
+          "text": "> **2026-11-12 更新**：已在昇腾 910B3/910B2 + CANN 9.2.0 与 9.3.0 上复测并核对源码。实测结论与需要修正的计数、参数或根因描述见下方「更新说明」；原正文中已被证伪的原句已就地更正。\n\n**更新说明**\n\n- 本单范围已拆分为 RmsNorm、GemmaRmsNorm、RmsNormGrad、AddLayerNormGrad 四个接口；正文原句「其余 6 个接口」是拆单前残留，已改为「其余 3 个接口」。\n- 当前 master 已把 RmsNorm/RmsNormGrad 出参文档的非连续列由 `√` 改为 `×`（`b4db407`）。这两者若仍接受非连续出参并写错，属「该拒未拒」；GemmaRmsNorm/AddLayerNormGrad 才是「承诺支持却错值」。两种契约需分开描述。\n- RmsNorm 的 CPU 标杆与物理 dump 证据完整；其余三个接口目前只有汇总数据，建议按本单格式补逐接口脚本与 dump。\n\n\n---\n\n[Bug-Report|缺陷反馈]: 4 个自动生成接口的出参非连续全部静默错值（两段返回 0，输出只写一半）\n\n关联：#8175、#8086（同属「自动生成接口不支持非连续输出」方向；那两条为 Requirement 且限于 Foreach 族，本条是已实测的静默错值）\n拆分：#8683（`aclnnExpandIntoJaggedPermute`）、#8684（`aclnnMaskedSoftmaxWithRelPosBias`）、#8685（`aclnnTopKTopPSample`）\n三条同源缺陷已单独提为细粒度单（各带物理 dump 逐元素比对 + 三组重复运行），**本条只覆盖下列 4 个接口**。\n## 现象\n\n入参连续、仅把**出参**换成 `stride` 带空洞的非连续视图时，两段接口均返回 `0/0`，但结果\n**按连续布局写入**，调用方按出参照 `stride` 读回即错位。4 个接口 6 个出参全部复现\n（构造均满足 `max_offset < numel(storage)`，合法）：\n\n| 接口 | 出参 | 非连续构造（view/stride/storage） | 结果 |\n|---|---|---|---|\n| `aclnnRmsNorm` | `rstdOut` | `[4,1]`/`{4,2}`/`{4,4}` | 3/4 元素为 0 |\n| `aclnnGemmaRmsNorm` | `yOut`、`rstdOut` | `[4,8]`/`{16,2}`/`{8,16}`、`[4,1]`/`{4,2}`/`{4,4}` | yOut 30/32 超差(worst=3.58)、rstdOut 3/4 为 0 |\n| `aclnnRmsNormGrad` | `dxOut` | `[4,8]`/`{16,2}`/`{8,16}` | 16/32 元素为 0 |\n| `aclnnAddLayerNormGrad` | `dxOut`、`dgammaOut`、`dbetaOut` | `[4,8]`/`{16,2}`/`{8,16}`、`[8]`/`{2}`/`{16}`×2 | 16/32、4/8、4/8 为 0 |\n\n**同接口的入参非连续是正常的**（`x` 切片、`gamma` 切片均 PASS），仅出参侧失效；\n基线（全连续）全部 PASS，排除环境与用法问题。\n## 期望\n\n资料对上述 4 个接口的出参均声明「非连续Tensor = √」：`aclnnRmsNorm`（`yOut`/`rstdOut`）、\n`aclnnGemmaRmsNorm`（`yOut`/`rstdOut`）、`aclnnRmsNormGrad`（`dxOut`/`dgammaOut`）、\n`aclnnAddLayerNormGrad`（`dxOut`/`dgammaOut`/`dbetaOut`）。资料路径均为\n`norm/<算子名>/docs/aclnn<接口名>.md`。\n\n按声明应与连续出参逐元素一致；实测不一致且**返回码全为 0**。\n\n对照：`aclnnHardswish`（有手写 `op_host/op_api/`）与 `aclnnForeachMulList` 出参非连续**均正常** —— 无 `op_host/op_api/` 的 7 个失败 7/7，有手写实现的 2 个通过 2/2。"
+        }
+      ]
+    },
+    {
+      "case_id": "dev-11",
+      "sources": [
+        {
+          "id": "issue",
+          "version": "ops-nn#8663 report revision 2026-11-12",
+          "path": "ops-nn#8663",
+          "kind": "issue",
+          "origin": "https://gitcode.com/cann/ops-nn/issues/8663",
+          "original_start_line": 1,
+          "text": "> **2026-11-12 更新**：已在昇腾 910B3/910B2 + CANN 9.2.0 与 9.3.0 上复测并核对源码。实测结论与需要修正的计数、参数或根因描述见下方「更新说明」；原正文中已被证伪的原句已就地更正。\n\n**更新说明**\n\n- 本单范围已拆分为 RmsNorm、GemmaRmsNorm、RmsNormGrad、AddLayerNormGrad 四个接口；正文原句「其余 6 个接口」是拆单前残留，已改为「其余 3 个接口」。\n- 当前 master 已把 RmsNorm/RmsNormGrad 出参文档的非连续列由 `√` 改为 `×`（`b4db407`）。这两者若仍接受非连续出参并写错，属「该拒未拒」；GemmaRmsNorm/AddLayerNormGrad 才是「承诺支持却错值」。两种契约需分开描述。\n- RmsNorm 的 CPU 标杆与物理 dump 证据完整；其余三个接口目前只有汇总数据，建议按本单格式补逐接口脚本与 dump。\n\n\n---\n\n[Bug-Report|缺陷反馈]: 4 个自动生成接口的出参非连续全部静默错值（两段返回 0，输出只写一半）\n\n关联：#8175、#8086（同属「自动生成接口不支持非连续输出」方向；那两条为 Requirement 且限于 Foreach 族，本条是已实测的静默错值）\n拆分：#8683（`aclnnExpandIntoJaggedPermute`）、#8684（`aclnnMaskedSoftmaxWithRelPosBias`）、#8685（`aclnnTopKTopPSample`）\n三条同源缺陷已单独提为细粒度单（各带物理 dump 逐元素比对 + 三组重复运行），**本条只覆盖下列 4 个接口**。\n## 现象\n\n入参连续、仅把**出参**换成 `stride` 带空洞的非连续视图时，两段接口均返回 `0/0`，但结果\n**按连续布局写入**，调用方按出参照 `stride` 读回即错位。4 个接口 6 个出参全部复现\n（构造均满足 `max_offset < numel(storage)`，合法）：\n\n| 接口 | 出参 | 非连续构造（view/stride/storage） | 结果 |\n|---|---|---|---|\n| `aclnnRmsNorm` | `rstdOut` | `[4,1]`/`{4,2}`/`{4,4}` | 3/4 元素为 0 |\n| `aclnnGemmaRmsNorm` | `yOut`、`rstdOut` | `[4,8]`/`{16,2}`/`{8,16}`、`[4,1]`/`{4,2}`/`{4,4}` | yOut 30/32 超差(worst=3.58)、rstdOut 3/4 为 0 |\n| `aclnnRmsNormGrad` | `dxOut` | `[4,8]`/`{16,2}`/`{8,16}` | 16/32 元素为 0 |\n| `aclnnAddLayerNormGrad` | `dxOut`、`dgammaOut`、`dbetaOut` | `[4,8]`/`{16,2}`/`{8,16}`、`[8]`/`{2}`/`{16}`×2 | 16/32、4/8、4/8 为 0 |\n\n**同接口的入参非连续是正常的**（`x` 切片、`gamma` 切片均 PASS），仅出参侧失效；\n基线（全连续）全部 PASS，排除环境与用法问题。\n## 期望\n\n资料对上述 4 个接口的出参均声明「非连续Tensor = √」：`aclnnRmsNorm`（`yOut`/`rstdOut`）、\n`aclnnGemmaRmsNorm`（`yOut`/`rstdOut`）、`aclnnRmsNormGrad`（`dxOut`/`dgammaOut`）、\n`aclnnAddLayerNormGrad`（`dxOut`/`dgammaOut`/`dbetaOut`）。资料路径均为\n`norm/<算子名>/docs/aclnn<接口名>.md`。\n\n按声明应与连续出参逐元素一致；实测不一致且**返回码全为 0**。\n\n对照：`aclnnHardswish`（有手写 `op_host/op_api/`）与 `aclnnForeachMulList` 出参非连续**均正常** —— 无 `op_host/op_api/` 的 7 个失败 7/7，有手写实现的 2 个通过 2/2。"
+        }
+      ]
+    }
+  ]
+}

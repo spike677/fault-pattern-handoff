@@ -1,0 +1,23 @@
+{
+  "scope": "development_snapshot",
+  "catalog_version": "0.2",
+  "development_base_sha": "22721f137bea4e99e6596be7a8618bc1cfb6fd46",
+  "branch": "codex/mechanism-classification-pilot",
+  "python": "3.11.3",
+  "extraction": "Codex development workflow reviewed already-read sources and produced development_facts.json",
+  "evaluation_has_real_blind_results": false,
+  "validated_local_source_excerpts": 14,
+  "sha256": {
+    "catalog.json": "bcd3793a579e34ca4cd1d8ca631ef5f99480cad3dd78ee2c2d437cce4db27974",
+    "classify.py": "cc1bdb11f9123af0a1d029e36417fd7f9681f6c1135fd91215060c2adc572f34",
+    "development.md": "d5e93ee0101c2752715261f58dc024739db791eeb71c602536cec7a65bbeb135",
+    "development_cases.json": "6de2bf6ecce995b798066cfbcc76cc121e64ced8e6034414774f4d335befbe63",
+    "development_facts.json": "ae3171bbca986d28e556ccbe082fd23f0f46b8e870f7ed22b7d9307beae2213f",
+    "development_lineage.json": "3d7d70234a90de6a6b9f8638aaccd3c982be9a1c199983e864937af7fec24c3e",
+    "development_verdicts.json": "b27f96a5a6b49cb3b4102f0e282d6abb874089be446468c5c6de2b6f8d2d430b",
+    "evaluate.py": "d857c2d19ac1e081cae8fbc8fb33d3ca8c7e8880e868351c0e869c3d16af1883",
+    "test_development.py": "552ebb8c2fbd363fef4930d42f9982d511c635516252c192758111cf0f9b7d80",
+    "test_evaluate.py": "30c00358eab584edfd4491e2fe08db6297406ecd59595f98b31b733201e30bc8",
+    "WORKFLOW.md": "58f1cc45b7f1895ebe64db5437c718743ce06c6d1f832416f67e266b64bfcf24"
+  }
+}
