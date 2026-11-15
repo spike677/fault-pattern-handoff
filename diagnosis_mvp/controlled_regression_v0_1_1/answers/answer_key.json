@@ -1,0 +1,235 @@
+{
+  "C01": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "ADDRESS_MAPPING"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C02": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "ADDRESS_MAPPING"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C03": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "PLAN_GENERATION"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C04": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "PLAN_TRANSFER"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C05a": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "PLAN_CONSUMPTION"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C05b": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "PLAN_CONSUMPTION"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C06": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "INTERFACE_CONTRACT"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C07": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "UNEXPECTED_CONTRIBUTION",
+      "MISSING_CONTRIBUTION"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C08": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "LOCAL_NUMERIC_DEVIATION"
+    ],
+    "numeric_stage": "LOCAL_AND_PROPAGATION",
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C09": {
+    "decisive_fields": [],
+    "mechanisms": [],
+    "numeric_stage": "UPSTREAM_PROPAGATION",
+    "outcome": "NO_SUPPORTED_MECHANISM",
+    "unresolved": null
+  },
+  "C10": {
+    "decisive_fields": [],
+    "mechanisms": [
+      "COLLECTIVE_PARTICIPATION",
+      "SHARED_SLOT_EARLY_REUSE"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "C11": {
+    "decisive_fields": [],
+    "mechanisms": [],
+    "outcome": "UNKNOWN",
+    "unresolved": "definition"
+  },
+  "C12": {
+    "decisive_fields": [],
+    "mechanisms": [],
+    "outcome": "OUT_OF_SCOPE",
+    "unresolved": null
+  },
+  "C13": {
+    "decisive_fields": [],
+    "mechanisms": [],
+    "numeric_stage": "UNKNOWN",
+    "outcome": "UNKNOWN",
+    "output_check": "INCOMPLETE",
+    "unresolved": "evidence"
+  },
+  "D01": {
+    "decisive_fields": [
+      "layout.actual_offset"
+    ],
+    "mechanisms": [
+      "ADDRESS_MAPPING"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "D02": {
+    "decisive_fields": [
+      "plan.produced"
+    ],
+    "mechanisms": [
+      "PLAN_TRANSFER"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "D03": {
+    "decisive_fields": [
+      "interface.observed"
+    ],
+    "mechanisms": [
+      "INTERFACE_CONTRACT"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "D04": {
+    "decisive_fields": [
+      "timing.later_write"
+    ],
+    "mechanisms": [
+      "SHARED_SLOT_EARLY_REUSE"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "D05": {
+    "decisive_fields": [
+      "contribution.observed"
+    ],
+    "mechanisms": [
+      "REPEATED_CONTRIBUTION"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "D06": {
+    "decisive_fields": [
+      "layout.actual_offset",
+      "plan.consumed"
+    ],
+    "mechanisms": [
+      "ADDRESS_MAPPING",
+      "PLAN_CONSUMPTION"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  },
+  "D07": {
+    "decisive_fields": [
+      "numeric.ref_healthy"
+    ],
+    "mechanisms": [],
+    "numeric_stage": "UPSTREAM_PROPAGATION",
+    "outcome": "NO_SUPPORTED_MECHANISM",
+    "unresolved": null
+  },
+  "D08": {
+    "decisive_fields": [],
+    "mechanisms": [],
+    "outcome": "UNKNOWN",
+    "unresolved": "evidence"
+  },
+  "D09": {
+    "decisive_fields": [],
+    "mechanisms": [],
+    "numeric_stage": "UNKNOWN",
+    "outcome": "UNKNOWN",
+    "unresolved": "reference"
+  },
+  "D10": {
+    "decisive_fields": [],
+    "mechanisms": [],
+    "outcome": "UNKNOWN",
+    "unresolved": "evidence"
+  },
+  "D11": {
+    "decisive_fields": [],
+    "mechanisms": [],
+    "outcome": "UNKNOWN",
+    "unresolved": "observation"
+  },
+  "D12": {
+    "decisive_fields": [
+      "layout.actual_offset"
+    ],
+    "mechanisms": [],
+    "outcome": "NO_SUPPORTED_MECHANISM",
+    "unresolved": null
+  },
+  "D13": {
+    "decisive_fields": [
+      "timing.observed_participants"
+    ],
+    "mechanisms": [],
+    "outcome": "NO_SUPPORTED_MECHANISM",
+    "unresolved": null
+  },
+  "D14": {
+    "decisive_fields": [
+      "interface.expected",
+      "interface.observed"
+    ],
+    "mechanisms": [
+      "INTERFACE_CONTRACT"
+    ],
+    "outcome": "SUPPORTED",
+    "unresolved": null
+  }
+}

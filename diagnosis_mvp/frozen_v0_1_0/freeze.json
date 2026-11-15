@@ -1,0 +1,36 @@
+{
+  "artifacts": {
+    "development.json": "470e26bee11aba76d0610a4e2c3a9884566f2ec06d6e8f0657c93995808b4bd8",
+    "diagnose.py": "eb498bd6b18f9e2addec193686a70a35b364c53dda2c53cc1f727b23beffb731",
+    "evaluate.py": "b879c7bbf3e771773d79dd9b8378ab2e01c6ac911ff6b75f36b140a443c6dce8",
+    "test_diagnose.py": "25b3b1ba3c622bf242cac675d24ca5c460b841dc51f0bf17073d0490cbcee25f",
+    "test_evaluate.py": "58d4189dad76d9510b97e1bbcd609616c5e57b2142fe4458f94371e4c9290069"
+  },
+  "development_lineage": [
+    "answer:pypto-shared-tutorial",
+    "event:shared-13-14",
+    "event:tensorrt-llm-07-08",
+    "family:cann-conv3d-arch35-W",
+    "family:cann-embeddingbag-n24",
+    "family:cann-ops-nn-8663",
+    "family:flashinfer-5260-5385"
+  ],
+  "engine_version": "0.1.0",
+  "protocol": {
+    "budgets": {
+      "classification": 0,
+      "diagnosis": 2
+    },
+    "cost_per_request": 1,
+    "methods": {
+      "classification": [
+        "adaptive"
+      ],
+      "diagnosis": [
+        "adaptive",
+        "fixed_route"
+      ]
+    },
+    "version": "1"
+  }
+}

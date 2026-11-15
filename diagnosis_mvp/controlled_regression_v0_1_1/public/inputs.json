@@ -1,0 +1,1859 @@
+[
+  {
+    "case": {
+      "build": "build-C01",
+      "call_id": "invocation-C01",
+      "case_id": "C01",
+      "contract": {
+        "build": "build-C01",
+        "source": "synthetic://C01/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C01",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C01",
+          "call_id": "invocation-C01",
+          "fact_id": "C01-record-1",
+          "field": "layout.geometry",
+          "kind": "CONTRACT",
+          "source": "synthetic://C01/observation/1",
+          "value": {
+            "base": 0,
+            "index": [
+              1,
+              1
+            ],
+            "shape": [
+              2,
+              3
+            ],
+            "strides": [
+              1,
+              2
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C01",
+          "call_id": "invocation-C01",
+          "fact_id": "C01-record-2",
+          "field": "layout.actual_offset",
+          "kind": "OBSERVED",
+          "source": "synthetic://C01/observation/2",
+          "value": {
+            "offset": 4,
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "layout"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C01",
+      "event:simulator-controlled-C01",
+      "answer:sealed-controlled-C01"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C02",
+      "call_id": "invocation-C02",
+      "case_id": "C02",
+      "contract": {
+        "build": "build-C02",
+        "source": "synthetic://C02/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C02",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C02",
+          "call_id": "invocation-C02",
+          "fact_id": "C02-record-1",
+          "field": "layout.geometry",
+          "kind": "CONTRACT",
+          "source": "synthetic://C02/observation/1",
+          "value": {
+            "base": 7,
+            "index": [
+              2
+            ],
+            "shape": [
+              4
+            ],
+            "strides": [
+              3
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C02",
+          "call_id": "invocation-C02",
+          "fact_id": "C02-record-2",
+          "field": "layout.actual_offset",
+          "kind": "OBSERVED",
+          "source": "synthetic://C02/observation/2",
+          "value": {
+            "offset": 9,
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "layout"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C02",
+      "event:simulator-controlled-C02",
+      "answer:sealed-controlled-C02"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C03",
+      "call_id": "invocation-C03",
+      "case_id": "C03",
+      "contract": {
+        "build": "build-C03",
+        "source": "synthetic://C03/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C03",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C03",
+          "call_id": "invocation-C03",
+          "fact_id": "C03-record-1",
+          "field": "plan.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://C03/observation/1",
+          "value": {
+            "range": [
+              0,
+              9
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C03",
+          "call_id": "invocation-C03",
+          "fact_id": "C03-record-2",
+          "field": "plan.produced",
+          "kind": "OBSERVED",
+          "source": "synthetic://C03/observation/2",
+          "value": {
+            "range": [
+              0,
+              8
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C03",
+          "call_id": "invocation-C03",
+          "fact_id": "C03-record-3",
+          "field": "plan.received",
+          "kind": "OBSERVED",
+          "source": "synthetic://C03/observation/3",
+          "value": {
+            "range": [
+              0,
+              8
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C03",
+          "call_id": "invocation-C03",
+          "fact_id": "C03-record-4",
+          "field": "plan.consumed",
+          "kind": "OBSERVED",
+          "source": "synthetic://C03/observation/4",
+          "value": {
+            "range": [
+              0,
+              8
+            ],
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "plan"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C03",
+      "event:simulator-controlled-C03",
+      "answer:sealed-controlled-C03"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C04",
+      "call_id": "invocation-C04",
+      "case_id": "C04",
+      "contract": {
+        "build": "build-C04",
+        "source": "synthetic://C04/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C04",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C04",
+          "call_id": "invocation-C04",
+          "fact_id": "C04-record-1",
+          "field": "plan.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://C04/observation/1",
+          "value": {
+            "range": [
+              0,
+              6
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C04",
+          "call_id": "invocation-C04",
+          "fact_id": "C04-record-2",
+          "field": "plan.produced",
+          "kind": "OBSERVED",
+          "source": "synthetic://C04/observation/2",
+          "value": {
+            "range": [
+              0,
+              6
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C04",
+          "call_id": "invocation-C04",
+          "fact_id": "C04-record-3",
+          "field": "plan.received",
+          "kind": "OBSERVED",
+          "source": "synthetic://C04/observation/3",
+          "value": {
+            "range": [
+              0,
+              5
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C04",
+          "call_id": "invocation-C04",
+          "fact_id": "C04-record-4",
+          "field": "plan.consumed",
+          "kind": "OBSERVED",
+          "source": "synthetic://C04/observation/4",
+          "value": {
+            "range": [
+              0,
+              5
+            ],
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "plan"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C04",
+      "event:simulator-controlled-C04",
+      "answer:sealed-controlled-C04"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C05a",
+      "call_id": "invocation-C05a",
+      "case_id": "C05a",
+      "contract": {
+        "build": "build-C05a",
+        "source": "synthetic://C05a/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-plan-end-inclusive",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C05a",
+          "call_id": "invocation-C05a",
+          "fact_id": "C05a-record-1",
+          "field": "plan.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://C05a/observation/1",
+          "value": {
+            "range": [
+              0,
+              7
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C05a",
+          "call_id": "invocation-C05a",
+          "fact_id": "C05a-record-2",
+          "field": "plan.produced",
+          "kind": "OBSERVED",
+          "source": "synthetic://C05a/observation/2",
+          "value": {
+            "range": [
+              0,
+              7
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C05a",
+          "call_id": "invocation-C05a",
+          "fact_id": "C05a-record-3",
+          "field": "plan.received",
+          "kind": "OBSERVED",
+          "source": "synthetic://C05a/observation/3",
+          "value": {
+            "range": [
+              0,
+              7
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C05a",
+          "call_id": "invocation-C05a",
+          "fact_id": "C05a-record-4",
+          "field": "plan.consumed",
+          "kind": "OBSERVED",
+          "source": "synthetic://C05a/observation/4",
+          "value": {
+            "range": [
+              0,
+              8
+            ],
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "plan"
+      ]
+    },
+    "lineage": [
+      "family:controlled-plan-end-inclusive",
+      "event:simulator-controlled-plan-end-inclusive",
+      "answer:sealed-controlled-plan-end-inclusive",
+      "patch:simulated-plan-end-inclusive",
+      "source:shared-plan-end-inclusive"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C05b",
+      "call_id": "invocation-C05b",
+      "case_id": "C05b",
+      "contract": {
+        "build": "build-C05b",
+        "source": "synthetic://C05b/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-plan-end-inclusive",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C05b",
+          "call_id": "invocation-C05b",
+          "fact_id": "C05b-record-1",
+          "field": "plan.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://C05b/observation/1",
+          "value": {
+            "range": [
+              0,
+              11
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C05b",
+          "call_id": "invocation-C05b",
+          "fact_id": "C05b-record-2",
+          "field": "plan.produced",
+          "kind": "OBSERVED",
+          "source": "synthetic://C05b/observation/2",
+          "value": {
+            "range": [
+              0,
+              11
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C05b",
+          "call_id": "invocation-C05b",
+          "fact_id": "C05b-record-3",
+          "field": "plan.received",
+          "kind": "OBSERVED",
+          "source": "synthetic://C05b/observation/3",
+          "value": {
+            "range": [
+              0,
+              11
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C05b",
+          "call_id": "invocation-C05b",
+          "fact_id": "C05b-record-4",
+          "field": "plan.consumed",
+          "kind": "OBSERVED",
+          "source": "synthetic://C05b/observation/4",
+          "value": {
+            "range": [
+              0,
+              12
+            ],
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "plan"
+      ]
+    },
+    "lineage": [
+      "family:controlled-plan-end-inclusive",
+      "event:simulator-controlled-plan-end-inclusive",
+      "answer:sealed-controlled-plan-end-inclusive",
+      "patch:simulated-plan-end-inclusive",
+      "source:shared-plan-end-inclusive"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C06",
+      "call_id": "invocation-C06",
+      "case_id": "C06",
+      "contract": {
+        "build": "build-C06",
+        "source": "synthetic://C06/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C06",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C06",
+          "call_id": "invocation-C06",
+          "fact_id": "C06-record-1",
+          "field": "interface.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://C06/observation/1",
+          "value": {
+            "axes": [
+              1,
+              3
+            ],
+            "rank": 4
+          }
+        },
+        {
+          "build": "build-C06",
+          "call_id": "invocation-C06",
+          "fact_id": "C06-record-2",
+          "field": "interface.observed",
+          "kind": "OBSERVED",
+          "source": "synthetic://C06/observation/2",
+          "value": {
+            "axes": [
+              1,
+              2
+            ],
+            "rank": 4
+          }
+        }
+      ],
+      "routes": [
+        "interface"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C06",
+      "event:simulator-controlled-C06",
+      "answer:sealed-controlled-C06"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C07",
+      "call_id": "invocation-C07",
+      "case_id": "C07",
+      "contract": {
+        "build": "build-C07",
+        "source": "synthetic://C07/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C07",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C07",
+          "call_id": "invocation-C07",
+          "fact_id": "C07-record-1",
+          "field": "contribution.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://C07/observation/1",
+          "value": [
+            "lane8",
+            "lane9",
+            "lane10"
+          ]
+        },
+        {
+          "build": "build-C07",
+          "call_id": "invocation-C07",
+          "fact_id": "C07-record-2",
+          "field": "contribution.observed",
+          "kind": "OBSERVED",
+          "source": "synthetic://C07/observation/2",
+          "value": [
+            "lane8",
+            "lane10",
+            "pad"
+          ]
+        }
+      ],
+      "routes": [
+        "contribution"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C07",
+      "event:simulator-controlled-C07",
+      "answer:sealed-controlled-C07"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C08",
+      "call_id": "invocation-C08",
+      "case_id": "C08",
+      "contract": {
+        "build": "build-C08",
+        "source": "synthetic://C08/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C08",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C08",
+          "call_id": "invocation-C08",
+          "fact_id": "C08-record-1",
+          "field": "numeric.actual",
+          "kind": "OBSERVED",
+          "source": "synthetic://C08/observation/1",
+          "value": {
+            "dtype": "float32",
+            "values": [
+              8
+            ]
+          }
+        },
+        {
+          "build": "build-C08",
+          "call_id": "invocation-C08",
+          "fact_id": "C08-record-2",
+          "field": "numeric.ref_observed",
+          "kind": "OBSERVED",
+          "source": "synthetic://C08/observation/2",
+          "value": {
+            "dtype": "float32",
+            "input_kind": "OBSERVED",
+            "mapping_id": "position-0",
+            "qualified": true,
+            "reference_id": "scalar-average-v2",
+            "state_id": "read-only-state",
+            "values": [
+              6.0
+            ]
+          }
+        },
+        {
+          "build": "build-C08",
+          "call_id": "invocation-C08",
+          "fact_id": "C08-record-3",
+          "field": "numeric.tolerance",
+          "kind": "CONTRACT",
+          "source": "synthetic://C08/observation/3",
+          "value": {
+            "atol": 0,
+            "rtol": 0
+          }
+        },
+        {
+          "build": "build-C08",
+          "call_id": "invocation-C08",
+          "fact_id": "C08-record-4",
+          "field": "numeric.ref_healthy",
+          "kind": "OBSERVED",
+          "source": "synthetic://C08/observation/4",
+          "value": {
+            "dtype": "float32",
+            "input_kind": "HEALTHY",
+            "mapping_id": "position-0",
+            "qualified": true,
+            "reference_id": "scalar-average-v2",
+            "state_id": "read-only-state",
+            "values": [
+              4.0
+            ]
+          }
+        }
+      ],
+      "routes": [
+        "numeric"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C08",
+      "event:simulator-controlled-C08",
+      "answer:sealed-controlled-C08"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C09",
+      "call_id": "invocation-C09",
+      "case_id": "C09",
+      "contract": {
+        "build": "build-C09",
+        "source": "synthetic://C09/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C09",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C09",
+          "call_id": "invocation-C09",
+          "fact_id": "C09-record-1",
+          "field": "numeric.actual",
+          "kind": "OBSERVED",
+          "source": "synthetic://C09/observation/1",
+          "value": {
+            "dtype": "float32",
+            "values": [
+              9
+            ]
+          }
+        },
+        {
+          "build": "build-C09",
+          "call_id": "invocation-C09",
+          "fact_id": "C09-record-2",
+          "field": "numeric.ref_observed",
+          "kind": "OBSERVED",
+          "source": "synthetic://C09/observation/2",
+          "value": {
+            "dtype": "float32",
+            "input_kind": "OBSERVED",
+            "mapping_id": "position-0",
+            "qualified": true,
+            "reference_id": "scalar-average-v2",
+            "state_id": "read-only-state",
+            "values": [
+              9.0
+            ]
+          }
+        },
+        {
+          "build": "build-C09",
+          "call_id": "invocation-C09",
+          "fact_id": "C09-record-3",
+          "field": "numeric.tolerance",
+          "kind": "CONTRACT",
+          "source": "synthetic://C09/observation/3",
+          "value": {
+            "atol": 0,
+            "rtol": 0
+          }
+        },
+        {
+          "build": "build-C09",
+          "call_id": "invocation-C09",
+          "fact_id": "C09-record-4",
+          "field": "numeric.ref_healthy",
+          "kind": "OBSERVED",
+          "source": "synthetic://C09/observation/4",
+          "value": {
+            "dtype": "float32",
+            "input_kind": "HEALTHY",
+            "mapping_id": "position-0",
+            "qualified": true,
+            "reference_id": "scalar-average-v2",
+            "state_id": "read-only-state",
+            "values": [
+              7.0
+            ]
+          }
+        }
+      ],
+      "routes": [
+        "numeric"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C09",
+      "event:simulator-controlled-C09",
+      "answer:sealed-controlled-C09"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C10",
+      "call_id": "invocation-C10",
+      "case_id": "C10",
+      "contract": {
+        "build": "build-C10",
+        "source": "synthetic://C10/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C10",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C10",
+          "call_id": "invocation-C10",
+          "fact_id": "C10-record-1",
+          "field": "timing.read",
+          "kind": "OBSERVED",
+          "source": "synthetic://C10/observation/1",
+          "value": {
+            "allocation": "ring",
+            "generation": 6,
+            "order_id": "trace-A",
+            "range": [
+              0,
+              8
+            ],
+            "read_done": 30,
+            "unit": "byte"
+          }
+        },
+        {
+          "build": "build-C10",
+          "call_id": "invocation-C10",
+          "fact_id": "C10-record-2",
+          "field": "timing.later_write",
+          "kind": "OBSERVED",
+          "source": "synthetic://C10/observation/2",
+          "value": {
+            "allocation": "ring",
+            "generation": 7,
+            "order_id": "trace-A",
+            "range": [
+              4,
+              12
+            ],
+            "unit": "byte",
+            "write_at": 28
+          }
+        },
+        {
+          "build": "build-C10",
+          "call_id": "invocation-C10",
+          "fact_id": "C10-record-3",
+          "field": "timing.expected_participants",
+          "kind": "CONTRACT",
+          "source": "synthetic://C10/observation/3",
+          "value": [
+            "g1:round6:t3",
+            "g1:round6:t4"
+          ]
+        },
+        {
+          "build": "build-C10",
+          "call_id": "invocation-C10",
+          "fact_id": "C10-record-4",
+          "field": "timing.observed_participants",
+          "kind": "OBSERVED",
+          "source": "synthetic://C10/observation/4",
+          "value": [
+            "g1:round6:t3",
+            "g1:round7:t4"
+          ]
+        }
+      ],
+      "routes": [
+        "timing"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C10",
+      "event:simulator-controlled-C10",
+      "answer:sealed-controlled-C10"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C11",
+      "call_id": "invocation-C11",
+      "case_id": "C11",
+      "contract": {
+        "build": "build-C11",
+        "source": "synthetic://C11/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C11",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C11",
+          "call_id": "invocation-C11",
+          "fact_id": "C11-record-1",
+          "field": "layout.geometry",
+          "kind": "CONTRACT",
+          "source": "synthetic://C11/observation/1",
+          "value": {
+            "base": 0,
+            "index": [
+              3
+            ],
+            "shape": [
+              3
+            ],
+            "strides": [
+              2
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C11",
+          "call_id": "invocation-C11",
+          "fact_id": "C11-record-2",
+          "field": "layout.actual_offset",
+          "kind": "OBSERVED",
+          "source": "synthetic://C11/observation/2",
+          "value": {
+            "offset": 6,
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "layout"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C11",
+      "event:simulator-controlled-C11",
+      "answer:sealed-controlled-C11"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C12",
+      "call_id": "invocation-C12",
+      "case_id": "C12",
+      "contract": {
+        "build": "build-C12",
+        "source": "synthetic://C12/applicable-contract",
+        "status": "OUT_OF_SCOPE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C12",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C12",
+          "call_id": "invocation-C12",
+          "fact_id": "C12-record-1",
+          "field": "layout.geometry",
+          "kind": "CONTRACT",
+          "source": "synthetic://C12/observation/1",
+          "value": {
+            "base": 0,
+            "index": [
+              4
+            ],
+            "shape": [
+              9
+            ],
+            "strides": [
+              2
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-C12",
+          "call_id": "invocation-C12",
+          "fact_id": "C12-record-2",
+          "field": "layout.actual_offset",
+          "kind": "OBSERVED",
+          "source": "synthetic://C12/observation/2",
+          "value": {
+            "offset": 4,
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "layout"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C12",
+      "event:simulator-controlled-C12",
+      "answer:sealed-controlled-C12"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-C13",
+      "call_id": "invocation-C13",
+      "case_id": "C13",
+      "contract": {
+        "build": "build-C13",
+        "source": "synthetic://C13/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-C13",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-C13",
+          "call_id": "invocation-C13",
+          "fact_id": "C13-record-1",
+          "field": "comparison.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://C13/observation/1",
+          "value": {
+            "primary": {
+              "dtype": "float32",
+              "mode": "BITWISE",
+              "shape": [
+                1
+              ]
+            },
+            "secondary": {
+              "dtype": "float32",
+              "mode": "BITWISE",
+              "shape": [
+                1
+              ]
+            }
+          }
+        },
+        {
+          "build": "build-C13",
+          "call_id": "invocation-C13",
+          "fact_id": "C13-record-2",
+          "field": "comparison.actual",
+          "kind": "OBSERVED",
+          "source": "synthetic://C13/observation/2",
+          "value": {
+            "primary": {
+              "dtype": "float32",
+              "hex": "0000a03f",
+              "shape": [
+                1
+              ]
+            }
+          }
+        },
+        {
+          "build": "build-C13",
+          "call_id": "invocation-C13",
+          "fact_id": "C13-record-3",
+          "field": "comparison.reference",
+          "kind": "OBSERVED",
+          "source": "synthetic://C13/observation/3",
+          "value": {
+            "primary": {
+              "dtype": "float32",
+              "hex": "0000a03f",
+              "shape": [
+                1
+              ]
+            }
+          }
+        }
+      ],
+      "routes": [
+        "numeric"
+      ]
+    },
+    "lineage": [
+      "family:controlled-C13",
+      "event:simulator-controlled-C13",
+      "answer:sealed-controlled-C13"
+    ],
+    "track": "classification"
+  },
+  {
+    "case": {
+      "build": "build-D01",
+      "call_id": "invocation-D01",
+      "case_id": "D01",
+      "contract": {
+        "build": "build-D01",
+        "source": "synthetic://D01/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D01",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D01",
+          "call_id": "invocation-D01",
+          "fact_id": "D01-record-1",
+          "field": "layout.geometry",
+          "kind": "CONTRACT",
+          "source": "synthetic://D01/observation/1",
+          "value": {
+            "base": 3,
+            "index": [
+              2,
+              1
+            ],
+            "shape": [
+              5,
+              2
+            ],
+            "strides": [
+              5,
+              2
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-D01",
+          "call_id": "invocation-D01",
+          "fact_id": "D01-record-2",
+          "field": "numeric.actual",
+          "kind": "OBSERVED",
+          "source": "synthetic://D01/observation/2",
+          "value": {
+            "dtype": "float32",
+            "values": [
+              4.5
+            ]
+          }
+        }
+      ],
+      "routes": [
+        "numeric",
+        "layout"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D01",
+      "event:simulator-controlled-D01",
+      "answer:sealed-controlled-D01"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D02",
+      "call_id": "invocation-D02",
+      "case_id": "D02",
+      "contract": {
+        "build": "build-D02",
+        "source": "synthetic://D02/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D02",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D02",
+          "call_id": "invocation-D02",
+          "fact_id": "D02-record-1",
+          "field": "plan.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://D02/observation/1",
+          "value": {
+            "range": [
+              0,
+              15
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-D02",
+          "call_id": "invocation-D02",
+          "fact_id": "D02-record-2",
+          "field": "plan.received",
+          "kind": "OBSERVED",
+          "source": "synthetic://D02/observation/2",
+          "value": {
+            "range": [
+              0,
+              14
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-D02",
+          "call_id": "invocation-D02",
+          "fact_id": "D02-record-3",
+          "field": "plan.consumed",
+          "kind": "OBSERVED",
+          "source": "synthetic://D02/observation/3",
+          "value": {
+            "range": [
+              0,
+              14
+            ],
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "plan",
+        "layout"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D02",
+      "event:simulator-controlled-D02",
+      "answer:sealed-controlled-D02"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D03",
+      "call_id": "invocation-D03",
+      "case_id": "D03",
+      "contract": {
+        "build": "build-D03",
+        "source": "synthetic://D03/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D03",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D03",
+          "call_id": "invocation-D03",
+          "fact_id": "D03-record-1",
+          "field": "interface.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://D03/observation/1",
+          "value": {
+            "axis": -1,
+            "normalized": 2
+          }
+        }
+      ],
+      "routes": [
+        "layout",
+        "interface"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D03",
+      "event:simulator-controlled-D03",
+      "answer:sealed-controlled-D03"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D04",
+      "call_id": "invocation-D04",
+      "case_id": "D04",
+      "contract": {
+        "build": "build-D04",
+        "source": "synthetic://D04/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D04",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D04",
+          "call_id": "invocation-D04",
+          "fact_id": "D04-record-1",
+          "field": "timing.read",
+          "kind": "OBSERVED",
+          "source": "synthetic://D04/observation/1",
+          "value": {
+            "allocation": "ring",
+            "generation": 6,
+            "order_id": "trace-A",
+            "range": [
+              0,
+              8
+            ],
+            "read_done": 23,
+            "unit": "byte"
+          }
+        },
+        {
+          "build": "build-D04",
+          "call_id": "invocation-D04",
+          "fact_id": "D04-record-2",
+          "field": "timing.expected_participants",
+          "kind": "CONTRACT",
+          "source": "synthetic://D04/observation/2",
+          "value": [
+            "g4:round6:t2"
+          ]
+        }
+      ],
+      "routes": [
+        "timing",
+        "layout"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D04",
+      "event:simulator-controlled-D04",
+      "answer:sealed-controlled-D04"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D05",
+      "call_id": "invocation-D05",
+      "case_id": "D05",
+      "contract": {
+        "build": "build-D05",
+        "source": "synthetic://D05/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D05",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D05",
+          "call_id": "invocation-D05",
+          "fact_id": "D05-record-1",
+          "field": "contribution.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://D05/observation/1",
+          "value": [
+            "part0",
+            "part1",
+            "part2"
+          ]
+        },
+        {
+          "build": "build-D05",
+          "call_id": "invocation-D05",
+          "fact_id": "D05-record-2",
+          "field": "timing.expected_participants",
+          "kind": "CONTRACT",
+          "source": "synthetic://D05/observation/2",
+          "value": [
+            "g2:round1:t0",
+            "g2:round1:t1"
+          ]
+        }
+      ],
+      "routes": [
+        "timing",
+        "contribution"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D05",
+      "event:simulator-controlled-D05",
+      "answer:sealed-controlled-D05"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D06",
+      "call_id": "invocation-D06",
+      "case_id": "D06",
+      "contract": {
+        "build": "build-D06",
+        "source": "synthetic://D06/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D06",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D06",
+          "call_id": "invocation-D06",
+          "fact_id": "D06-record-1",
+          "field": "layout.geometry",
+          "kind": "CONTRACT",
+          "source": "synthetic://D06/observation/1",
+          "value": {
+            "base": 0,
+            "index": [
+              2,
+              3
+            ],
+            "shape": [
+              3,
+              6
+            ],
+            "strides": [
+              16,
+              2
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-D06",
+          "call_id": "invocation-D06",
+          "fact_id": "D06-record-2",
+          "field": "plan.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://D06/observation/2",
+          "value": {
+            "range": [
+              0,
+              13
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-D06",
+          "call_id": "invocation-D06",
+          "fact_id": "D06-record-3",
+          "field": "plan.produced",
+          "kind": "OBSERVED",
+          "source": "synthetic://D06/observation/3",
+          "value": {
+            "range": [
+              0,
+              13
+            ],
+            "unit": "element"
+          }
+        },
+        {
+          "build": "build-D06",
+          "call_id": "invocation-D06",
+          "fact_id": "D06-record-4",
+          "field": "plan.received",
+          "kind": "OBSERVED",
+          "source": "synthetic://D06/observation/4",
+          "value": {
+            "range": [
+              0,
+              13
+            ],
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "layout",
+        "plan"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D06",
+      "event:simulator-controlled-D06",
+      "answer:sealed-controlled-D06"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D07",
+      "call_id": "invocation-D07",
+      "case_id": "D07",
+      "contract": {
+        "build": "build-D07",
+        "source": "synthetic://D07/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D07",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D07",
+          "call_id": "invocation-D07",
+          "fact_id": "D07-record-1",
+          "field": "numeric.actual",
+          "kind": "OBSERVED",
+          "source": "synthetic://D07/observation/1",
+          "value": {
+            "dtype": "float32",
+            "values": [
+              11
+            ]
+          }
+        },
+        {
+          "build": "build-D07",
+          "call_id": "invocation-D07",
+          "fact_id": "D07-record-2",
+          "field": "numeric.ref_observed",
+          "kind": "OBSERVED",
+          "source": "synthetic://D07/observation/2",
+          "value": {
+            "dtype": "float32",
+            "input_kind": "OBSERVED",
+            "mapping_id": "position-0",
+            "qualified": true,
+            "reference_id": "scalar-average-v2",
+            "state_id": "read-only-state",
+            "values": [
+              11.0
+            ]
+          }
+        },
+        {
+          "build": "build-D07",
+          "call_id": "invocation-D07",
+          "fact_id": "D07-record-3",
+          "field": "numeric.tolerance",
+          "kind": "CONTRACT",
+          "source": "synthetic://D07/observation/3",
+          "value": {
+            "atol": 0,
+            "rtol": 0
+          }
+        }
+      ],
+      "routes": [
+        "numeric"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D07",
+      "event:simulator-controlled-D07",
+      "answer:sealed-controlled-D07"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D08",
+      "call_id": "invocation-D08",
+      "case_id": "D08",
+      "contract": {
+        "build": "build-D08",
+        "source": "synthetic://D08/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D08",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D08",
+          "call_id": "invocation-D08",
+          "fact_id": "D08-record-1",
+          "field": "timing.read",
+          "kind": "OBSERVED",
+          "source": "synthetic://D08/observation/1",
+          "value": {
+            "allocation": "ring",
+            "generation": 6,
+            "order_id": "trace-A",
+            "range": [
+              0,
+              8
+            ],
+            "read_done": 8,
+            "unit": "byte"
+          }
+        },
+        {
+          "build": "build-D08",
+          "call_id": "invocation-D08",
+          "fact_id": "D08-record-2",
+          "field": "timing.expected_participants",
+          "kind": "CONTRACT",
+          "source": "synthetic://D08/observation/2",
+          "value": [
+            "g2:round6:t5"
+          ]
+        }
+      ],
+      "routes": [
+        "timing"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D08",
+      "event:simulator-controlled-D08",
+      "answer:sealed-controlled-D08"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D09",
+      "call_id": "invocation-D09",
+      "case_id": "D09",
+      "contract": {
+        "build": "build-D09",
+        "source": "synthetic://D09/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D09",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D09",
+          "call_id": "invocation-D09",
+          "fact_id": "D09-record-1",
+          "field": "numeric.actual",
+          "kind": "OBSERVED",
+          "source": "synthetic://D09/observation/1",
+          "value": {
+            "dtype": "float32",
+            "values": [
+              7
+            ]
+          }
+        },
+        {
+          "build": "build-D09",
+          "call_id": "invocation-D09",
+          "fact_id": "D09-record-2",
+          "field": "numeric.tolerance",
+          "kind": "CONTRACT",
+          "source": "synthetic://D09/observation/2",
+          "value": {
+            "atol": 0,
+            "rtol": 0
+          }
+        }
+      ],
+      "routes": [
+        "numeric"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D09",
+      "event:simulator-controlled-D09",
+      "answer:sealed-controlled-D09"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D10",
+      "call_id": "invocation-D10",
+      "case_id": "D10",
+      "contract": {
+        "build": "build-D10",
+        "source": "synthetic://D10/applicable-contract",
+        "status": "UNKNOWN",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D10",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D10",
+          "call_id": "invocation-D10",
+          "fact_id": "D10-record-1",
+          "field": "layout.geometry",
+          "kind": "CONTRACT",
+          "source": "synthetic://D10/observation/1",
+          "value": {
+            "base": 0,
+            "index": [
+              6
+            ],
+            "shape": [
+              10
+            ],
+            "strides": [
+              3
+            ],
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "layout",
+        "interface"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D10",
+      "event:simulator-controlled-D10",
+      "answer:sealed-controlled-D10"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D11",
+      "call_id": "invocation-D11",
+      "case_id": "D11",
+      "contract": {
+        "build": "build-D11",
+        "source": "synthetic://D11/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D11",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D11",
+          "call_id": "invocation-D11",
+          "fact_id": "D11-record-1",
+          "field": "plan.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://D11/observation/1",
+          "value": {
+            "range": [
+              0,
+              20
+            ],
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "plan"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D11",
+      "event:simulator-controlled-D11",
+      "answer:sealed-controlled-D11"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D12",
+      "call_id": "invocation-D12",
+      "case_id": "D12",
+      "contract": {
+        "build": "build-D12",
+        "source": "synthetic://D12/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D12",
+      "intake": "Changing the output view reproduces the observed values.",
+      "observations": [
+        {
+          "build": "build-D12",
+          "call_id": "invocation-D12",
+          "fact_id": "D12-record-1",
+          "field": "layout.geometry",
+          "kind": "CONTRACT",
+          "source": "synthetic://D12/observation/1",
+          "value": {
+            "base": 2,
+            "index": [
+              3
+            ],
+            "shape": [
+              5
+            ],
+            "strides": [
+              3
+            ],
+            "unit": "element"
+          }
+        }
+      ],
+      "routes": [
+        "layout"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D12",
+      "event:simulator-controlled-D12",
+      "answer:sealed-controlled-D12"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D13",
+      "call_id": "invocation-D13",
+      "case_id": "D13",
+      "contract": {
+        "build": "build-D13",
+        "source": "synthetic://D13/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D13",
+      "intake": "A newer iteration uses the same allocation.",
+      "observations": [
+        {
+          "build": "build-D13",
+          "call_id": "invocation-D13",
+          "fact_id": "D13-record-1",
+          "field": "timing.read",
+          "kind": "OBSERVED",
+          "source": "synthetic://D13/observation/1",
+          "value": {
+            "allocation": "ring",
+            "generation": 6,
+            "order_id": "trace-A",
+            "range": [
+              0,
+              8
+            ],
+            "read_done": 18,
+            "unit": "byte"
+          }
+        },
+        {
+          "build": "build-D13",
+          "call_id": "invocation-D13",
+          "fact_id": "D13-record-2",
+          "field": "timing.later_write",
+          "kind": "OBSERVED",
+          "source": "synthetic://D13/observation/2",
+          "value": {
+            "allocation": "ring",
+            "generation": 7,
+            "order_id": "trace-A",
+            "range": [
+              8,
+              16
+            ],
+            "unit": "byte",
+            "write_at": 15
+          }
+        },
+        {
+          "build": "build-D13",
+          "call_id": "invocation-D13",
+          "fact_id": "D13-record-3",
+          "field": "timing.expected_participants",
+          "kind": "CONTRACT",
+          "source": "synthetic://D13/observation/3",
+          "value": [
+            "g0:round6:t7"
+          ]
+        }
+      ],
+      "routes": [
+        "timing"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D13",
+      "event:simulator-controlled-D13",
+      "answer:sealed-controlled-D13"
+    ],
+    "track": "diagnosis"
+  },
+  {
+    "case": {
+      "build": "build-D14",
+      "call_id": "invocation-D14",
+      "case_id": "D14",
+      "contract": {
+        "build": "build-D14",
+        "source": "synthetic://D14/applicable-contract",
+        "status": "APPLICABLE",
+        "version": "simulation-v1"
+      },
+      "family_id": "controlled-D14",
+      "intake": "Output values differ under an alternate configuration.",
+      "observations": [
+        {
+          "build": "build-D14",
+          "call_id": "invocation-D14",
+          "fact_id": "D14-record-1",
+          "field": "contribution.expected",
+          "kind": "CONTRACT",
+          "source": "synthetic://D14/observation/1",
+          "value": [
+            "row17",
+            "row18"
+          ]
+        }
+      ],
+      "routes": [
+        "interface",
+        "contribution"
+      ]
+    },
+    "lineage": [
+      "family:controlled-D14",
+      "event:simulator-controlled-D14",
+      "answer:sealed-controlled-D14"
+    ],
+    "track": "diagnosis"
+  }
+]

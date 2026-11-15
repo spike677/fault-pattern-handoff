@@ -1,0 +1,4327 @@
+{
+  "freeze_sha256": "93a78e5530062a627e051aee721c23715c3b1a0f16b9d13d81a41be8dc47072b",
+  "predictions": [
+    {
+      "budget": 0,
+      "case_id": "C01",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C01",
+        "checks": [
+          {
+            "details": {
+              "expected": 3,
+              "logical_index": [
+                1,
+                1
+              ],
+              "observed": 4
+            },
+            "evidence": [
+              {
+                "fact_id": "C01-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://C01/observation/1"
+              },
+              {
+                "fact_id": "C01-record-2",
+                "field": "layout.actual_offset",
+                "kind": "OBSERVED",
+                "source": "synthetic://C01/observation/2"
+              }
+            ],
+            "family": "layout",
+            "judgment": "SUPPORTED",
+            "mechanism": "ADDRESS_MAPPING"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C01",
+        "input_sha256": "28263cda97d99173e7c29a67173d8c5c58c0dd09853881f78a649a7baedff18e",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "ADDRESS_MAPPING"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "layout.actual_offset",
+        "layout.geometry"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C02",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C02",
+        "checks": [
+          {
+            "details": {
+              "expected": 13,
+              "logical_index": [
+                2
+              ],
+              "observed": 9
+            },
+            "evidence": [
+              {
+                "fact_id": "C02-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://C02/observation/1"
+              },
+              {
+                "fact_id": "C02-record-2",
+                "field": "layout.actual_offset",
+                "kind": "OBSERVED",
+                "source": "synthetic://C02/observation/2"
+              }
+            ],
+            "family": "layout",
+            "judgment": "SUPPORTED",
+            "mechanism": "ADDRESS_MAPPING"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C02",
+        "input_sha256": "6a05ee73eee566cc83398f8fbad8a138fff46a22294a07b01a7dcc0d2a25b380",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "ADDRESS_MAPPING"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "layout.actual_offset",
+        "layout.geometry"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C03",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C03",
+        "checks": [
+          {
+            "details": {
+              "expected": [
+                0,
+                9
+              ],
+              "observed": [
+                0,
+                8
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C03-record-1",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://C03/observation/1"
+              },
+              {
+                "fact_id": "C03-record-2",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://C03/observation/2"
+              }
+            ],
+            "family": "plan",
+            "judgment": "SUPPORTED",
+            "mechanism": "PLAN_GENERATION"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                8
+              ],
+              "observed": [
+                0,
+                8
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C03-record-2",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://C03/observation/2"
+              },
+              {
+                "fact_id": "C03-record-3",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://C03/observation/3"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_TRANSFER"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                8
+              ],
+              "observed": [
+                0,
+                8
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C03-record-3",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://C03/observation/3"
+              },
+              {
+                "fact_id": "C03-record-4",
+                "field": "plan.consumed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C03/observation/4"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_CONSUMPTION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C03",
+        "input_sha256": "9ee9edc4de688ba377dfd8293a316b212c0ae387609308ae3e3ccbc4a87f0863",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "PLAN_GENERATION"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "plan.consumed",
+        "plan.expected",
+        "plan.produced",
+        "plan.received"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C04",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C04",
+        "checks": [
+          {
+            "details": {
+              "expected": [
+                0,
+                6
+              ],
+              "observed": [
+                0,
+                6
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C04-record-1",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://C04/observation/1"
+              },
+              {
+                "fact_id": "C04-record-2",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://C04/observation/2"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_GENERATION"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                6
+              ],
+              "observed": [
+                0,
+                5
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C04-record-2",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://C04/observation/2"
+              },
+              {
+                "fact_id": "C04-record-3",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://C04/observation/3"
+              }
+            ],
+            "family": "plan",
+            "judgment": "SUPPORTED",
+            "mechanism": "PLAN_TRANSFER"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                5
+              ],
+              "observed": [
+                0,
+                5
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C04-record-3",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://C04/observation/3"
+              },
+              {
+                "fact_id": "C04-record-4",
+                "field": "plan.consumed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C04/observation/4"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_CONSUMPTION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C04",
+        "input_sha256": "773c921f207afd3ec573b1ba2e078e5f140f830deeb1175f5071693cb0defd21",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "PLAN_TRANSFER"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "plan.consumed",
+        "plan.expected",
+        "plan.produced",
+        "plan.received"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C05a",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C05a",
+        "checks": [
+          {
+            "details": {
+              "expected": [
+                0,
+                7
+              ],
+              "observed": [
+                0,
+                7
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C05a-record-1",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://C05a/observation/1"
+              },
+              {
+                "fact_id": "C05a-record-2",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05a/observation/2"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_GENERATION"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                7
+              ],
+              "observed": [
+                0,
+                7
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C05a-record-2",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05a/observation/2"
+              },
+              {
+                "fact_id": "C05a-record-3",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05a/observation/3"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_TRANSFER"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                7
+              ],
+              "observed": [
+                0,
+                8
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C05a-record-3",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05a/observation/3"
+              },
+              {
+                "fact_id": "C05a-record-4",
+                "field": "plan.consumed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05a/observation/4"
+              }
+            ],
+            "family": "plan",
+            "judgment": "SUPPORTED",
+            "mechanism": "PLAN_CONSUMPTION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-plan-end-inclusive",
+        "input_sha256": "716a8649a6d4f2b87d237607b79e6bf40db067ff6dd1c33bbb2e163d48c9075a",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "PLAN_CONSUMPTION"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "plan.consumed",
+        "plan.expected",
+        "plan.produced",
+        "plan.received"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C05b",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C05b",
+        "checks": [
+          {
+            "details": {
+              "expected": [
+                0,
+                11
+              ],
+              "observed": [
+                0,
+                11
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C05b-record-1",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://C05b/observation/1"
+              },
+              {
+                "fact_id": "C05b-record-2",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05b/observation/2"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_GENERATION"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                11
+              ],
+              "observed": [
+                0,
+                11
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C05b-record-2",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05b/observation/2"
+              },
+              {
+                "fact_id": "C05b-record-3",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05b/observation/3"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_TRANSFER"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                11
+              ],
+              "observed": [
+                0,
+                12
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "C05b-record-3",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05b/observation/3"
+              },
+              {
+                "fact_id": "C05b-record-4",
+                "field": "plan.consumed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C05b/observation/4"
+              }
+            ],
+            "family": "plan",
+            "judgment": "SUPPORTED",
+            "mechanism": "PLAN_CONSUMPTION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-plan-end-inclusive",
+        "input_sha256": "e93c845a70fa32e947dc188ad0a9cb501748c802b8ab942000b91bab32c57024",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "PLAN_CONSUMPTION"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "plan.consumed",
+        "plan.expected",
+        "plan.produced",
+        "plan.received"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C06",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C06",
+        "checks": [
+          {
+            "details": {
+              "expected": {
+                "axes": [
+                  1,
+                  3
+                ],
+                "rank": 4
+              },
+              "observed": {
+                "axes": [
+                  1,
+                  2
+                ],
+                "rank": 4
+              }
+            },
+            "evidence": [
+              {
+                "fact_id": "C06-record-1",
+                "field": "interface.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://C06/observation/1"
+              },
+              {
+                "fact_id": "C06-record-2",
+                "field": "interface.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C06/observation/2"
+              }
+            ],
+            "family": "interface",
+            "judgment": "SUPPORTED",
+            "mechanism": "INTERFACE_CONTRACT"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C06",
+        "input_sha256": "9a610f2d1a69aa085e7ecf4cb7a422a8b71673fc7faa266d4f1861977f3e326d",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "INTERFACE_CONTRACT"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "interface.expected",
+        "interface.observed"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C07",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C07",
+        "checks": [
+          {
+            "details": {
+              "unexpected_ids": [
+                "pad"
+              ]
+            },
+            "evidence": [
+              {
+                "fact_id": "C07-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://C07/observation/1"
+              },
+              {
+                "fact_id": "C07-record-2",
+                "field": "contribution.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C07/observation/2"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "SUPPORTED",
+            "mechanism": "UNEXPECTED_CONTRIBUTION"
+          },
+          {
+            "details": {
+              "multiplicity_differences": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "C07-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://C07/observation/1"
+              },
+              {
+                "fact_id": "C07-record-2",
+                "field": "contribution.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C07/observation/2"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "EXCLUDED",
+            "mechanism": "REPEATED_CONTRIBUTION"
+          },
+          {
+            "details": {
+              "multiplicity_differences": {
+                "lane9": 1
+              }
+            },
+            "evidence": [
+              {
+                "fact_id": "C07-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://C07/observation/1"
+              },
+              {
+                "fact_id": "C07-record-2",
+                "field": "contribution.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C07/observation/2"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "SUPPORTED",
+            "mechanism": "MISSING_CONTRIBUTION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C07",
+        "input_sha256": "477d6b354ffda911342b57c94462cfef3829229bdbbdb9d865cad4ca652c70b1",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "UNEXPECTED_CONTRIBUTION",
+          "MISSING_CONTRIBUTION"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "contribution.expected",
+        "contribution.observed"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C08",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C08",
+        "checks": [
+          {
+            "details": {
+              "checked_elements": 1,
+              "differing_indices": [
+                0
+              ]
+            },
+            "evidence": [
+              {
+                "fact_id": "C08-record-1",
+                "field": "numeric.actual",
+                "kind": "OBSERVED",
+                "source": "synthetic://C08/observation/1"
+              },
+              {
+                "fact_id": "C08-record-2",
+                "field": "numeric.ref_observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C08/observation/2"
+              },
+              {
+                "fact_id": "C08-record-3",
+                "field": "numeric.tolerance",
+                "kind": "CONTRACT",
+                "source": "synthetic://C08/observation/3"
+              }
+            ],
+            "family": "numeric",
+            "judgment": "SUPPORTED",
+            "mechanism": "LOCAL_NUMERIC_DEVIATION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C08",
+        "input_sha256": "d2f107427abe5d5198b25fc200da0c2e350aedcb5dae58f9d1bc54d89859c74f",
+        "next_observation": null,
+        "numeric_stage": {
+          "evidence": [
+            {
+              "fact_id": "C08-record-1",
+              "field": "numeric.actual",
+              "kind": "OBSERVED",
+              "source": "synthetic://C08/observation/1"
+            },
+            {
+              "fact_id": "C08-record-2",
+              "field": "numeric.ref_observed",
+              "kind": "OBSERVED",
+              "source": "synthetic://C08/observation/2"
+            },
+            {
+              "fact_id": "C08-record-4",
+              "field": "numeric.ref_healthy",
+              "kind": "OBSERVED",
+              "source": "synthetic://C08/observation/4"
+            },
+            {
+              "fact_id": "C08-record-3",
+              "field": "numeric.tolerance",
+              "kind": "CONTRACT",
+              "source": "synthetic://C08/observation/3"
+            }
+          ],
+          "status": "LOCAL_AND_PROPAGATION"
+        },
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "LOCAL_NUMERIC_DEVIATION"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "numeric.actual",
+        "numeric.ref_healthy",
+        "numeric.ref_observed",
+        "numeric.tolerance"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C09",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C09",
+        "checks": [
+          {
+            "details": {
+              "checked_elements": 1,
+              "differing_indices": []
+            },
+            "evidence": [
+              {
+                "fact_id": "C09-record-1",
+                "field": "numeric.actual",
+                "kind": "OBSERVED",
+                "source": "synthetic://C09/observation/1"
+              },
+              {
+                "fact_id": "C09-record-2",
+                "field": "numeric.ref_observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://C09/observation/2"
+              },
+              {
+                "fact_id": "C09-record-3",
+                "field": "numeric.tolerance",
+                "kind": "CONTRACT",
+                "source": "synthetic://C09/observation/3"
+              }
+            ],
+            "family": "numeric",
+            "judgment": "EXCLUDED",
+            "mechanism": "LOCAL_NUMERIC_DEVIATION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C09",
+        "input_sha256": "9a97d73ab84f17c9a277a0cc68cfc960e34c61bdca6438141489251853dd9cbe",
+        "next_observation": null,
+        "numeric_stage": {
+          "evidence": [
+            {
+              "fact_id": "C09-record-1",
+              "field": "numeric.actual",
+              "kind": "OBSERVED",
+              "source": "synthetic://C09/observation/1"
+            },
+            {
+              "fact_id": "C09-record-2",
+              "field": "numeric.ref_observed",
+              "kind": "OBSERVED",
+              "source": "synthetic://C09/observation/2"
+            },
+            {
+              "fact_id": "C09-record-4",
+              "field": "numeric.ref_healthy",
+              "kind": "OBSERVED",
+              "source": "synthetic://C09/observation/4"
+            },
+            {
+              "fact_id": "C09-record-3",
+              "field": "numeric.tolerance",
+              "kind": "CONTRACT",
+              "source": "synthetic://C09/observation/3"
+            }
+          ],
+          "status": "UPSTREAM_PROPAGATION"
+        },
+        "outcome": "NO_SUPPORTED_MECHANISM",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "numeric.actual",
+        "numeric.ref_healthy",
+        "numeric.ref_observed",
+        "numeric.tolerance"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C10",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C10",
+        "checks": [
+          {
+            "details": {
+              "missing": {
+                "g1:round6:t4": 1
+              },
+              "unexpected": {
+                "g1:round7:t4": 1
+              }
+            },
+            "evidence": [
+              {
+                "fact_id": "C10-record-3",
+                "field": "timing.expected_participants",
+                "kind": "CONTRACT",
+                "source": "synthetic://C10/observation/3"
+              },
+              {
+                "fact_id": "C10-record-4",
+                "field": "timing.observed_participants",
+                "kind": "OBSERVED",
+                "source": "synthetic://C10/observation/4"
+              }
+            ],
+            "family": "timing",
+            "judgment": "SUPPORTED",
+            "mechanism": "COLLECTIVE_PARTICIPATION"
+          },
+          {
+            "details": {
+              "overlap": true,
+              "read_done": 30,
+              "write_at": 28
+            },
+            "evidence": [
+              {
+                "fact_id": "C10-record-1",
+                "field": "timing.read",
+                "kind": "OBSERVED",
+                "source": "synthetic://C10/observation/1"
+              },
+              {
+                "fact_id": "C10-record-2",
+                "field": "timing.later_write",
+                "kind": "OBSERVED",
+                "source": "synthetic://C10/observation/2"
+              }
+            ],
+            "family": "timing",
+            "judgment": "SUPPORTED",
+            "mechanism": "SHARED_SLOT_EARLY_REUSE"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C10",
+        "input_sha256": "beeec605ae3ad5f179179eefc3bee225b3f3300c5690e8b0916d1687e6d74f50",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "COLLECTIVE_PARTICIPATION",
+          "SHARED_SLOT_EARLY_REUSE"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "timing.expected_participants",
+        "timing.later_write",
+        "timing.observed_participants",
+        "timing.read"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C11",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C11",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "C11-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://C11/observation/1"
+              },
+              {
+                "fact_id": "C11-record-2",
+                "field": "layout.actual_offset",
+                "kind": "OBSERVED",
+                "source": "synthetic://C11/observation/2"
+              }
+            ],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "reason": "Logical coordinate is out of the contracted domain"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C11",
+        "input_sha256": "063b8a8884951f682d34ee1457eb23a62f6ad98383889a33d7b653430618e8ce",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "layout.actual_offset",
+        "layout.geometry"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C12",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C12",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "C12-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://C12/observation/1"
+              },
+              {
+                "fact_id": "C12-record-2",
+                "field": "layout.actual_offset",
+                "kind": "OBSERVED",
+                "source": "synthetic://C12/observation/2"
+              }
+            ],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "reason": "contract_scope_out_of_scope"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C12",
+        "input_sha256": "8438a950acfb950e6ff0eca2bf1458c56c4ebd91cfae2996de98bd087e445537",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "OUT_OF_SCOPE",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "OUT_OF_SCOPE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "layout.actual_offset",
+        "layout.geometry"
+      ]
+    },
+    {
+      "budget": 0,
+      "case_id": "C13",
+      "method": "adaptive",
+      "result": {
+        "case_id": "C13",
+        "checks": [
+          {
+            "evidence": [],
+            "family": "numeric",
+            "judgment": "UNKNOWN",
+            "mechanism": "LOCAL_NUMERIC_DEVIATION",
+            "missing_fields": [
+              "numeric.actual",
+              "numeric.ref_observed",
+              "numeric.tolerance"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-C13",
+        "input_sha256": "be077cd9dd9b3dea667aee5a1c4a1d0026b36599339ae800967eefcfbac517de",
+        "next_observation": {
+          "distinguishes": [
+            "LOCAL_NUMERIC_DEVIATION"
+          ],
+          "field": "numeric.actual",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": {
+          "missing_fields": [
+            "numeric.actual",
+            "numeric.ref_observed",
+            "numeric.ref_healthy",
+            "numeric.tolerance"
+          ],
+          "status": "UNKNOWN"
+        },
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "evidence": [
+            {
+              "fact_id": "C13-record-1",
+              "field": "comparison.expected",
+              "kind": "CONTRACT",
+              "source": "synthetic://C13/observation/1"
+            },
+            {
+              "fact_id": "C13-record-2",
+              "field": "comparison.actual",
+              "kind": "OBSERVED",
+              "source": "synthetic://C13/observation/2"
+            },
+            {
+              "fact_id": "C13-record-3",
+              "field": "comparison.reference",
+              "kind": "OBSERVED",
+              "source": "synthetic://C13/observation/3"
+            }
+          ],
+          "missing_outputs": {
+            "actual": [
+              "secondary"
+            ],
+            "reference": [
+              "secondary"
+            ]
+          },
+          "status": "INCOMPLETE"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "classification",
+      "visible_fields": [
+        "comparison.actual",
+        "comparison.expected",
+        "comparison.reference"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D01",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D01",
+        "checks": [
+          {
+            "details": {
+              "expected": 15,
+              "logical_index": [
+                2,
+                1
+              ],
+              "observed": 8
+            },
+            "evidence": [
+              {
+                "fact_id": "D01-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://D01/observation/1"
+              },
+              {
+                "fact_id": "D01-record-3",
+                "field": "layout.actual_offset",
+                "kind": "OBSERVED",
+                "source": "synthetic://D01/observation/3"
+              }
+            ],
+            "family": "layout",
+            "judgment": "SUPPORTED",
+            "mechanism": "ADDRESS_MAPPING"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D01-record-2",
+                "field": "numeric.actual",
+                "kind": "OBSERVED",
+                "source": "synthetic://D01/observation/2"
+              },
+              {
+                "fact_id": "D01-record-5",
+                "field": "numeric.ref_observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D01/observation/5"
+              }
+            ],
+            "family": "numeric",
+            "judgment": "UNKNOWN",
+            "mechanism": "LOCAL_NUMERIC_DEVIATION",
+            "missing_fields": [
+              "numeric.tolerance"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D01",
+        "input_sha256": "856e579cf2e5cfb2373ebcf85075b01e83ac11aeb1343f3bf36a2c0bb0306580",
+        "next_observation": {
+          "distinguishes": [
+            "LOCAL_NUMERIC_DEVIATION"
+          ],
+          "field": "numeric.tolerance",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": {
+          "missing_fields": [
+            "numeric.ref_healthy",
+            "numeric.tolerance"
+          ],
+          "status": "UNKNOWN"
+        },
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "ADDRESS_MAPPING"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "f5aee67e80208b76e36b23f6b7c9d8db17eb985d5516e961df6306068c746d2a",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "ADDRESS_MAPPING"
+            ],
+            "field": "layout.actual_offset",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D01-record-3"
+        },
+        {
+          "prior_input_sha256": "e4608bf6282f9e8684a265aeb61546a6a92ba8029af3a6d5d0936790f1439a0b",
+          "prior_outcome": "SUPPORTED",
+          "prior_supported": [
+            "ADDRESS_MAPPING"
+          ],
+          "request": {
+            "distinguishes": [
+              "LOCAL_NUMERIC_DEVIATION"
+            ],
+            "field": "numeric.ref_observed",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D01-record-5"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "layout.actual_offset",
+        "layout.geometry",
+        "numeric.actual",
+        "numeric.ref_observed"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D01",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D01",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "D01-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://D01/observation/1"
+              }
+            ],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "missing_fields": [
+              "layout.actual_offset"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "details": {
+              "checked_elements": 1,
+              "differing_indices": []
+            },
+            "evidence": [
+              {
+                "fact_id": "D01-record-2",
+                "field": "numeric.actual",
+                "kind": "OBSERVED",
+                "source": "synthetic://D01/observation/2"
+              },
+              {
+                "fact_id": "D01-record-5",
+                "field": "numeric.ref_observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D01/observation/5"
+              },
+              {
+                "fact_id": "D01-record-4",
+                "field": "numeric.tolerance",
+                "kind": "CONTRACT",
+                "source": "synthetic://D01/observation/4"
+              }
+            ],
+            "family": "numeric",
+            "judgment": "EXCLUDED",
+            "mechanism": "LOCAL_NUMERIC_DEVIATION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D01",
+        "input_sha256": "70de2d03ea6d81dd247962733350d4115ed2114a41d769c2fdcb0dd0793fb446",
+        "next_observation": {
+          "distinguishes": [
+            "LOCAL_DEVIATION",
+            "UPSTREAM_PROPAGATION"
+          ],
+          "field": "numeric.ref_healthy",
+          "test": "Evaluate the same reference on healthy input with the same state and mapping"
+        },
+        "numeric_stage": {
+          "missing_fields": [
+            "numeric.ref_healthy"
+          ],
+          "status": "UNKNOWN"
+        },
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "f5aee67e80208b76e36b23f6b7c9d8db17eb985d5516e961df6306068c746d2a",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "LOCAL_NUMERIC_DEVIATION"
+            ],
+            "field": "numeric.ref_observed",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D01-record-5"
+        },
+        {
+          "prior_input_sha256": "a454f258dce2a1f55c5a4ce882b66e50c562aa123b9c8cf00ce5e465c0f03ec7",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "LOCAL_NUMERIC_DEVIATION"
+            ],
+            "field": "numeric.tolerance",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D01-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "layout.geometry",
+        "numeric.actual",
+        "numeric.ref_observed",
+        "numeric.tolerance"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D02",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D02",
+        "checks": [
+          {
+            "details": {
+              "expected": [
+                0,
+                15
+              ],
+              "observed": [
+                0,
+                15
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D02-record-1",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D02/observation/1"
+              },
+              {
+                "fact_id": "D02-record-4",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/4"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_GENERATION"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                15
+              ],
+              "observed": [
+                0,
+                14
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D02-record-4",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/4"
+              },
+              {
+                "fact_id": "D02-record-2",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/2"
+              }
+            ],
+            "family": "plan",
+            "judgment": "SUPPORTED",
+            "mechanism": "PLAN_TRANSFER"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                14
+              ],
+              "observed": [
+                0,
+                14
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D02-record-2",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/2"
+              },
+              {
+                "fact_id": "D02-record-3",
+                "field": "plan.consumed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/3"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_CONSUMPTION"
+          },
+          {
+            "evidence": [],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "missing_fields": [
+              "layout.geometry",
+              "layout.actual_offset"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D02",
+        "input_sha256": "4b2182e7eaf0b74b85cbfe43a4ed5ad965b078b8d3c27ebf26766990631e68b8",
+        "next_observation": {
+          "distinguishes": [
+            "ADDRESS_MAPPING"
+          ],
+          "field": "layout.geometry",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "PLAN_TRANSFER"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "9cf9e5196b456629929c71df5532268e16b3efc2e2c35db7a7aa8719e7708551",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "PLAN_GENERATION",
+              "PLAN_TRANSFER"
+            ],
+            "field": "plan.produced",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D02-record-4"
+        },
+        {
+          "prior_input_sha256": "4b2182e7eaf0b74b85cbfe43a4ed5ad965b078b8d3c27ebf26766990631e68b8",
+          "prior_outcome": "SUPPORTED",
+          "prior_supported": [
+            "PLAN_TRANSFER"
+          ],
+          "request": {
+            "distinguishes": [
+              "ADDRESS_MAPPING"
+            ],
+            "field": "layout.actual_offset",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": null
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "plan.consumed",
+        "plan.expected",
+        "plan.produced",
+        "plan.received"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D02",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D02",
+        "checks": [
+          {
+            "details": {
+              "expected": [
+                0,
+                15
+              ],
+              "observed": [
+                0,
+                15
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D02-record-1",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D02/observation/1"
+              },
+              {
+                "fact_id": "D02-record-4",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/4"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_GENERATION"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                15
+              ],
+              "observed": [
+                0,
+                14
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D02-record-4",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/4"
+              },
+              {
+                "fact_id": "D02-record-2",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/2"
+              }
+            ],
+            "family": "plan",
+            "judgment": "SUPPORTED",
+            "mechanism": "PLAN_TRANSFER"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                14
+              ],
+              "observed": [
+                0,
+                14
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D02-record-2",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/2"
+              },
+              {
+                "fact_id": "D02-record-3",
+                "field": "plan.consumed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D02/observation/3"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_CONSUMPTION"
+          },
+          {
+            "evidence": [],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "missing_fields": [
+              "layout.geometry",
+              "layout.actual_offset"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D02",
+        "input_sha256": "4b2182e7eaf0b74b85cbfe43a4ed5ad965b078b8d3c27ebf26766990631e68b8",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "PLAN_TRANSFER"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "9cf9e5196b456629929c71df5532268e16b3efc2e2c35db7a7aa8719e7708551",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "PLAN_GENERATION",
+              "PLAN_TRANSFER"
+            ],
+            "field": "plan.produced",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D02-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "plan.consumed",
+        "plan.expected",
+        "plan.produced",
+        "plan.received"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D03",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D03",
+        "checks": [
+          {
+            "details": {
+              "expected": {
+                "axis": -1,
+                "normalized": 2
+              },
+              "observed": {
+                "axis": -1,
+                "normalized": 1
+              }
+            },
+            "evidence": [
+              {
+                "fact_id": "D03-record-1",
+                "field": "interface.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D03/observation/1"
+              },
+              {
+                "fact_id": "D03-record-2",
+                "field": "interface.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D03/observation/2"
+              }
+            ],
+            "family": "interface",
+            "judgment": "SUPPORTED",
+            "mechanism": "INTERFACE_CONTRACT"
+          },
+          {
+            "evidence": [],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "missing_fields": [
+              "layout.geometry",
+              "layout.actual_offset"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D03",
+        "input_sha256": "da5ecc469f90333ccecb7cddb2f2d87e7be791d0b7825010371a58ebcbf1d951",
+        "next_observation": {
+          "distinguishes": [
+            "ADDRESS_MAPPING"
+          ],
+          "field": "layout.geometry",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "INTERFACE_CONTRACT"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "b20cca89e5effaac7c693972996e2657f6e8c50b1372b6115af94804a257e732",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "INTERFACE_CONTRACT"
+            ],
+            "field": "interface.observed",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D03-record-2"
+        },
+        {
+          "prior_input_sha256": "da5ecc469f90333ccecb7cddb2f2d87e7be791d0b7825010371a58ebcbf1d951",
+          "prior_outcome": "SUPPORTED",
+          "prior_supported": [
+            "INTERFACE_CONTRACT"
+          ],
+          "request": {
+            "distinguishes": [
+              "ADDRESS_MAPPING"
+            ],
+            "field": "layout.actual_offset",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": null
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "interface.expected",
+        "interface.observed"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D03",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D03",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "D03-record-1",
+                "field": "interface.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D03/observation/1"
+              }
+            ],
+            "family": "interface",
+            "judgment": "UNKNOWN",
+            "mechanism": "INTERFACE_CONTRACT",
+            "missing_fields": [
+              "interface.observed"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "evidence": [],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "missing_fields": [
+              "layout.geometry",
+              "layout.actual_offset"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D03",
+        "input_sha256": "b20cca89e5effaac7c693972996e2657f6e8c50b1372b6115af94804a257e732",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "b20cca89e5effaac7c693972996e2657f6e8c50b1372b6115af94804a257e732",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "ADDRESS_MAPPING"
+            ],
+            "field": "layout.actual_offset",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": null
+        },
+        {
+          "prior_input_sha256": "b20cca89e5effaac7c693972996e2657f6e8c50b1372b6115af94804a257e732",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "ADDRESS_MAPPING"
+            ],
+            "field": "layout.geometry",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": null
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "interface.expected"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D04",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D04",
+        "checks": [
+          {
+            "evidence": [],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "missing_fields": [
+              "layout.geometry",
+              "layout.actual_offset"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "details": {
+              "missing": {},
+              "unexpected": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D04-record-2",
+                "field": "timing.expected_participants",
+                "kind": "CONTRACT",
+                "source": "synthetic://D04/observation/2"
+              },
+              {
+                "fact_id": "D04-record-4",
+                "field": "timing.observed_participants",
+                "kind": "OBSERVED",
+                "source": "synthetic://D04/observation/4"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "COLLECTIVE_PARTICIPATION"
+          },
+          {
+            "details": {
+              "overlap": true,
+              "read_done": 23,
+              "write_at": 22
+            },
+            "evidence": [
+              {
+                "fact_id": "D04-record-1",
+                "field": "timing.read",
+                "kind": "OBSERVED",
+                "source": "synthetic://D04/observation/1"
+              },
+              {
+                "fact_id": "D04-record-3",
+                "field": "timing.later_write",
+                "kind": "OBSERVED",
+                "source": "synthetic://D04/observation/3"
+              }
+            ],
+            "family": "timing",
+            "judgment": "SUPPORTED",
+            "mechanism": "SHARED_SLOT_EARLY_REUSE"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D04",
+        "input_sha256": "c0619086086258de8b8ab24a507bb48cb24fd0b3e087131f8d052e9bce3b1021",
+        "next_observation": {
+          "distinguishes": [
+            "ADDRESS_MAPPING"
+          ],
+          "field": "layout.actual_offset",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "SHARED_SLOT_EARLY_REUSE"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "945710c4d1074484c9cf2910e0da83389a1d75e2a1c62d7e123ce83841f37517",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "SHARED_SLOT_EARLY_REUSE"
+            ],
+            "field": "timing.later_write",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D04-record-3"
+        },
+        {
+          "prior_input_sha256": "c781ffba1c4ab7a6f3fc709baaf29d65ec3e293c29b1423760af4ed3e53ddda0",
+          "prior_outcome": "SUPPORTED",
+          "prior_supported": [
+            "SHARED_SLOT_EARLY_REUSE"
+          ],
+          "request": {
+            "distinguishes": [
+              "COLLECTIVE_PARTICIPATION"
+            ],
+            "field": "timing.observed_participants",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D04-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "timing.expected_participants",
+        "timing.later_write",
+        "timing.observed_participants",
+        "timing.read"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D04",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D04",
+        "checks": [
+          {
+            "evidence": [],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "missing_fields": [
+              "layout.geometry",
+              "layout.actual_offset"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "details": {
+              "missing": {},
+              "unexpected": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D04-record-2",
+                "field": "timing.expected_participants",
+                "kind": "CONTRACT",
+                "source": "synthetic://D04/observation/2"
+              },
+              {
+                "fact_id": "D04-record-4",
+                "field": "timing.observed_participants",
+                "kind": "OBSERVED",
+                "source": "synthetic://D04/observation/4"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "COLLECTIVE_PARTICIPATION"
+          },
+          {
+            "details": {
+              "overlap": true,
+              "read_done": 23,
+              "write_at": 22
+            },
+            "evidence": [
+              {
+                "fact_id": "D04-record-1",
+                "field": "timing.read",
+                "kind": "OBSERVED",
+                "source": "synthetic://D04/observation/1"
+              },
+              {
+                "fact_id": "D04-record-3",
+                "field": "timing.later_write",
+                "kind": "OBSERVED",
+                "source": "synthetic://D04/observation/3"
+              }
+            ],
+            "family": "timing",
+            "judgment": "SUPPORTED",
+            "mechanism": "SHARED_SLOT_EARLY_REUSE"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D04",
+        "input_sha256": "c0619086086258de8b8ab24a507bb48cb24fd0b3e087131f8d052e9bce3b1021",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "SHARED_SLOT_EARLY_REUSE"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "945710c4d1074484c9cf2910e0da83389a1d75e2a1c62d7e123ce83841f37517",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "SHARED_SLOT_EARLY_REUSE"
+            ],
+            "field": "timing.later_write",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D04-record-3"
+        },
+        {
+          "prior_input_sha256": "c781ffba1c4ab7a6f3fc709baaf29d65ec3e293c29b1423760af4ed3e53ddda0",
+          "prior_outcome": "SUPPORTED",
+          "prior_supported": [
+            "SHARED_SLOT_EARLY_REUSE"
+          ],
+          "request": {
+            "distinguishes": [
+              "COLLECTIVE_PARTICIPATION"
+            ],
+            "field": "timing.observed_participants",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D04-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "timing.expected_participants",
+        "timing.later_write",
+        "timing.observed_participants",
+        "timing.read"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D05",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D05",
+        "checks": [
+          {
+            "details": {
+              "unexpected_ids": []
+            },
+            "evidence": [
+              {
+                "fact_id": "D05-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D05/observation/1"
+              },
+              {
+                "fact_id": "D05-record-3",
+                "field": "contribution.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D05/observation/3"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "EXCLUDED",
+            "mechanism": "UNEXPECTED_CONTRIBUTION"
+          },
+          {
+            "details": {
+              "multiplicity_differences": {
+                "part1": 1
+              }
+            },
+            "evidence": [
+              {
+                "fact_id": "D05-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D05/observation/1"
+              },
+              {
+                "fact_id": "D05-record-3",
+                "field": "contribution.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D05/observation/3"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "SUPPORTED",
+            "mechanism": "REPEATED_CONTRIBUTION"
+          },
+          {
+            "details": {
+              "multiplicity_differences": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D05-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D05/observation/1"
+              },
+              {
+                "fact_id": "D05-record-3",
+                "field": "contribution.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D05/observation/3"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "EXCLUDED",
+            "mechanism": "MISSING_CONTRIBUTION"
+          },
+          {
+            "details": {
+              "missing": {},
+              "unexpected": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D05-record-2",
+                "field": "timing.expected_participants",
+                "kind": "CONTRACT",
+                "source": "synthetic://D05/observation/2"
+              },
+              {
+                "fact_id": "D05-record-4",
+                "field": "timing.observed_participants",
+                "kind": "OBSERVED",
+                "source": "synthetic://D05/observation/4"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "COLLECTIVE_PARTICIPATION"
+          },
+          {
+            "evidence": [],
+            "family": "timing",
+            "judgment": "UNKNOWN",
+            "mechanism": "SHARED_SLOT_EARLY_REUSE",
+            "missing_fields": [
+              "timing.read",
+              "timing.later_write"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D05",
+        "input_sha256": "7f10242070d2f235863bbb2d720a6ae503956dc309ed5fe5759c8b87323094d0",
+        "next_observation": {
+          "distinguishes": [
+            "SHARED_SLOT_EARLY_REUSE"
+          ],
+          "field": "timing.later_write",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "REPEATED_CONTRIBUTION"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "ed307a00c2199c0018539519fe533f9c07354fb8189534916f32c9c3e9609eaa",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "UNEXPECTED_CONTRIBUTION",
+              "REPEATED_CONTRIBUTION",
+              "MISSING_CONTRIBUTION"
+            ],
+            "field": "contribution.observed",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D05-record-3"
+        },
+        {
+          "prior_input_sha256": "c8553a854469f6e47dfcd5205dcdcbacf95ae702ec8b3e562aa4ad37012f0f64",
+          "prior_outcome": "SUPPORTED",
+          "prior_supported": [
+            "REPEATED_CONTRIBUTION"
+          ],
+          "request": {
+            "distinguishes": [
+              "COLLECTIVE_PARTICIPATION"
+            ],
+            "field": "timing.observed_participants",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D05-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "contribution.expected",
+        "contribution.observed",
+        "timing.expected_participants",
+        "timing.observed_participants"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D05",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D05",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "D05-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D05/observation/1"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "UNKNOWN",
+            "mechanism": "UNEXPECTED_CONTRIBUTION",
+            "missing_fields": [
+              "contribution.observed"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D05-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D05/observation/1"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "UNKNOWN",
+            "mechanism": "REPEATED_CONTRIBUTION",
+            "missing_fields": [
+              "contribution.observed"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D05-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D05/observation/1"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "UNKNOWN",
+            "mechanism": "MISSING_CONTRIBUTION",
+            "missing_fields": [
+              "contribution.observed"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "details": {
+              "missing": {},
+              "unexpected": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D05-record-2",
+                "field": "timing.expected_participants",
+                "kind": "CONTRACT",
+                "source": "synthetic://D05/observation/2"
+              },
+              {
+                "fact_id": "D05-record-4",
+                "field": "timing.observed_participants",
+                "kind": "OBSERVED",
+                "source": "synthetic://D05/observation/4"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "COLLECTIVE_PARTICIPATION"
+          },
+          {
+            "evidence": [],
+            "family": "timing",
+            "judgment": "UNKNOWN",
+            "mechanism": "SHARED_SLOT_EARLY_REUSE",
+            "missing_fields": [
+              "timing.read",
+              "timing.later_write"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D05",
+        "input_sha256": "ee7d1aad5de57d99ba3f37275456c6143bad1a2da987b6f9ad721c90080ab53c",
+        "next_observation": {
+          "distinguishes": [
+            "SHARED_SLOT_EARLY_REUSE"
+          ],
+          "field": "timing.read",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "ed307a00c2199c0018539519fe533f9c07354fb8189534916f32c9c3e9609eaa",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "COLLECTIVE_PARTICIPATION"
+            ],
+            "field": "timing.observed_participants",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D05-record-4"
+        },
+        {
+          "prior_input_sha256": "ee7d1aad5de57d99ba3f37275456c6143bad1a2da987b6f9ad721c90080ab53c",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "SHARED_SLOT_EARLY_REUSE"
+            ],
+            "field": "timing.later_write",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": null
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "contribution.expected",
+        "timing.expected_participants",
+        "timing.observed_participants"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D06",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D06",
+        "checks": [
+          {
+            "details": {
+              "expected": [
+                0,
+                13
+              ],
+              "observed": [
+                0,
+                13
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D06-record-2",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D06/observation/2"
+              },
+              {
+                "fact_id": "D06-record-3",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/3"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_GENERATION"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                13
+              ],
+              "observed": [
+                0,
+                13
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D06-record-3",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/3"
+              },
+              {
+                "fact_id": "D06-record-4",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/4"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_TRANSFER"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                13
+              ],
+              "observed": [
+                0,
+                14
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D06-record-4",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/4"
+              },
+              {
+                "fact_id": "D06-record-6",
+                "field": "plan.consumed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/6"
+              }
+            ],
+            "family": "plan",
+            "judgment": "SUPPORTED",
+            "mechanism": "PLAN_CONSUMPTION"
+          },
+          {
+            "details": {
+              "expected": 38,
+              "logical_index": [
+                2,
+                3
+              ],
+              "observed": 35
+            },
+            "evidence": [
+              {
+                "fact_id": "D06-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://D06/observation/1"
+              },
+              {
+                "fact_id": "D06-record-5",
+                "field": "layout.actual_offset",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/5"
+              }
+            ],
+            "family": "layout",
+            "judgment": "SUPPORTED",
+            "mechanism": "ADDRESS_MAPPING"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D06",
+        "input_sha256": "5ed46d8e60116e6522c98137cd61da5bd5e5848bb02252f322cd0517e8ac0a31",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "PLAN_CONSUMPTION",
+          "ADDRESS_MAPPING"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "53bed4fe880ff0d244e807376518abd3862888888c34c596e6e452df50150838",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "ADDRESS_MAPPING"
+            ],
+            "field": "layout.actual_offset",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D06-record-5"
+        },
+        {
+          "prior_input_sha256": "0b9f456282b9d181df79c4c3c503ea323e8a5b45dd9ca903342be047c51b4055",
+          "prior_outcome": "SUPPORTED",
+          "prior_supported": [
+            "ADDRESS_MAPPING"
+          ],
+          "request": {
+            "distinguishes": [
+              "PLAN_CONSUMPTION"
+            ],
+            "field": "plan.consumed",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D06-record-6"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "layout.actual_offset",
+        "layout.geometry",
+        "plan.consumed",
+        "plan.expected",
+        "plan.produced",
+        "plan.received"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D06",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D06",
+        "checks": [
+          {
+            "details": {
+              "expected": [
+                0,
+                13
+              ],
+              "observed": [
+                0,
+                13
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D06-record-2",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D06/observation/2"
+              },
+              {
+                "fact_id": "D06-record-3",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/3"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_GENERATION"
+          },
+          {
+            "details": {
+              "expected": [
+                0,
+                13
+              ],
+              "observed": [
+                0,
+                13
+              ],
+              "unit": "element"
+            },
+            "evidence": [
+              {
+                "fact_id": "D06-record-3",
+                "field": "plan.produced",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/3"
+              },
+              {
+                "fact_id": "D06-record-4",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/4"
+              }
+            ],
+            "family": "plan",
+            "judgment": "EXCLUDED",
+            "mechanism": "PLAN_TRANSFER"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D06-record-4",
+                "field": "plan.received",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/4"
+              }
+            ],
+            "family": "plan",
+            "judgment": "UNKNOWN",
+            "mechanism": "PLAN_CONSUMPTION",
+            "missing_fields": [
+              "plan.consumed"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "details": {
+              "expected": 38,
+              "logical_index": [
+                2,
+                3
+              ],
+              "observed": 35
+            },
+            "evidence": [
+              {
+                "fact_id": "D06-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://D06/observation/1"
+              },
+              {
+                "fact_id": "D06-record-5",
+                "field": "layout.actual_offset",
+                "kind": "OBSERVED",
+                "source": "synthetic://D06/observation/5"
+              }
+            ],
+            "family": "layout",
+            "judgment": "SUPPORTED",
+            "mechanism": "ADDRESS_MAPPING"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D06",
+        "input_sha256": "0b9f456282b9d181df79c4c3c503ea323e8a5b45dd9ca903342be047c51b4055",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "ADDRESS_MAPPING"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "53bed4fe880ff0d244e807376518abd3862888888c34c596e6e452df50150838",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "ADDRESS_MAPPING"
+            ],
+            "field": "layout.actual_offset",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D06-record-5"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "layout.actual_offset",
+        "layout.geometry",
+        "plan.expected",
+        "plan.produced",
+        "plan.received"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D07",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D07",
+        "checks": [
+          {
+            "details": {
+              "checked_elements": 1,
+              "differing_indices": []
+            },
+            "evidence": [
+              {
+                "fact_id": "D07-record-1",
+                "field": "numeric.actual",
+                "kind": "OBSERVED",
+                "source": "synthetic://D07/observation/1"
+              },
+              {
+                "fact_id": "D07-record-2",
+                "field": "numeric.ref_observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D07/observation/2"
+              },
+              {
+                "fact_id": "D07-record-3",
+                "field": "numeric.tolerance",
+                "kind": "CONTRACT",
+                "source": "synthetic://D07/observation/3"
+              }
+            ],
+            "family": "numeric",
+            "judgment": "EXCLUDED",
+            "mechanism": "LOCAL_NUMERIC_DEVIATION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D07",
+        "input_sha256": "003c5cb814681c2010110b011941722f225c5e82fdc9c1b3616434cb3cfb4991",
+        "next_observation": null,
+        "numeric_stage": {
+          "evidence": [
+            {
+              "fact_id": "D07-record-1",
+              "field": "numeric.actual",
+              "kind": "OBSERVED",
+              "source": "synthetic://D07/observation/1"
+            },
+            {
+              "fact_id": "D07-record-2",
+              "field": "numeric.ref_observed",
+              "kind": "OBSERVED",
+              "source": "synthetic://D07/observation/2"
+            },
+            {
+              "fact_id": "D07-record-4",
+              "field": "numeric.ref_healthy",
+              "kind": "OBSERVED",
+              "source": "synthetic://D07/observation/4"
+            },
+            {
+              "fact_id": "D07-record-3",
+              "field": "numeric.tolerance",
+              "kind": "CONTRACT",
+              "source": "synthetic://D07/observation/3"
+            }
+          ],
+          "status": "UPSTREAM_PROPAGATION"
+        },
+        "outcome": "NO_SUPPORTED_MECHANISM",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "73e167e5f985558a50b498b507de5f967e4caadc9e612af51158d1ad8bc1e41b",
+          "prior_outcome": "NO_SUPPORTED_MECHANISM",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "LOCAL_DEVIATION",
+              "UPSTREAM_PROPAGATION"
+            ],
+            "field": "numeric.ref_healthy",
+            "test": "Evaluate the same reference on healthy input with the same state and mapping"
+          },
+          "returned_fact_id": "D07-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "numeric.actual",
+        "numeric.ref_healthy",
+        "numeric.ref_observed",
+        "numeric.tolerance"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D07",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D07",
+        "checks": [
+          {
+            "details": {
+              "checked_elements": 1,
+              "differing_indices": []
+            },
+            "evidence": [
+              {
+                "fact_id": "D07-record-1",
+                "field": "numeric.actual",
+                "kind": "OBSERVED",
+                "source": "synthetic://D07/observation/1"
+              },
+              {
+                "fact_id": "D07-record-2",
+                "field": "numeric.ref_observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D07/observation/2"
+              },
+              {
+                "fact_id": "D07-record-3",
+                "field": "numeric.tolerance",
+                "kind": "CONTRACT",
+                "source": "synthetic://D07/observation/3"
+              }
+            ],
+            "family": "numeric",
+            "judgment": "EXCLUDED",
+            "mechanism": "LOCAL_NUMERIC_DEVIATION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D07",
+        "input_sha256": "003c5cb814681c2010110b011941722f225c5e82fdc9c1b3616434cb3cfb4991",
+        "next_observation": null,
+        "numeric_stage": {
+          "evidence": [
+            {
+              "fact_id": "D07-record-1",
+              "field": "numeric.actual",
+              "kind": "OBSERVED",
+              "source": "synthetic://D07/observation/1"
+            },
+            {
+              "fact_id": "D07-record-2",
+              "field": "numeric.ref_observed",
+              "kind": "OBSERVED",
+              "source": "synthetic://D07/observation/2"
+            },
+            {
+              "fact_id": "D07-record-4",
+              "field": "numeric.ref_healthy",
+              "kind": "OBSERVED",
+              "source": "synthetic://D07/observation/4"
+            },
+            {
+              "fact_id": "D07-record-3",
+              "field": "numeric.tolerance",
+              "kind": "CONTRACT",
+              "source": "synthetic://D07/observation/3"
+            }
+          ],
+          "status": "UPSTREAM_PROPAGATION"
+        },
+        "outcome": "NO_SUPPORTED_MECHANISM",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "73e167e5f985558a50b498b507de5f967e4caadc9e612af51158d1ad8bc1e41b",
+          "prior_outcome": "NO_SUPPORTED_MECHANISM",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "LOCAL_DEVIATION",
+              "UPSTREAM_PROPAGATION"
+            ],
+            "field": "numeric.ref_healthy",
+            "test": "Evaluate the same reference on healthy input with the same state and mapping"
+          },
+          "returned_fact_id": "D07-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "numeric.actual",
+        "numeric.ref_healthy",
+        "numeric.ref_observed",
+        "numeric.tolerance"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D08",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D08",
+        "checks": [
+          {
+            "details": {
+              "missing": {},
+              "unexpected": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D08-record-2",
+                "field": "timing.expected_participants",
+                "kind": "CONTRACT",
+                "source": "synthetic://D08/observation/2"
+              },
+              {
+                "fact_id": "D08-record-4",
+                "field": "timing.observed_participants",
+                "kind": "OBSERVED",
+                "source": "synthetic://D08/observation/4"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "COLLECTIVE_PARTICIPATION"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D08-record-1",
+                "field": "timing.read",
+                "kind": "OBSERVED",
+                "source": "synthetic://D08/observation/1"
+              },
+              {
+                "fact_id": "D08-record-3",
+                "field": "timing.later_write",
+                "kind": "OBSERVED",
+                "source": "synthetic://D08/observation/3"
+              }
+            ],
+            "family": "timing",
+            "judgment": "UNKNOWN",
+            "mechanism": "SHARED_SLOT_EARLY_REUSE",
+            "reason": "Read and write have no established common order"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D08",
+        "input_sha256": "23a4ecd3b128aa297e729fb9b4f4e330d3244fa7a14f13e7f05315ccac64b24c",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "89daadacdbd1eb3ecb483a7c9c6e030eb47b7db0f45ab97efedfd3d21006ab1a",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "SHARED_SLOT_EARLY_REUSE"
+            ],
+            "field": "timing.later_write",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D08-record-3"
+        },
+        {
+          "prior_input_sha256": "f89e2ece86bdc2e53027158c155a759973c3e281188dc2cf18aa55b56ef17739",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "COLLECTIVE_PARTICIPATION"
+            ],
+            "field": "timing.observed_participants",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D08-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "timing.expected_participants",
+        "timing.later_write",
+        "timing.observed_participants",
+        "timing.read"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D08",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D08",
+        "checks": [
+          {
+            "details": {
+              "missing": {},
+              "unexpected": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D08-record-2",
+                "field": "timing.expected_participants",
+                "kind": "CONTRACT",
+                "source": "synthetic://D08/observation/2"
+              },
+              {
+                "fact_id": "D08-record-4",
+                "field": "timing.observed_participants",
+                "kind": "OBSERVED",
+                "source": "synthetic://D08/observation/4"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "COLLECTIVE_PARTICIPATION"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D08-record-1",
+                "field": "timing.read",
+                "kind": "OBSERVED",
+                "source": "synthetic://D08/observation/1"
+              },
+              {
+                "fact_id": "D08-record-3",
+                "field": "timing.later_write",
+                "kind": "OBSERVED",
+                "source": "synthetic://D08/observation/3"
+              }
+            ],
+            "family": "timing",
+            "judgment": "UNKNOWN",
+            "mechanism": "SHARED_SLOT_EARLY_REUSE",
+            "reason": "Read and write have no established common order"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D08",
+        "input_sha256": "23a4ecd3b128aa297e729fb9b4f4e330d3244fa7a14f13e7f05315ccac64b24c",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "89daadacdbd1eb3ecb483a7c9c6e030eb47b7db0f45ab97efedfd3d21006ab1a",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "SHARED_SLOT_EARLY_REUSE"
+            ],
+            "field": "timing.later_write",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D08-record-3"
+        },
+        {
+          "prior_input_sha256": "f89e2ece86bdc2e53027158c155a759973c3e281188dc2cf18aa55b56ef17739",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "COLLECTIVE_PARTICIPATION"
+            ],
+            "field": "timing.observed_participants",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D08-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "timing.expected_participants",
+        "timing.later_write",
+        "timing.observed_participants",
+        "timing.read"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D09",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D09",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "D09-record-1",
+                "field": "numeric.actual",
+                "kind": "OBSERVED",
+                "source": "synthetic://D09/observation/1"
+              },
+              {
+                "fact_id": "D09-record-3",
+                "field": "numeric.ref_observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D09/observation/3"
+              },
+              {
+                "fact_id": "D09-record-2",
+                "field": "numeric.tolerance",
+                "kind": "CONTRACT",
+                "source": "synthetic://D09/observation/2"
+              }
+            ],
+            "family": "numeric",
+            "judgment": "UNKNOWN",
+            "mechanism": "LOCAL_NUMERIC_DEVIATION",
+            "reason": "Reference needs a qualified implementation, state, mapping, and input scope"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D09",
+        "input_sha256": "87a8224c0d68f2aeec8c9fb7ee620eb4f688f5563399880503dbaf75bf81b013",
+        "next_observation": null,
+        "numeric_stage": {
+          "missing_fields": [
+            "numeric.ref_healthy"
+          ],
+          "status": "UNKNOWN"
+        },
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "bd82d80008fe6a4a83b1d373b1692454365be4e4364c60161391b146d85b4d90",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "LOCAL_NUMERIC_DEVIATION"
+            ],
+            "field": "numeric.ref_observed",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D09-record-3"
+        },
+        {
+          "prior_input_sha256": "87a8224c0d68f2aeec8c9fb7ee620eb4f688f5563399880503dbaf75bf81b013",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "LOCAL_DEVIATION",
+              "UPSTREAM_PROPAGATION"
+            ],
+            "field": "numeric.ref_healthy",
+            "test": "Evaluate the same reference on healthy input with the same state and mapping"
+          },
+          "returned_fact_id": null
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "numeric.actual",
+        "numeric.ref_observed",
+        "numeric.tolerance"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D09",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D09",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "D09-record-1",
+                "field": "numeric.actual",
+                "kind": "OBSERVED",
+                "source": "synthetic://D09/observation/1"
+              },
+              {
+                "fact_id": "D09-record-3",
+                "field": "numeric.ref_observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D09/observation/3"
+              },
+              {
+                "fact_id": "D09-record-2",
+                "field": "numeric.tolerance",
+                "kind": "CONTRACT",
+                "source": "synthetic://D09/observation/2"
+              }
+            ],
+            "family": "numeric",
+            "judgment": "UNKNOWN",
+            "mechanism": "LOCAL_NUMERIC_DEVIATION",
+            "reason": "Reference needs a qualified implementation, state, mapping, and input scope"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D09",
+        "input_sha256": "87a8224c0d68f2aeec8c9fb7ee620eb4f688f5563399880503dbaf75bf81b013",
+        "next_observation": null,
+        "numeric_stage": {
+          "missing_fields": [
+            "numeric.ref_healthy"
+          ],
+          "status": "UNKNOWN"
+        },
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "bd82d80008fe6a4a83b1d373b1692454365be4e4364c60161391b146d85b4d90",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "LOCAL_NUMERIC_DEVIATION"
+            ],
+            "field": "numeric.ref_observed",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D09-record-3"
+        },
+        {
+          "prior_input_sha256": "87a8224c0d68f2aeec8c9fb7ee620eb4f688f5563399880503dbaf75bf81b013",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "LOCAL_DEVIATION",
+              "UPSTREAM_PROPAGATION"
+            ],
+            "field": "numeric.ref_healthy",
+            "test": "Evaluate the same reference on healthy input with the same state and mapping"
+          },
+          "returned_fact_id": null
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "numeric.actual",
+        "numeric.ref_observed",
+        "numeric.tolerance"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D10",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D10",
+        "checks": [
+          {
+            "evidence": [],
+            "family": "interface",
+            "judgment": "UNKNOWN",
+            "mechanism": "INTERFACE_CONTRACT",
+            "reason": "contract_scope_unknown"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D10-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://D10/observation/1"
+              }
+            ],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "reason": "contract_scope_unknown"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D10",
+        "input_sha256": "7d684fd358261a5cfc7c920fce13ee3bfec76aa6ae0c87c6d1bd89c79610b39a",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "UNKNOWN",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "diagnosis",
+      "visible_fields": [
+        "layout.geometry"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D10",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D10",
+        "checks": [
+          {
+            "evidence": [],
+            "family": "interface",
+            "judgment": "UNKNOWN",
+            "mechanism": "INTERFACE_CONTRACT",
+            "reason": "contract_scope_unknown"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D10-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://D10/observation/1"
+              }
+            ],
+            "family": "layout",
+            "judgment": "UNKNOWN",
+            "mechanism": "ADDRESS_MAPPING",
+            "reason": "contract_scope_unknown"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D10",
+        "input_sha256": "7d684fd358261a5cfc7c920fce13ee3bfec76aa6ae0c87c6d1bd89c79610b39a",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "UNKNOWN",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [],
+      "track": "diagnosis",
+      "visible_fields": [
+        "layout.geometry"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D11",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D11",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "D11-record-1",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D11/observation/1"
+              }
+            ],
+            "family": "plan",
+            "judgment": "UNKNOWN",
+            "mechanism": "PLAN_GENERATION",
+            "missing_fields": [
+              "plan.produced"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "evidence": [],
+            "family": "plan",
+            "judgment": "UNKNOWN",
+            "mechanism": "PLAN_TRANSFER",
+            "missing_fields": [
+              "plan.produced",
+              "plan.received"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "evidence": [],
+            "family": "plan",
+            "judgment": "UNKNOWN",
+            "mechanism": "PLAN_CONSUMPTION",
+            "missing_fields": [
+              "plan.received",
+              "plan.consumed"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D11",
+        "input_sha256": "e3226b918e40026e6e6f64cd26931d711071830c822a7d6974dcc51925209221",
+        "next_observation": {
+          "distinguishes": [
+            "PLAN_CONSUMPTION"
+          ],
+          "field": "plan.consumed",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "e3226b918e40026e6e6f64cd26931d711071830c822a7d6974dcc51925209221",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "PLAN_GENERATION",
+              "PLAN_TRANSFER"
+            ],
+            "field": "plan.produced",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": null
+        },
+        {
+          "prior_input_sha256": "e3226b918e40026e6e6f64cd26931d711071830c822a7d6974dcc51925209221",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "PLAN_TRANSFER",
+              "PLAN_CONSUMPTION"
+            ],
+            "field": "plan.received",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": null
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "plan.expected"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D11",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D11",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "D11-record-1",
+                "field": "plan.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D11/observation/1"
+              }
+            ],
+            "family": "plan",
+            "judgment": "UNKNOWN",
+            "mechanism": "PLAN_GENERATION",
+            "missing_fields": [
+              "plan.produced"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "evidence": [],
+            "family": "plan",
+            "judgment": "UNKNOWN",
+            "mechanism": "PLAN_TRANSFER",
+            "missing_fields": [
+              "plan.produced",
+              "plan.received"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "evidence": [],
+            "family": "plan",
+            "judgment": "UNKNOWN",
+            "mechanism": "PLAN_CONSUMPTION",
+            "missing_fields": [
+              "plan.received",
+              "plan.consumed"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D11",
+        "input_sha256": "e3226b918e40026e6e6f64cd26931d711071830c822a7d6974dcc51925209221",
+        "next_observation": {
+          "distinguishes": [
+            "PLAN_CONSUMPTION"
+          ],
+          "field": "plan.consumed",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "e3226b918e40026e6e6f64cd26931d711071830c822a7d6974dcc51925209221",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "PLAN_GENERATION",
+              "PLAN_TRANSFER"
+            ],
+            "field": "plan.produced",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": null
+        },
+        {
+          "prior_input_sha256": "e3226b918e40026e6e6f64cd26931d711071830c822a7d6974dcc51925209221",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "PLAN_TRANSFER",
+              "PLAN_CONSUMPTION"
+            ],
+            "field": "plan.received",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": null
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "plan.expected"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D12",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D12",
+        "checks": [
+          {
+            "details": {
+              "expected": 11,
+              "logical_index": [
+                3
+              ],
+              "observed": 11
+            },
+            "evidence": [
+              {
+                "fact_id": "D12-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://D12/observation/1"
+              },
+              {
+                "fact_id": "D12-record-2",
+                "field": "layout.actual_offset",
+                "kind": "OBSERVED",
+                "source": "synthetic://D12/observation/2"
+              }
+            ],
+            "family": "layout",
+            "judgment": "EXCLUDED",
+            "mechanism": "ADDRESS_MAPPING"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D12",
+        "input_sha256": "2b6aca714ed64262d6a334307d604c28c4f14bc73ad7cde64a69b925a0e71fc9",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "NO_SUPPORTED_MECHANISM",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "b5b8b5e22f3e439827ff03e8c5944871c6d41f46f257b817ab75774c4abdcea8",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "ADDRESS_MAPPING"
+            ],
+            "field": "layout.actual_offset",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D12-record-2"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "layout.actual_offset",
+        "layout.geometry"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D12",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D12",
+        "checks": [
+          {
+            "details": {
+              "expected": 11,
+              "logical_index": [
+                3
+              ],
+              "observed": 11
+            },
+            "evidence": [
+              {
+                "fact_id": "D12-record-1",
+                "field": "layout.geometry",
+                "kind": "CONTRACT",
+                "source": "synthetic://D12/observation/1"
+              },
+              {
+                "fact_id": "D12-record-2",
+                "field": "layout.actual_offset",
+                "kind": "OBSERVED",
+                "source": "synthetic://D12/observation/2"
+              }
+            ],
+            "family": "layout",
+            "judgment": "EXCLUDED",
+            "mechanism": "ADDRESS_MAPPING"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D12",
+        "input_sha256": "2b6aca714ed64262d6a334307d604c28c4f14bc73ad7cde64a69b925a0e71fc9",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "NO_SUPPORTED_MECHANISM",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "b5b8b5e22f3e439827ff03e8c5944871c6d41f46f257b817ab75774c4abdcea8",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "ADDRESS_MAPPING"
+            ],
+            "field": "layout.actual_offset",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D12-record-2"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "layout.actual_offset",
+        "layout.geometry"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D13",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D13",
+        "checks": [
+          {
+            "details": {
+              "missing": {},
+              "unexpected": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D13-record-3",
+                "field": "timing.expected_participants",
+                "kind": "CONTRACT",
+                "source": "synthetic://D13/observation/3"
+              },
+              {
+                "fact_id": "D13-record-4",
+                "field": "timing.observed_participants",
+                "kind": "OBSERVED",
+                "source": "synthetic://D13/observation/4"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "COLLECTIVE_PARTICIPATION"
+          },
+          {
+            "details": {
+              "overlap": false,
+              "reason": "disjoint_ranges"
+            },
+            "evidence": [
+              {
+                "fact_id": "D13-record-1",
+                "field": "timing.read",
+                "kind": "OBSERVED",
+                "source": "synthetic://D13/observation/1"
+              },
+              {
+                "fact_id": "D13-record-2",
+                "field": "timing.later_write",
+                "kind": "OBSERVED",
+                "source": "synthetic://D13/observation/2"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "SHARED_SLOT_EARLY_REUSE"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D13",
+        "input_sha256": "2378c56b544ac0607ea01a06b9e44f5b794b0f064b00e416fecf6cd88ce15c42",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "NO_SUPPORTED_MECHANISM",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "bfac8233e8a9bc738c7c02d6c2baf9008f6e0b5a29618d61d7bb25041bae486d",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "COLLECTIVE_PARTICIPATION"
+            ],
+            "field": "timing.observed_participants",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D13-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "timing.expected_participants",
+        "timing.later_write",
+        "timing.observed_participants",
+        "timing.read"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D13",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D13",
+        "checks": [
+          {
+            "details": {
+              "missing": {},
+              "unexpected": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D13-record-3",
+                "field": "timing.expected_participants",
+                "kind": "CONTRACT",
+                "source": "synthetic://D13/observation/3"
+              },
+              {
+                "fact_id": "D13-record-4",
+                "field": "timing.observed_participants",
+                "kind": "OBSERVED",
+                "source": "synthetic://D13/observation/4"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "COLLECTIVE_PARTICIPATION"
+          },
+          {
+            "details": {
+              "overlap": false,
+              "reason": "disjoint_ranges"
+            },
+            "evidence": [
+              {
+                "fact_id": "D13-record-1",
+                "field": "timing.read",
+                "kind": "OBSERVED",
+                "source": "synthetic://D13/observation/1"
+              },
+              {
+                "fact_id": "D13-record-2",
+                "field": "timing.later_write",
+                "kind": "OBSERVED",
+                "source": "synthetic://D13/observation/2"
+              }
+            ],
+            "family": "timing",
+            "judgment": "EXCLUDED",
+            "mechanism": "SHARED_SLOT_EARLY_REUSE"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D13",
+        "input_sha256": "2378c56b544ac0607ea01a06b9e44f5b794b0f064b00e416fecf6cd88ce15c42",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "NO_SUPPORTED_MECHANISM",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "bfac8233e8a9bc738c7c02d6c2baf9008f6e0b5a29618d61d7bb25041bae486d",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "COLLECTIVE_PARTICIPATION"
+            ],
+            "field": "timing.observed_participants",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D13-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "timing.expected_participants",
+        "timing.later_write",
+        "timing.observed_participants",
+        "timing.read"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D14",
+      "method": "adaptive",
+      "result": {
+        "case_id": "D14",
+        "checks": [
+          {
+            "evidence": [
+              {
+                "fact_id": "D14-record-3",
+                "field": "interface.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D14/observation/3"
+              }
+            ],
+            "family": "interface",
+            "judgment": "UNKNOWN",
+            "mechanism": "INTERFACE_CONTRACT",
+            "missing_fields": [
+              "interface.observed"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "details": {
+              "unexpected_ids": []
+            },
+            "evidence": [
+              {
+                "fact_id": "D14-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D14/observation/1"
+              },
+              {
+                "fact_id": "D14-record-2",
+                "field": "contribution.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D14/observation/2"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "EXCLUDED",
+            "mechanism": "UNEXPECTED_CONTRIBUTION"
+          },
+          {
+            "details": {
+              "multiplicity_differences": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D14-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D14/observation/1"
+              },
+              {
+                "fact_id": "D14-record-2",
+                "field": "contribution.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D14/observation/2"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "EXCLUDED",
+            "mechanism": "REPEATED_CONTRIBUTION"
+          },
+          {
+            "details": {
+              "multiplicity_differences": {}
+            },
+            "evidence": [
+              {
+                "fact_id": "D14-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D14/observation/1"
+              },
+              {
+                "fact_id": "D14-record-2",
+                "field": "contribution.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D14/observation/2"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "EXCLUDED",
+            "mechanism": "MISSING_CONTRIBUTION"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D14",
+        "input_sha256": "6e6e22115ab5ce4d269d293bf3e180ba416326bd2f432f70f09bdd7a116c01d5",
+        "next_observation": {
+          "distinguishes": [
+            "INTERFACE_CONTRACT"
+          ],
+          "field": "interface.observed",
+          "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+        },
+        "numeric_stage": null,
+        "outcome": "UNKNOWN",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "2eedc33bcb5900aebab408e0678256d16b4fdd7f3c3c820d161568db97d50ef6",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "UNEXPECTED_CONTRIBUTION",
+              "REPEATED_CONTRIBUTION",
+              "MISSING_CONTRIBUTION"
+            ],
+            "field": "contribution.observed",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D14-record-2"
+        },
+        {
+          "prior_input_sha256": "c7c52ab746084320154f2a8582fd4b9ef935cdef54c6131f57f07bade0fce634",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "INTERFACE_CONTRACT"
+            ],
+            "field": "interface.expected",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D14-record-3"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "contribution.expected",
+        "contribution.observed",
+        "interface.expected"
+      ]
+    },
+    {
+      "budget": 2,
+      "case_id": "D14",
+      "method": "fixed_route",
+      "result": {
+        "case_id": "D14",
+        "checks": [
+          {
+            "details": {
+              "expected": {
+                "output_count": 2
+              },
+              "observed": {
+                "output_count": 1
+              }
+            },
+            "evidence": [
+              {
+                "fact_id": "D14-record-3",
+                "field": "interface.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D14/observation/3"
+              },
+              {
+                "fact_id": "D14-record-4",
+                "field": "interface.observed",
+                "kind": "OBSERVED",
+                "source": "synthetic://D14/observation/4"
+              }
+            ],
+            "family": "interface",
+            "judgment": "SUPPORTED",
+            "mechanism": "INTERFACE_CONTRACT"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D14-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D14/observation/1"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "UNKNOWN",
+            "mechanism": "UNEXPECTED_CONTRIBUTION",
+            "missing_fields": [
+              "contribution.observed"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D14-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D14/observation/1"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "UNKNOWN",
+            "mechanism": "REPEATED_CONTRIBUTION",
+            "missing_fields": [
+              "contribution.observed"
+            ],
+            "reason": "insufficient_observations"
+          },
+          {
+            "evidence": [
+              {
+                "fact_id": "D14-record-1",
+                "field": "contribution.expected",
+                "kind": "CONTRACT",
+                "source": "synthetic://D14/observation/1"
+              }
+            ],
+            "family": "contribution",
+            "judgment": "UNKNOWN",
+            "mechanism": "MISSING_CONTRIBUTION",
+            "missing_fields": [
+              "contribution.observed"
+            ],
+            "reason": "insufficient_observations"
+          }
+        ],
+        "evidence_issues": [],
+        "family_id": "controlled-D14",
+        "input_sha256": "605cf333241e363f9dc8d794b4936ebf6225a5a1dcf89a02ad94e989f3122230",
+        "next_observation": null,
+        "numeric_stage": null,
+        "outcome": "SUPPORTED",
+        "output_check": {
+          "status": "NOT_ASSESSED"
+        },
+        "scope": "APPLICABLE",
+        "supported_mechanisms": [
+          "INTERFACE_CONTRACT"
+        ],
+        "version": "0.1.0"
+      },
+      "timeline": [
+        {
+          "prior_input_sha256": "2eedc33bcb5900aebab408e0678256d16b4fdd7f3c3c820d161568db97d50ef6",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "INTERFACE_CONTRACT"
+            ],
+            "field": "interface.expected",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D14-record-3"
+        },
+        {
+          "prior_input_sha256": "5d9f1937377cc6cc9ed704bb8b3ea572b4688941805514c8b84e9cc80f886deb",
+          "prior_outcome": "UNKNOWN",
+          "prior_supported": [],
+          "request": {
+            "distinguishes": [
+              "INTERFACE_CONTRACT"
+            ],
+            "field": "interface.observed",
+            "test": "Supply a same-build, same-call observation to support or contradict these local predicates"
+          },
+          "returned_fact_id": "D14-record-4"
+        }
+      ],
+      "track": "diagnosis",
+      "visible_fields": [
+        "contribution.expected",
+        "interface.expected",
+        "interface.observed"
+      ]
+    }
+  ],
+  "seal_sha256": "d7308c6ea1b864c55c9793eb906fb092cc8de096fd4417e1566754671a11e6b3"
+}

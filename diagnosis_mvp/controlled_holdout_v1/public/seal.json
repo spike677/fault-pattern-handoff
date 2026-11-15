@@ -1,0 +1,11 @@
+{
+  "freeze_sha256": "93a78e5530062a627e051aee721c23715c3b1a0f16b9d13d81a41be8dc47072b",
+  "generator_sha256": "62b96434e4cd53b06427579e134c55caade96f57bc4a560dae40fc59992fd81f",
+  "hashes": {
+    "answer_key.json": "bc4e96a618ef1d3441c900f0a73e00f427267a751e1b6fed8878253e2742ebfb",
+    "inputs.json": "795c33c8590907028e8df7c2f40b5d97bba0b93e06624a400fa9715fc51d7ad3",
+    "packets.json": "6b66608808ed512493dcae78571d8b8b40945eda96217671ad80df878d42c06f"
+  },
+  "kind": "SYNTHETIC_CONTROLLED",
+  "preparation": "Deterministic fixtures prepared by the prototype author after the freeze. Inputs and future observations are sealed before prediction; answers are read only for scoring."
+}

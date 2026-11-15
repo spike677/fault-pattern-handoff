@@ -1,0 +1,11 @@
+{
+  "freeze_sha256": "e20d350e8535ec195f3e8a5115801ab30206d791aac4284441861e3348a232f7",
+  "generator_sha256": "7915dc246dd9b96c49ae50b50017a22da897e1219a15b20f024e0c1b0d8a5ccc",
+  "hashes": {
+    "answer_key.json": "bc4e96a618ef1d3441c900f0a73e00f427267a751e1b6fed8878253e2742ebfb",
+    "inputs.json": "795c33c8590907028e8df7c2f40b5d97bba0b93e06624a400fa9715fc51d7ad3",
+    "packets.json": "6b66608808ed512493dcae78571d8b8b40945eda96217671ad80df878d42c06f"
+  },
+  "kind": "SYNTHETIC_CONTROLLED",
+  "preparation": "Regression on the same controlled v0.1.0 fixtures, after both comparison fixes. The answer key was already revealed for the first run."
+}

@@ -1,0 +1,209 @@
+{
+  "kind": "DEVELOPMENT_REPLAY",
+  "cases": [
+    {
+      "case_id": "DEV-CONV3D",
+      "family_id": "cann-conv3d-arch35-W",
+      "build": "CANN-9.3.0-Ascend950DT-arch35",
+      "call_id": "DEV-CONV3D-archive",
+      "routes": [
+        "plan"
+      ],
+      "contract": {
+        "version": "conv-debug-tools@a625867",
+        "build": "CANN-9.3.0-Ascend950DT-arch35",
+        "source": "D:/project/精度/fault-evidence-audit-codex-initial-public-release/work/classification_research_20261114/rule_review_510601f/research/diagnosis-replay/source-and-acceptance-review.md:9",
+        "status": "APPLICABLE"
+      },
+      "observations": [
+        {
+          "fact_id": "DEV-CONV3D-1",
+          "field": "plan.received",
+          "build": "CANN-9.3.0-Ascend950DT-arch35",
+          "call_id": "DEV-CONV3D-archive",
+          "source": "D:/project/精度/fault-evidence-audit-codex-initial-public-release/work/classification_research_20261114/rule_review_510601f/research/diagnosis-replay/source-and-acceptance-review.md:9",
+          "kind": "REPORTED",
+          "value": {
+            "unit": "element",
+            "range": [
+              0,
+              12
+            ]
+          }
+        },
+        {
+          "fact_id": "DEV-CONV3D-2",
+          "field": "plan.consumed",
+          "build": "CANN-9.3.0-Ascend950DT-arch35",
+          "call_id": "DEV-CONV3D-archive",
+          "source": "D:/project/精度/fault-evidence-audit-codex-initial-public-release/work/classification_research_20261114/rule_review_510601f/research/diagnosis-replay/source-and-acceptance-review.md:9",
+          "kind": "DERIVED",
+          "value": {
+            "unit": "element",
+            "range": [
+              0,
+              13
+            ]
+          }
+        }
+      ],
+      "notes": "将非切分 B 窗口正规化为同单位宽度。收到的 12 来自设备 Tiling dump，13 是源码复算。主机实际产物、传输原件与逐点消费 trace 仍缺。"
+    },
+    {
+      "case_id": "DEV-RMSNORM",
+      "family_id": "cann-ops-nn-8663",
+      "build": "ops-nn-8663-report-build",
+      "call_id": "DEV-RMSNORM-archive",
+      "routes": [
+        "layout"
+      ],
+      "contract": {
+        "version": "9b3be291175ab88fabfdc4610ca894511d50adf1",
+        "build": "ops-nn-8663-report-build",
+        "source": "D:/project/精度/fault-evidence-audit-codex-initial-public-release/work/classification_research_20261114/rule_review_510601f/research/diagnosis-replay/case-evidence-index.md:12",
+        "status": "APPLICABLE"
+      },
+      "observations": [
+        {
+          "fact_id": "DEV-RMSNORM-1",
+          "field": "layout.geometry",
+          "build": "ops-nn-8663-report-build",
+          "call_id": "DEV-RMSNORM-archive",
+          "source": "D:/project/精度/fault-evidence-audit-codex-initial-public-release/work/classification_research_20261114/rule_review_510601f/research/diagnosis-replay/case-evidence-index.md:12",
+          "kind": "CONTRACT",
+          "value": {
+            "unit": "element",
+            "base": 0,
+            "shape": [
+              4,
+              1
+            ],
+            "strides": [
+              4,
+              2
+            ],
+            "index": [
+              1,
+              0
+            ]
+          }
+        },
+        {
+          "fact_id": "DEV-RMSNORM-2",
+          "field": "layout.actual_offset",
+          "build": "ops-nn-8663-report-build",
+          "call_id": "DEV-RMSNORM-archive",
+          "source": "D:/project/精度/fault-evidence-audit-codex-initial-public-release/work/classification_research_20261114/rule_review_510601f/research/diagnosis-replay/case-evidence-index.md:12",
+          "kind": "REPORTED",
+          "value": {
+            "unit": "element",
+            "offset": 1
+          }
+        }
+      ],
+      "notes": "报告版允许非连续 rstdOut，第二个值对应相对位置 4、报告中的物理位置 1。实际写入者尚无逐点 trace。"
+    },
+    {
+      "case_id": "DEV-FLASHINFER",
+      "family_id": "flashinfer-5260-5385",
+      "build": "28fae4f2e0ce6b7d9230f828291ca96aa0473ec9-H200",
+      "call_id": "DEV-FLASHINFER-archive",
+      "routes": [
+        "layout",
+        "plan"
+      ],
+      "contract": {
+        "version": "28fae4f2e0ce6b7d9230f828291ca96aa0473ec9",
+        "build": "28fae4f2e0ce6b7d9230f828291ca96aa0473ec9-H200",
+        "source": "D:/project/精度/fault-evidence-audit-codex-initial-public-release/work/classification_research_20261114/rule_review_510601f/research/diagnosis-replay/case-evidence-index.md:26",
+        "status": "UNKNOWN"
+      },
+      "observations": [],
+      "notes": "已有等值 contiguous/stride-2 差异及分支路径线索。目标分支上的适用合同和首个错误物理读取位置仍需核验，不能把源码路径推断写作地址 trace。"
+    },
+    {
+      "case_id": "DEV-EMBEDDINGBAG-BASE",
+      "family_id": "cann-embeddingbag-n24",
+      "build": "a6b00134936bbe2ed90f35c2897217e8224526e2",
+      "call_id": "DEV-EMBEDDINGBAG-BASE-archive",
+      "routes": [
+        "interface"
+      ],
+      "contract": {
+        "version": "N24-archived-None-convention",
+        "build": "a6b00134936bbe2ed90f35c2897217e8224526e2",
+        "source": "D:/project/精度/CANN25_25_review_reports/N24.md:20",
+        "status": "APPLICABLE"
+      },
+      "observations": [
+        {
+          "fact_id": "DEV-EMBEDDINGBAG-BASE-1",
+          "field": "interface.expected",
+          "build": "a6b00134936bbe2ed90f35c2897217e8224526e2",
+          "call_id": "DEV-EMBEDDINGBAG-BASE-archive",
+          "source": "D:/project/精度/CANN25_25_review_reports/N24.md:20",
+          "kind": "CONTRACT",
+          "value": {
+            "padding_idx": -1,
+            "meaning": "no_padding"
+          }
+        },
+        {
+          "fact_id": "DEV-EMBEDDINGBAG-BASE-2",
+          "field": "interface.observed",
+          "build": "a6b00134936bbe2ed90f35c2897217e8224526e2",
+          "call_id": "DEV-EMBEDDINGBAG-BASE-archive",
+          "source": "D:/project/精度/CANN25_25_review_reports/N24.md:36",
+          "kind": "DERIVED",
+          "value": {
+            "padding_idx": 2,
+            "meaning": "filter_row"
+          }
+        }
+      ],
+      "notes": "N=3 的静态反事实。只裁决旧版 None/-1 语义，历史框架桥接与其它负值未裁决。"
+    },
+    {
+      "case_id": "DEV-EMBEDDINGBAG-HEAD",
+      "family_id": "cann-embeddingbag-n24",
+      "build": "4bdd6c479637259cac0c3c23fd745d572efe71ed",
+      "call_id": "DEV-EMBEDDINGBAG-HEAD-archive",
+      "routes": [
+        "interface"
+      ],
+      "contract": {
+        "version": "N24-archived-attribute-layout",
+        "build": "4bdd6c479637259cac0c3c23fd745d572efe71ed",
+        "source": "D:/project/精度/CANN25_25_review_reports/N24.md:32",
+        "status": "APPLICABLE"
+      },
+      "observations": [
+        {
+          "fact_id": "DEV-EMBEDDINGBAG-HEAD-1",
+          "field": "interface.expected",
+          "build": "4bdd6c479637259cac0c3c23fd745d572efe71ed",
+          "call_id": "DEV-EMBEDDINGBAG-HEAD-archive",
+          "source": "D:/project/精度/CANN25_25_review_reports/N24.md:32",
+          "kind": "CONTRACT",
+          "value": {
+            "attribute": 4,
+            "role": "padding_idx"
+          }
+        },
+        {
+          "fact_id": "DEV-EMBEDDINGBAG-HEAD-2",
+          "field": "interface.observed",
+          "build": "4bdd6c479637259cac0c3c23fd745d572efe71ed",
+          "call_id": "DEV-EMBEDDINGBAG-HEAD-archive",
+          "source": "D:/project/精度/CANN25_25_review_reports/N24.md:32",
+          "kind": "DERIVED",
+          "value": {
+            "attribute": 3,
+            "role": "include_last_offset"
+          }
+        }
+      ],
+      "notes": "修订读取了相邻 bool 属性，单独按静态属性绑定判断。旧版与新 head 同事件，不能重复增加评估家族。"
+    }
+  ]
+}
