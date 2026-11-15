@@ -1,0 +1,1627 @@
+{
+  "date": "2026-11-16",
+  "timezone": "Asia/Shanghai",
+  "baseline_commit": "beedb4bff00192b1af871315229ffc28f3243ef2",
+  "historical_candidate_commit": "064a872082b6f0c2eb549558148ad3a5acf7028e",
+  "decision_candidate_commit": "843f5282f04a83530ffbf9c51b339f49df7b601a",
+  "catalog_version": "0.3",
+  "decision_version": "0.3.1",
+  "scoring_protocol": "classification_only/0.3.1",
+  "independent_holdout_evaluated": false,
+  "isolation": {
+    "status": "BLOCKED",
+    "outside_approved_results": {
+      "answer": "readable",
+      "prior-prediction": "readable",
+      "history": "readable"
+    }
+  },
+  "verification": {
+    "historical_classification_tests": 56,
+    "classification_tests": 75,
+    "historical_diagnosis_tests": 17
+  },
+  "historical_replay_and_regrade": {
+    "event_families": 8,
+    "original_score_sha256": "68f3f03bde4072e673063747ea3a082f68d408aa3bcbe7a1bfb8d72b60610687",
+    "original_supplemental_score_sha256": "3a652490214d3c11ec466a0cae2e6c38c55b997f8e54953926401c1c12243acf",
+    "regraded_score_sha256": "ef6322902722600ae30ec2193196e2870b41d0bc53b093e26ccd664994c164f7",
+    "failure_audit_sha256": "0f86370cb65acdba6fbb52a83b29550f2c492ecbdbab249504d9121d5eda0808",
+    "runs": [
+      {
+        "run_sha256": "a08657129f92f032fda6d4f6f4db734db1d038efd97f7a915afd15bee0b7c4d5",
+        "case_strict": 6,
+        "complete_cases_with_role_order": 5,
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 8,
+            "eligible": 10
+          },
+          "actual_supported_statuses": {
+            "leaf": 2,
+            "outside:outside_catalog": 5,
+            "parent": 1
+          },
+          "families": {
+            "correct": 6,
+            "eligible": 8
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 0,
+            "eligible": 2
+          },
+          "leaf": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "outside:outside_catalog": {
+            "correct": 4,
+            "eligible": 4
+          },
+          "parent": {
+            "correct": 2,
+            "eligible": 2
+          }
+        },
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 9,
+            "eligible": 9
+          },
+          "unknown_false_confirmation": 1,
+          "unknown_retained": {
+            "correct": 0,
+            "eligible": 1
+          }
+        },
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 6,
+            "eligible": 10
+          },
+          "structure": {
+            "correct": 8,
+            "eligible": 10
+          },
+          "unresolved_predicted_actions": 0,
+          "unresolved_predicted_roles": 0
+        },
+        "independent_reconciliation": {
+          "claimed": 10,
+          "duplicates": 0,
+          "expected": 8,
+          "false_negative": 0,
+          "false_positive": 2,
+          "true_positive": 8
+        },
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "ScatterNdAdd"
+            ],
+            "operators": [
+              "ScatterNdAdd"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "action_counts": {
+          "accepted_alternative_label": 1,
+          "facts_supported": 8,
+          "independent_defects_claimed": 10,
+          "label_correct": 8,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 2,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 10,
+          "primary_label_hit": 7,
+          "strict": 8,
+          "strict_independent_defects": 8,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0,
+          "unsupported_attribution": 1
+        },
+        "expected_verdict_counts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C2": 2,
+          "outside:outside_catalog": 4,
+          "parent:MECH-v0.3:address": 1,
+          "parent:MECH-v0.3:parameter": 1
+        },
+        "failure_counts": {
+          "insufficient_evidence": 2,
+          "material_understanding": 2
+        },
+        "accepted_alternatives": [
+          {
+            "actual": "outside:outside_catalog",
+            "count": 1,
+            "primary_expected": "parent:MECH-v0.3:parameter",
+            "strict": 1
+          }
+        ]
+      },
+      {
+        "run_sha256": "c2f0952c70bf48d8fa974f8e0b650ff309b74b2a5a0da45612d6ffaaea4ea028",
+        "case_strict": 7,
+        "complete_cases_with_role_order": 6,
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 10,
+            "eligible": 10
+          },
+          "actual_supported_statuses": {
+            "insufficient": 2,
+            "leaf": 2,
+            "outside:outside_catalog": 4,
+            "parent": 2
+          },
+          "families": {
+            "correct": 8,
+            "eligible": 8
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "leaf": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "outside:outside_catalog": {
+            "correct": 4,
+            "eligible": 4
+          },
+          "parent": {
+            "correct": 2,
+            "eligible": 2
+          }
+        },
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 9,
+            "eligible": 9
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 7,
+            "eligible": 10
+          },
+          "structure": {
+            "correct": 9,
+            "eligible": 10
+          },
+          "unresolved_predicted_actions": 2,
+          "unresolved_predicted_roles": 1
+        },
+        "independent_reconciliation": {
+          "claimed": 8,
+          "duplicates": 0,
+          "expected": 8,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 8
+        },
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "ScatterNdAdd"
+            ],
+            "operators": [
+              "ScatterNdAdd"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "action_counts": {
+          "facts_supported": 10,
+          "independent_defects_claimed": 8,
+          "label_correct": 10,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 10,
+          "primary_label_hit": 10,
+          "strict": 9,
+          "strict_independent_defects": 8,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "expected_verdict_counts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C2": 2,
+          "outside:outside_catalog": 4,
+          "parent:MECH-v0.3:address": 1,
+          "parent:MECH-v0.3:parameter": 1
+        },
+        "failure_counts": {
+          "insufficient_evidence": 1
+        },
+        "accepted_alternatives": []
+      }
+    ],
+    "stability": {
+      "same_allowed_labels": {
+        "correct": 6,
+        "eligible": 8
+      },
+      "same_and_both_incorrect_cases": 0,
+      "same_cases": 5,
+      "same_causal_structure": {
+        "correct": 7,
+        "eligible": 8
+      },
+      "same_decisive_facts": {
+        "correct": 6,
+        "eligible": 8
+      },
+      "same_labels": {
+        "correct": 5,
+        "eligible": 8
+      },
+      "same_labels_facts_and_action": {
+        "correct": 5,
+        "eligible": 8
+      },
+      "same_specific_action": {
+        "correct": 7,
+        "eligible": 8
+      }
+    }
+  },
+  "same_material_development_retest": {
+    "scope": "exercise_only",
+    "event_families": 8,
+    "source_views": 36,
+    "sha256": {
+      "a": "e8c2b3422af710c1f046e0a5cba91a14b40a37a69945caa994d3ac3c708ff279",
+      "b": "7e9c8a4fd6d708bf8686556ba365a35943324d91f836a73d33e284d14e5b8034",
+      "freeze": "dbd5e592094bcaf6a74303902cdf09be0c0c3b78987d0f83a0ec43541a4f8d48",
+      "seal": "1eeb3766e0ef8530dcf50115b3d01e35cd608c1c03f23a8a7fca65f2df74630a",
+      "lock": "fd1ac2d4a13f55ce75bf7f5b3fdc9459ac7f31c59671939a26ae8dfaccfbfe23",
+      "post_lock_review": "57ec6d622061b01418a1e0aae5ddb7d172ed9b422417445aac8a4ce927337b0f",
+      "score": "19c96d00670028f111a216655f76c573f5d39d525700664d8af033af7790ff81"
+    },
+    "runs": [
+      {
+        "run_sha256": "1b0056883c805650c2bbc2413a9bf968d52f2784ce3b4f67a0de316bfb3e8447",
+        "case_strict": 3,
+        "complete_cases_with_role_order": 3,
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 5,
+            "eligible": 10
+          },
+          "actual_supported_statuses": {
+            "insufficient": 2,
+            "outside:outside_catalog": 3
+          },
+          "families": {
+            "correct": 5,
+            "eligible": 8
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "leaf": {
+            "correct": 0,
+            "eligible": 2
+          },
+          "outside:outside_catalog": {
+            "correct": 2,
+            "eligible": 4
+          },
+          "parent": {
+            "correct": 1,
+            "eligible": 2
+          }
+        },
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 9,
+            "eligible": 9
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 4,
+            "eligible": 10
+          },
+          "structure": {
+            "correct": 5,
+            "eligible": 10
+          },
+          "unresolved_predicted_actions": 5,
+          "unresolved_predicted_roles": 7
+        },
+        "independent_reconciliation": {
+          "claimed": 3,
+          "duplicates": 0,
+          "expected": 8,
+          "false_negative": 5,
+          "false_positive": 0,
+          "true_positive": 3
+        },
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "ScatterNdAdd"
+            ],
+            "operators": [],
+            "status": "needs_review",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "action_counts": {
+          "accepted_alternative_label": 1,
+          "facts_supported": 10,
+          "independent_defects_claimed": 3,
+          "label_correct": 5,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 5,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "over_abstention": 3,
+          "predicted_actions": 10,
+          "primary_label_hit": 4,
+          "strict": 3,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "expected_verdict_counts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C2": 2,
+          "outside:outside_catalog": 4,
+          "parent:MECH-v0.3:address": 1,
+          "parent:MECH-v0.3:parameter": 1
+        },
+        "failure_counts": {
+          "class_definition": 2,
+          "insufficient_evidence": 4,
+          "material_understanding": 1,
+          "sample_or_answer": 4
+        },
+        "accepted_alternatives": [
+          {
+            "actual": "outside:outside_catalog",
+            "count": 1,
+            "primary_expected": "parent:MECH-v0.3:parameter",
+            "strict": 0
+          }
+        ]
+      },
+      {
+        "run_sha256": "22dc02241e6cf7411ab350361abd99d4ae8711313c982f82c3d6e4f11904aa1a",
+        "case_strict": 4,
+        "complete_cases_with_role_order": 4,
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 6,
+            "eligible": 10
+          },
+          "actual_supported_statuses": {
+            "insufficient": 2,
+            "outside:outside_catalog": 4
+          },
+          "families": {
+            "correct": 6,
+            "eligible": 8
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "leaf": {
+            "correct": 0,
+            "eligible": 2
+          },
+          "outside:outside_catalog": {
+            "correct": 3,
+            "eligible": 4
+          },
+          "parent": {
+            "correct": 1,
+            "eligible": 2
+          }
+        },
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 9,
+            "eligible": 9
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 5,
+            "eligible": 10
+          },
+          "structure": {
+            "correct": 6,
+            "eligible": 10
+          },
+          "unresolved_predicted_actions": 4,
+          "unresolved_predicted_roles": 6
+        },
+        "independent_reconciliation": {
+          "claimed": 4,
+          "duplicates": 0,
+          "expected": 8,
+          "false_negative": 4,
+          "false_positive": 0,
+          "true_positive": 4
+        },
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "ScatterNdAdd"
+            ],
+            "operators": [],
+            "status": "needs_review",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "action_counts": {
+          "accepted_alternative_label": 1,
+          "facts_supported": 10,
+          "independent_defects_claimed": 4,
+          "label_correct": 6,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 4,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "over_abstention": 2,
+          "predicted_actions": 10,
+          "primary_label_hit": 5,
+          "strict": 4,
+          "strict_independent_defects": 2,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "expected_verdict_counts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C2": 2,
+          "outside:outside_catalog": 4,
+          "parent:MECH-v0.3:address": 1,
+          "parent:MECH-v0.3:parameter": 1
+        },
+        "failure_counts": {
+          "class_definition": 2,
+          "insufficient_evidence": 4,
+          "sample_or_answer": 4
+        },
+        "accepted_alternatives": [
+          {
+            "actual": "outside:outside_catalog",
+            "count": 1,
+            "primary_expected": "parent:MECH-v0.3:parameter",
+            "strict": 0
+          }
+        ]
+      }
+    ],
+    "stability": {
+      "same_allowed_labels": {
+        "correct": 5,
+        "eligible": 8
+      },
+      "same_and_both_incorrect_cases": 4,
+      "same_cases": 7,
+      "same_causal_structure": {
+        "correct": 7,
+        "eligible": 8
+      },
+      "same_decisive_facts": {
+        "correct": 7,
+        "eligible": 8
+      },
+      "same_labels": {
+        "correct": 7,
+        "eligible": 8
+      },
+      "same_labels_facts_and_action": {
+        "correct": 7,
+        "eligible": 8
+      },
+      "same_specific_action": {
+        "correct": 8,
+        "eligible": 8
+      }
+    }
+  },
+  "same_material_retest_acceptance": "FAIL",
+  "targeted_development_batch": {
+    "scope": "exercise_only",
+    "event_families": 12,
+    "source_views": 24,
+    "sha256": {
+      "a": "4ab64afd2fc91c2c73ef7d9dfb1dfae2b1c4e556464fc8da781df0541e72dde9",
+      "b": "7f437ceec2f9e5472bbb9172bae5b4ab18cf464bd5f23b5be77ca9f56e519e0e",
+      "freeze": "7f3c985c12c2bfe0ea40e76ab7ae82c1cbca7b41fd94bbe78a189957e1f28dec",
+      "seal": "bade99e93bfacdb2a708856dea063af80ffe4bcb50c7e6fe11964d0d4389fc20",
+      "lock": "c9105fe1df1e96e1ef2cf10d7115cfbb0d66e3e252a8efe9c65bdcee23982e7d",
+      "post_lock_review": "348cdc1d40dc16674fe35cbb215c88c44e00448bd6def47c94b9c70a7b0e5365",
+      "score": "6f2d03dfd56e9922c52af8ba1f591115067082e0ebbdc34d26147ade7b6cc2c7"
+    },
+    "runs": [
+      {
+        "run_sha256": "824b9f806d81e370dc35495a7924979fb1b8004a5bce763b2a53b87126fcb230",
+        "case_strict": 2,
+        "complete_cases_with_role_order": 1,
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 13,
+            "eligible": 15
+          },
+          "actual_supported_statuses": {
+            "insufficient": 2,
+            "leaf": 9,
+            "outside:outside_catalog": 2
+          },
+          "families": {
+            "correct": 2,
+            "eligible": 12
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 2,
+            "eligible": 3
+          },
+          "leaf": {
+            "correct": 9,
+            "eligible": 10
+          },
+          "outside:outside_catalog": {
+            "correct": 2,
+            "eligible": 2
+          }
+        },
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 11,
+            "eligible": 12
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 3,
+            "eligible": 3
+          }
+        },
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 10,
+            "eligible": 15
+          },
+          "structure": {
+            "correct": 13,
+            "eligible": 15
+          },
+          "unresolved_predicted_actions": 7,
+          "unresolved_predicted_roles": 8
+        },
+        "independent_reconciliation": {
+          "claimed": 16,
+          "duplicates": 0,
+          "expected": 12,
+          "false_negative": 2,
+          "false_positive": 6,
+          "true_positive": 10
+        },
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "TTNN block-float matmul"
+            ],
+            "operators": [
+              "TTNN block-float matmul"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "DeepSpeed ZeRO gradient all-reduce"
+            ],
+            "operators": [
+              "DeepSpeed ZeRO gradient all-reduce"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "SGLang Qwen3-MoE mori aggregate"
+            ],
+            "operators": [],
+            "status": "needs_review",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "MPS tiled bmm"
+            ],
+            "operators": [
+              "MPS tiled bmm"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "llama.cpp Metal sparse flash attention"
+            ],
+            "operators": [
+              "llama.cpp Metal sparse flash attention"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "FlashAttention / CPU attention"
+            ],
+            "operators": [
+              "FlashAttention / CPU attention"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "FlashInfer recurrent_kda"
+            ],
+            "operators": [
+              "FlashInfer recurrent_kda"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          }
+        },
+        "action_counts": {
+          "facts_supported": 24,
+          "independent_defects_claimed": 16,
+          "label_correct": 13,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 2,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "partial_parent": 1,
+          "predicted_actions": 25,
+          "primary_label_hit": 13,
+          "strict": 11,
+          "strict_independent_defects": 9,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 10,
+          "unresolved_implementation_actions": 0,
+          "unsupported_attribution": 1
+        },
+        "expected_verdict_counts": {
+          "insufficient": 3,
+          "leaf:MECH-v0.3:C1": 2,
+          "leaf:MECH-v0.3:C2": 1,
+          "leaf:MECH-v0.3:C3": 1,
+          "leaf:MECH-v0.3:L1": 1,
+          "leaf:MECH-v0.3:L2": 2,
+          "leaf:MECH-v0.3:P1": 2,
+          "leaf:MECH-v0.3:P2": 1,
+          "outside:outside_catalog": 2
+        },
+        "failure_counts": {
+          "class_definition": 5,
+          "insufficient_evidence": 2,
+          "sample_or_answer": 8
+        },
+        "accepted_alternatives": []
+      },
+      {
+        "run_sha256": "b795cf04f6e11c135faf700889abed96efb268833b7520ad0c00bce179786428",
+        "case_strict": 4,
+        "complete_cases_with_role_order": 4,
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 13,
+            "eligible": 15
+          },
+          "actual_supported_statuses": {
+            "insufficient": 3,
+            "leaf": 8,
+            "outside:outside_catalog": 2
+          },
+          "families": {
+            "correct": 4,
+            "eligible": 12
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "leaf": {
+            "correct": 8,
+            "eligible": 10
+          },
+          "outside:outside_catalog": {
+            "correct": 2,
+            "eligible": 2
+          }
+        },
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 11,
+            "eligible": 12
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 3,
+            "eligible": 3
+          }
+        },
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 11,
+            "eligible": 15
+          },
+          "structure": {
+            "correct": 13,
+            "eligible": 15
+          },
+          "unresolved_predicted_actions": 8,
+          "unresolved_predicted_roles": 8
+        },
+        "independent_reconciliation": {
+          "claimed": 13,
+          "duplicates": 0,
+          "expected": 12,
+          "false_negative": 2,
+          "false_positive": 3,
+          "true_positive": 10
+        },
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "TTNN block-float matmul"
+            ],
+            "operators": [
+              "TTNN block-float matmul"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "DeepSpeed ZeRO gradient all-reduce"
+            ],
+            "operators": [
+              "DeepSpeed ZeRO gradient all-reduce"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "SGLang Qwen3-MoE mori aggregate"
+            ],
+            "operators": [],
+            "status": "needs_review",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "MPS tiled bmm"
+            ],
+            "operators": [
+              "MPS tiled bmm"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "llama.cpp Metal sparse flash attention"
+            ],
+            "operators": [
+              "llama.cpp Metal sparse flash attention"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "FlashAttention / CPU attention"
+            ],
+            "operators": [
+              "FlashAttention / CPU attention"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "FlashInfer recurrent_kda"
+            ],
+            "operators": [
+              "FlashInfer recurrent_kda"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          }
+        },
+        "action_counts": {
+          "facts_supported": 22,
+          "independent_defects_claimed": 13,
+          "label_correct": 13,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 1,
+          "missing_actions": 1,
+          "missing_independent_actions": 1,
+          "partial_parent": 1,
+          "predicted_actions": 22,
+          "primary_label_hit": 13,
+          "strict": 12,
+          "strict_independent_defects": 9,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 8,
+          "unresolved_implementation_actions": 0
+        },
+        "expected_verdict_counts": {
+          "insufficient": 3,
+          "leaf:MECH-v0.3:C1": 2,
+          "leaf:MECH-v0.3:C2": 1,
+          "leaf:MECH-v0.3:C3": 1,
+          "leaf:MECH-v0.3:L1": 1,
+          "leaf:MECH-v0.3:L2": 2,
+          "leaf:MECH-v0.3:P1": 2,
+          "leaf:MECH-v0.3:P2": 1,
+          "outside:outside_catalog": 2
+        },
+        "failure_counts": {
+          "material_understanding": 4,
+          "sample_or_answer": 8
+        },
+        "accepted_alternatives": []
+      }
+    ],
+    "stability": {
+      "same_allowed_labels": {
+        "correct": 1,
+        "eligible": 12
+      },
+      "same_and_both_incorrect_cases": 6,
+      "same_cases": 7,
+      "same_causal_structure": {
+        "correct": 3,
+        "eligible": 12
+      },
+      "same_decisive_facts": {
+        "correct": 10,
+        "eligible": 12
+      },
+      "same_labels": {
+        "correct": 7,
+        "eligible": 12
+      },
+      "same_labels_facts_and_action": {
+        "correct": 7,
+        "eligible": 12
+      },
+      "same_specific_action": {
+        "correct": 9,
+        "eligible": 12
+      }
+    }
+  },
+  "separately_locked_c3_batch": {
+    "scope": "exercise_only",
+    "event_families": 1,
+    "source_views": 4,
+    "sha256": {
+      "a": "be78a2291ed115542bb8e5becb6cf5fa83267411dd0d8a695fccf2154d50b42a",
+      "b": "f79c97f2c490026b0285a2528acf427e604870037fad28fb072fed32476cfc84",
+      "freeze": "28dbe79b9d0981ac3f7f56ad149020da381d954e9078ab7d9c1327ab2a882286",
+      "seal": "5b8baadd1c4fe0ee7c7239ced242ada8b59a9a6fcb8bc549df948448cb1bbb65",
+      "lock": "2932ee5123a4a1b0f1ee6a81f88d76c8de7fcccde52d8507370bfa26a893da9d",
+      "post_lock_review": "17fe76b69fe8c4831fd2f93026f5aa3da17240441221e41114c658986600b7db",
+      "score": "5198e0f80f9fc7d542727a77a5a3a12e2c48a8d8dbbdc4fbf8066d788987bfac"
+    },
+    "runs": [
+      {
+        "run_sha256": "c9e372030f5b9d4573c335cd533e608b4da3dd3dee261b1868a79f22a5c3215e",
+        "case_strict": 1,
+        "complete_cases_with_role_order": 1,
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "actual_supported_statuses": {
+            "leaf": 1
+          },
+          "families": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "status_metrics": {
+          "leaf": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 0,
+            "eligible": 0
+          }
+        },
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "structure": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unresolved_predicted_actions": 0,
+          "unresolved_predicted_roles": 0
+        },
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "ExecuTorch Vulkan linear_dq8ca_q4gsw"
+            ],
+            "operators": [
+              "ExecuTorch Vulkan linear_dq8ca_q4gsw"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "action_counts": {
+          "facts_supported": 1,
+          "independent_defects_claimed": 1,
+          "label_correct": 1,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 1,
+          "primary_label_hit": 1,
+          "strict": 1,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "expected_verdict_counts": {
+          "leaf:MECH-v0.3:C3": 1
+        },
+        "failure_counts": {},
+        "accepted_alternatives": []
+      },
+      {
+        "run_sha256": "28f58e5a71c0e9827c9424600eceb2fbd67a01956b84026b062607bebad540c0",
+        "case_strict": 1,
+        "complete_cases_with_role_order": 1,
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "actual_supported_statuses": {
+            "leaf": 1
+          },
+          "families": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "status_metrics": {
+          "leaf": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 0,
+            "eligible": 0
+          }
+        },
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "structure": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unresolved_predicted_actions": 0,
+          "unresolved_predicted_roles": 0
+        },
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "ExecuTorch Vulkan linear_dq8ca_q4gsw"
+            ],
+            "operators": [
+              "ExecuTorch Vulkan linear_dq8ca_q4gsw"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "action_counts": {
+          "facts_supported": 1,
+          "independent_defects_claimed": 1,
+          "label_correct": 1,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 1,
+          "primary_label_hit": 1,
+          "strict": 1,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "expected_verdict_counts": {
+          "leaf:MECH-v0.3:C3": 1
+        },
+        "failure_counts": {},
+        "accepted_alternatives": []
+      }
+    ],
+    "stability": {
+      "same_allowed_labels": {
+        "correct": 1,
+        "eligible": 1
+      },
+      "same_and_both_incorrect_cases": 0,
+      "same_cases": 1,
+      "same_causal_structure": {
+        "correct": 1,
+        "eligible": 1
+      },
+      "same_decisive_facts": {
+        "correct": 1,
+        "eligible": 1
+      },
+      "same_labels": {
+        "correct": 1,
+        "eligible": 1
+      },
+      "same_labels_facts_and_action": {
+        "correct": 1,
+        "eligible": 1
+      },
+      "same_specific_action": {
+        "correct": 1,
+        "eligible": 1
+      }
+    }
+  },
+  "leaf_acceptance": {
+    "P1": {
+      "eligible_families": 1,
+      "supported_families_per_round": [
+        1,
+        1
+      ],
+      "status": "PASS"
+    },
+    "P2": {
+      "eligible_families": 1,
+      "supported_families_per_round": [
+        1,
+        1
+      ],
+      "status": "PASS"
+    },
+    "L1": {
+      "eligible_families": 1,
+      "supported_families_per_round": [
+        1,
+        1
+      ],
+      "status": "PASS"
+    },
+    "L2": {
+      "eligible_families": 1,
+      "supported_families_per_round": [
+        1,
+        1
+      ],
+      "status": "PASS"
+    },
+    "C1": {
+      "eligible_families": 1,
+      "supported_families_per_round": [
+        1,
+        1
+      ],
+      "status": "PASS"
+    },
+    "C2": {
+      "eligible_families": 1,
+      "supported_families_per_round": [
+        1,
+        1
+      ],
+      "status": "PASS"
+    },
+    "C3": {
+      "eligible_families": 2,
+      "supported_families_per_round": [
+        1,
+        1
+      ],
+      "status": "PASS"
+    }
+  },
+  "old_scatter_supplement": {
+    "experiment": "supplemented_static_material",
+    "version": "55b1f9f97bba2e1a479469ae7e1961896a3123ab",
+    "review_scope": "Old PR-head parent source; all four old-side hunks match. This result is separate from the two frozen same-A readings.",
+    "matched_old_diff_hunks": 4,
+    "original_a_sha256": "e8c2b3422af710c1f046e0a5cba91a14b40a37a69945caa994d3ac3c708ff279",
+    "supplement_source_sha256": "02d24eb1e1f1b574aed32ce9a1c0e0b960ac2d8528975f98038c8b6c1b38644b",
+    "same_a_retest_unchanged": true,
+    "family_count": 1,
+    "c2_actions": 2,
+    "independent_actions": 2
+  },
+  "exposure_keys": {
+    "before": 113,
+    "after_initial_coverage": 153,
+    "after_c3_supplement": 156
+  }
+}
