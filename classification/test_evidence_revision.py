@@ -66,6 +66,22 @@ class EvidenceRevision(unittest.TestCase):
         self.assertEqual(without_cause["action_resolution"], "supported")
         self.assertFalse(without_cause["count_as_independent"])
 
+    def test_scoped_neutralization_rules_out_participation_parent(self):
+        facts = [self.fact(key) for key in (
+            "applicable_contract", "actual_contribution", "participation_violation",
+            "implementation_action", "causal_role",
+        )]
+        self.assertEqual(self.result(*facts)["parent_id"], "item_participation")
+
+        possible = self.fact("contribution_neutralized", "hypothesis")
+        self.assertEqual(self.result(*facts, possible)["parent_id"], "item_participation")
+
+        confirmed = self.fact("contribution_neutralized")
+        output = self.result(*facts, confirmed)
+        self.assertEqual((output["status"], output["role"]), ("insufficient", "unknown"))
+        self.assertFalse(output["count_as_independent"])
+        self.assertIn(confirmed, output["facts"])
+
     def test_patch_effect_and_suspicion_are_preserved_without_defect(self):
         hypothesis = self.fact("established_other_defect", "hypothesis", [self.anchor("report", "context")])
         changed = self.fact("added_barrier", "observation", [self.anchor("patch", "context", 2)])
@@ -87,6 +103,24 @@ class EvidenceRevision(unittest.TestCase):
         output = self.result(self.fact("established_other_defect"), self.fact("causal_role"))
         self.assertEqual((output["status"], output["outside_reason"]), ("outside", "outside_catalog"))
         self.assertTrue(output["count_as_independent"])
+
+    def test_diff_hunk_header_is_not_a_contract_or_old_behavior(self):
+        self.case["sources"][2]["text"] = "@@ -1,2 +1,3 @@\n Old path enters compute."
+        for use, other in (("behavior", self.anchor("contract", "requirement")),
+                           ("requirement", self.anchor("old", "behavior"))):
+            with self.subTest(use=use):
+                header = self.anchor("patch", use)
+                header["end_line"] = 2
+                output = self.result(self.fact("established_other_defect", anchors=[header, other]))
+                self.assertEqual(output["status"], "insufficient")
+                self.assertIn("missing_derivation_basis", [issue["code"] for issue in output["issues"]])
+
+    def test_quoted_old_behavior_survives_a_span_with_new_context(self):
+        contract = self.anchor("contract", "requirement")
+        old_quote = self.anchor("patch", "behavior", 3)
+        old_quote["start_line"] = 2
+        output = self.result(self.fact("established_other_defect", anchors=[contract, old_quote]))
+        self.assertEqual((output["status"], output.get("outside_reason")), ("outside", "outside_catalog"))
 
     def test_explicit_report_has_reported_scope_without_keyword_heuristic(self):
         self.action["scope"] = {"version": "v1", "path": "issue", "claim": "reported"}

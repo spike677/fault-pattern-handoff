@@ -3,6 +3,7 @@
 import argparse
 from collections import defaultdict
 import hashlib
+from itertools import groupby
 import json
 from pathlib import Path
 import sys
@@ -251,10 +252,14 @@ def evidence_basis(fact, sources, scope, decisive):
             return True
         if source["kind"] != "diff":
             return False
+
+        def is_old_line(line):
+            return line.startswith((" ", "-")) and not line.startswith("---")
+
         lines = source["text"].splitlines()[anchor["start_line"] - 1:anchor["end_line"]]
-        return any(line.startswith((" ", "-")) and line[1:].strip() for line in lines) and not any(
-            line.startswith(("+", "---")) for line in lines
-        )
+        quote = "\n".join(anchor["quote"].splitlines())
+        old_spans = groupby(lines, key=is_old_line)
+        return any(quote in "\n".join(span) for old_side, span in old_spans if old_side)
 
     requirement = any(
         source["kind"] != "runtime" and (source["kind"] != "diff" or old_behavior(anchor, source))
@@ -372,13 +377,15 @@ def verdict(action, sources, catalog, revised=False):
         decisive_keys.update(item["required_fact"] for item in combinations)
         decisive_keys.update(key for card in modes.values() for key in card.get("excluded_by", ()))
     facts, true, false, scoped, issues, conflicts = collect_facts(action, sources, scope, decisive_keys)
-    insufficient_participation = (
-        revised and "participation_violation" in true
-        and not ({"actual_contribution"} <= true and {"actual_contribution"} <= scoped)
+    participation_claimed = revised and "participation_violation" in true
+    insufficient_participation = participation_claimed and "actual_contribution" not in (true & scoped)
+    participation_excluded = participation_claimed and bool(
+        set(modes["C1"].get("excluded_by", ())) & true & scoped
     )
-    if insufficient_participation:
+    if insufficient_participation or participation_excluded:
         true.remove("participation_violation")
-        issues.append({"fact": "participation_violation", "code": "actual_participation_unproven"})
+        code = "participation_contradicted" if participation_excluded else "actual_participation_unproven"
+        issues.append({"fact": "participation_violation", "code": code})
     disputed = set(conflicts)
     comparisons = mode_comparisons(modes, operations, true, false, scoped, disputed)
     supported = [mode for mode, check in comparisons.items()

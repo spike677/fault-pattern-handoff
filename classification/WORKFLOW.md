@@ -83,8 +83,8 @@ python -B -X utf8 classification/evaluate.py score freeze.json A.json seal.json 
 
 `probe`、读件、分类和 `capture` 分别从两个隔离执行上下文运行。两个 `facts` 文件各是该次独立提取的事实包列表，两个 `results` 文件各可用 `classify.py --batch A.json facts-1.json` 生成，第二次使用其独立事实包。保留实际执行日志。上下文记录执行者、上下文、外部见证人、隔离方式、实际冻结配置、哨兵哈希，以及独立保管、只读已批准输入、新上下文、无先前结果四项见证。整理者与见证人确认被拒绝或未挂载的哨兵确实部署在待验证边界。
 
-`lock` 锁定两轮输出。判卷者随后持锁定记录及 B 运行 `score`。按错误操作、对象、源码位置与作用域对齐预测与参考动作。每项 `facts_supported` 核查裁决所需的证据，另以 `action_correct` 和 `action_rationale` 核查具体操作或应保留的未知。逐动作登记失败成因及遗漏，重复断言可标 `double_count: true`。判卷记录的 `stability` 数组逐案包含 `case_id`、`same_decisive_facts`、`same_specific_action` 和 `rationale`。严格标签和允许集合内的一致性分别计算，因果结构按对齐的动作身份与边比较。答案修订使用 `score --revision` 并绑定原 B 哈希，保留原结果。
+`lock` 锁定两轮输出。判卷者随后持锁定记录及 B 运行 `score`。按错误操作、对象、源码位置与作用域对齐预测与参考动作。每项 `facts_supported` 核查机理裁决的证据，`action_correct` 和 `action_rationale` 核查具体操作或应保留的未知，`role_supported` 核查因果角色和所声明因果边的依据，并在 `rationale` 解释。旧格式缺少 `role_supported` 时，`unknown` 按与参考角色是否匹配计分，已声明的角色沿用 `facts_supported`。逐动作登记失败成因及遗漏，重复断言可标 `double_count: true`。判卷记录的 `stability` 数组逐案包含 `case_id`、`same_decisive_facts`、`same_specific_action` 和 `rationale`。严格标签和允许集合内的一致性分别计算，因果结构按对齐的动作身份与边比较。答案修订使用 `score --revision` 并绑定原 B 哈希，保留原结果。
 
-评分文件分别给出有据机理与状态、按家族的叶级覆盖、具体动作及未知动作误确认、因果关系和完整案件。独立动作按身份对账 `claimed`、`expected`、`true_positive`、`false_positive`、`false_negative` 和 `duplicates`，可回溯到动作或遗漏项。两个执行上下文都记录冻结的 `execution` 配置。共享权限边界中的开发试测使用 `seal --kind exercise`。
+评分文件分别给出有据机理与状态、按家族的叶级覆盖、具体动作及未知动作误确认、因果关系和完整案件。独立动作按有据的根动作身份对账 `claimed`、`expected`、`true_positive`、`false_positive`、`false_negative` 和 `duplicates`，可回溯到动作或遗漏项。有据的主次顺序仅影响角色和相应的完整案件分数。两个执行上下文都记录冻结的 `execution` 配置。共享权限边界中的开发试测使用 `seal --kind exercise`。
 
 与命令对应的最小 JSON 构造和失败回归见 `test_evaluate.py`。实际原件不得与其答案存放在同一可读目录或分发包。

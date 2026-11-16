@@ -509,6 +509,8 @@ def grade_case(result, answer, review, standard):
                 "Judge each action against A and record failure attribution or an empty list")
         actual = verdict(action, standard)
         resolution, independent = prediction_resolution(action)
+        role_supported = entry.get("role_supported", action["role"] == "unknown" or entry["facts_supported"])
+        require(type(role_supported) is bool, "Role evidence support must be boolean")
         expected_id = mapping[key]
         action_correct = entry.get("action_correct")
         require(type(action_correct) is bool and nonempty(entry.get("action_rationale"))
@@ -524,9 +526,9 @@ def grade_case(result, answer, review, standard):
             gold = expected[expected_id]
             expected_role = gold["role"]
             edge_matches = upstream == gold.get("upstream_id")
-            role_exact = action["role"] == expected_role and edge_matches
+            role_exact = role_supported and action["role"] == expected_role and edge_matches
             unordered_match = unordered and expected_role in ROOT_ROLES and action["role"] in ROOT_ROLES
-            relationship = role_exact or (unordered_match and edge_matches)
+            relationship = role_exact or (role_supported and unordered_match and edge_matches)
         label_correct = actual in allowed
         primary_hit = actual == primary
         alternative_hit = label_correct and not primary_hit
@@ -535,7 +537,7 @@ def grade_case(result, answer, review, standard):
         require(strict or entry["failure_causes"], "Judge must attribute each failed prediction")
         counted = "not_claimed"
         if independent:
-            if expected_id in independent_expected and action_correct and relationship and not double_count:
+            if expected_id in independent_expected and action_correct and role_supported and not double_count:
                 counted = "true_positive"
                 roots_confirmed.add(expected_id)
             else:
@@ -547,7 +549,8 @@ def grade_case(result, answer, review, standard):
             "primary_expected": label_text(primary, standard) if primary is not None else None,
             "expected": [label_text(item, standard) for item in allowed], "label_correct": label_correct,
             "primary_label_hit": primary_hit, "accepted_alternative_label": alternative_hit,
-            "facts_supported": entry["facts_supported"], "relationship_correct": relationship,
+            "facts_supported": entry["facts_supported"], "role_supported": role_supported,
+            "relationship_correct": relationship,
             "mechanism_correct": mechanism_correct, "role_exact": role_exact,
             "action_correct": action_correct, "action_rationale": entry["action_rationale"],
             "independent_count_outcome": counted, "upstream_expected_id": upstream,
@@ -558,7 +561,7 @@ def grade_case(result, answer, review, standard):
             "unresolved_implementation_action": resolution == "unresolved" and positive_verdict(action),
             "partial_parent": not label_correct and any(partial_parent(actual, want, standard) for want in allowed),
             "over_abstention": actual[0] == "insufficient" and bool(allowed) and not label_correct,
-            "unsupported_attribution": (actual[0] in ("leaf", "parent") and not entry["facts_supported"]),
+            "unsupported_attribution": positive_verdict(action) and not entry["facts_supported"],
         })
     missing = set(expected) - set(matched)
     omissions = review.get("omissions", {})

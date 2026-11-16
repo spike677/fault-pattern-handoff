@@ -54,6 +54,8 @@ class ReliabilityScoringTest(unittest.TestCase):
         ordered = self.grade(actions, answer, decisions)
         unordered = self.grade(actions[::-1], answer, decisions, unordered=True)
         self.assertFalse(ordered["strict"])
+        self.assertEqual(ordered["missed_independent_action_ids"], [])
+        self.assertTrue(all(row["independent_count_outcome"] == "true_positive" for row in ordered["actions"]))
         self.assertTrue(unordered["strict"])
         self.assertTrue(all(row["relationship_correct"] for row in unordered["actions"]))
         self.assertFalse(any(row["role_exact"] for row in unordered["actions"]))
@@ -103,6 +105,34 @@ class ReliabilityScoringTest(unittest.TestCase):
         self.assertTrue(grade["actions"][0]["mechanism_correct"])
         self.assertEqual(grade["actions"][0]["independent_count_outcome"], "false_positive")
         self.assertEqual(grade["missed_independent_action_ids"], ["target"])
+
+    def test_unsupported_outside_defect_cannot_count_as_confirmed_root(self):
+        label = {"status": "outside", "outside_reason": "outside_catalog"}
+        answer = [gold("target", "primary", "Wrong queue read", label)]
+        review = decision("hit", "target", cause="insufficient_evidence")
+        review["facts_supported"] = False
+        grade = self.grade([predicted("hit", "primary", label)], answer, [review])
+        row = grade["actions"][0]
+        self.assertTrue(row["action_correct"])
+        self.assertTrue(row["unsupported_attribution"])
+        self.assertFalse(row["relationship_correct"])
+        self.assertEqual(row["independent_count_outcome"], "false_positive")
+        self.assertEqual(grade["missed_independent_action_ids"], ["target"])
+
+    def test_role_evidence_is_scored_separately_from_mechanism_evidence(self):
+        answer = [gold("target", "primary", "Wrong local branch")]
+        review = decision("hit", "target", cause="insufficient_evidence")
+        no_role_evidence = {**review, "role_supported": False}
+        row = self.grade([predicted("hit", "primary")], answer, [no_role_evidence])["actions"][0]
+        self.assertTrue(row["mechanism_correct"])
+        self.assertFalse(row["role_exact"])
+        self.assertEqual(row["independent_count_outcome"], "false_positive")
+
+        no_mechanism_evidence = {**review, "facts_supported": False, "role_supported": True}
+        row = self.grade([predicted("hit", "primary", PARENT)], answer, [no_mechanism_evidence])["actions"][0]
+        self.assertFalse(row["mechanism_correct"])
+        self.assertTrue(row["role_exact"])
+        self.assertEqual(row["independent_count_outcome"], "true_positive")
 
     def test_accepted_alternative_stability_preserves_primary_denominator(self):
         answer = [{**gold("target", "primary", "Missing write"),
