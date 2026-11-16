@@ -122,6 +122,15 @@ class EvidenceRevision(unittest.TestCase):
         output = self.result(self.fact("established_other_defect", anchors=[contract, old_quote]))
         self.assertEqual((output["status"], output.get("outside_reason")), ("outside", "outside_catalog"))
 
+    def test_mixed_diff_span_does_not_admit_quote_from_new_side(self):
+        contract = self.anchor("contract", "requirement")
+        new_quote = self.anchor("patch", "behavior", 2)
+        new_quote.update(start_line=1, end_line=3)
+        output = self.result(self.fact("established_other_defect", anchors=[contract, new_quote]))
+        self.assertEqual((output["status"], output["role"]), ("insufficient", "unknown"))
+        self.assertFalse(output["count_as_independent"])
+        self.assertIn("missing_derivation_basis", [issue["code"] for issue in output["issues"]])
+
     def test_explicit_report_has_reported_scope_without_keyword_heuristic(self):
         self.action["scope"] = {"version": "v1", "path": "issue", "claim": "reported"}
         anchors = [self.anchor("report", "confirmation")]
