@@ -1,0 +1,126 @@
+{
+  "verification_runtime": {
+    "python": "3.12.14",
+    "platform": "win32",
+    "execution": "offline"
+  },
+  "fresh_controlled_clone": {
+    "scope": "fresh_offline_controlled_clone",
+    "classification_tests": 125,
+    "diagnosis_tests": 17,
+    "historical_classification_tests": 56,
+    "numeric_candidate_classification_tests": 95,
+    "formal_admission_baseline_tests": 114,
+    "unchanged_history_artifacts": 269,
+    "historical_score_replay": "passed",
+    "numeric_fixed_and_sealed_replay": "passed",
+    "reader_stage_replays": 4,
+    "formal_admission_fixed_facts_rounds": [
+      {
+        "passed": 5,
+        "total": 5
+      },
+      {
+        "passed": 5,
+        "total": 5
+      }
+    ],
+    "injection_cpu_prototypes": 9,
+    "work_original_capture_and_score_replay": "byte_exact",
+    "work_exercise_rounds": [
+      {
+        "strict_families": {
+          "passed": 2,
+          "total": 13
+        },
+        "supported_leaf": {
+          "correct": 0,
+          "eligible": 6
+        },
+        "known_concrete_actions": {
+          "correct": 10,
+          "eligible": 11
+        }
+      },
+      {
+        "strict_families": {
+          "passed": 2,
+          "total": 13
+        },
+        "supported_leaf": {
+          "correct": 0,
+          "eligible": 6
+        },
+        "known_concrete_actions": {
+          "correct": 9,
+          "eligible": 11
+        }
+      }
+    ],
+    "post_lock_program_replay": {
+      "scope": "program_only_no_rescoring",
+      "rounds": [
+        {
+          "round": 1,
+          "old_version_mismatches": 49,
+          "new_version_mismatches": 40
+        },
+        {
+          "round": 2,
+          "old_version_mismatches": 47,
+          "new_version_mismatches": 36
+        }
+      ],
+      "report_plus_code": "C3",
+      "without_confirmation": "insufficient",
+      "incomplete_dispatch": "insufficient"
+    }
+  },
+  "work_handoff": {
+    "scope": "exercise_only",
+    "families": 13,
+    "source_views": 37,
+    "preseal_reference_revisions": 8,
+    "formal_f": "BLOCKED",
+    "filesystem_access_probes": {
+      "readable": 3,
+      "total": 3
+    },
+    "external_witness": false
+  },
+  "locked_supplements": {
+    "scoring_rubric_audit_known_actions_both_rounds": {
+      "correct": 10,
+      "eligible": 11
+    },
+    "fixed_copy_path_static_reclassification": {
+      "leaf": "L1",
+      "independent": 1
+    },
+    "fixed_pool_paths_against_locked_predictions": {
+      "mechanism_each_round": {
+        "correct": 2,
+        "eligible": 2
+      },
+      "independent_each_round": {
+        "correct": 1,
+        "eligible": 2
+      },
+      "strict_each_round": {
+        "correct": 0,
+        "eligible": 1
+      }
+    }
+  },
+  "prospective_development_lineage_keys": 413,
+  "new_catalog_admissions_this_handoff": 0,
+  "device_injection": "NOT_TESTED",
+  "logs_and_reference_material": "controlled_archive",
+  "public_smoke": {
+    "classification_and_locked_flow_tests": 14,
+    "diagnosis_tests": 17,
+    "release_file_hashes": 46,
+    "formal_catalog_cards": 9,
+    "injection_cpu_prototypes": 9
+  }
+}

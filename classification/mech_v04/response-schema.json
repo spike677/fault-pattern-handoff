@@ -1,0 +1,273 @@
+{
+  "type": "object",
+  "properties": {
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "case_id": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/action"
+            },
+            "minItems": 1
+          },
+          "readback": {
+            "type": "string"
+          },
+          "supporting_operations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/supporting_operation"
+            }
+          }
+        },
+        "required": [
+          "case_id",
+          "operator",
+          "roles",
+          "actions",
+          "readback",
+          "supporting_operations"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "cases"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "action": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "primary",
+            "independent",
+            "downstream",
+            "unknown"
+          ]
+        },
+        "upstream_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope": {
+          "type": "object",
+          "properties": {
+            "source_id": {
+              "type": "string"
+            },
+            "claim": {
+              "enum": [
+                "static",
+                "reported",
+                "runtime"
+              ]
+            },
+            "build": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "call_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "source_id",
+            "claim",
+            "build",
+            "call_id"
+          ],
+          "additionalProperties": false
+        },
+        "facts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fact"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "role",
+        "upstream_id",
+        "scope",
+        "facts"
+      ],
+      "additionalProperties": false
+    },
+    "fact": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "enum": [
+            "actual_contribution",
+            "actual_source",
+            "address_units_consistent",
+            "address_violation",
+            "applicable_contract",
+            "causal_role",
+            "compliant",
+            "contiguous_formula",
+            "contract_inapplicable",
+            "contribution_neutralized",
+            "contribution_preserved",
+            "contribution_violation",
+            "correct_contiguous_conversion",
+            "correct_source",
+            "distinct_members_for_replacement",
+            "equivalent_source",
+            "established_other_defect",
+            "excess_multiplicity",
+            "expected_multiplicity",
+            "expected_multiplicity_met",
+            "expected_source",
+            "expected_units",
+            "implementation_action",
+            "ineligible_member",
+            "member_eligible",
+            "multiplicity_violation",
+            "no_correct_contiguous_conversion",
+            "non_equivalent_source",
+            "omission_permitted",
+            "omitted_contribution",
+            "original_contribution_identity",
+            "parameter_violation",
+            "participation_violation",
+            "repeat_semantics_permitted",
+            "required_member",
+            "special_state",
+            "state_treatment_allowed",
+            "storage_width",
+            "supported_view",
+            "view_formula_correct",
+            "view_unsupported",
+            "wrong_conversion",
+            "wrong_state_treatment",
+            "centered_variance_survives_at_same_precision",
+            "contribution_set_preserved",
+            "distorted_value_consumed",
+            "loop_carried_narrow_state",
+            "pre_reduction_square_overflow",
+            "variance_consumed_by_normalization",
+            "variance_from_raw_moment_difference",
+            "wider_state_preserves_same_updates"
+          ]
+        },
+        "value": {
+          "type": "boolean"
+        },
+        "claim_state": {
+          "enum": [
+            "observation",
+            "hypothesis",
+            "confirmed_report",
+            "derived",
+            "verified_runtime"
+          ]
+        },
+        "explanation": {
+          "type": "string"
+        },
+        "anchors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/anchor"
+          }
+        }
+      },
+      "required": [
+        "key",
+        "value",
+        "claim_state",
+        "explanation",
+        "anchors"
+      ],
+      "additionalProperties": false
+    },
+    "anchor": {
+      "type": "object",
+      "properties": {
+        "source_id": {
+          "type": "string"
+        },
+        "start_line": {
+          "type": "integer"
+        },
+        "end_line": {
+          "type": "integer"
+        },
+        "use": {
+          "enum": [
+            "context",
+            "confirmation",
+            "requirement",
+            "behavior",
+            "runtime"
+          ]
+        }
+      },
+      "required": [
+        "source_id",
+        "start_line",
+        "end_line",
+        "use"
+      ],
+      "additionalProperties": false
+    },
+    "supporting_operation": {
+      "type": "object",
+      "properties": {
+        "action_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "anchors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/anchor"
+          }
+        }
+      },
+      "required": [
+        "action_id",
+        "description",
+        "anchors"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

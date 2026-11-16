@@ -1,0 +1,26 @@
+{
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "tools": [],
+  "disabled_features": [
+    "shell_tool",
+    "unified_exec",
+    "shell_snapshot",
+    "skill_search",
+    "multi_agent",
+    "plugins",
+    "remote_plugin",
+    "enable_mcp_apps"
+  ],
+  "web_search": "disabled",
+  "session": "ephemeral",
+  "cli": "0.167.0-alpha.4.1",
+  "batch_kind": "MECH-v0.4 independent evaluation",
+  "prompt": "Pinned three-part MECH-v0.4 source-only prompt with evidence-scope guidance",
+  "prompt_artifacts": {
+    "proposals/numeric_validation_v042/PROMPT.md": "46e22c26f035b296df1a98c412b27c4e63f8189082f42f05c2df9efaef6f2f60",
+    "proposals/numeric_validation_v042/SCOPE_BINDING.md": "f68b03da8c865e37dbaf5795802d7caeba576b813444c4fdaf69f0bfbdf5be0b",
+    "mech_v04/PROMPT.md": "74f40926ef4fe3a43f94eb7a13a99f41e753e5566b798c4c53b64373011c2927"
+  },
+  "response_schema_sha256": "d0b2da469ec9f967dfe8cee015eba42ec3a50ed3b4c349c0974d0157594a0aa2"
+}

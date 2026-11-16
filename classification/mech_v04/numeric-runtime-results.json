@@ -1,0 +1,85 @@
+{
+  "environment": {
+    "jax": "0.6.2",
+    "jaxlib": "0.6.2",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "python": "3.12.14",
+    "platform": "Windows",
+    "machine": "AMD64",
+    "backend": "cpu",
+    "jax_source_git_blob": "21ea7ac615a920f33fb243bd86eeb8fffc8b4897",
+    "x64_enabled": false
+  },
+  "jax_37281_seed": {
+    "seed": 121235,
+    "shape": [
+      15,
+      14,
+      13,
+      4
+    ],
+    "eager_vs_outer_jit": {
+      "release": 0.0030235648155212402,
+      "centered": 2.372264862060547e-05
+    }
+  },
+  "jax_compiled_witness": {
+    "input": [
+      [
+        8191.0,
+        8193.0,
+        8191.0,
+        8193.0
+      ]
+    ],
+    "raw": [
+      [
+        -316.227783203125,
+        316.227783203125,
+        -316.227783203125,
+        316.227783203125
+      ]
+    ],
+    "centered": [
+      [
+        -0.9999949932098389,
+        0.9999949932098389,
+        -0.9999949932098389,
+        0.9999949932098389
+      ]
+    ],
+    "reference": [
+      [
+        -0.9999950000374997,
+        0.9999950000374997,
+        -0.9999950000374997,
+        0.9999950000374997
+      ]
+    ],
+    "raw_error": 315.2277882030875,
+    "centered_error": 6.827660881114639e-09
+  },
+  "jax_compiled_control": {
+    "input": [
+      [
+        1.0,
+        2.0,
+        4.0
+      ]
+    ],
+    "max_absolute_error": 1.9752309099452248e-07,
+    "review_bound": 0.0001
+  },
+  "terminal_cast_control": {
+    "wide": 2050.0,
+    "terminal_fp16": 2050.0,
+    "step_fp16": 2048.0
+  },
+  "qdrant_report_1400_control": {
+    "modeled_first_overflow_update": 47,
+    "updates_per_lane": 48,
+    "float32_full_dot": 2150400,
+    "scope": "model of the fixed loop; this host did not execute NEON"
+  }
+}

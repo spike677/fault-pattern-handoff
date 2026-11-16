@@ -1,0 +1,25 @@
+{
+  "source_catalog": "MECH-v0.3",
+  "target_catalog": "MECH-v0.4",
+  "inherited_modes": {
+    "P1": "P1",
+    "P2": "P2",
+    "L1": "L1",
+    "L2": "L2",
+    "C1": "C1",
+    "C2": "C2",
+    "C3": "C3"
+  },
+  "admitted_modes": ["NUM-01", "NUM-02"],
+  "facts_protocol": "classification_facts/0.3.1",
+  "scoring_protocol": "classification_only/0.3.1",
+  "formal_decision_version": "0.4.1",
+  "admission_replays": {
+    "E06": "NUM-01",
+    "N501": "NUM-01",
+    "G05": "NUM-02",
+    "N502": "NUM-02",
+    "N503": "outside_catalog",
+    "V406": "outside_catalog"
+  }
+}
