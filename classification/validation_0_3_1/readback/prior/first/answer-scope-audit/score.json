@@ -1,0 +1,2347 @@
+{
+  "answer_revision": {
+    "original_sha256": "378adb296a9f41ad29d972576a60fdc165b9f715df6cde725a501a118ca93312",
+    "reason": "G02 的 s1 仅为报错者在 Issue 中的跳过预期，来源版本为 Issue 更新时间。s2 至 s5 的固定父提交支持正确读取 indices、默认有符号排序与前缀 mapping，但没有同版本 API 对 -1 的约定。冻结规则按版本拒绝 s1 作为静态 requirement。若把报告的预期明确作为外加假设，局部 P2 推导成立。本次事后复核采用冻结材料自身能证明的范围。",
+    "reviewer_id": "post-lock-codex-scope-audit"
+  },
+  "answer_sha256": "10937153f01924633aea161e89857562bf0c3a7fa9ce8aaedf7815f08b2fbdf2",
+  "catalog_version": "0.3",
+  "lock_sha256": "9be48a86a17f0cfd5609616c1605dc57c24d444de95031a1f8363920a191ca11",
+  "mechanism_namespace": "MECH-v0.3",
+  "note": "Hashes preserve bytes. Human attestation, not the evaluator, establishes isolation and exposure.",
+  "protocol": "classification_only/0.3.1",
+  "review_sha256": "32d7b58f3a33669a5551e91cb677e1ae12950bcad1e34b78885aff52990f93a5",
+  "runs": [
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "两轮均把宿主按组派发与旧核前三轴界限合在同一覆盖错误。第二片缺统计输入和写回是同一工作缺失的后果，主角色有据。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C2",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "g01-a1",
+              "primary_expected": "leaf:MECH-v0.3:C2",
+              "primary_label_hit": true,
+              "rationale": "固定 09566845 的 s3 L4386–L4409、L4412–L4436 按第 4 轴逐片取值并写对应输出。s1 L4606–L4615、L4629–L4638 只传前三轴并以 ngrp×1×1 派发。s2 L249–L264、L289–L292、L313–L317 共用 [0,3) 的范围，第二片 [3,6) 入均值、方差和写回的次数均为零，所示路径没有等价补算。支持限于静态 C2。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G01",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C2",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/ggml-org/llama.cpp!31852",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "ggml GROUP_NORM",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C2",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "G02 的 s1 仅为报错者在 Issue 中的跳过预期，来源版本为 Issue 更新时间。s2 至 s5 的固定父提交支持正确读取 indices、默认有符号排序与前缀 mapping，但没有同版本 API 对 -1 的约定。冻结规则按版本拒绝 s1 作为静态 requirement。若把报告的预期明确作为外加假设，局部 P2 推导成立。本次事后复核采用冻结材料自身能证明的范围。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "g02-a1",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "G02 的 s1 仅为报错者在 Issue 中的跳过预期，来源版本为 Issue 更新时间。s2 至 s5 的固定父提交支持正确读取 indices、默认有符号排序与前缀 mapping，但没有同版本 API 对 -1 的约定。冻结规则按版本拒绝 s1 作为静态 requirement。若把报告的预期明确作为外加假设，局部 P2 推导成立。本次事后复核采用冻结材料自身能证明的范围。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G02",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/nvidia/transformerengine#2908",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "moe_permute",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "错误发生在 derive 把 4 字节转换为 8 字节元素数时，余量随字段存入而丢失。unsafe_convert 按字段约定展开，是错误偏移的消费者。一次主动作，限于条件 L2。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:L2",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:L2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "g03-a1",
+              "primary_expected": "leaf:MECH-v0.3:L2",
+              "primary_label_hit": true,
+              "rationale": "固定 aa6edcfa 的 s1 L1–L4、L16–L19 规定 offset 以元素计并原样保存。s2 L93–L97 共享缓冲并用 (1×4)÷8 存入 0。s3 L300–L301 按目标元素宽取指针，得到 base；约定的原起点是 base+4。作用域指定直接 derive→unsafe_convert。不同版本 s4 L55–L61 仅为对照。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G03",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:L2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:L2",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/juliagpu/amdgpu.jl!898",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "ROCArray reinterpret",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:L2",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "布尔掩码步长解包是单次可定位的 P1 主动作。修正槽序即消除其下游地址偏差，不增加独立地址动作。不同提交的 s4 L9957–L9969 只提供形状和掩码条件。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:P1",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:P1"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "g04-a1",
+              "primary_expected": "leaf:MECH-v0.3:P1",
+              "primary_label_hit": true,
+              "rationale": "固定 5c5e523c 的 s2 L488–L508、L528–L538 与指定 H=1、Q=8、KV=512 的布尔 fixture 对应单趟路径。s1 L230–L238 的参数 10 按 kv/q/head 打包 (1,512,0)，s3 L37–L39 用不同的 x/y/z 角色取值，s3 L66–L68、L84–L89 将其直接用于 mask[0]。 首轮的 q=0、k=8 对照为期望 8 与旧逻辑偏移 4096，后者超出 8×512 逻辑掩码。未主张该位置实际返回的布尔值。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G04",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:P1"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:P1",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/pytorch/pytorch!182285",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "scaled_dot_product_attention",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:P1",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "具体主动作是普通非 RMS 小核用 FP32 大数矩差估计小方差，再消费该结果。两个矩是同一元素的合法角色，非活动线程已中性化。结论为已进入该旧小核条件下的目录外数值缺陷。",
+              "action_resolution": "supported",
+              "actual": "outside:outside_catalog",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "outside:outside_catalog"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "g05-a1",
+              "primary_expected": "outside:outside_catalog",
+              "primary_label_hit": true,
+              "rationale": "旧 a926b837 的 s1 L124–L156、L163–L170 为有效元素形成 FP32 一阶和二阶矩，非活动线程贡献 (0,0)。s3 L161–L180 将原始矩差喂给 rsqrtf，再乘到有效输出。中心化方差和两原始矩的差实数等价，有限精度下可失真。s4 L81–L103 的中心化参照与 s5 L17 的作者 NaN 报告各为对照。 首轮 [1000,1000,1000,1000+1/32] 的中心方差为 0.00018310546875，两独立舍入的 FP32 矩项均为 1000015.625，差为零。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G05",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "outside:outside_catalog"
+              ],
+              "concrete_action_expected": true,
+              "primary": "outside:outside_catalog",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/microsoft/onnxruntime#33198",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "SkipLayerNormalization",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "outside:outside_catalog",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "在固定 52604e1d 的所评路径，s1 L325–330 构造 1008，s6 L97–116 与 s7 L1017、L1043–1054 暂存此 CPU 镜像，s2 L363–374 恢复 ScheduleBatch 后仍传递该 ForwardBatch。s4 L397–401、L418–423 再加 8 并交给本地 replay。预测找到了唯一使实参从 1008 变 1016 的主动作。",
+              "action_resolution": "supported",
+              "actual": "parent:MECH-v0.3:parameter",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C3"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [
+                "class_definition"
+              ],
+              "independent_count_outcome": "true_positive",
+              "label_correct": false,
+              "mechanism_correct": false,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "g06-a1",
+              "primary_expected": "leaf:MECH-v0.3:C3",
+              "primary_label_hit": false,
+              "rationale": "P 上位描述了有据的实参失配，但同一第一请求、同一次 verify block 已在 1008 中，且按相同角色再次贡献到 replay 长度。固定材料可证它应计一次、实际两次，支持 C3。读件叙述已还原此数据流，结构事实只提交 parameter_violation 等 P 事实，未提交 C3 的同源和重数事实。裁决器依据收到的事实输出，叶级失败归于分类边界识别。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": false,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G06",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C3"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C3",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/sgl-project/sglang!47216",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "FIA graph replay KV-length",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "parent:MECH-v0.3:parameter",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": false,
+          "strict_with_role_order": false
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "固定 34eb3e29 的 s2 L499–511、L519–538 接纳并保留转置 Q 且走 one-pass，s3 L190–198、L212、L219–228 把 batch 与 head 编入 grid.x。s4 L54–61、L73–75 把扁平索引用于实际 Q 加载。预测的主动作是以 H×head stride 代替正确 batch stride。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:L1",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:L1"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "g07-a1",
+              "primary_expected": "leaf:MECH-v0.3:L1",
+              "primary_label_hit": true,
+              "rationale": "复现的 BHSD 视图 stride 为 (576,64,192,1)。指定 (b=1,h=0,s=0) 的元素首偏移实际为 3×64=192，应为 576，同单位且未连续化 Q。支持 L1，结论限固定源码的该 Q 读。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G07",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:L1"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:L1",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/pytorch/pytorch#181133",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "scaled_dot_product_attention",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:L1",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "固定 ad3a7450 的 s4 L72–80 把 h_start 由 −1 钳到 0，h_end 仍为 2，L86–95 实际将 x[0]=1 与初值 0 比较，L100–105 消费结果。此单一钳位改变采样相位，是所评首窗的主动作。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C1",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C1"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "g08-a1",
+              "primary_expected": "leaf:MECH-v0.3:C1",
+              "primary_label_hit": true,
+              "rationale": "s2 L210–225 表明首窗原采样格点为 −1、1，过滤后只剩索引 1。索引 0 不能参与该窗，但实际获胜并影响值和索引，符合 C1。s1 L5 的报告只是结果对照。B 的作用域只评索引 0，未额外判整窗的另一失效关系。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G08",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C1"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C1",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/microsoft/onnxruntime!29638",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "MaxPool",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C1",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "没有可对齐的具体内部动作。s2 L67–75 仅定位分区触发并排除所测 Where_2 或 mask 改动为唯一故障，s3 L25–39、L53–65 是配置、调用与分数个数检查。保留 unknown 及不计独立动作正确。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "g09-a1",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "s1 L3–19 确认同模型同输入的成功返回和有限分数超差。外部对照无法判 ORT 分区、lowering 或 Core ML 编译链何处出错，缺正向机理与责任证据，证据不足有据。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G09",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/microsoft/onnxruntime#32569",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "CoreML MLProgram partition",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "首读 s1 L44–61 只将 int8 y_zero_point 绑定到第 8 个输入，零基 7。s3 L262–264 只标作者运行环境，不能定位读取、后续覆盖或消失处。保留 unknown 正确，已知症状不计独立缺陷。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "g10-a1",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "s2 L197、L204–205 的相对零点全零基线逐元素差异都是 0/147，相对参考各为 1、112、115 个差异。明确的是相同 CPU 评估的响应症状；没有故障实现的必要消费者证据，证据不足正确。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G10",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/quadric-io/onnxruntime#58",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "QLinearConvTranspose",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "保留动作及角色未知正确。s3 L178–185、s4 L239–245、s5 L627–664 提供按形状与 Select 追溯的方向，但原件未绑定 09901464 到作者运行，也没有指出在哪一步从四列变成两列。",
+              "action_resolution": "unresolved",
+              "actual": "leaf:MECH-v0.3:C2",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "g11-a1",
+              "primary_expected": "leaf:MECH-v0.3:C2",
+              "primary_label_hit": true,
+              "rationale": "s2 L71–79 固定保留原行 0、2，仅替换筛选后矩阵主对角。s1 L53–58 的 4×4 CPU XLA 对照显示同一目标位置所需的 3、4、11、12 均缺失，合同需各一次，最终各零次。作者报告的输出级 C2 成立，结论不归责于具体内部动作。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": true,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G11",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "concrete_action_expected": false,
+              "primary": "leaf:MECH-v0.3:C2",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/tensorflow/tensorflow#129054",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "MatrixSetDiag",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C2",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 11,
+          "independent_defects_claimed": 7,
+          "label_correct": 10,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 1,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 11,
+          "primary_label_hit": 10,
+          "strict": 10,
+          "strict_independent_defects": 6,
+          "strict_unresolved_implementation_actions": 1,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 1
+        },
+        "case_strict": 10,
+        "cases": 11,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 11,
+            "eligible": 11
+          },
+          "structure": {
+            "correct": 11,
+            "eligible": 11
+          },
+          "unresolved_predicted_actions": 4,
+          "unresolved_predicted_roles": 4
+        },
+        "complete_cases_with_role_order": 10,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 7,
+            "eligible": 7
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 4,
+            "eligible": 4
+          }
+        },
+        "confusion": [
+          {
+            "actual": "insufficient",
+            "count": 3,
+            "expected": "insufficient"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:C1",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C1"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:C2",
+            "count": 2,
+            "expected": "leaf:MECH-v0.3:C2"
+          },
+          {
+            "actual": "parent:MECH-v0.3:parameter",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C3"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:L1",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:L1"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:L2",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:L2"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:P1",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:P1"
+          },
+          {
+            "actual": "outside:outside_catalog",
+            "count": 1,
+            "expected": "outside:outside_catalog"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "MaxPool"
+            ],
+            "operators": [
+              "MaxPool"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": true,
+            "eligible_families": 2,
+            "eligible_operators": [
+              "MatrixSetDiag",
+              "ggml GROUP_NORM"
+            ],
+            "operators": [
+              "MatrixSetDiag",
+              "ggml GROUP_NORM"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 2
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "FIA graph replay KV-length"
+            ],
+            "operators": [],
+            "status": "needs_review",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "scaled_dot_product_attention"
+            ],
+            "operators": [
+              "scaled_dot_product_attention"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "ROCArray reinterpret"
+            ],
+            "operators": [
+              "ROCArray reinterpret"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "scaled_dot_product_attention"
+            ],
+            "operators": [
+              "scaled_dot_product_attention"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "expected_verdict_counts": {
+          "insufficient": 3,
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:C2": 2,
+          "leaf:MECH-v0.3:C3": 1,
+          "leaf:MECH-v0.3:L1": 1,
+          "leaf:MECH-v0.3:L2": 1,
+          "leaf:MECH-v0.3:P1": 1,
+          "outside:outside_catalog": 1
+        },
+        "failure_counts": {
+          "class_definition": 1
+        },
+        "families": 11,
+        "families_strict": 10,
+        "independent_reconciliation": {
+          "claimed": 7,
+          "duplicates": 0,
+          "expected": 7,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 7
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 10,
+            "eligible": 11
+          },
+          "actual_supported_statuses": {
+            "insufficient": 3,
+            "leaf": 6,
+            "outside:outside_catalog": 1
+          },
+          "families": {
+            "correct": 10,
+            "eligible": 11
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "leaf": {
+            "correct": 6,
+            "eligible": 7
+          },
+          "outside:outside_catalog": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {
+          "insufficient": 3,
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:C2": 2,
+          "leaf:MECH-v0.3:L1": 1,
+          "leaf:MECH-v0.3:L2": 1,
+          "leaf:MECH-v0.3:P1": 1,
+          "outside:outside_catalog": 1
+        },
+        "strict_verdicts": {
+          "insufficient": 3,
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:C2": 2,
+          "leaf:MECH-v0.3:L1": 1,
+          "leaf:MECH-v0.3:L2": 1,
+          "leaf:MECH-v0.3:P1": 1,
+          "outside:outside_catalog": 1,
+          "parent:MECH-v0.3:parameter": 0
+        }
+      },
+      "run_sha256": "fa3f14c0c7162bf230cc0a1e5723ab01181db7b95d6609b46d0c69bda0e1bc7a"
+    },
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "两轮均把宿主按组派发与旧核前三轴界限合在同一覆盖错误。第二片缺统计输入和写回是同一工作缺失的后果，主角色有据。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C2",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G01-a",
+              "primary_expected": "leaf:MECH-v0.3:C2",
+              "primary_label_hit": true,
+              "rationale": "固定 09566845 的 s3 L4386–L4409、L4412–L4436 按第 4 轴逐片取值并写对应输出。s1 L4606–L4615、L4629–L4638 只传前三轴并以 ngrp×1×1 派发。s2 L249–L264、L289–L292、L313–L317 共用 [0,3) 的范围，第二片 [3,6) 入均值、方差和写回的次数均为零，所示路径没有等价补算。支持限于静态 C2。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G01",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C2",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/ggml-org/llama.cpp!31852",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "ggml GROUP_NORM",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C2",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "G02 的 s1 仅为报错者在 Issue 中的跳过预期，来源版本为 Issue 更新时间。s2 至 s5 的固定父提交支持正确读取 indices、默认有符号排序与前缀 mapping，但没有同版本 API 对 -1 的约定。冻结规则按版本拒绝 s1 作为静态 requirement。若把报告的预期明确作为外加假设，局部 P2 推导成立。本次事后复核采用冻结材料自身能证明的范围。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "G02-a",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "G02 的 s1 仅为报错者在 Issue 中的跳过预期，来源版本为 Issue 更新时间。s2 至 s5 的固定父提交支持正确读取 indices、默认有符号排序与前缀 mapping，但没有同版本 API 对 -1 的约定。冻结规则按版本拒绝 s1 作为静态 requirement。若把报告的预期明确作为外加假设，局部 P2 推导成立。本次事后复核采用冻结材料自身能证明的范围。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G02",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/nvidia/transformerengine#2908",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "moe_permute",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "错误发生在 derive 把 4 字节转换为 8 字节元素数时，余量随字段存入而丢失。unsafe_convert 按字段约定展开，是错误偏移的消费者。一次主动作，限于条件 L2。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:L2",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:L2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G03-a",
+              "primary_expected": "leaf:MECH-v0.3:L2",
+              "primary_label_hit": true,
+              "rationale": "固定 aa6edcfa 的 s1 L1–L4、L16–L19 规定 offset 以元素计并原样保存。s2 L93–L97 共享缓冲并用 (1×4)÷8 存入 0。s3 L300–L301 按目标元素宽取指针，得到 base；约定的原起点是 base+4。作用域指定直接 derive→unsafe_convert。不同版本 s4 L55–L61 仅为对照。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G03",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:L2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:L2",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/juliagpu/amdgpu.jl!898",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "ROCArray reinterpret",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:L2",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "布尔掩码步长解包是单次可定位的 P1 主动作。修正槽序即消除其下游地址偏差，不增加独立地址动作。不同提交的 s4 L9957–L9969 只提供形状和掩码条件。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:P1",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:P1"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G04-a",
+              "primary_expected": "leaf:MECH-v0.3:P1",
+              "primary_label_hit": true,
+              "rationale": "固定 5c5e523c 的 s2 L488–L508、L528–L538 与指定 H=1、Q=8、KV=512 的布尔 fixture 对应单趟路径。s1 L230–L238 的参数 10 按 kv/q/head 打包 (1,512,0)，s3 L37–L39 用不同的 x/y/z 角色取值，s3 L66–L68、L84–L89 将其直接用于 mask[0]。 次轮的 q=1、k=0 则在有定义的掩码范围内，从正确偏移 512 的 false 变为旧偏移 0 的 true，支持门控改变的静态推导，未验证最终加权输出。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G04",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:P1"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:P1",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/pytorch/pytorch!182285",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "scaled_dot_product_attention",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:P1",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "具体主动作是普通非 RMS 小核用 FP32 大数矩差估计小方差，再消费该结果。两个矩是同一元素的合法角色，非活动线程已中性化。结论为已进入该旧小核条件下的目录外数值缺陷。",
+              "action_resolution": "supported",
+              "actual": "outside:outside_catalog",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "outside:outside_catalog"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G05-a",
+              "primary_expected": "outside:outside_catalog",
+              "primary_label_hit": true,
+              "rationale": "旧 a926b837 的 s1 L124–L156、L163–L170 为有效元素形成 FP32 一阶和二阶矩，非活动线程贡献 (0,0)。s3 L161–L180 将原始矩差喂给 rsqrtf，再乘到有效输出。中心化方差和两原始矩的差实数等价，有限精度下可失真。s4 L81–L103 的中心化参照与 s5 L17 的作者 NaN 报告各为对照。 次轮 [1024,1024,1024,1024+1/128] 的中心方差为 0.000011444091796875，两独立舍入的 FP32 矩项均为 1048580，差为零。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G05",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "outside:outside_catalog"
+              ],
+              "concrete_action_expected": true,
+              "primary": "outside:outside_catalog",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/microsoft/onnxruntime#33198",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "SkipLayerNormalization",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "outside:outside_catalog",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s5 L540–546 的无 hook 条件与 s1 L325–330 证明合法首次加入 8，s2 L363–374、s7 L1017、L1052–1054 保留 1008 的 ForwardBatch。s3 L116–126、s4 L376–406、L418–423 确定所评 DSPARK 回退再加同一次 8。主动作定位正确，证据止于 1016 的本地实参。",
+              "action_resolution": "supported",
+              "actual": "outside:outside_catalog",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C3"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [
+                "class_definition"
+              ],
+              "independent_count_outcome": "true_positive",
+              "label_correct": false,
+              "mechanism_correct": false,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G06-a",
+              "primary_expected": "leaf:MECH-v0.3:C3",
+              "primary_label_hit": false,
+              "rationale": "与原件一致的 1000→1008→1016 是同一目标长度同源块超额计入的实际链。C3 明确检查逻辑项计入次数，长度构造也可成为计算目标。预测在排除 P1/P2 后止于目录外，没有把已证同一 verify block 编码为 C3，属于分类边界识别错误。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": false,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G06",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C3"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C3",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/sgl-project/sglang!47216",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "FIA graph replay KV-length",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "outside:outside_catalog",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": false,
+          "strict_with_role_order": false
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s2 L519–538 保留 Q 视图而 K/V 连续化，s3 L190–198、L212、L226–227 传扁平 grid 和真实 head/seq stride，s4 L54、L60–61、L73–75 用扁平 head stride 调整指针并真实加载。受评的是原 Q 视图的 batch 项，主动作正确。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:L1",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:L1"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G07-a",
+              "primary_expected": "leaf:MECH-v0.3:L1",
+              "primary_label_hit": true,
+              "rationale": "在该 fixture，B=84、S=H=3、D=64，视图 stride 为 (576,64,192,1)。目标元素用 tid.x=3 得到 192 而非真实 576。实际消费地址证据完整，支持静态 L1，并无单位转换断言。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G07",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:L1"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:L1",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/pytorch/pytorch#181133",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "scaled_dot_product_attention",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:L1",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s4 L72–80 的旧代码钳位改变 dilation 格点，s4 L86–95、L100–105 显示候选计算和结果消费。旧核第 12 行是材料 s4 的节选行，对应原文件第 80 行，主动作无误。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C1",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C1"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G08-a",
+              "primary_expected": "leaf:MECH-v0.3:C1",
+              "primary_label_hit": true,
+              "rationale": "s2 L211–220 的格点是 −1、1，s3 L158–172、L181–202 确认 CUDA 消费给定参数。x[0] 对首窗预期零次，但从 0 起步时实际比较且获胜。支持单一作用域的 C1，合法下一窗与整窗另算。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G08",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C1"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C1",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/microsoft/onnxruntime!29638",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "MaxPool",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C1",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "保留内部动作及角色未知。s2 L69–75 将分区变化和 cast 差异限定为线索，s3 L33–39、L55–65 证明 Go 复现片段只构造多配置调用及返回检查。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "G09-a",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "facts 将 s1 的外部对照记为 observation；锁定 readback 同样核对了 s2 的触发与排除边界及 s3 的复现范围。缺具体旧内部违约与消费者，证据不足正确。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G09",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/microsoft/onnxruntime#32569",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "CoreML MLProgram partition",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "预测识别外部第 8 个输入但不认定内部行为。s1 L44–61 和 s3 L262–264 无旧消费链，观测输出相同不能推出哪一步用了常量。未知角色与动作符合 B。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "G10-a",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "s2 L197、L204–205 支持三个 ORT 输出逐元素相同。预测将内部输出零点语义失效保留为假设，未提升到已证槽位、已证加数遗漏或目录外动作，缺证裁决准确。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G10",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/quadric-io/onnxruntime#58",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "QLinearConvTranspose",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "保留 unknown 和未解决动作。s3–s5 对角广播及输出代码没有提供作者运行所用构建、动态 HLO 形状或截短阶段，不能因可定位 Select 源码就归责。",
+              "action_resolution": "unresolved",
+              "actual": "leaf:MECH-v0.3:C2",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "G11-a",
+              "primary_expected": "leaf:MECH-v0.3:C2",
+              "primary_label_hit": true,
+              "rationale": "作者在 s1 L53–58 给出了 4×4 的实际 2×2 与应得 2×4；报告脚本 s2 L71–79 表明仅删除原行 1、3。原行 0 和 2 后两列四个成员各应到各自目标一次但实际零次。作者报告范围的 C2 成立。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": true,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G11",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "concrete_action_expected": false,
+              "primary": "leaf:MECH-v0.3:C2",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/tensorflow/tensorflow#129054",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "MatrixSetDiag",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C2",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 11,
+          "independent_defects_claimed": 7,
+          "label_correct": 10,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 1,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 11,
+          "primary_label_hit": 10,
+          "strict": 10,
+          "strict_independent_defects": 6,
+          "strict_unresolved_implementation_actions": 1,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 1
+        },
+        "case_strict": 10,
+        "cases": 11,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 11,
+            "eligible": 11
+          },
+          "structure": {
+            "correct": 11,
+            "eligible": 11
+          },
+          "unresolved_predicted_actions": 4,
+          "unresolved_predicted_roles": 4
+        },
+        "complete_cases_with_role_order": 10,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 7,
+            "eligible": 7
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 4,
+            "eligible": 4
+          }
+        },
+        "confusion": [
+          {
+            "actual": "insufficient",
+            "count": 3,
+            "expected": "insufficient"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:C1",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C1"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:C2",
+            "count": 2,
+            "expected": "leaf:MECH-v0.3:C2"
+          },
+          {
+            "actual": "outside:outside_catalog",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C3"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:L1",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:L1"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:L2",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:L2"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:P1",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:P1"
+          },
+          {
+            "actual": "outside:outside_catalog",
+            "count": 1,
+            "expected": "outside:outside_catalog"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "MaxPool"
+            ],
+            "operators": [
+              "MaxPool"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": true,
+            "eligible_families": 2,
+            "eligible_operators": [
+              "MatrixSetDiag",
+              "ggml GROUP_NORM"
+            ],
+            "operators": [
+              "MatrixSetDiag",
+              "ggml GROUP_NORM"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 2
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "FIA graph replay KV-length"
+            ],
+            "operators": [],
+            "status": "needs_review",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "scaled_dot_product_attention"
+            ],
+            "operators": [
+              "scaled_dot_product_attention"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "ROCArray reinterpret"
+            ],
+            "operators": [
+              "ROCArray reinterpret"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "scaled_dot_product_attention"
+            ],
+            "operators": [
+              "scaled_dot_product_attention"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "expected_verdict_counts": {
+          "insufficient": 3,
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:C2": 2,
+          "leaf:MECH-v0.3:C3": 1,
+          "leaf:MECH-v0.3:L1": 1,
+          "leaf:MECH-v0.3:L2": 1,
+          "leaf:MECH-v0.3:P1": 1,
+          "outside:outside_catalog": 1
+        },
+        "failure_counts": {
+          "class_definition": 1
+        },
+        "families": 11,
+        "families_strict": 10,
+        "independent_reconciliation": {
+          "claimed": 7,
+          "duplicates": 0,
+          "expected": 7,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 7
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 10,
+            "eligible": 11
+          },
+          "actual_supported_statuses": {
+            "insufficient": 3,
+            "leaf": 6,
+            "outside:outside_catalog": 1
+          },
+          "families": {
+            "correct": 10,
+            "eligible": 11
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "leaf": {
+            "correct": 6,
+            "eligible": 7
+          },
+          "outside:outside_catalog": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {
+          "insufficient": 3,
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:C2": 2,
+          "leaf:MECH-v0.3:L1": 1,
+          "leaf:MECH-v0.3:L2": 1,
+          "leaf:MECH-v0.3:P1": 1,
+          "outside:outside_catalog": 1
+        },
+        "strict_verdicts": {
+          "insufficient": 3,
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:C2": 2,
+          "leaf:MECH-v0.3:L1": 1,
+          "leaf:MECH-v0.3:L2": 1,
+          "leaf:MECH-v0.3:P1": 1,
+          "outside:outside_catalog": 1
+        }
+      },
+      "run_sha256": "3544d3e3f19849ea2849c48a03fe9808a795d412501bc1cea1e258720b333fc5"
+    }
+  ],
+  "scope": "exercise_only",
+  "stability": {
+    "cases": [
+      {
+        "case_id": "G01",
+        "family_id": "github.com/ggml-org/llama.cpp!31852",
+        "rationale": "两轮都以同版 CPU 第 4 轴义务、宿主单组派发和 Metal 的 [0,3) 界限定位第二片遗漏，按一个可归责的覆盖动作计。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G02",
+        "family_id": "github.com/nvidia/transformerengine#2908",
+        "rationale": "两轮都观察到正确取原始 int key、升序和按排名映射，并保留同一严格同版合同缺口。第二轮把少两条本地路由写入假设，首轮读件说明也推演了相同结果。二者都未确立封存 P2 主动作，稳定性不代表命中。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G03",
+        "family_id": "github.com/juliagpu/amdgpu.jl!898",
+        "rationale": "两轮均用同版的共享缓冲、4 到 8 字节整数转换和同一指针消费者，把错误定位到 derive 处。旧公开 API 调用链均未声称已验证。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G04",
+        "family_id": "github.com/pytorch/pytorch!182285",
+        "rationale": "两轮从同版 host 的轴序与旧 kernel 取槽证明相同错配，均追到 bool 门控。所举的越界与界内坐标例不同，决定性事实及动作相同。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G05",
+        "family_id": "github.com/microsoft/onnxruntime#33198",
+        "rationale": "两轮均限定普通小核，把 FP32 双矩相减及其 rsqrtf 消费视作同一数值缺陷。两个有限反例证实同一精度失效，均与报告运行分记。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G06",
+        "family_id": "github.com/sgl-project/sglang!47216",
+        "rationale": "两轮均复算同一 ForwardBatch 镜像的 1008 以及旧 replay 回退又加同一个 verify block 得 1016，定位同一主动作。结构事实和最终标签没有表达已有的 C3 关系，R1 参数上位与 R2 目录外仍为不同标签。",
+        "same": false,
+        "same_allowed_labels": false,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": false,
+        "same_labels_facts_and_action": false,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G07",
+        "family_id": "github.com/pytorch/pytorch#181133",
+        "rationale": "两轮均用被支持且未连续化的转置 Q、扁平 batch/head 索引及实际 Q 消费复算 192 对 576，主动作相同。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G08",
+        "family_id": "github.com/microsoft/onnxruntime!29638",
+        "rationale": "两轮均证实首窗的合法膨胀格点、旧起点钳位以及 x[0] 获胜写回，具体动作相同。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G09",
+        "family_id": "github.com/microsoft/onnxruntime#32569",
+        "rationale": "两轮均还原固定输入的分数超差、分区仅为触发条件以及不能定位内部消费者。事实结构记录详略不同，readback 均保留相同的待核动作边界。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G10",
+        "family_id": "github.com/quadric-io/onnxruntime#58",
+        "rationale": "两轮均识别模型输入的零基槽位 7 和三组输出逐元素不变，且无旧内部消费链。对参数违约的事实定级不同，对证据不足和未知动作的边界一致。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G11",
+        "family_id": "github.com/tensorflow/tensorflow#129054",
+        "rationale": "两轮均把保留行缺后两列的四个目标项认作报告范围的 C2，并都保留实现动作和因果角色未知。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      }
+    ],
+    "same_allowed_labels": {
+      "correct": 10,
+      "eligible": 11
+    },
+    "same_and_both_incorrect_cases": 0,
+    "same_cases": 10,
+    "same_causal_structure": {
+      "correct": 11,
+      "eligible": 11
+    },
+    "same_decisive_facts": {
+      "correct": 11,
+      "eligible": 11
+    },
+    "same_labels": {
+      "correct": 10,
+      "eligible": 11
+    },
+    "same_labels_facts_and_action": {
+      "correct": 10,
+      "eligible": 11
+    },
+    "same_specific_action": {
+      "correct": 11,
+      "eligible": 11
+    }
+  }
+}

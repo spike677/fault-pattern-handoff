@@ -1,0 +1,30 @@
+{
+  "commit": "21a6af4224b7c62681c241236c6850cac3e72109",
+  "shared_files": {
+    "PROMPT.md": "108e2c3bf9ac0c9c6837ee9c90558697158541c2a4b6a36ae9ad0e018ab4cbd7",
+    "RESPONSE.json": "9118781c0a89e8e1f6eceaff3c795e2e3211d95c049b809276371112fd37dc70",
+    "readback.py": "b2476f9a5600542493d3530f51f9d59678b5e459acc9d26acf47e64f663efb48",
+    "replay.py": "faf6cdd39b5b3ac7cfd702e063a00ab73fb3a698dcd249c99ec1b43c4a27462c"
+  },
+  "batch_files": {
+    "execution.json": "0bd9e5e27eb843360ac1bca4027c266d217a1bf052dc9221d97b6a6e4e41fd26",
+    "exposures.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "fixtures-origin.json": "b99cf991c27c825848d4e2f7cd27c07c63564e76680382380eabfc2ed844bf88",
+    "freeze.json": "a57c182b912a9b50620a25d35cafd72e9e4265018ca959c781a0f52e2e3fce98",
+    "first/A.json": "33cd4ac926661c0977b2343dc221b9108a12881f63e10eb27be48e6f93e606ed",
+    "first/B.json": "e2b53bacd8d26c8db88bcfe31bdee55b1cdff1a62fb76c681460581c151c8130",
+    "first/scopes.json": "319a8616fb723745df2dcba61672a585bef8345e94c90184193db09c7deb27b4",
+    "first/seal.json": "dc3fd2c81ccb1f2041c4fbc0809dd046476a50c121f5aafb4fdf0a468d4d901b",
+    "supplement/A.json": "95fbf573e69a35470b82e27f9a50405532510ae57b314eb3c179680197e696b8",
+    "supplement/B.json": "309068929c211d8f860fb686c8b635109c9733b2f32c8a717eb0224f1eae3624",
+    "supplement/scopes.json": "0e764ba0b02c309a1c2c1c385ee05ae82b1320b778cc96534d8887a5ac6e7956",
+    "supplement/seal.json": "c652d43db08d59488dac3849c4d95b2147801fdc7223787756bf6e09b6792d0e"
+  },
+  "candidate_files": {
+    "classification/WORKFLOW.md": "65b90d219df5e18a40a4e536e0054bc3438f9fc35046dc8cdfac47e5b7e43df9",
+    "classification/catalog.json": "119a52ac3a8830e030161d1f4f5a2b6ffdfcb9ad6abd1230fdd9b103c1c9dac5",
+    "classification/classify.py": "3f8ec2e1c308ab88524d1f9945209758848f30bdc8e85059f0a2f46ea1050359",
+    "classification/evaluate.py": "9184eabad28ae1992024923ae806ef20014a41e5fbed94c71dd2408d5d765023",
+    "classification/validation_0_3_1/PROMPT.md": "2342da12fa65c4e8611b2368f8670326b5dc10a5bce0030fec618d7e6645acdd"
+  }
+}

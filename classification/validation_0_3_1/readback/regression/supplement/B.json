@@ -1,0 +1,50 @@
+{
+  "curator_id": "new-events-curator",
+  "answer_reviewer_id": "reference-review-panel:9635e2f1d3edd77b2585a7cc8ea4420ff902ded3ba8200cde4bbdae4db5b8392",
+  "curation_notes": "同一事件、输入和范围的源码补证草稿。补证结果须单列。",
+  "cases": [
+    {
+      "case_id": "G10",
+      "family_id": "github.com/quadric-io/onnxruntime#58",
+      "operator": "QLinearConvTranspose",
+      "lineage": [
+        "family:github.com/quadric-io/onnxruntime#58",
+        "event:github.com/quadric-io/onnxruntime#58",
+        "patch:github.com/quadric-io/onnxruntime!59",
+        "event:github.com/quadric-io/onnxruntime!59",
+        "patch:github.com/quadric-io/onnxruntime@300404cfe090732940b7ff0b3fa8636cf7b71f61"
+      ],
+      "exposure_review": "按家族、事件、原修订与相关 backport 去重，详见 exposure-review.json。",
+      "source_view_review": "在同一输入、作用域和首读原件之上加入真实修复唯一父提交的 schema、调用及 MLAS 消费者。修复不作为证据，未声称 original report runtime 与该 git SHA 相同。",
+      "actions": [
+        {
+          "id": "expected-1",
+          "role": "primary",
+          "specific_action": "旧 qlinearconvtranspose 将输出重定标的 y_zero_point 参数固定为 (T)0，使来自同签名第 7 槽的合法加数不进入目标 int8 输出。",
+          "allowed": [
+            {
+              "status": "leaf",
+              "pattern_id": "C2"
+            }
+          ],
+          "rationale": "同版本 schema 描述了必传的标量输出零点，旧实现只读三尺度，调用中把该实参固定为0，MLAS 实际缩放、舍入并加上这个实参才写 output。给定 y_zero_point=25/−30，输出定义必需的 addend 未计入，固定0不能保全该非零贡献。报告的 CPU 状态与固定源码推导分别保留。",
+          "near_neighbor": "具体动作是未把所给输入送至加法的实参，用中性0令整项缺失。源码没有从另一个槽位取 y_zero_point，也没有读取后误解某个特殊状态。",
+          "decisive_facts": [
+            "s1、s4 L1415–L1424、s5 L70–L80：标量 y_zero_point 在第 7 槽且该 fixture 非零，输入/权重零点固定为 0。",
+            "s5 L52–L67、s6 L215–L226：旧路径算比例后无 `IN_Y_ZERO_POINT` 读取，调用第 8 个形式参数以 `(T)0` 代替实际值，直接写 Ydata。",
+            "s7 L1090–L1108、s8 L1282–L1314：MLAS 的 x86 分支在缩放、clamp、舍入后把实参转成的 ZeroPointVector 加入写出，传0即无该 addend。"
+          ]
+        }
+      ]
+    }
+  ],
+  "reference_review": {
+    "G10": {
+      "reviewer_id": "local-codex-exec:01a1e2ce-4246-7060-85a6-4580b5d45244",
+      "review_sha256": "5acc98afb2df5a46265f6afb160debe05c4900d5de2ecaf2da3fc223e0449f3e",
+      "rationale": "固定提交 fac7b31168cc88790d7c8a2be07692ade3a354bf 支持一项 derived 的 primary 动作及其 C2 关系。s4 第 6–10 行和 s5 第 28–31 行确定零基槽位 7 是标量输出零点，s1 第 18–27 行确认单组模型将该标量传入。对每个目标 int8 输出，来自槽位 7 的零点是合法且应计入一次的逻辑加数。s6 第 11–22 行显示旧调用将该实参固定为 (T)0，并以 Ydata 为输出。s7 第 6–24 行及 s8 第 5–16、25–36 行显示所展示的 SSE2 消费者用该实参设定裁剪界限，并在舍入后加一次再写出。因此在 y_zero_point=25 或 −30 时，消费者加了一次常量零，所给零点实际计入零次。加数缺失和裁剪界限随之错误均由同一个实参替换造成，独立错误动作计一次。y_zero_point=0 时，该替代值在所评约定下等效。",
+      "note": "将草案的“无读取”限于所示尺度辅助函数和重定标调用。s5 第 4–19 行只展示三种尺度的读取，决定性证据是 s6 第 11–22 行把常量传给最终消费者。P1 缺少读取另一语义槽位、字段或参数的动作，P2 缺少正确取值后误解释特殊状态的动作。加零没有引入无资格的逻辑贡献，也没有重复计入同源项，因此 C1、C3 均不成立。s8 显示该路径执行写出，缺失的是输入加数，访问地址、缺写和正确逻辑项的数值精度应分别判断。s2 第 2、9–10 行仅记录三种输出零点下与零点全零基线的输出差异均为零，以及全零基线已有一处差 1。后者原因未定。s3 第 3–5 行给出报告环境，未将调用或构建绑定到固定提交或 SSE2 分支。以静态推导定级，报告只佐证现象。"
+    }
+  },
+  "seal_nonce": "7431a5425a62e1fe13c952ad310251fe93b4f94c8c341f1246e28d5d07be7b21"
+}

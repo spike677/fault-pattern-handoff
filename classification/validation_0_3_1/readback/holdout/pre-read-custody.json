@@ -1,0 +1,9 @@
+{
+  "recorded_at": "2026-11-16T06:33:31.082560+00:00",
+  "seal_sha256": "7dfb4a16000376fea01eadbfa19c1c36756b75c249713f01d4ce2f369dcfa32e",
+  "answer_sha256": "a6fffaf516ba575d96d851da22cc354a36d46006ae04ffcaa3510bf3e0e91e23",
+  "answer_file_in_checkout": false,
+  "custody": "Sibling workspace directory outside the reader checkout",
+  "payload": "v3 prompt, fixed catalog, raw sources and scopes",
+  "tools": []
+}

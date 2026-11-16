@@ -1,0 +1,22 @@
+{
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "medium",
+  "prompt": "readback/PROMPT.md sha256 108e2c3bf9ac0c9c6837ee9c90558697158541c2a4b6a36ae9ad0e018ab4cbd7",
+  "response_schema_sha256": "9118781c0a89e8e1f6eceaff3c795e2e3211d95c049b809276371112fd37dc70",
+  "driver_sha256": "b2476f9a5600542493d3530f51f9d59678b5e459acc9d26acf47e64f663efb48",
+  "tools": [],
+  "disabled_features": [
+    "shell_tool",
+    "unified_exec",
+    "shell_snapshot",
+    "skill_search",
+    "multi_agent",
+    "plugins",
+    "remote_plugin",
+    "enable_mcp_apps"
+  ],
+  "web_search": "disabled",
+  "session": "ephemeral",
+  "cli": "0.167.0-alpha.4.1",
+  "batch_kind": "already revealed C3, C2, and incomplete-evidence regressions"
+}

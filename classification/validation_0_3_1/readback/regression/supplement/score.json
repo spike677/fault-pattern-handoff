@@ -1,0 +1,536 @@
+{
+  "answer_revision": null,
+  "answer_sha256": "309068929c211d8f860fb686c8b635109c9733b2f32c8a717eb0224f1eae3624",
+  "catalog_version": "0.3",
+  "lock_sha256": "14a6cfbf2a5e8cf7e5ad7c50bfc8913d457456ae5542697be6e785098a364445",
+  "mechanism_namespace": "MECH-v0.3",
+  "note": "Hashes preserve bytes. Human attestation, not the evaluator, establishes isolation and exposure.",
+  "protocol": "classification_only/0.3.1",
+  "review_sha256": "915903537963c82480d933be88463bc12c1da01a38cc184c7d23ab63a52f0c58",
+  "runs": [
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C2",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G10-A1",
+              "primary_expected": "leaf:MECH-v0.3:C2",
+              "primary_label_hit": true,
+              "rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G10",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C2",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/quadric-io/onnxruntime#58",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "QLinearConvTranspose",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C2",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 1,
+          "independent_defects_claimed": 1,
+          "label_correct": 1,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 1,
+          "primary_label_hit": 1,
+          "strict": 1,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "case_strict": 1,
+        "cases": 1,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "structure": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unresolved_predicted_actions": 0,
+          "unresolved_predicted_roles": 0
+        },
+        "complete_cases_with_role_order": 1,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 0,
+            "eligible": 0
+          }
+        },
+        "confusion": [
+          {
+            "actual": "leaf:MECH-v0.3:C2",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C2"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "QLinearConvTranspose"
+            ],
+            "operators": [
+              "QLinearConvTranspose"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "expected_verdict_counts": {
+          "leaf:MECH-v0.3:C2": 1
+        },
+        "failure_counts": {},
+        "families": 1,
+        "families_strict": 1,
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "actual_supported_statuses": {
+            "leaf": 1
+          },
+          "families": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "status_metrics": {
+          "leaf": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {
+          "leaf:MECH-v0.3:C2": 1
+        },
+        "strict_verdicts": {
+          "leaf:MECH-v0.3:C2": 1
+        }
+      },
+      "run_sha256": "a82e10b02d37f72005bc8a0b71aafa405fef7b55810d4dc6d30d5649953dc2a0"
+    },
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C2",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G10-requantize-output",
+              "primary_expected": "leaf:MECH-v0.3:C2",
+              "primary_label_hit": true,
+              "rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G10",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C2",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/quadric-io/onnxruntime#58",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "QLinearConvTranspose",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C2",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 1,
+          "independent_defects_claimed": 1,
+          "label_correct": 1,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 1,
+          "primary_label_hit": 1,
+          "strict": 1,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "case_strict": 1,
+        "cases": 1,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "structure": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unresolved_predicted_actions": 0,
+          "unresolved_predicted_roles": 0
+        },
+        "complete_cases_with_role_order": 1,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 0,
+            "eligible": 0
+          }
+        },
+        "confusion": [
+          {
+            "actual": "leaf:MECH-v0.3:C2",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C2"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "QLinearConvTranspose"
+            ],
+            "operators": [
+              "QLinearConvTranspose"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "expected_verdict_counts": {
+          "leaf:MECH-v0.3:C2": 1
+        },
+        "failure_counts": {},
+        "families": 1,
+        "families_strict": 1,
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "actual_supported_statuses": {
+            "leaf": 1
+          },
+          "families": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "status_metrics": {
+          "leaf": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {
+          "leaf:MECH-v0.3:C2": 1
+        },
+        "strict_verdicts": {
+          "leaf:MECH-v0.3:C2": 1
+        }
+      },
+      "run_sha256": "62bf77a5c9e09bfaf80eb890eca8ed817fd70f236b29097c38b94d3587f84870"
+    }
+  ],
+  "scope": "exercise_only",
+  "stability": {
+    "cases": [
+      {
+        "case_id": "G10",
+        "family_id": "github.com/quadric-io/onnxruntime#58",
+        "rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      }
+    ],
+    "same_allowed_labels": {
+      "correct": 1,
+      "eligible": 1
+    },
+    "same_and_both_incorrect_cases": 0,
+    "same_cases": 1,
+    "same_causal_structure": {
+      "correct": 1,
+      "eligible": 1
+    },
+    "same_decisive_facts": {
+      "correct": 1,
+      "eligible": 1
+    },
+    "same_labels": {
+      "correct": 1,
+      "eligible": 1
+    },
+    "same_labels_facts_and_action": {
+      "correct": 1,
+      "eligible": 1
+    },
+    "same_specific_action": {
+      "correct": 1,
+      "eligible": 1
+    }
+  }
+}

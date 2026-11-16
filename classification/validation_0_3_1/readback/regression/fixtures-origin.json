@@ -1,0 +1,14 @@
+{
+  "previous_archive_sha256": "3e923be2794b0761d2865a737bab5951a4a6cd79e23c95a42c01cd9c0c6805c2",
+  "first_A_sha256": "5ecddc5799f2bbec57c5a589086c62a91417b30ff9eaa4ac72e10dfdd6c0f4ed",
+  "supplement_A_sha256": "95fbf573e69a35470b82e27f9a50405532510ae57b314eb3c179680197e696b8",
+  "transformerengine_scope_audit_sha256": "10937153f01924633aea161e89857562bf0c3a7fa9ce8aaedf7815f08b2fbdf2",
+  "first_cases": [
+    "G02",
+    "G06",
+    "G10"
+  ],
+  "supplement_cases": [
+    "G10"
+  ]
+}

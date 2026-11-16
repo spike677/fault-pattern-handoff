@@ -1,0 +1,128 @@
+{
+  "curator_id": "new-events-curator",
+  "answer_reviewer_id": "reference-review-panel:d6a494f727585f2bdab2adda137bc024ce5bdcaf64aa30afaee9adbd9943148e",
+  "curation_notes": "Opened regression. The G02 contract boundary uses the separate post-lock evidence audit. G06 and G10 retain their sealed answers.",
+  "cases": [
+    {
+      "case_id": "G02",
+      "family_id": "github.com/nvidia/transformerengine#2908",
+      "operator": "moe_permute",
+      "lineage": [
+        "family:github.com/nvidia/transformerengine#2908",
+        "event:github.com/nvidia/transformerengine#2908",
+        "patch:github.com/nvidia/transformerengine!2907",
+        "event:github.com/nvidia/transformerengine!2907",
+        "patch:github.com/nvidia/transformerengine@b7323b1ecf92a94a0b15dab423f15549f19a4d39",
+        "patch:github.com/nvidia/transformerengine!936",
+        "event:github.com/nvidia/transformerengine#1336"
+      ],
+      "exposure_review": "按家族、事件、原修订与相关 backport 去重，详见 exposure-review.json。",
+      "source_view_review": "实际修复提交首父；范围到排序键和划分规则。保留原四案预览不变。 揭盲后口径复核保留同版 API 合同未证。",
+      "actions": [
+        {
+          "id": "expected-1",
+          "role": "unknown",
+          "specific_action": null,
+          "allowed": [
+            {
+              "status": "insufficient"
+            }
+          ],
+          "rationale": "G02 的 s1 仅为报错者在 Issue 中的跳过预期，来源版本为 Issue 更新时间。s2 至 s5 的固定父提交支持正确读取 indices、默认有符号排序与前缀 mapping，但没有同版本 API 对 -1 的约定。冻结规则按版本拒绝 s1 作为静态 requirement。若把报告的预期明确作为外加假设，局部 P2 推导成立。本次事后复核采用冻结材料自身能证明的范围。",
+          "near_neighbor": "P2 要同版本能够证明 -1 是这条路径承诺跳过的特殊状态。",
+          "decisive_facts": [
+            "s1 报告者期望及版本边界",
+            "s2 至 s5 的固定旧排序和 mapping"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "G06",
+      "family_id": "github.com/sgl-project/sglang!47216",
+      "operator": "FIA graph replay KV-length",
+      "lineage": [
+        "family:github.com/sgl-project/sglang!47216",
+        "event:github.com/sgl-project/sglang!47216",
+        "patch:github.com/sgl-project/sglang!47216",
+        "patch:github.com/sgl-project/sglang@9f0beaa43b2e71dbc66ef3900254edd4299e96be"
+      ],
+      "exposure_review": "按家族、事件、原修订与相关 backport 去重，详见 exposure-review.json。",
+      "source_view_review": "修复提交唯一父提交；旧判断、非 compact 生产者、ForwardBatch 镜像传递和本地 replay 消费闭合。范围适用性仍以显式旧分支条件为准。",
+      "actions": [
+        {
+          "id": "expected-1",
+          "role": "primary",
+          "specific_action": "DSPARK NPU replay fallback 从已包含当前 verify block 的 CPU 长度镜像取值，又按捕获宽度加入同一个 block。",
+          "allowed": [
+            {
+              "status": "leaf",
+              "pattern_id": "C3"
+            }
+          ],
+          "rationale": "所评目标是送达 replay 后端的单请求 KV 长度。给定不具备该 hook 的 backend，检查结果为 false，生产端会为 CPU 镜像加上该次验证宽度。prepare_for_verify 创建的 ForwardBatch 把这条 schedule 镜像按引用装入，恢复 ScheduleBatch 不会改变已经交付的镜像。DSPARK 不走旧 is_dflash 分支，replay 消费端给同一个块再加一次 8，输出长度 1016；证据止于本地 replay 实参。",
+          "near_neighbor": "独立历史前缀和当前块本可合法分别相加；第二次加入的是同一个请求、同一个当前 verify block 这项贡献，而不是另一段相邻区间。",
+          "decisive_facts": [
+            "s5 L540–L546、s1 L311–L335：指定 backend 不存在该 hook，旧判断为 false，生产端把该次 verify_w=8 加到 CPU mirror 前缀。",
+            "s1 L335–L339、s2 L363–L374、s6 L84–L116、s7 L1017及L1043–L1054：prepare 创建 ForwardBatch 并引用同一更新后的 CPU mirror，再恢复 ScheduleBatch；s8、s9 的附带缓存准备不构成长度镜像的另一个来源。",
+            "s3 L116–L126 和 s4 L376–L423：DSPARK 不满足 is_dflash，旧 CPU 镜像分支读取 1008，加 capture 的同一 verify block 8 后作为本地 replay `seq_lens` 实参。"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "G10",
+      "family_id": "github.com/quadric-io/onnxruntime#58",
+      "operator": "QLinearConvTranspose",
+      "lineage": [
+        "family:github.com/quadric-io/onnxruntime#58",
+        "event:github.com/quadric-io/onnxruntime#58",
+        "patch:github.com/quadric-io/onnxruntime!59",
+        "event:github.com/quadric-io/onnxruntime!59",
+        "patch:github.com/quadric-io/onnxruntime@300404cfe090732940b7ff0b3fa8636cf7b71f61"
+      ],
+      "exposure_review": "按家族、事件、原修订与相关 backport 去重，详见 exposure-review.json。",
+      "source_view_review": "原件节选固定为症状材料。报告原运行不绑定到精确父 SHA；这个阶段未以旧实现动作评分。",
+      "actions": [
+        {
+          "id": "expected-1",
+          "role": "unknown",
+          "specific_action": null,
+          "allowed": [
+            {
+              "status": "insufficient"
+            }
+          ],
+          "rationale": "原件确认同一 CPU EP 的输出没有随所给 y_zero_point 改变，并绑定相关数值差异；仍未显示内部实现使用了哪个实参、是否走过 requantization，以及模式适用的那项具体贡献在哪一阶段出现或消失。",
+          "near_neighbor": "有异常输出，仍欠实现端 `y_zero_point` 及消费者的连接证据。现有片段不能分辨被忽略、被误读、在下游被覆盖，或其它结果内抵消。",
+          "decisive_facts": [
+            "s1：相同单节点模型输入，`y_zero_point` 作为指定 initializer 位于第 7 槽摘要。",
+            "s2：三个 x/w=0 用例给出相同 ORT Hash 和不同参考比较，证明数值响应就该场景缺失。",
+            "s3：原报告只给 ORT CPU build 版本字符串，未提供函数级追踪或可绑定 build 的消费记录。"
+          ]
+        }
+      ]
+    }
+  ],
+  "reference_review": {
+    "G02": {
+      "reviewer_id": "local-codex-exec:01a1e2ce-d2c2-7a83-bb90-70a50d8fd50a",
+      "review_sha256": "2aac712fc33d197769e7bb31a40cf02096e744061365f31af2466a17cf00b1d7",
+      "rationale": "P2 可由报告场景的约定与 d73bfa14 的旧路径静态支持。s1:1–8 给出两条本地有效路由、四条以 −1 标记的非本地路由及保留数 2。s2:13–17、31–45 正确取得索引张量，将其作为有符号键并另传展开行号。s5:2–7 调用 CUB 默认升序排序，因此任取排序前两位都对应 −1 路由。s2:63–70、s4:11–18、s3:10–22 把这两条路由标为保留，其余标为丢弃。把哨兵交给普通专家键排序，并用排序位置决定其保留状态，是一个主缺陷动作。",
+      "note": "报告片段给出此场景的约定。静态结论依赖默认有符号排序语义，无需假设并列键的内部顺序。空目标、其他路由 API 和映射之后的张量贡献均超出本案范围。"
+    },
+    "G06": {
+      "reviewer_id": "local-codex-exec:01a1e2ce-d2c2-7a83-bb90-70a50d8fd50a",
+      "review_sha256": "2aac712fc33d197769e7bb31a40cf02096e744061365f31af2466a17cf00b1d7",
+      "rationale": "C3 可由 52604e1d 的本地 replay 路径静态支持。s5:1–7 和 s1:24–32 表明无该 hook 且 CPU 镜像存在时，生产者把本次验证块加到前缀，得到 1008。s6:29–48、s7:4、30–40 将这份镜像装入 ForwardBatch，s2:13–24 随后恢复 ScheduleBatch 并传递已准备的 ForwardBatch。s3:6–16 表明 DSPARK 不满足旧 is_dflash 判断，s4:5–35、47–52 因而从 CPU 镜像再加捕获宽度 8，并把 1016 传给 replay。目标是该请求的实际 KV 长度，同一当前验证块应计一次却计了两次。第二次加法是唯一主缺陷动作。",
+      "note": "将结论限定于 s4:1–5 的普通 target verify 分支和指定 CPU 镜像条件。首次加法完成合法的长度构造。修补方向应以消费端区分前缀长度和已含验证块的长度为准，原件只支持到本地 replay 实参。"
+    },
+    "G10": {
+      "reviewer_id": "local-codex-exec:01a1e2ce-3c03-78e1-a1a0-06e051582ac2",
+      "review_sha256": "367bd691c92c7aa5fc3813824abf2408f62ca6c36af1ac7f0bc3747c586826fc",
+      "rationale": "草案的 `insufficient` 和 `unknown` 均有原件支持。s1 第 10–27 行给出单组 int8 单节点模型，`y_zero_point` 是第 8 个输入（零基槽位 7）。s2 第 1–2、9–10 行显示，在 x、w 零点均为 0 时，y 零点取 25 或 -30 的 ORT 输出与 y 零点为 0 的基线逐元素比较均为 0/147 差异，而与参考结果的差异分别为 112/147 和 115/147，基线为 1/147。这些行支持作者报告的局部症状。s3 第 3–5 行给出 SDK 26.08、ORT 1.20.0、CPUExecutionProvider 和算子类型，缺少可将内部操作绑定到一次调用的构建标识、call_id 和消费路径。草案保留的是一个待核边界，已证独立错误动作数为 0。",
+      "note": "建议将草案的“第 7 槽”明确写为“零基槽位 7（第 8 个输入）”，并以 s2 的逐元素比较作为输出不变的直接依据。要进一步分类，需补同版本 CPU 路径的输出零点约定，以及从旧属性读取或输入取值到重数量化、最终写出的消费链。P1 需要定位语义不同的实际来源，P2 需要证明正确取值后的特殊状态误处理。若主张 C 类，还需给出相对同一输出的具体逻辑项、参与资格及预期和实际次数。现有节选无法区分未消费、错读、后续覆盖或抵消，也无法定位地址失配、缺少写入，或把基线的 1 个单位差异归因于独立的数值精度错误。"
+    }
+  },
+  "seal_nonce": "7431a5425a62e1fe13c952ad310251fe93b4f94c8c341f1246e28d5d07be7b21"
+}

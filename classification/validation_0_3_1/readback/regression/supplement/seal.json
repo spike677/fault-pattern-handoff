@@ -1,0 +1,11 @@
+{
+  "a_sha256": "95fbf573e69a35470b82e27f9a50405532510ae57b314eb3c179680197e696b8",
+  "answer_reviewer_id": "reference-review-panel:9635e2f1d3edd77b2585a7cc8ea4420ff902ded3ba8200cde4bbdae4db5b8392",
+  "b_sha256": "309068929c211d8f860fb686c8b635109c9733b2f32c8a717eb0224f1eae3624",
+  "case_count": 1,
+  "curator_id": "new-events-curator",
+  "freeze_sha256": "a57c182b912a9b50620a25d35cafd72e9e4265018ca959c781a0f52e2e3fce98",
+  "kind": "exercise",
+  "protocol": "classification_only/0.3.1",
+  "sealed_at": "2026-11-16T06:21:32.679868+00:00"
+}

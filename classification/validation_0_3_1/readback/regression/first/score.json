@@ -1,0 +1,888 @@
+{
+  "answer_revision": null,
+  "answer_sha256": "e2b53bacd8d26c8db88bcfe31bdee55b1cdff1a62fb76c681460581c151c8130",
+  "catalog_version": "0.3",
+  "lock_sha256": "596d611e4353faf2de0f9834d08b84f5ad667c58b64c9f07a073a31805656183",
+  "mechanism_namespace": "MECH-v0.3",
+  "note": "Hashes preserve bytes. Human attestation, not the evaluator, establishes isolation and exposure.",
+  "protocol": "classification_only/0.3.1",
+  "review_sha256": "de0afb87c1c17fdd5d54a0895d0c223ccd2d8f212b5a5e69e18d78bbb57e12a6",
+  "runs": [
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "G02-A1",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G02",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/nvidia/transformerengine#2908",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "moe_permute",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C3",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C3"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G06-A1",
+              "primary_expected": "leaf:MECH-v0.3:C3",
+              "primary_label_hit": true,
+              "rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G06",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C3"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C3",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/sgl-project/sglang!47216",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "FIA graph replay KV-length",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C3",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "G10-A1",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G10",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/quadric-io/onnxruntime#58",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "QLinearConvTranspose",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 3,
+          "independent_defects_claimed": 1,
+          "label_correct": 3,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 3,
+          "primary_label_hit": 3,
+          "strict": 3,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "case_strict": 3,
+        "cases": 3,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "structure": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "unresolved_predicted_actions": 2,
+          "unresolved_predicted_roles": 2
+        },
+        "complete_cases_with_role_order": 3,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 2,
+            "eligible": 2
+          }
+        },
+        "confusion": [
+          {
+            "actual": "insufficient",
+            "count": 2,
+            "expected": "insufficient"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:C3",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C3"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "FIA graph replay KV-length"
+            ],
+            "operators": [
+              "FIA graph replay KV-length"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "expected_verdict_counts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C3": 1
+        },
+        "failure_counts": {},
+        "families": 3,
+        "families_strict": 3,
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "actual_supported_statuses": {
+            "insufficient": 2,
+            "leaf": 1
+          },
+          "families": {
+            "correct": 3,
+            "eligible": 3
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "leaf": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C3": 1
+        },
+        "strict_verdicts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C3": 1
+        }
+      },
+      "run_sha256": "7f3a26273b62aa4589f11999899f89118c111670433945da23ff2c268db141ed"
+    },
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "G02-1",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G02",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/nvidia/transformerengine#2908",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "moe_permute",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C3",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C3"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G06-1",
+              "primary_expected": "leaf:MECH-v0.3:C3",
+              "primary_label_hit": true,
+              "rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G06",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C3"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C3",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/sgl-project/sglang!47216",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "FIA graph replay KV-length",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C3",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。",
+              "action_resolution": "unresolved",
+              "actual": "insufficient",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "insufficient"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "G10-1",
+              "primary_expected": "insufficient",
+              "primary_label_hit": true,
+              "rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G10",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "insufficient"
+              ],
+              "concrete_action_expected": false,
+              "primary": "insufficient",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/quadric-io/onnxruntime#58",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "QLinearConvTranspose",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "insufficient",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 3,
+          "independent_defects_claimed": 1,
+          "label_correct": 3,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 3,
+          "primary_label_hit": 3,
+          "strict": 3,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "case_strict": 3,
+        "cases": 3,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "structure": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "unresolved_predicted_actions": 2,
+          "unresolved_predicted_roles": 2
+        },
+        "complete_cases_with_role_order": 3,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 2,
+            "eligible": 2
+          }
+        },
+        "confusion": [
+          {
+            "actual": "insufficient",
+            "count": 2,
+            "expected": "insufficient"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:C3",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C3"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "FIA graph replay KV-length"
+            ],
+            "operators": [
+              "FIA graph replay KV-length"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "expected_verdict_counts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C3": 1
+        },
+        "failure_counts": {},
+        "families": 3,
+        "families_strict": 3,
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "actual_supported_statuses": {
+            "insufficient": 2,
+            "leaf": 1
+          },
+          "families": {
+            "correct": 3,
+            "eligible": 3
+          }
+        },
+        "status_metrics": {
+          "insufficient": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "leaf": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C3": 1
+        },
+        "strict_verdicts": {
+          "insufficient": 2,
+          "leaf:MECH-v0.3:C3": 1
+        }
+      },
+      "run_sha256": "cbf64dda04a7dfd792a07415f9cb28351bec19dfecc524f91d5e97e6f37b2596"
+    }
+  ],
+  "scope": "exercise_only",
+  "stability": {
+    "cases": [
+      {
+        "case_id": "G02",
+        "family_id": "github.com/nvidia/transformerengine#2908",
+        "rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G06",
+        "family_id": "github.com/sgl-project/sglang!47216",
+        "rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "G10",
+        "family_id": "github.com/quadric-io/onnxruntime#58",
+        "rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      }
+    ],
+    "same_allowed_labels": {
+      "correct": 3,
+      "eligible": 3
+    },
+    "same_and_both_incorrect_cases": 0,
+    "same_cases": 3,
+    "same_causal_structure": {
+      "correct": 3,
+      "eligible": 3
+    },
+    "same_decisive_facts": {
+      "correct": 3,
+      "eligible": 3
+    },
+    "same_labels": {
+      "correct": 3,
+      "eligible": 3
+    },
+    "same_labels_facts_and_action": {
+      "correct": 3,
+      "eligible": 3
+    },
+    "same_specific_action": {
+      "correct": 3,
+      "eligible": 3
+    }
+  }
+}

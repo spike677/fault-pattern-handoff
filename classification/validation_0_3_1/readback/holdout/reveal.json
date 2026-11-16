@@ -1,0 +1,15 @@
+{
+  "locked_at": "2026-11-16T06:35:38.586080+00:00",
+  "lock_sha256": "d89d9cb08f76eef40445b9979f573778ca2b7ed3decdc8a3c752b3371f0f83d1",
+  "revealed_at": "2026-11-16T06:36:15.883431+00:00",
+  "answer_sha256": "a6fffaf516ba575d96d851da22cc354a36d46006ae04ffcaa3510bf3e0e91e23",
+  "payload_sha256": "4cfb037f7dfb27bf1dbf30b431686c543d86ae7da2b52b5dcf67d2618b75fdd3",
+  "reader_contexts": [
+    "01a1e30f-c0bb-7070-a18e-6cdbafb9db13",
+    "01a1e30f-c0bb-72d3-9d57-2b8f496586d0"
+  ],
+  "reference_context": "01a1e30e-6ef8-75e0-8aa9-02ee6cb11c72",
+  "reader_tool_events": 0,
+  "external_witness": false,
+  "kind": "exercise"
+}

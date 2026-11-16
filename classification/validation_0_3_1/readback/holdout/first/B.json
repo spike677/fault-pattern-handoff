@@ -1,0 +1,95 @@
+{
+  "curator_id": "codex-coordinator:new-source-curation",
+  "answer_reviewer_id": "local-codex-exec:01a1e30e-6ef8-75e0-8aa9-02ee6cb11c72",
+  "curation_notes": "Two new public source views. Contracts and consumers are from the same verified fixed parent per case.",
+  "cases": [
+    {
+      "case_id": "H01",
+      "family_id": "github.com/pytorch/pytorch!69511",
+      "operator": "PyTorch cross_entropy",
+      "lineage": [
+        "family:github.com/pytorch/pytorch!69511",
+        "event:github.com/pytorch/pytorch!69511",
+        "patch:github.com/pytorch/pytorch!69511",
+        "patch:github.com/pytorch/pytorch@65fc84f8aa6a03bce05d13d791ff7b925abb732b",
+        "patch:github.com/pytorch/pytorch@8b1e49635a488a4b260ef5d5657279585c5a291d",
+        "event:github.com/pytorch/pytorch#69339"
+      ],
+      "exposure_review": "Issue, PR, first fixing commit and actual parent checked against the development exposure list.",
+      "source_view_review": "Fixed old public docstring, Python binding and native implementation. Local static fixture.",
+      "actions": [
+        {
+          "id": "expected-1",
+          "role": "primary",
+          "allowed": [
+            {
+              "status": "leaf",
+              "pattern_id": "P2"
+            }
+          ],
+          "specific_action": "label smoothing 的加权 mean 分支以未过滤 target 查询 class weight，把配置为 ignore_index 的 0 按普通类 ID 查询。",
+          "rationale": "同版 F.cross_entropy 的文档要求 mean 排除 ignore_index。包装器和 dispatcher 正确转发 target、ignore_index；旧 smoothing 分支虽为分子将 0 对应项清零，却在权重索引读取完整 target.flatten()。按约定分母针对本地例子只含 w[1]=3，此处实际取 w[0]+w[1]=5。受评动作止于误用哨兵作为权重索引。",
+          "near_neighbor": "同一值 0 在 ignore_index 不是 0 时可作为普通类号。当前没有读错输入槽，只有所评权重索引使用特殊值。",
+          "decisive_facts": [
+            "s1 ignore_index 合同",
+            "s2 与 s4 正确转发参数",
+            "s3 542–552 行的有条件分子屏蔽和无过滤 gather"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "H02",
+      "family_id": "github.com/numpy/numpy!33326",
+      "operator": "NumPy add.at",
+      "lineage": [
+        "family:github.com/numpy/numpy!33326",
+        "event:github.com/numpy/numpy!33326",
+        "patch:github.com/numpy/numpy!33326",
+        "patch:github.com/numpy/numpy@723054e37c1166234a026d2da4883810332d6a7a",
+        "patch:github.com/numpy/numpy@5fcd16dc72cbc4563deec5225e84f3b585e69afe"
+      ],
+      "exposure_review": "PR, selected commit and actual parent checked against the development exposure list.",
+      "source_view_review": "Fixed old documented semantics and checked-in integer fixture, bound to indexed add.",
+      "actions": [
+        {
+          "id": "expected-1",
+          "role": "unknown",
+          "allowed": [
+            {
+              "status": "outside",
+              "outside_reason": "compliant"
+            }
+          ],
+          "specific_action": null,
+          "rationale": "s1 明示同目标下标会累加每次更新，s2 的既有测试给出输入与 202。寄存的 indexed loop 按每个源元素推进 index 和 value，s3 输送三次更新，s5 读改写所指位置。目的地 2 接到独立的 b[0] 和 b[2]，各一次。a[2] 的初始 2 作为运行和进入第二次更新，没有重新计入。",
+          "near_neighbor": "目的地址相同且两个值都是 100，逻辑来源仍是两个不同的操作数槽。约定也允许同一标量作为各索引更新的值。",
+          "decisive_facts": [
+            "s1 同址累加合同",
+            "s2 固定整数用例",
+            "s3 与 s4 indexed-loop 调用",
+            "s5 迭代体及 s6/s7 注册"
+          ]
+        }
+      ]
+    }
+  ],
+  "reference_review": {
+    "record_sha256": "ead77e3a9123bb648f7b50d320ff1ee4383148b2cf4e22a9a50b799d8cafe847",
+    "cases": [
+      {
+        "case_id": "H01",
+        "accepted": true,
+        "rationale": "P2 和 primary 均成立。同版约定规定按非忽略目标求均值（s1 012–015）。包装器及分派器从正确来源原样转发 target 和 ignore_index（s2 003，s4 009–025）。在该调用中，配置使 0 表示忽略状态。旧路径据此将平滑分子对应项清零，却用完整 target 查询类别权重，将该位置当作普通类 0 计入分母。实际分母为 2+3=5，约定分母为 3。旧路径用该分母除平滑项总和，再把结果计入返回损失（s3 027–037、051）。未过滤的 gather 是所评路径中直接造成偏差的动作，作用域内只证实这一个错误动作。",
+        "limits": "静态结论限于版本 8b1e49635a488a4b260ef5d5657279585c5a291d 的指定 CPU 输入及加权 mean 平滑路径。返回式用于确认分母偏差传到损失，其余分支仅作路径背景。"
+      },
+      {
+        "case_id": "H02",
+        "accepted": true,
+        "rationale": "compliant 和草案的 unknown 角色均可保留。约定要求对重复目标下标逐次累加（s1 008–013），固定整数用例给出两个值均为 100 的独立操作数槽，并断言 aa[2] 为 202（s2 001–006、020–023）。注册和分派将调用绑定到 indexed add（s6 002–016，s7 007–014、031–041，s4 001–015）。调用端传入非标量 b 的步长及索引流（s3 011–023、030–047），循环同步推进索引和值，并对目标原址读改写（s5 001–004、012–026）。目标 aa[2] 依次计入 b[0]、b[2] 各一次，得到 (2+100)+100。第二次读到的 102 是运行和，初始值 2 在展开式中只出现一次。同址和等值对应两个独立的更新来源，作用域内未发现错误动作或可归责角色。",
+        "limits": "静态结论限于版本 5fcd16dc72cbc4563deec5225e84f3b585e69afe 中进入所示 1D indexed loop 的 native integer 用例。测试断言提供同版预期结果。"
+      }
+    ]
+  },
+  "seal_nonce": "e95f8a85d29f394bdd14de8f2014e520cda3fd40e9aad1e8"
+}

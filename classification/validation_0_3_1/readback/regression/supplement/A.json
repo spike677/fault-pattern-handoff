@@ -1,0 +1,81 @@
+{
+  "cases": [
+    {
+      "case_id": "G10",
+      "sources": [
+        {
+          "id": "s1",
+          "version": "GitHub issue body updated_at 2026-10-20T05:58:49Z",
+          "path": "https://github.com/quadric-io/onnxruntime/issues/58/#issue-body-markdown",
+          "kind": "contract",
+          "origin": "https://github.com/quadric-io/onnxruntime/issues/58",
+          "original_start_line": 35,
+          "text": "N, C_IN, H, W = 1, 2, 4, 4\nC_OUT, KH, KW = 3, 3, 3\nSTRIDES, PADS, DILATIONS = [2, 2], [1, 1, 1, 1], [1, 1]\nX_SCALE, W_SCALE, Y_SCALE = 0.03, 0.02, 0.05\n\nX_Q = np.random.randint(-128, 128, size=(N, C_IN, H, W)).astype(np.int8)\nW_Q = np.random.randint(-127, 128, size=(C_IN, C_OUT, KH, KW)).astype(np.int8)\n\n\ndef build_qlct(x_zp, w_zp, y_zp, path=None):\n    \"\"\"Single-node com.microsoft::QLinearConvTranspose, int8 in / int8 out.\"\"\"\n    inits = [\n        numpy_helper.from_array(np.array(X_SCALE, np.float32), \"x_scale\"),\n        numpy_helper.from_array(np.array(x_zp, np.int8), \"x_zero_point\"),\n        numpy_helper.from_array(W_Q, \"w\"),\n        numpy_helper.from_array(np.array(W_SCALE, np.float32), \"w_scale\"),\n        numpy_helper.from_array(np.array(w_zp, np.int8), \"w_zero_point\"),\n        numpy_helper.from_array(np.array(Y_SCALE, np.float32), \"y_scale\"),\n        numpy_helper.from_array(np.array(y_zp, np.int8), \"y_zero_point\"),\n    ]\n    node = helper.make_node(\n        \"QLinearConvTranspose\",\n        [\"x\", \"x_scale\", \"x_zero_point\", \"w\", \"w_scale\", \"w_zero_point\",\n         \"y_scale\", \"y_zero_point\"],\n        [\"y\"], domain=\"com.microsoft\",\n        kernel_shape=[KH, KW], strides=STRIDES, pads=PADS,\n        dilations=DILATIONS, group=1,\n    )\n    graph = helper.make_graph(\n        [node], \"qlct\",\n        [helper.make_tensor_value_info(\"x\", TensorProto.INT8, [N, C_IN, H, W])],\n        [helper.make_tensor_value_info(\"y\", TensorProto.INT8, [N, C_OUT, 7, 7])],\n        initializer=inits,\n    )\n    model = helper.make_model(graph, opset_imports=[\n        helper.make_opsetid(\"\", 17), helper.make_opsetid(\"com.microsoft\", 1)])\n    model.ir_version = 9\n    if path:\n        onnx.save(model, path)\n    return model"
+        },
+        {
+          "id": "s2",
+          "version": "GitHub issue body updated_at 2026-10-20T05:58:49Z",
+          "path": "https://github.com/quadric-io/onnxruntime/issues/58/#issue-body-markdown",
+          "kind": "report",
+          "origin": "https://github.com/quadric-io/onnxruntime/issues/58",
+          "original_start_line": 196,
+          "text": "  x_zp  w_zp  y_zp   ORT md5       ORT vs reference              ORT vs ORT(all zp=0)\n     0     0     0   6ae30a6778cd  bad   1/147  max|diff|   1    bad   0/147  max|diff|   0\n   -40     0     0   6ae30a6778cd  bad 129/147  max|diff| 203    bad   0/147  max|diff|   0\n    64     0     0   6ae30a6778cd  bad 121/147  max|diff| 255    bad   0/147  max|diff|   0\n  -128     0     0   6ae30a6778cd  bad 134/147  max|diff| 255    bad   0/147  max|diff|   0\n   127     0     0   6ae30a6778cd  bad 121/147  max|diff| 255    bad   0/147  max|diff|   0\n     0     7     0   6ae30a6778cd  bad 104/147  max|diff|  22    bad   0/147  max|diff|   0\n     0    -9     0   6ae30a6778cd  bad 107/147  max|diff|  28    bad   0/147  max|diff|   0\n     0     0    25   6ae30a6778cd  bad 112/147  max|diff|  26    bad   0/147  max|diff|   0\n     0     0   -30   6ae30a6778cd  bad 115/147  max|diff|  30    bad   0/147  max|diff|   0"
+        },
+        {
+          "id": "s3",
+          "version": "GitHub issue body updated_at 2026-10-20T05:58:49Z",
+          "path": "https://github.com/quadric-io/onnxruntime/issues/58/#issue-body-markdown",
+          "kind": "issue",
+          "origin": "https://github.com/quadric-io/onnxruntime/issues/58",
+          "original_start_line": 260,
+          "text": "## Environment\n\n- SDK Version: 26.08\n- onnxruntime: 1.20.0, CPUExecutionProvider\n- Op: `com.microsoft::QLinearConvTranspose`, `T1=T2=T3=int8`, `T4=int32`"
+        },
+        {
+          "id": "s4",
+          "version": "fac7b31168cc88790d7c8a2be07692ade3a354bf",
+          "path": "onnxruntime/core/graph/contrib_ops/quantization_defs.cc",
+          "kind": "contract",
+          "origin": "https://github.com/quadric-io/onnxruntime/blob/fac7b31168cc88790d7c8a2be07692ade3a354bf/onnxruntime/core/graph/contrib_ops/quantization_defs.cc#L1415-L1438",
+          "original_start_line": 1415,
+          "text": "        .Input(\n            6,\n            \"y_scale\",\n            \"Scale tensor for output 'y'. It's a scalar, which means a per-tensor/layer quantization.\",\n            \"tensor(float)\")\n        .Input(\n            7,\n            \"y_zero_point\",\n            \"Zero point tensor for output 'y'. It's a scalar, which means a per-tensor/layer quantization.\",\n            \"T3\")\n        .Input(\n            8,\n            \"B\",\n            \"Optional 1D bias to be added to the convolution, has size of M. \"\n            \"Bias must be quantized using scale = x_scale * w_scale and zero_point = 0\",\n            \"T4\",\n            OpSchema::Optional)\n        .Output(\n            0,\n            \"y\",\n            \"Output data tensor that contains the result of the \"\n            \"convolution. The output dimensions are functions \"\n            \"of the kernel size, stride size, and pad lengths.\",\n            \"T3\")"
+        },
+        {
+          "id": "s5",
+          "version": "fac7b31168cc88790d7c8a2be07692ade3a354bf",
+          "path": "onnxruntime/core/providers/cpu/quantization/qlinearconvtranspose.cc",
+          "kind": "code",
+          "origin": "https://github.com/quadric-io/onnxruntime/blob/fac7b31168cc88790d7c8a2be07692ade3a354bf/onnxruntime/core/providers/cpu/quantization/qlinearconvtranspose.cc#L49-L83",
+          "original_start_line": 49,
+          "text": "  Status DoConvTranspose(OpKernelContext* context) const;\n\n private:\n  static float ComputeOutputScale(OpKernelContext* context) {\n    const Tensor* X_scale = context->Input<Tensor>(InputTensors::IN_X_SCALE);\n    const Tensor* W_scale = context->Input<Tensor>(InputTensors::IN_W_SCALE);\n    const Tensor* Y_scale = context->Input<Tensor>(InputTensors::IN_Y_SCALE);\n    ORT_ENFORCE(IsScalarOr1ElementVector(X_scale),\n                \"QLinearConv : input scale must be a scalar or 1D tensor of size 1\");\n    ORT_ENFORCE(IsScalarOr1ElementVector(Y_scale),\n                \"QLinearConv : result scale must be a scalar or 1D tensor of size 1\");\n    ORT_ENFORCE(IsScalarOr1ElementVector(W_scale),\n                \"QLinearConv : filter scale must be a scalar or 1D tensor of size 1\");\n\n    auto X_scale_value = *(X_scale->Data<float>());\n    auto Y_scale_value = *(Y_scale->Data<float>());\n    auto W_scale_value = *(W_scale->Data<float>());\n\n    return X_scale_value * W_scale_value / Y_scale_value;\n  }\n\n  enum InputTensors : int {\n    IN_X = 0,\n    IN_X_SCALE = 1,\n    IN_X_ZERO_POINT = 2,\n    IN_W = 3,\n    IN_W_SCALE = 4,\n    IN_W_ZERO_POINT = 5,\n    IN_Y_SCALE = 6,\n    IN_Y_ZERO_POINT = 7,\n    IN_BIAS = 8\n\n  };\n  enum OutputTensors : int {\n    OUT_Y = 0"
+        },
+        {
+          "id": "s6",
+          "version": "fac7b31168cc88790d7c8a2be07692ade3a354bf",
+          "path": "onnxruntime/core/providers/cpu/quantization/qlinearconvtranspose.cc",
+          "kind": "code",
+          "origin": "https://github.com/quadric-io/onnxruntime/blob/fac7b31168cc88790d7c8a2be07692ade3a354bf/onnxruntime/core/providers/cpu/quantization/qlinearconvtranspose.cc#L205-L231",
+          "original_start_line": 205,
+          "text": "          reinterpret_cast<ActType*>(out_i32_data + group_id * Y_offset),\n          &CPUMathUtil::Instance());\n    }\n\n    if (p.B != nullptr) {\n      auto out_i32_matrix = EigenMatrixMap<ActType>(out_i32_data, output_size, p.num_output_channels);\n      auto Bvec = ConstEigenVectorMap<ActType>(p.B->Data<ActType>(), p.num_output_channels);\n      out_i32_matrix.rowwise() += Bvec.transpose();\n    }\n\n    MlasRequantizeOutput(out_i32_data,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         Ydata,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         nullptr,\n                         &scale_value,\n                         false,\n                         (T)0,\n                         0,\n                         0,\n                         p.num_output_channels,\n                         p.Y->Shape()[2] * p.Y->Shape()[3]);\n    Xdata += X_offset * conv_transpose_attrs_.group;\n    Ydata += Y_offset * conv_transpose_attrs_.group;\n  }\n\n  return Status::OK();"
+        },
+        {
+          "id": "s7",
+          "version": "fac7b31168cc88790d7c8a2be07692ade3a354bf",
+          "path": "onnxruntime/core/mlas/lib/quantize.cpp",
+          "kind": "code",
+          "origin": "https://github.com/quadric-io/onnxruntime/blob/fac7b31168cc88790d7c8a2be07692ade3a354bf/onnxruntime/core/mlas/lib/quantize.cpp#L1085-L1108",
+          "original_start_line": 1085,
+          "text": "#if defined(MLAS_SSE2_INTRINSICS)\n\ntemplate <typename OutputType>\nvoid\nMLASCALL\nMlasRequantizeOutput(\n    const int32_t* Input,\n    size_t InputLeadingDimension,\n    OutputType* Output,\n    size_t OutputLeadingDimension,\n    const int32_t* Bias,\n    const float* Scale,\n    bool PerColumnScale,\n    OutputType ZeroPoint,\n    size_t StartM,\n    size_t StartN,\n    size_t CountM,\n    size_t CountN\n    )\n{\n    const __m128 PerMatrixScaleVector = PerColumnScale ? _mm_setzero_ps() : _mm_load1_ps(Scale); // _mm_load1_ps loads one float into 4 words\n    const __m128 MinimumValueVector = _mm_set1_ps(float(std::numeric_limits<OutputType>::lowest() - ZeroPoint));\n    const __m128 MaximumValueVector = _mm_set1_ps(float(std::numeric_limits<OutputType>::max() - ZeroPoint));\n    const __m128i ZeroPointVector = _mm_set1_epi32(ZeroPoint);"
+        },
+        {
+          "id": "s8",
+          "version": "fac7b31168cc88790d7c8a2be07692ade3a354bf",
+          "path": "onnxruntime/core/mlas/lib/quantize.cpp",
+          "kind": "code",
+          "origin": "https://github.com/quadric-io/onnxruntime/blob/fac7b31168cc88790d7c8a2be07692ade3a354bf/onnxruntime/core/mlas/lib/quantize.cpp#L1278-L1317",
+          "original_start_line": 1278,
+          "text": "            } else {\n                ScaleVector = PerMatrixScaleVector;\n            }\n\n            FloatVector = _mm_mul_ps(FloatVector, ScaleVector);\n\n            FloatVector = _mm_max_ps(FloatVector, MinimumValueVector);\n            FloatVector = _mm_min_ps(FloatVector, MaximumValueVector);\n\n            IntegerVector = _mm_cvtps_epi32(FloatVector);\n            IntegerVector = _mm_add_epi32(IntegerVector, ZeroPointVector);\n\n            if (std::is_signed<OutputType>::value) {\n\n                IntegerVector = _mm_packs_epi32(IntegerVector, IntegerVector);\n                IntegerVector = _mm_packs_epi16(IntegerVector, IntegerVector);\n\n            } else {\n\n                IntegerVector = _mm_packus_epi16(IntegerVector, IntegerVector);\n                IntegerVector = _mm_packus_epi16(IntegerVector, IntegerVector);\n\n            }\n\n            uint32_t OutputValue = uint32_t(_mm_cvtsi128_si32(IntegerVector));\n\n            if (n >= 4) {\n\n                *reinterpret_cast<uint32_t*>(RowOutput) = OutputValue;\n                RowOutput += 4;\n\n                n -= 4;\n\n            } else {\n\n                *RowOutput = uint8_t(OutputValue);\n                RowOutput += 1;\n\n                n -= 1;\n            }"
+        }
+      ]
+    }
+  ]
+}

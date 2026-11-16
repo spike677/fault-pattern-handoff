@@ -1,0 +1,247 @@
+[
+  {
+    "case_id": "G10",
+    "case_sha256": "b5a977cf9808b35389e97f1c54d9bf58effc4cc5416740cef23e22a344ef98ad",
+    "facts_sha256": "5a0ab039fc16d3b47ff4eba1525c7e87b9945b8435c896aea1fae4062f5ba1a8",
+    "catalog_version": "0.3",
+    "decision_version": "0.3.1",
+    "mechanism_namespace": "MECH-v0.3",
+    "operator": "Quadric ONNX Runtime CPU int8 QLinearConvTranspose",
+    "roles": [
+      "输出元素 y[0,c,h,w]",
+      "第 7 槽的标量输出零点 y_zero_point",
+      "卷积 int32 累加值",
+      "重定标及写回消费者 MlasRequantizeOutput"
+    ],
+    "actions": [
+      {
+        "id": "G10-requantize-output",
+        "scope": {
+          "claim": "static",
+          "version": "fac7b31168cc88790d7c8a2be07692ade3a354bf",
+          "path": "onnxruntime/core/providers/cpu/quantization/qlinearconvtranspose.cc"
+        },
+        "role": "primary",
+        "status": "leaf",
+        "facts": [
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 1,
+                "end_line": 10,
+                "use": "requirement",
+                "quote": "        .Input(\n            6,\n            \"y_scale\",\n            \"Scale tensor for output 'y'. It's a scalar, which means a per-tensor/layer quantization.\",\n            \"tensor(float)\")\n        .Input(\n            7,\n            \"y_zero_point\",\n            \"Zero point tensor for output 'y'. It's a scalar, which means a per-tensor/layer quantization.\",\n            \"T3\")"
+              },
+              {
+                "source_id": "s6",
+                "start_line": 11,
+                "end_line": 22,
+                "use": "behavior",
+                "quote": "    MlasRequantizeOutput(out_i32_data,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         Ydata,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         nullptr,\n                         &scale_value,\n                         false,\n                         (T)0,\n                         0,\n                         0,\n                         p.num_output_channels,\n                         p.Y->Shape()[2] * p.Y->Shape()[3]);"
+              }
+            ],
+            "explanation": "第 6、7 槽定义输出张量的逐张量量化比例和零点。旧调用把卷积累加缓冲交给 MlasRequantizeOutput，由它重定标并写入 Ydata，因此该调用承担每个输出元素的输出量化。",
+            "claim_state": "derived"
+          },
+          {
+            "key": "required_member",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 1,
+                "end_line": 10,
+                "use": "requirement",
+                "quote": "        .Input(\n            6,\n            \"y_scale\",\n            \"Scale tensor for output 'y'. It's a scalar, which means a per-tensor/layer quantization.\",\n            \"tensor(float)\")\n        .Input(\n            7,\n            \"y_zero_point\",\n            \"Zero point tensor for output 'y'. It's a scalar, which means a per-tensor/layer quantization.\",\n            \"T3\")"
+              },
+              {
+                "source_id": "s5",
+                "start_line": 15,
+                "end_line": 19,
+                "use": "behavior",
+                "quote": "    auto X_scale_value = *(X_scale->Data<float>());\n    auto Y_scale_value = *(Y_scale->Data<float>());\n    auto W_scale_value = *(W_scale->Data<float>());\n\n    return X_scale_value * W_scale_value / Y_scale_value;"
+              },
+              {
+                "source_id": "s6",
+                "start_line": 11,
+                "end_line": 22,
+                "use": "behavior",
+                "quote": "    MlasRequantizeOutput(out_i32_data,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         Ydata,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         nullptr,\n                         &scale_value,\n                         false,\n                         (T)0,\n                         0,\n                         0,\n                         p.num_output_channels,\n                         p.Y->Shape()[2] * p.Y->Shape()[3]);"
+              },
+              {
+                "source_id": "s7",
+                "start_line": 11,
+                "end_line": 14,
+                "use": "behavior",
+                "quote": "    const int32_t* Bias,\n    const float* Scale,\n    bool PerColumnScale,\n    OutputType ZeroPoint,"
+              },
+              {
+                "source_id": "s8",
+                "start_line": 5,
+                "end_line": 11,
+                "use": "behavior",
+                "quote": "            FloatVector = _mm_mul_ps(FloatVector, ScaleVector);\n\n            FloatVector = _mm_max_ps(FloatVector, MinimumValueVector);\n            FloatVector = _mm_min_ps(FloatVector, MaximumValueVector);\n\n            IntegerVector = _mm_cvtps_epi32(FloatVector);\n            IntegerVector = _mm_add_epi32(IntegerVector, ZeroPointVector);"
+              }
+            ],
+            "explanation": "对每个输出元素，约定结果为 sat_int8(round(acc × (x_scale × w_scale / y_scale)) + y_zero_point)。同一个第 7 槽标量对各输出元素分别承担输出编码偏移的角色，每个目标元素须计入一次。旧调用的 ZeroPoint 实参就是承载此加项的位置。",
+            "claim_state": "derived"
+          },
+          {
+            "key": "omitted_contribution",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 6,
+                "end_line": 17,
+                "use": "requirement",
+                "quote": "        .Input(\n            7,\n            \"y_zero_point\",\n            \"Zero point tensor for output 'y'. It's a scalar, which means a per-tensor/layer quantization.\",\n            \"T3\")\n        .Input(\n            8,\n            \"B\",\n            \"Optional 1D bias to be added to the convolution, has size of M. \"\n            \"Bias must be quantized using scale = x_scale * w_scale and zero_point = 0\",\n            \"T4\",\n            OpSchema::Optional)"
+              },
+              {
+                "source_id": "s5",
+                "start_line": 15,
+                "end_line": 19,
+                "use": "behavior",
+                "quote": "    auto X_scale_value = *(X_scale->Data<float>());\n    auto Y_scale_value = *(Y_scale->Data<float>());\n    auto W_scale_value = *(W_scale->Data<float>());\n\n    return X_scale_value * W_scale_value / Y_scale_value;"
+              },
+              {
+                "source_id": "s6",
+                "start_line": 5,
+                "end_line": 27,
+                "use": "behavior",
+                "quote": "    if (p.B != nullptr) {\n      auto out_i32_matrix = EigenMatrixMap<ActType>(out_i32_data, output_size, p.num_output_channels);\n      auto Bvec = ConstEigenVectorMap<ActType>(p.B->Data<ActType>(), p.num_output_channels);\n      out_i32_matrix.rowwise() += Bvec.transpose();\n    }\n\n    MlasRequantizeOutput(out_i32_data,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         Ydata,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         nullptr,\n                         &scale_value,\n                         false,\n                         (T)0,\n                         0,\n                         0,\n                         p.num_output_channels,\n                         p.Y->Shape()[2] * p.Y->Shape()[3]);\n    Xdata += X_offset * conv_transpose_attrs_.group;\n    Ydata += Y_offset * conv_transpose_attrs_.group;\n  }\n\n  return Status::OK();"
+              },
+              {
+                "source_id": "s7",
+                "start_line": 21,
+                "end_line": 24,
+                "use": "behavior",
+                "quote": "    const __m128 PerMatrixScaleVector = PerColumnScale ? _mm_setzero_ps() : _mm_load1_ps(Scale); // _mm_load1_ps loads one float into 4 words\n    const __m128 MinimumValueVector = _mm_set1_ps(float(std::numeric_limits<OutputType>::lowest() - ZeroPoint));\n    const __m128 MaximumValueVector = _mm_set1_ps(float(std::numeric_limits<OutputType>::max() - ZeroPoint));\n    const __m128i ZeroPointVector = _mm_set1_epi32(ZeroPoint);"
+              },
+              {
+                "source_id": "s8",
+                "start_line": 5,
+                "end_line": 16,
+                "use": "behavior",
+                "quote": "            FloatVector = _mm_mul_ps(FloatVector, ScaleVector);\n\n            FloatVector = _mm_max_ps(FloatVector, MinimumValueVector);\n            FloatVector = _mm_min_ps(FloatVector, MaximumValueVector);\n\n            IntegerVector = _mm_cvtps_epi32(FloatVector);\n            IntegerVector = _mm_add_epi32(IntegerVector, ZeroPointVector);\n\n            if (std::is_signed<OutputType>::value) {\n\n                IntegerVector = _mm_packs_epi32(IntegerVector, IntegerVector);\n                IntegerVector = _mm_packs_epi16(IntegerVector, IntegerVector);"
+              },
+              {
+                "source_id": "s8",
+                "start_line": 25,
+                "end_line": 36,
+                "use": "behavior",
+                "quote": "            uint32_t OutputValue = uint32_t(_mm_cvtsi128_si32(IntegerVector));\n\n            if (n >= 4) {\n\n                *reinterpret_cast<uint32_t*>(RowOutput) = OutputValue;\n                RowOutput += 4;\n\n                n -= 4;\n\n            } else {\n\n                *RowOutput = uint8_t(OutputValue);"
+              }
+            ],
+            "explanation": "固定模型没有可选卷积偏置。旧调用的 MLAS Bias 实参为 nullptr，Scale 仅由量化比例组成，ZeroPoint 实参恒为 0。所示 SSE2 消费路径以该 0 形成裁剪界限和加法向量，缩放、取整后加零，随后打包写出。写回后调用方只推进指针并返回。该输出重定标及写回链中，约定的 +25 或 -30 实际计入零次，所示路径没有等价补偿。",
+            "claim_state": "derived"
+          },
+          {
+            "key": "implementation_action",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 6,
+                "end_line": 10,
+                "use": "requirement",
+                "quote": "        .Input(\n            7,\n            \"y_zero_point\",\n            \"Zero point tensor for output 'y'. It's a scalar, which means a per-tensor/layer quantization.\",\n            \"T3\")"
+              },
+              {
+                "source_id": "s6",
+                "start_line": 11,
+                "end_line": 18,
+                "use": "behavior",
+                "quote": "    MlasRequantizeOutput(out_i32_data,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         Ydata,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         nullptr,\n                         &scale_value,\n                         false,\n                         (T)0,"
+              },
+              {
+                "source_id": "s7",
+                "start_line": 6,
+                "end_line": 14,
+                "use": "behavior",
+                "quote": "MlasRequantizeOutput(\n    const int32_t* Input,\n    size_t InputLeadingDimension,\n    OutputType* Output,\n    size_t OutputLeadingDimension,\n    const int32_t* Bias,\n    const float* Scale,\n    bool PerColumnScale,\n    OutputType ZeroPoint,"
+              }
+            ],
+            "explanation": "CPU 旧文件 qlinearconvtranspose.cc 在把输出累加缓冲重定标到 Ydata 时，将 MlasRequantizeOutput 第八个实参固定为 (T)0。对第 7 输入槽给出非零 int8 输出零点的模型，这个实参转发动作以中性值代替了必需加项。",
+            "claim_state": "derived"
+          },
+          {
+            "key": "causal_role",
+            "value": true,
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 6,
+                "end_line": 10,
+                "use": "requirement",
+                "quote": "        .Input(\n            7,\n            \"y_zero_point\",\n            \"Zero point tensor for output 'y'. It's a scalar, which means a per-tensor/layer quantization.\",\n            \"T3\")"
+              },
+              {
+                "source_id": "s6",
+                "start_line": 11,
+                "end_line": 22,
+                "use": "behavior",
+                "quote": "    MlasRequantizeOutput(out_i32_data,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         Ydata,\n                         p.Y->Shape()[2] * p.Y->Shape()[3],\n                         nullptr,\n                         &scale_value,\n                         false,\n                         (T)0,\n                         0,\n                         0,\n                         p.num_output_channels,\n                         p.Y->Shape()[2] * p.Y->Shape()[3]);"
+              },
+              {
+                "source_id": "s7",
+                "start_line": 21,
+                "end_line": 24,
+                "use": "behavior",
+                "quote": "    const __m128 PerMatrixScaleVector = PerColumnScale ? _mm_setzero_ps() : _mm_load1_ps(Scale); // _mm_load1_ps loads one float into 4 words\n    const __m128 MinimumValueVector = _mm_set1_ps(float(std::numeric_limits<OutputType>::lowest() - ZeroPoint));\n    const __m128 MaximumValueVector = _mm_set1_ps(float(std::numeric_limits<OutputType>::max() - ZeroPoint));\n    const __m128i ZeroPointVector = _mm_set1_epi32(ZeroPoint);"
+              },
+              {
+                "source_id": "s8",
+                "start_line": 7,
+                "end_line": 11,
+                "use": "behavior",
+                "quote": "            FloatVector = _mm_max_ps(FloatVector, MinimumValueVector);\n            FloatVector = _mm_min_ps(FloatVector, MaximumValueVector);\n\n            IntegerVector = _mm_cvtps_epi32(FloatVector);\n            IntegerVector = _mm_add_epi32(IntegerVector, ZeroPointVector);"
+              }
+            ],
+            "explanation": "在可追溯的旧路径中，调用点将输出零点固定为零，直接决定了下游加法的操作数。消费端按收到的零点裁剪和加法。调用点若传入约定值，所示消费路径即会在写回前使用它。根动作计为该实参转发一次。",
+            "claim_state": "derived"
+          }
+        ],
+        "issues": [],
+        "conflicts": [],
+        "description": "在固定旧版的 CPU 输出重定标调用中，向 MlasRequantizeOutput 的 ZeroPoint 形参传入 (T)0。对指定单批单组模型，x_zero_point 和 w_zero_point 均为 0，y_zero_point 为 25 或 -30 时，每个输出元素所需的输出零点加项被遗漏，满足 C2。y_zero_point 为 0 时，实参与该加项一致。",
+        "pattern_id": "C2",
+        "pattern_ref": "MECH-v0.3:C2",
+        "definition_level": "mechanism_relation",
+        "mode_name": "必需计算项遗漏",
+        "group_id": "item_multiplicity",
+        "group_ref": "MECH-v0.3:item_multiplicity",
+        "group_name": "计算项重复／遗漏问题",
+        "neighbors": [
+          {
+            "pattern_id": "C1",
+            "missing": [
+              "actual_contribution",
+              "ineligible_member"
+            ],
+            "contrary": [],
+            "disputed": [],
+            "pattern_ref": "MECH-v0.3:C1"
+          },
+          {
+            "pattern_id": "C3",
+            "missing": [
+              "excess_multiplicity",
+              "expected_multiplicity",
+              "original_contribution_identity"
+            ],
+            "contrary": [],
+            "disputed": [],
+            "pattern_ref": "MECH-v0.3:C3"
+          }
+        ],
+        "action_resolution": "supported",
+        "missing": [],
+        "count_as_independent": true
+      }
+    ]
+  }
+]

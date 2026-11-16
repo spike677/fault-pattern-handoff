@@ -1,0 +1,9 @@
+{
+  "locked_at": "2026-11-16T06:23:41.722189+00:00",
+  "protocol": "classification_only/0.3.1",
+  "run_sha256": [
+    "7f3a26273b62aa4589f11999899f89118c111670433945da23ff2c268db141ed",
+    "cbf64dda04a7dfd792a07415f9cb28351bec19dfecc524f91d5e97e6f37b2596"
+  ],
+  "seal_sha256": "dc3fd2c81ccb1f2041c4fbc0809dd046476a50c121f5aafb4fdf0a468d4d901b"
+}

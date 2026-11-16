@@ -1,0 +1,68 @@
+{
+  "artifacts": {
+    "WORKFLOW.md": "65b90d219df5e18a40a4e536e0054bc3438f9fc35046dc8cdfac47e5b7e43df9",
+    "catalog.json": "119a52ac3a8830e030161d1f4f5a2b6ffdfcb9ad6abd1230fdd9b103c1c9dac5",
+    "classify.py": "3f8ec2e1c308ab88524d1f9945209758848f30bdc8e85059f0a2f46ea1050359",
+    "evaluate.py": "9184eabad28ae1992024923ae806ef20014a41e5fbed94c71dd2408d5d765023",
+    "validation_0_3_1/readback/PROMPT.md": "108e2c3bf9ac0c9c6837ee9c90558697158541c2a4b6a36ae9ad0e018ab4cbd7"
+  },
+  "catalog_version": "0.3",
+  "combinations": [
+    {
+      "modes": [
+        "C1",
+        "C2"
+      ],
+      "parent": "calculation_item",
+      "required_fact": "distinct_members_for_replacement"
+    }
+  ],
+  "config_sha256": "0bd9e5e27eb843360ac1bca4027c266d217a1bf052dc9221d97b6a6e4e41fd26",
+  "created_at": "2026-11-16T06:21:32.544651+00:00",
+  "development_lineage": [],
+  "execution": {
+    "batch_kind": "already revealed C3, C2, and incomplete-evidence regressions",
+    "cli": "0.167.0-alpha.4.1",
+    "disabled_features": [
+      "shell_tool",
+      "unified_exec",
+      "shell_snapshot",
+      "skill_search",
+      "multi_agent",
+      "plugins",
+      "remote_plugin",
+      "enable_mcp_apps"
+    ],
+    "driver_sha256": "b2476f9a5600542493d3530f51f9d59678b5e459acc9d26acf47e64f663efb48",
+    "model": "gpt-6.1-sol",
+    "prompt": "readback/PROMPT.md sha256 108e2c3bf9ac0c9c6837ee9c90558697158541c2a4b6a36ae9ad0e018ab4cbd7",
+    "reasoning_effort": "medium",
+    "response_schema_sha256": "9118781c0a89e8e1f6eceaff3c795e2e3211d95c049b809276371112fd37dc70",
+    "session": "ephemeral",
+    "tools": [],
+    "web_search": "disabled"
+  },
+  "exposure_manifest_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+  "mechanism_namespace": "MECH-v0.3",
+  "parent_hierarchy": {
+    "item_multiplicity": "calculation_item",
+    "item_participation": "calculation_item"
+  },
+  "parent_ids": [
+    "address",
+    "calculation_item",
+    "item_multiplicity",
+    "item_participation",
+    "parameter"
+  ],
+  "parents": {
+    "C1": "item_participation",
+    "C2": "item_multiplicity",
+    "C3": "item_multiplicity",
+    "L1": "address",
+    "L2": "address",
+    "P1": "parameter",
+    "P2": "parameter"
+  },
+  "protocol": "classification_only/0.3.1"
+}

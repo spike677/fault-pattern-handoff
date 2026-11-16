@@ -1,0 +1,55 @@
+{
+  "lock_sha256": "14a6cfbf2a5e8cf7e5ad7c50bfc8913d457456ae5542697be6e785098a364445",
+  "answer_sha256": "309068929c211d8f860fb686c8b635109c9733b2f32c8a717eb0224f1eae3624",
+  "judge_id": "codex-coordinator:post-lock-opened-regression",
+  "runs": [
+    {
+      "run_sha256": "a82e10b02d37f72005bc8a0b71aafa405fef7b55810d4dc6d30d5649953dc2a0",
+      "cases": [
+        {
+          "case_id": "G10",
+          "actions": [
+            {
+              "prediction_id": "G10-A1",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。",
+              "rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。",
+              "failure_causes": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run_sha256": "62bf77a5c9e09bfaf80eb890eca8ed817fd70f236b29097c38b94d3587f84870",
+      "cases": [
+        {
+          "case_id": "G10",
+          "actions": [
+            {
+              "prediction_id": "G10-requantize-output",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。",
+              "rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。",
+              "failure_causes": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "stability": [
+    {
+      "case_id": "G10",
+      "same_decisive_facts": true,
+      "same_specific_action": true,
+      "rationale": "s4 固定输出零点要求，s6 旧调用将 MLAS ZeroPoint 写死为 (T)0，s7、s8 用传入值加法并写回，自模型零点的非零加数应计一次而实际零次。一次实现主动作。"
+    }
+  ]
+}

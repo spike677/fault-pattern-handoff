@@ -1,0 +1,1262 @@
+{
+  "artifacts": {
+    "context_sha256": "52fe22ae1aeb4ccda9ad7d99ba9dd07d9db9affe5d81095fc349e4eb4d54ada1",
+    "facts_sha256": "1cd3589f7e140debe60d5744eb447362028c6a63c73d0941bb01d1a07db67aa5",
+    "log_sha256": "02a2bbc06f2900d9c151d49df3debbf06dba4096fe888f2378abcc838a192edd",
+    "results_sha256": "d938347ca0670d46c53468369be4a12c86bc5c40a865b1927a2ab80d75149c25"
+  },
+  "captured_at": "2026-11-16T06:35:38.406346+00:00",
+  "context": {
+    "context_id": "01a1e30f-c0bb-7070-a18e-6cdbafb9db13",
+    "execution": {
+      "batch_kind": "new P2 and C3-neighbor public source views",
+      "cli": "0.167.0-alpha.4.1",
+      "disabled_features": [
+        "shell_tool",
+        "unified_exec",
+        "shell_snapshot",
+        "skill_search",
+        "multi_agent",
+        "plugins",
+        "remote_plugin",
+        "enable_mcp_apps"
+      ],
+      "driver_sha256": "b2476f9a5600542493d3530f51f9d59678b5e459acc9d26acf47e64f663efb48",
+      "model": "gpt-6.1-sol",
+      "prompt": "readback/PROMPT.md sha256 108e2c3bf9ac0c9c6837ee9c90558697158541c2a4b6a36ae9ad0e018ab4cbd7",
+      "reasoning_effort": "medium",
+      "response_schema_sha256": "9118781c0a89e8e1f6eceaff3c795e2e3211d95c049b809276371112fd37dc70",
+      "session": "ephemeral",
+      "tools": [],
+      "web_search": "disabled"
+    },
+    "executor_id": "local-codex-exec:01a1e30f-c0bb-7070-a18e-6cdbafb9db13",
+    "isolation_mechanism": "Ephemeral Codex request with no reader file or web tools",
+    "payload_sha256": "4cfb037f7dfb27bf1dbf30b431686c543d86ae7da2b52b5dcf67d2618b75fdd3",
+    "usage": {
+      "cache_write_input_tokens": 0,
+      "cached_input_tokens": 0,
+      "input_tokens": 26951,
+      "output_tokens": 3977,
+      "reasoning_output_tokens": 408
+    }
+  },
+  "facts": [
+    {
+      "actions": [
+        {
+          "description": "P2。加权平滑 mean 分支将原样展平的 target 交给 class-weight gather，使第 0 个样本的忽略状态 0 被用作普通类别索引。",
+          "facts": [
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 25,
+                  "quote": "  } else if (label_smoothing > 0.0) {\n    TORCH_CHECK(label_smoothing <= 1.0, \"label_smoothing must be between 0.0 and 1.0. Got: \", label_smoothing);\n\n    // See [Note: hacky wrapper removal for optional tensor]\n    c10::MaybeOwned<Tensor> weight_maybe_owned = at::borrow_from_optional_tensor(weight);\n    const Tensor& weight_ = *weight_maybe_owned;\n    ret = cross_entropy_loss_label_smoothing(self, target, weight_, reduction, ignore_index, label_smoothing);",
+                  "source_id": "s4",
+                  "start_line": 19,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "      case Reduction::Mean:\n        if (weight.defined()) {\n          // TODO: This code can path can be removed if #61309 is resolved\n          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 33,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "类别索引路径的 mean 按未忽略目标计算。旧平滑分支的加权 mean 使用目标类别权重作归一化，给定输入满足该分支条件。",
+              "key": "applicable_contract",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 3,
+                  "quote": "    return torch._C._nn.cross_entropy_loss(input, target, weight, _Reduction.get_enum(reduction), ignore_index, label_smoothing)",
+                  "source_id": "s2",
+                  "start_line": 3,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 37,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "类别索引来自调用方的 target，忽略值来自同一调用的 ignore_index。旧函数以这两者比较来识别忽略位置，分母 gather 也从这份 target 取索引。",
+              "key": "correct_source",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 2,
+                  "quote": "        target (Tensor) : If containing class indices, shape :math:`(N)` where each value is\n            :math:`0 \\leq \\text{targets}[i] \\leq C-1`, or :math:`(N, d_1, d_2, ..., d_K)` with",
+                  "source_id": "s1",
+                  "start_line": 1,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "在给定调用中，target[0] 等于 ignore_index=0，具有忽略语义。0 同时落在合法类别索引范围内，旧分子的比较仍能识别这一忽略位置。",
+              "key": "special_state",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "忽略处理只把对应的 smooth_loss 置零。分母仍用完整的 target.flatten() 索引 weight，因此忽略位置上的 0 被解释为类别 0，gather 得到 2。",
+              "key": "wrong_state_treatment",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "      case Reduction::Mean:\n        if (weight.defined()) {\n          // TODO: This code can path can be removed if #61309 is resolved\n          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 33,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "LossNLL.cpp 的加权 Reduction::Mean 分支调用 weight.gather(0, target.flatten())，给 gather 的索引保留了等于 ignore_index 的位置。",
+              "key": "implementation_action",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "分子已识别并清零该忽略位置。分母路径在 gather 处把同一位置转成具体类别权重，并立即交给求和，故将此处记为范围内的根动作。",
+              "key": "causal_role",
+              "value": true
+            }
+          ],
+          "id": "H01-gather",
+          "role": "primary",
+          "scope": {
+            "claim": "static",
+            "path": "aten/src/ATen/native/LossNLL.cpp",
+            "version": "8b1e49635a488a4b260ef5d5657279585c5a291d"
+          }
+        },
+        {
+          "description": "C1。gather 的权重向量直接进入分母求和，第 0 个样本对应的非中性权重 2 与第 1 个样本对应的权重 3 一起计入。",
+          "facts": [
+            {
+              "anchors": [
+                {
+                  "end_line": 6,
+                  "quote": "        weight (Tensor, optional): a manual rescaling weight given to each\n            class. If given, has to be a Tensor of size `C`",
+                  "source_id": "s1",
+                  "start_line": 5,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "      case Reduction::Mean:\n        if (weight.defined()) {\n          // TODO: This code can path can be removed if #61309 is resolved\n          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 33,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "受评目标是平滑分支加权 mean 的分母。每个按约定参与 mean 的样本提供其目标类别的权重。",
+              "key": "applicable_contract",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "在这个分母中，第 0 个样本对应的目标类权重项无资格参与，因为 target[0] 等于 ignore_index。",
+              "key": "ineligible_member",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "gather 按样本位置产生 [2,3]，紧接的 sum 将 2 实际加到分母，得到 5。约定分母只含第 1 个样本的 3。分子上的置零没有中性化分母里的 2。",
+              "key": "actual_contribution",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "LossNLL.cpp 的加权 mean 表达式对 gather 的完整结果直接求和，并把该和用作 smooth_loss.sum() 的除数。",
+              "key": "implementation_action",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "分母求和消费 H01-gather 的权重结果。上游排除忽略位置后，同一 sum 只收到权重 3，额外的 2 随即消失。",
+              "key": "causal_role",
+              "value": true
+            }
+          ],
+          "id": "H01-normalizer",
+          "role": "downstream",
+          "scope": {
+            "claim": "static",
+            "path": "aten/src/ATen/native/LossNLL.cpp",
+            "version": "8b1e49635a488a4b260ef5d5657279585c5a291d"
+          },
+          "upstream_id": "H01-gather"
+        }
+      ],
+      "case_id": "H01",
+      "fact_protocol": "classification_facts/0.3.1",
+      "operator": "PyTorch CPU cross_entropy",
+      "roles": [
+        "类别索引 target",
+        "忽略状态 ignore_index",
+        "平滑分支的 class-weight gather",
+        "加权 mean 归一化分母"
+      ]
+    },
+    {
+      "actions": [
+        {
+          "description": "1D indexed loop 逐次消耗索引与对应的 b 元素，对 aa[2] 依次累加 b[0] 和 b[2]，符合 add.at 的重复索引约定。",
+          "facts": [
+            {
+              "anchors": [
+                {
+                  "end_line": 13,
+                  "quote": "    Performs unbuffered in place operation on operand 'a' for elements\n    specified by 'indices'. For addition ufunc, this method is equivalent to\n    ``a[indices] += b``, except that results are accumulated for elements that\n    are indexed more than once. For example, ``a[[0,0]] += 1`` will only\n    increment the first element once because of buffering, whereas\n    ``add.at(a, [0,0], 1)`` will increment the first element twice.",
+                  "source_id": "s1",
+                  "start_line": 8,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 23,
+                  "quote": "        args[2] = (char *)PyArray_DATA(op2_array);\n        if (PyArray_NDIM(op2_array) == 0\n            || PyArray_DIM(op2_array, 0) <= 1) {\n            steps[2] = 0;\n        } else {\n            steps[2] = PyArray_STRIDE(op2_array, 0);\n        }",
+                  "source_id": "s3",
+                  "start_line": 17,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 42,
+                  "quote": "        npy_intp *inner_size = NpyIter_GetInnerLoopSizePtr(iter->outer);\n        npy_intp * indxP = (npy_intp *)iter->outer_ptrs[0];\n        args[1] = (char *)indxP;\n        steps[1] = iter->outer_strides[0];\n        /*\n         * The value of iter->fancy_dims[0] is added to negative indexes\n         * inside the inner loop\n         */\n        steps[3] = iter->fancy_dims[0];\n\n        res = ufuncimpl->contiguous_indexed_loop(\n                context, args, inner_size, steps, NULL);",
+                  "source_id": "s3",
+                  "start_line": 31,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 26,
+                  "quote": "    for(i = 0; i < n; i++, indxp += isindex, value += isb) {\n        npy_intp indx = *(npy_intp *)indxp;\n        if (indx < 0) {\n            indx += shape;\n        }\n        indexed = (@type@ *)(ip1 + is1 * indx);\n        *indexed = *indexed @OP@ *(@type@ *)value;",
+                  "source_id": "s5",
+                  "start_line": 20,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "add.at 对索引指定的位置作无缓冲原地加法。受评路径里，调用者把索引、非标量 b 的数据及步长传给 1D indexed loop，内层逐位置更新。",
+              "key": "applicable_contract",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 13,
+                  "quote": "    Performs unbuffered in place operation on operand 'a' for elements\n    specified by 'indices'. For addition ufunc, this method is equivalent to\n    ``a[indices] += b``, except that results are accumulated for elements that\n    are indexed more than once. For example, ``a[[0,0]] += 1`` will only\n    increment the first element once because of buffering, whereas\n    ``add.at(a, [0,0], 1)`` will increment the first element twice.",
+                  "source_id": "s1",
+                  "start_line": 8,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 22,
+                  "quote": "        aa = a.copy()\n        b = np.array([100, 100, 100])\n        np.add.at(aa, [2, 5, 2], b)",
+                  "source_id": "s2",
+                  "start_line": 20,
+                  "use": "context"
+                },
+                {
+                  "end_line": 26,
+                  "quote": "    for(i = 0; i < n; i++, indxp += isindex, value += isb) {\n        npy_intp indx = *(npy_intp *)indxp;\n        if (indx < 0) {\n            indx += shape;\n        }\n        indexed = (@type@ *)(ip1 + is1 * indx);\n        *indexed = *indexed @OP@ *(@type@ *)value;",
+                  "source_id": "s5",
+                  "start_line": 20,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "约定要求对同一目标的每次索引出现作一次累加。索引出现位置 0 和 2 都指向 aa[2]，分别配对 b[0] 和 b[2]。两个操作数元素同值但逻辑坐标不同。",
+              "key": "repeat_semantics_permitted",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 13,
+                  "quote": "    Performs unbuffered in place operation on operand 'a' for elements\n    specified by 'indices'. For addition ufunc, this method is equivalent to\n    ``a[indices] += b``, except that results are accumulated for elements that\n    are indexed more than once. For example, ``a[[0,0]] += 1`` will only\n    increment the first element once because of buffering, whereas\n    ``add.at(a, [0,0], 1)`` will increment the first element twice.",
+                  "source_id": "s1",
+                  "start_line": 8,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 23,
+                  "quote": "        aa = a.copy()\n        b = np.array([100, 100, 100])\n        np.add.at(aa, [2, 5, 2], b)\n        assert_equal(aa, [0, 1, 202, 3, 4, 105, 6, 7, 8, 9])",
+                  "source_id": "s2",
+                  "start_line": 20,
+                  "use": "context"
+                },
+                {
+                  "end_line": 23,
+                  "quote": "        args[2] = (char *)PyArray_DATA(op2_array);\n        if (PyArray_NDIM(op2_array) == 0\n            || PyArray_DIM(op2_array, 0) <= 1) {\n            steps[2] = 0;\n        } else {\n            steps[2] = PyArray_STRIDE(op2_array, 0);\n        }",
+                  "source_id": "s3",
+                  "start_line": 17,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 47,
+                  "quote": "        res = ufuncimpl->contiguous_indexed_loop(\n                context, args, inner_size, steps, NULL);\n\n        if (args[2] != NULL) {\n            args[2] += (*inner_size) * steps[2];\n        }\n    } while (res == 0 && iter->outer_next(iter->outer));",
+                  "source_id": "s3",
+                  "start_line": 41,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 4,
+                  "quote": " * #kind = add, subtract, multiply, bitwise_and, bitwise_or, bitwise_xor#\n * #OP = +, -, *, &, |, ^#",
+                  "source_id": "s5",
+                  "start_line": 3,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 26,
+                  "quote": "    for(i = 0; i < n; i++, indxp += isindex, value += isb) {\n        npy_intp indx = *(npy_intp *)indxp;\n        if (indx < 0) {\n            indx += shape;\n        }\n        indexed = (@type@ *)(ip1 + is1 * indx);\n        *indexed = *indexed @OP@ *(@type@ *)value;",
+                  "source_id": "s5",
+                  "start_line": 20,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "内层每轮同步推进索引游标和 b 游标，按当前索引取地址并立即读改写。对 aa[2]，b[0] 和 b[2] 各进入一次，第二次更新沿用第一次写出的 102，得到 202。中间的 b[1] 更新 aa[5]。",
+              "key": "expected_multiplicity_met",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 13,
+                  "quote": "    Performs unbuffered in place operation on operand 'a' for elements\n    specified by 'indices'. For addition ufunc, this method is equivalent to\n    ``a[indices] += b``, except that results are accumulated for elements that\n    are indexed more than once. For example, ``a[[0,0]] += 1`` will only\n    increment the first element once because of buffering, whereas\n    ``add.at(a, [0,0], 1)`` will increment the first element twice.",
+                  "source_id": "s1",
+                  "start_line": 8,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 2,
+                  "quote": "                             np.arange(10, dtype=int),",
+                  "source_id": "s2",
+                  "start_line": 2,
+                  "use": "context"
+                },
+                {
+                  "end_line": 23,
+                  "quote": "        aa = a.copy()\n        b = np.array([100, 100, 100])\n        np.add.at(aa, [2, 5, 2], b)\n        assert_equal(aa, [0, 1, 202, 3, 4, 105, 6, 7, 8, 9])",
+                  "source_id": "s2",
+                  "start_line": 20,
+                  "use": "context"
+                },
+                {
+                  "end_line": 4,
+                  "quote": " * #kind = add, subtract, multiply, bitwise_and, bitwise_or, bitwise_xor#\n * #OP = +, -, *, &, |, ^#",
+                  "source_id": "s5",
+                  "start_line": 3,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 26,
+                  "quote": "    for(i = 0; i < n; i++, indxp += isindex, value += isb) {\n        npy_intp indx = *(npy_intp *)indxp;\n        if (indx < 0) {\n            indx += shape;\n        }\n        indexed = (@type@ *)(ip1 + is1 * indx);\n        *indexed = *indexed @OP@ *(@type@ *)value;",
+                  "source_id": "s5",
+                  "start_line": 20,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "限定进入所示 loop 的路径，aa[2] 的结果为初值 2 加上两次合法索引出现各自携带的 100，满足原地累加的约定。",
+              "key": "compliant",
+              "value": true
+            }
+          ],
+          "id": "H02-indexed-add",
+          "role": "unknown",
+          "scope": {
+            "claim": "static",
+            "path": "numpy/_core/src/umath/loops.c.src",
+            "version": "5fcd16dc72cbc4563deec5225e84f3b585e69afe"
+          }
+        }
+      ],
+      "case_id": "H02",
+      "fact_protocol": "classification_facts/0.3.1",
+      "operator": "NumPy native integer add.at",
+      "roles": [
+        "原地目标 aa[2]",
+        "索引出现位置 0 和 2",
+        "非标量操作数 b 的逻辑元素",
+        "1D indexed loop"
+      ]
+    }
+  ],
+  "predictions": [
+    {
+      "actions": [
+        {
+          "action_resolution": "supported",
+          "conflicts": [],
+          "count_as_independent": true,
+          "definition_level": "implementation_error",
+          "description": "P2。加权平滑 mean 分支将原样展平的 target 交给 class-weight gather，使第 0 个样本的忽略状态 0 被用作普通类别索引。",
+          "facts": [
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 25,
+                  "quote": "  } else if (label_smoothing > 0.0) {\n    TORCH_CHECK(label_smoothing <= 1.0, \"label_smoothing must be between 0.0 and 1.0. Got: \", label_smoothing);\n\n    // See [Note: hacky wrapper removal for optional tensor]\n    c10::MaybeOwned<Tensor> weight_maybe_owned = at::borrow_from_optional_tensor(weight);\n    const Tensor& weight_ = *weight_maybe_owned;\n    ret = cross_entropy_loss_label_smoothing(self, target, weight_, reduction, ignore_index, label_smoothing);",
+                  "source_id": "s4",
+                  "start_line": 19,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "      case Reduction::Mean:\n        if (weight.defined()) {\n          // TODO: This code can path can be removed if #61309 is resolved\n          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 33,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "类别索引路径的 mean 按未忽略目标计算。旧平滑分支的加权 mean 使用目标类别权重作归一化，给定输入满足该分支条件。",
+              "key": "applicable_contract",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 3,
+                  "quote": "    return torch._C._nn.cross_entropy_loss(input, target, weight, _Reduction.get_enum(reduction), ignore_index, label_smoothing)",
+                  "source_id": "s2",
+                  "start_line": 3,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 37,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "类别索引来自调用方的 target，忽略值来自同一调用的 ignore_index。旧函数以这两者比较来识别忽略位置，分母 gather 也从这份 target 取索引。",
+              "key": "correct_source",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 2,
+                  "quote": "        target (Tensor) : If containing class indices, shape :math:`(N)` where each value is\n            :math:`0 \\leq \\text{targets}[i] \\leq C-1`, or :math:`(N, d_1, d_2, ..., d_K)` with",
+                  "source_id": "s1",
+                  "start_line": 1,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "在给定调用中，target[0] 等于 ignore_index=0，具有忽略语义。0 同时落在合法类别索引范围内，旧分子的比较仍能识别这一忽略位置。",
+              "key": "special_state",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "忽略处理只把对应的 smooth_loss 置零。分母仍用完整的 target.flatten() 索引 weight，因此忽略位置上的 0 被解释为类别 0，gather 得到 2。",
+              "key": "wrong_state_treatment",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "      case Reduction::Mean:\n        if (weight.defined()) {\n          // TODO: This code can path can be removed if #61309 is resolved\n          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 33,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "LossNLL.cpp 的加权 Reduction::Mean 分支调用 weight.gather(0, target.flatten())，给 gather 的索引保留了等于 ignore_index 的位置。",
+              "key": "implementation_action",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "分子已识别并清零该忽略位置。分母路径在 gather 处把同一位置转成具体类别权重，并立即交给求和，故将此处记为范围内的根动作。",
+              "key": "causal_role",
+              "value": true
+            }
+          ],
+          "group_id": "parameter",
+          "group_name": "参数语义",
+          "group_ref": "MECH-v0.3:parameter",
+          "id": "H01-gather",
+          "issues": [],
+          "missing": [],
+          "mode_name": "特殊参数状态误解释",
+          "neighbors": [
+            {
+              "contrary": [
+                "correct_source"
+              ],
+              "disputed": [],
+              "missing": [
+                "actual_source",
+                "expected_source",
+                "non_equivalent_source"
+              ],
+              "pattern_id": "P1",
+              "pattern_ref": "MECH-v0.3:P1"
+            }
+          ],
+          "pattern_id": "P2",
+          "pattern_ref": "MECH-v0.3:P2",
+          "role": "primary",
+          "scope": {
+            "claim": "static",
+            "path": "aten/src/ATen/native/LossNLL.cpp",
+            "version": "8b1e49635a488a4b260ef5d5657279585c5a291d"
+          },
+          "status": "leaf"
+        },
+        {
+          "action_resolution": "supported",
+          "conflicts": [],
+          "count_as_independent": false,
+          "definition_level": "mechanism_relation",
+          "description": "C1。gather 的权重向量直接进入分母求和，第 0 个样本对应的非中性权重 2 与第 1 个样本对应的权重 3 一起计入。",
+          "facts": [
+            {
+              "anchors": [
+                {
+                  "end_line": 6,
+                  "quote": "        weight (Tensor, optional): a manual rescaling weight given to each\n            class. If given, has to be a Tensor of size `C`",
+                  "source_id": "s1",
+                  "start_line": 5,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "      case Reduction::Mean:\n        if (weight.defined()) {\n          // TODO: This code can path can be removed if #61309 is resolved\n          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 33,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "受评目标是平滑分支加权 mean 的分母。每个按约定参与 mean 的样本提供其目标类别的权重。",
+              "key": "applicable_contract",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "在这个分母中，第 0 个样本对应的目标类权重项无资格参与，因为 target[0] 等于 ignore_index。",
+              "key": "ineligible_member",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 29,
+                  "quote": "    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }",
+                  "source_id": "s3",
+                  "start_line": 27,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "gather 按样本位置产生 [2,3]，紧接的 sum 将 2 实际加到分母，得到 5。约定分母只含第 1 个样本的 3。分子上的置零没有中性化分母里的 2。",
+              "key": "actual_contribution",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "LossNLL.cpp 的加权 mean 表达式对 gather 的完整结果直接求和，并把该和用作 smooth_loss.sum() 的除数。",
+              "key": "implementation_action",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 15,
+                  "quote": "        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.",
+                  "source_id": "s1",
+                  "start_line": 12,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 37,
+                  "quote": "          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();",
+                  "source_id": "s3",
+                  "start_line": 36,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "分母求和消费 H01-gather 的权重结果。上游排除忽略位置后，同一 sum 只收到权重 3，额外的 2 随即消失。",
+              "key": "causal_role",
+              "value": true
+            }
+          ],
+          "group_id": "item_participation",
+          "group_name": "计算项的参与范围问题",
+          "group_ref": "MECH-v0.3:item_participation",
+          "id": "H01-normalizer",
+          "issues": [],
+          "missing": [],
+          "mode_name": "无效计算项纳入",
+          "neighbors": [
+            {
+              "contrary": [],
+              "disputed": [],
+              "missing": [
+                "omitted_contribution",
+                "required_member"
+              ],
+              "pattern_id": "C2",
+              "pattern_ref": "MECH-v0.3:C2"
+            },
+            {
+              "contrary": [],
+              "disputed": [],
+              "missing": [
+                "excess_multiplicity",
+                "expected_multiplicity",
+                "original_contribution_identity"
+              ],
+              "pattern_id": "C3",
+              "pattern_ref": "MECH-v0.3:C3"
+            }
+          ],
+          "pattern_id": "C1",
+          "pattern_ref": "MECH-v0.3:C1",
+          "role": "downstream",
+          "scope": {
+            "claim": "static",
+            "path": "aten/src/ATen/native/LossNLL.cpp",
+            "version": "8b1e49635a488a4b260ef5d5657279585c5a291d"
+          },
+          "status": "leaf",
+          "upstream_id": "H01-gather"
+        }
+      ],
+      "case_id": "H01",
+      "case_sha256": "13047b5c51f4dcc9e93e487132a9c6981b7e187e4216cd925214e661f60b33b9",
+      "catalog_version": "0.3",
+      "decision_version": "0.3.1",
+      "facts_sha256": "09b7daa9575cf742ef5d5a2748a6422dd12a144fffce7d586269433de2978bc1",
+      "mechanism_namespace": "MECH-v0.3",
+      "operator": "PyTorch CPU cross_entropy",
+      "roles": [
+        "类别索引 target",
+        "忽略状态 ignore_index",
+        "平滑分支的 class-weight gather",
+        "加权 mean 归一化分母"
+      ]
+    },
+    {
+      "actions": [
+        {
+          "action_resolution": "unresolved",
+          "conflicts": [],
+          "count_as_independent": false,
+          "description": "1D indexed loop 逐次消耗索引与对应的 b 元素，对 aa[2] 依次累加 b[0] 和 b[2]，符合 add.at 的重复索引约定。",
+          "facts": [
+            {
+              "anchors": [
+                {
+                  "end_line": 13,
+                  "quote": "    Performs unbuffered in place operation on operand 'a' for elements\n    specified by 'indices'. For addition ufunc, this method is equivalent to\n    ``a[indices] += b``, except that results are accumulated for elements that\n    are indexed more than once. For example, ``a[[0,0]] += 1`` will only\n    increment the first element once because of buffering, whereas\n    ``add.at(a, [0,0], 1)`` will increment the first element twice.",
+                  "source_id": "s1",
+                  "start_line": 8,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 23,
+                  "quote": "        args[2] = (char *)PyArray_DATA(op2_array);\n        if (PyArray_NDIM(op2_array) == 0\n            || PyArray_DIM(op2_array, 0) <= 1) {\n            steps[2] = 0;\n        } else {\n            steps[2] = PyArray_STRIDE(op2_array, 0);\n        }",
+                  "source_id": "s3",
+                  "start_line": 17,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 42,
+                  "quote": "        npy_intp *inner_size = NpyIter_GetInnerLoopSizePtr(iter->outer);\n        npy_intp * indxP = (npy_intp *)iter->outer_ptrs[0];\n        args[1] = (char *)indxP;\n        steps[1] = iter->outer_strides[0];\n        /*\n         * The value of iter->fancy_dims[0] is added to negative indexes\n         * inside the inner loop\n         */\n        steps[3] = iter->fancy_dims[0];\n\n        res = ufuncimpl->contiguous_indexed_loop(\n                context, args, inner_size, steps, NULL);",
+                  "source_id": "s3",
+                  "start_line": 31,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 26,
+                  "quote": "    for(i = 0; i < n; i++, indxp += isindex, value += isb) {\n        npy_intp indx = *(npy_intp *)indxp;\n        if (indx < 0) {\n            indx += shape;\n        }\n        indexed = (@type@ *)(ip1 + is1 * indx);\n        *indexed = *indexed @OP@ *(@type@ *)value;",
+                  "source_id": "s5",
+                  "start_line": 20,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "add.at 对索引指定的位置作无缓冲原地加法。受评路径里，调用者把索引、非标量 b 的数据及步长传给 1D indexed loop，内层逐位置更新。",
+              "key": "applicable_contract",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 13,
+                  "quote": "    Performs unbuffered in place operation on operand 'a' for elements\n    specified by 'indices'. For addition ufunc, this method is equivalent to\n    ``a[indices] += b``, except that results are accumulated for elements that\n    are indexed more than once. For example, ``a[[0,0]] += 1`` will only\n    increment the first element once because of buffering, whereas\n    ``add.at(a, [0,0], 1)`` will increment the first element twice.",
+                  "source_id": "s1",
+                  "start_line": 8,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 22,
+                  "quote": "        aa = a.copy()\n        b = np.array([100, 100, 100])\n        np.add.at(aa, [2, 5, 2], b)",
+                  "source_id": "s2",
+                  "start_line": 20,
+                  "use": "context"
+                },
+                {
+                  "end_line": 26,
+                  "quote": "    for(i = 0; i < n; i++, indxp += isindex, value += isb) {\n        npy_intp indx = *(npy_intp *)indxp;\n        if (indx < 0) {\n            indx += shape;\n        }\n        indexed = (@type@ *)(ip1 + is1 * indx);\n        *indexed = *indexed @OP@ *(@type@ *)value;",
+                  "source_id": "s5",
+                  "start_line": 20,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "约定要求对同一目标的每次索引出现作一次累加。索引出现位置 0 和 2 都指向 aa[2]，分别配对 b[0] 和 b[2]。两个操作数元素同值但逻辑坐标不同。",
+              "key": "repeat_semantics_permitted",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 13,
+                  "quote": "    Performs unbuffered in place operation on operand 'a' for elements\n    specified by 'indices'. For addition ufunc, this method is equivalent to\n    ``a[indices] += b``, except that results are accumulated for elements that\n    are indexed more than once. For example, ``a[[0,0]] += 1`` will only\n    increment the first element once because of buffering, whereas\n    ``add.at(a, [0,0], 1)`` will increment the first element twice.",
+                  "source_id": "s1",
+                  "start_line": 8,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 23,
+                  "quote": "        aa = a.copy()\n        b = np.array([100, 100, 100])\n        np.add.at(aa, [2, 5, 2], b)\n        assert_equal(aa, [0, 1, 202, 3, 4, 105, 6, 7, 8, 9])",
+                  "source_id": "s2",
+                  "start_line": 20,
+                  "use": "context"
+                },
+                {
+                  "end_line": 23,
+                  "quote": "        args[2] = (char *)PyArray_DATA(op2_array);\n        if (PyArray_NDIM(op2_array) == 0\n            || PyArray_DIM(op2_array, 0) <= 1) {\n            steps[2] = 0;\n        } else {\n            steps[2] = PyArray_STRIDE(op2_array, 0);\n        }",
+                  "source_id": "s3",
+                  "start_line": 17,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 47,
+                  "quote": "        res = ufuncimpl->contiguous_indexed_loop(\n                context, args, inner_size, steps, NULL);\n\n        if (args[2] != NULL) {\n            args[2] += (*inner_size) * steps[2];\n        }\n    } while (res == 0 && iter->outer_next(iter->outer));",
+                  "source_id": "s3",
+                  "start_line": 41,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 4,
+                  "quote": " * #kind = add, subtract, multiply, bitwise_and, bitwise_or, bitwise_xor#\n * #OP = +, -, *, &, |, ^#",
+                  "source_id": "s5",
+                  "start_line": 3,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 26,
+                  "quote": "    for(i = 0; i < n; i++, indxp += isindex, value += isb) {\n        npy_intp indx = *(npy_intp *)indxp;\n        if (indx < 0) {\n            indx += shape;\n        }\n        indexed = (@type@ *)(ip1 + is1 * indx);\n        *indexed = *indexed @OP@ *(@type@ *)value;",
+                  "source_id": "s5",
+                  "start_line": 20,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "内层每轮同步推进索引游标和 b 游标，按当前索引取地址并立即读改写。对 aa[2]，b[0] 和 b[2] 各进入一次，第二次更新沿用第一次写出的 102，得到 202。中间的 b[1] 更新 aa[5]。",
+              "key": "expected_multiplicity_met",
+              "value": true
+            },
+            {
+              "anchors": [
+                {
+                  "end_line": 13,
+                  "quote": "    Performs unbuffered in place operation on operand 'a' for elements\n    specified by 'indices'. For addition ufunc, this method is equivalent to\n    ``a[indices] += b``, except that results are accumulated for elements that\n    are indexed more than once. For example, ``a[[0,0]] += 1`` will only\n    increment the first element once because of buffering, whereas\n    ``add.at(a, [0,0], 1)`` will increment the first element twice.",
+                  "source_id": "s1",
+                  "start_line": 8,
+                  "use": "requirement"
+                },
+                {
+                  "end_line": 2,
+                  "quote": "                             np.arange(10, dtype=int),",
+                  "source_id": "s2",
+                  "start_line": 2,
+                  "use": "context"
+                },
+                {
+                  "end_line": 23,
+                  "quote": "        aa = a.copy()\n        b = np.array([100, 100, 100])\n        np.add.at(aa, [2, 5, 2], b)\n        assert_equal(aa, [0, 1, 202, 3, 4, 105, 6, 7, 8, 9])",
+                  "source_id": "s2",
+                  "start_line": 20,
+                  "use": "context"
+                },
+                {
+                  "end_line": 4,
+                  "quote": " * #kind = add, subtract, multiply, bitwise_and, bitwise_or, bitwise_xor#\n * #OP = +, -, *, &, |, ^#",
+                  "source_id": "s5",
+                  "start_line": 3,
+                  "use": "behavior"
+                },
+                {
+                  "end_line": 26,
+                  "quote": "    for(i = 0; i < n; i++, indxp += isindex, value += isb) {\n        npy_intp indx = *(npy_intp *)indxp;\n        if (indx < 0) {\n            indx += shape;\n        }\n        indexed = (@type@ *)(ip1 + is1 * indx);\n        *indexed = *indexed @OP@ *(@type@ *)value;",
+                  "source_id": "s5",
+                  "start_line": 20,
+                  "use": "behavior"
+                }
+              ],
+              "claim_state": "derived",
+              "explanation": "限定进入所示 loop 的路径，aa[2] 的结果为初值 2 加上两次合法索引出现各自携带的 100，满足原地累加的约定。",
+              "key": "compliant",
+              "value": true
+            }
+          ],
+          "id": "H02-indexed-add",
+          "issues": [],
+          "missing": [],
+          "neighbors": [
+            {
+              "contrary": [],
+              "disputed": [],
+              "missing": [
+                "actual_contribution",
+                "ineligible_member"
+              ],
+              "pattern_id": "C1",
+              "pattern_ref": "MECH-v0.3:C1"
+            },
+            {
+              "contrary": [],
+              "disputed": [],
+              "missing": [
+                "omitted_contribution",
+                "required_member"
+              ],
+              "pattern_id": "C2",
+              "pattern_ref": "MECH-v0.3:C2"
+            },
+            {
+              "contrary": [
+                "expected_multiplicity_met",
+                "repeat_semantics_permitted"
+              ],
+              "disputed": [],
+              "missing": [
+                "excess_multiplicity",
+                "expected_multiplicity",
+                "original_contribution_identity"
+              ],
+              "pattern_id": "C3",
+              "pattern_ref": "MECH-v0.3:C3"
+            },
+            {
+              "contrary": [],
+              "disputed": [],
+              "missing": [
+                "contiguous_formula",
+                "no_correct_contiguous_conversion",
+                "supported_view"
+              ],
+              "pattern_id": "L1",
+              "pattern_ref": "MECH-v0.3:L1"
+            },
+            {
+              "contrary": [],
+              "disputed": [],
+              "missing": [
+                "expected_units",
+                "storage_width",
+                "wrong_conversion"
+              ],
+              "pattern_id": "L2",
+              "pattern_ref": "MECH-v0.3:L2"
+            },
+            {
+              "contrary": [],
+              "disputed": [],
+              "missing": [
+                "actual_source",
+                "expected_source",
+                "non_equivalent_source"
+              ],
+              "pattern_id": "P1",
+              "pattern_ref": "MECH-v0.3:P1"
+            },
+            {
+              "contrary": [],
+              "disputed": [],
+              "missing": [
+                "correct_source",
+                "special_state",
+                "wrong_state_treatment"
+              ],
+              "pattern_id": "P2",
+              "pattern_ref": "MECH-v0.3:P2"
+            }
+          ],
+          "outside_reason": "compliant",
+          "role": "unknown",
+          "scope": {
+            "claim": "static",
+            "path": "numpy/_core/src/umath/loops.c.src",
+            "version": "5fcd16dc72cbc4563deec5225e84f3b585e69afe"
+          },
+          "status": "outside"
+        }
+      ],
+      "case_id": "H02",
+      "case_sha256": "ff3066724c05122cd08505b1a20532eab877cbfabf9fcf741e4b0568aa553af4",
+      "catalog_version": "0.3",
+      "decision_version": "0.3.1",
+      "facts_sha256": "1e527aaf4f9876a80004822bc688cdde0df024d60093717ad5952a9fa28f664b",
+      "mechanism_namespace": "MECH-v0.3",
+      "operator": "NumPy native integer add.at",
+      "roles": [
+        "原地目标 aa[2]",
+        "索引出现位置 0 和 2",
+        "非标量操作数 b 的逻辑元素",
+        "1D indexed loop"
+      ]
+    }
+  ],
+  "probe": null,
+  "protocol": "classification_only/0.3.1",
+  "seal_sha256": "7dfb4a16000376fea01eadbfa19c1c36756b75c249713f01d4ce2f369dcfa32e"
+}

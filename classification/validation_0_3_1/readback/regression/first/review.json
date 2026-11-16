@@ -1,0 +1,127 @@
+{
+  "lock_sha256": "596d611e4353faf2de0f9834d08b84f5ad667c58b64c9f07a073a31805656183",
+  "answer_sha256": "e2b53bacd8d26c8db88bcfe31bdee55b1cdff1a62fb76c681460581c151c8130",
+  "judge_id": "codex-coordinator:post-lock-opened-regression",
+  "runs": [
+    {
+      "run_sha256": "7f3a26273b62aa4589f11999899f89118c111670433945da23ff2c268db141ed",
+      "cases": [
+        {
+          "case_id": "G02",
+          "actions": [
+            {
+              "prediction_id": "G02-A1",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。",
+              "rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。",
+              "failure_causes": []
+            }
+          ]
+        },
+        {
+          "case_id": "G06",
+          "actions": [
+            {
+              "prediction_id": "G06-A1",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。",
+              "rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。",
+              "failure_causes": []
+            }
+          ]
+        },
+        {
+          "case_id": "G10",
+          "actions": [
+            {
+              "prediction_id": "G10-A1",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。",
+              "rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。",
+              "failure_causes": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run_sha256": "cbf64dda04a7dfd792a07415f9cb28351bec19dfecc524f91d5e97e6f37b2596",
+      "cases": [
+        {
+          "case_id": "G02",
+          "actions": [
+            {
+              "prediction_id": "G02-1",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。",
+              "rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。",
+              "failure_causes": []
+            }
+          ]
+        },
+        {
+          "case_id": "G06",
+          "actions": [
+            {
+              "prediction_id": "G06-1",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。",
+              "rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。",
+              "failure_causes": []
+            }
+          ]
+        },
+        {
+          "case_id": "G10",
+          "actions": [
+            {
+              "prediction_id": "G10-1",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。",
+              "rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。",
+              "failure_causes": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "stability": [
+    {
+      "case_id": "G02",
+      "same_decisive_facts": true,
+      "same_specific_action": true,
+      "rationale": "两轮均定位有符号排序及前缀消费。唯一负 sentinel 预期为报告者陈述，和旧源码版本不同，无同版输入契约；保持缺证。"
+    },
+    {
+      "case_id": "G06",
+      "same_decisive_facts": true,
+      "same_specific_action": true,
+      "rationale": "s1、s2、s5、s6、s7 跟踪首个请求的镜像从 1000 变为 1008，s4 对同一次 verify 同一来源区间再加 8 并将 1016 传给 replay。应计一次，实计两次。"
+    },
+    {
+      "case_id": "G10",
+      "same_decisive_facts": true,
+      "same_specific_action": true,
+      "rationale": "s2 仅见输出对零点改动不敏感，无法区分没取值、转发、消费者或其他原因。原件没有旧调用和写回链。"
+    }
+  ]
+}

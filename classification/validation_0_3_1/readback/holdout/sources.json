@@ -1,0 +1,196 @@
+{
+  "case_count": 2,
+  "exposures_checked": 282,
+  "A_sha256": "e5d04f4b9d929ccad1945d5573c979326e6f9e26475fcec3123d881dc9cb814c",
+  "exposure_source_sha256": "d6c59fb108d2ac63f37d2bf85ee9002623e638a0fd5f1ca9859abe27ffd65df5",
+  "cases": [
+    {
+      "case_id": "H01",
+      "issue": "https://github.com/pytorch/pytorch/issues/69339",
+      "pull_request": "https://github.com/pytorch/pytorch/pull/69511",
+      "selected_fix": "https://github.com/pytorch/pytorch/commit/65fc84f8aa6a03bce05d13d791ff7b925abb732b",
+      "first_parent": "8b1e49635a488a4b260ef5d5657279585c5a291d",
+      "patch_matched_old_hunks": {
+        "aten/src/ATen/native/LossNLL.cpp": [
+          [
+            539,
+            547
+          ],
+          [
+            549,
+            555
+          ]
+        ]
+      },
+      "lineage": [
+        "family:github.com/pytorch/pytorch!69511",
+        "event:github.com/pytorch/pytorch!69511",
+        "patch:github.com/pytorch/pytorch!69511",
+        "patch:github.com/pytorch/pytorch@65fc84f8aa6a03bce05d13d791ff7b925abb732b",
+        "patch:github.com/pytorch/pytorch@8b1e49635a488a4b260ef5d5657279585c5a291d",
+        "event:github.com/pytorch/pytorch#69339"
+      ],
+      "excerpts": [
+        {
+          "source_id": "s1",
+          "path": "torch/nn/functional.py",
+          "old_commit": "8b1e49635a488a4b260ef5d5657279585c5a291d",
+          "range": [
+            2895,
+            2910
+          ],
+          "origin": "https://github.com/pytorch/pytorch/blob/8b1e49635a488a4b260ef5d5657279585c5a291d/torch/nn/functional.py#L2895-L2910",
+          "source_sha256": "70b281cb2caa9e1f85f6d169cc1a64df9efab3358656f052257da9d8701e5a38",
+          "excerpt_sha256": "36e398ea092239caf1aed8ca2ad0184683f6285bdcbb46383e4f7215bd010c0d"
+        },
+        {
+          "source_id": "s2",
+          "path": "torch/nn/functional.py",
+          "old_commit": "8b1e49635a488a4b260ef5d5657279585c5a291d",
+          "range": [
+            2953,
+            2955
+          ],
+          "origin": "https://github.com/pytorch/pytorch/blob/8b1e49635a488a4b260ef5d5657279585c5a291d/torch/nn/functional.py#L2953-L2955",
+          "source_sha256": "70b281cb2caa9e1f85f6d169cc1a64df9efab3358656f052257da9d8701e5a38",
+          "excerpt_sha256": "c2658a952ecff2c3bf9dc98f7eca397e95e1e6ddbf059b5c1ba9de9d72f0beef"
+        },
+        {
+          "source_id": "s3",
+          "path": "aten/src/ATen/native/LossNLL.cpp",
+          "old_commit": "8b1e49635a488a4b260ef5d5657279585c5a291d",
+          "range": [
+            516,
+            566
+          ],
+          "origin": "https://github.com/pytorch/pytorch/blob/8b1e49635a488a4b260ef5d5657279585c5a291d/aten/src/ATen/native/LossNLL.cpp#L516-L566",
+          "source_sha256": "295fb494553553c5ccb67e61d184e2491b1d2d70339caf445a36919473c20a51",
+          "excerpt_sha256": "40f7c4f92962f25009966273c85fa41e4b9127f2bd85167cdf5280ab28f95170"
+        },
+        {
+          "source_id": "s4",
+          "path": "aten/src/ATen/native/LossNLL.cpp",
+          "old_commit": "8b1e49635a488a4b260ef5d5657279585c5a291d",
+          "range": [
+            569,
+            593
+          ],
+          "origin": "https://github.com/pytorch/pytorch/blob/8b1e49635a488a4b260ef5d5657279585c5a291d/aten/src/ATen/native/LossNLL.cpp#L569-L593",
+          "source_sha256": "295fb494553553c5ccb67e61d184e2491b1d2d70339caf445a36919473c20a51",
+          "excerpt_sha256": "1aa49c752e982b5de81f31f09967f70e0fffb83ef8b9a06313fb06c5e6028259"
+        }
+      ]
+    },
+    {
+      "case_id": "H02",
+      "pull_request": "https://github.com/numpy/numpy/pull/33326",
+      "selected_change": "https://github.com/numpy/numpy/commit/723054e37c1166234a026d2da4883810332d6a7a",
+      "first_parent": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+      "patch_matched_old_hunks": {
+        "numpy/_core/src/umath/ufunc_object.c": [
+          [
+            6456,
+            6461
+          ],
+          [
+            6896,
+            6901
+          ]
+        ]
+      },
+      "lineage": [
+        "family:github.com/numpy/numpy!33326",
+        "event:github.com/numpy/numpy!33326",
+        "patch:github.com/numpy/numpy!33326",
+        "patch:github.com/numpy/numpy@723054e37c1166234a026d2da4883810332d6a7a",
+        "patch:github.com/numpy/numpy@5fcd16dc72cbc4563deec5225e84f3b585e69afe"
+      ],
+      "excerpts": [
+        {
+          "source_id": "s1",
+          "path": "numpy/_core/_add_newdocs.py",
+          "old_commit": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "range": [
+            5828,
+            5840
+          ],
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/_add_newdocs.py#L5828-L5840",
+          "source_sha256": "58fd708b3a8090c1e9ddcf892000cafb6a248d8419ac405cef29eaa605bdf1f8",
+          "excerpt_sha256": "62860426aaf44b58e34b7969ec0d58bfc4d3631b0c153627a475110a99d99b4c"
+        },
+        {
+          "source_id": "s2",
+          "path": "numpy/_core/tests/test_ufunc.py",
+          "old_commit": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "range": [
+            2191,
+            2213
+          ],
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/tests/test_ufunc.py#L2191-L2213",
+          "source_sha256": "e2446ade9e9fd76f9db4a116cf6dd1aa80956194f64813b91ae2d18be231c252",
+          "excerpt_sha256": "f7b4c816482bff4a1522a1f8e00991605f2267ff844d25fa2276a6beab920821"
+        },
+        {
+          "source_id": "s3",
+          "path": "numpy/_core/src/umath/ufunc_object.c",
+          "old_commit": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "range": [
+            6328,
+            6374
+          ],
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/src/umath/ufunc_object.c#L6328-L6374",
+          "source_sha256": "4c1cecc0bd7e9f686718572e552b4dad51bf3cb15a546a801cc00b76e7c6f6c7",
+          "excerpt_sha256": "1b34e844cd78cf0913be55ffbf7b455cd6e9a14b2c3c6a258df08b369278688b"
+        },
+        {
+          "source_id": "s4",
+          "path": "numpy/_core/src/umath/ufunc_object.c",
+          "old_commit": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "range": [
+            6882,
+            6903
+          ],
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/src/umath/ufunc_object.c#L6882-L6903",
+          "source_sha256": "4c1cecc0bd7e9f686718572e552b4dad51bf3cb15a546a801cc00b76e7c6f6c7",
+          "excerpt_sha256": "bde593af969d0f59e89b3b4d6561d3a456a5723a6c75f9bd03a01d2bc4f4a538"
+        },
+        {
+          "source_id": "s5",
+          "path": "numpy/_core/src/umath/loops.c.src",
+          "old_commit": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "range": [
+            516,
+            544
+          ],
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/src/umath/loops.c.src#L516-L544",
+          "source_sha256": "e07d8a6a1f3d6cd96fd811e5c84ca8969f56bc3b5b21df2aeec85dc21a3bf1e9",
+          "excerpt_sha256": "dbfcf4fa06acbf1b19f10738e21f92275f9de39b429534f3e6bc809fe3c6bed6"
+        },
+        {
+          "source_id": "s6",
+          "path": "numpy/_core/code_generators/generate_umath.py",
+          "old_commit": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "range": [
+            354,
+            370
+          ],
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/code_generators/generate_umath.py#L354-L370",
+          "source_sha256": "aba28d6c6a2956bad63c3e5bb183a5a9919008208282a7b6186fae79e11443ac",
+          "excerpt_sha256": "6b9fdf579b895fcef5e600bbbc757ebcc7b61bd96e9b0f1f0a17a50837fbe5e7"
+        },
+        {
+          "source_id": "s7",
+          "path": "numpy/_core/code_generators/generate_umath.py",
+          "old_commit": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "range": [
+            1605,
+            1647
+          ],
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/code_generators/generate_umath.py#L1605-L1647",
+          "source_sha256": "aba28d6c6a2956bad63c3e5bb183a5a9919008208282a7b6186fae79e11443ac",
+          "excerpt_sha256": "85b0647339292a41c6364a2c132c3f0e0576010e19b0247983095efa096a4821"
+        }
+      ]
+    }
+  ]
+}

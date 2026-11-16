@@ -1,0 +1,4 @@
+{
+  "H01": "PyTorch 旧 CPU cross_entropy。logits 形状 [2,2]，int64 target=[0,1]，weight=[2,3]，mean reduction，label_smoothing=0.2，ignore_index=0。核对平滑分支的 target 作为 class-weight gather 输入时的状态处理及其结果。另两个损失分支只用于路径背景。",
+  "H02": "NumPy 的 native integer add.at，选择同版 test_ufunc_at_basic 中索引 [2,5,2]、非标量 b=[100,100,100] 的应用，限定实际进入所示 1D indexed loop 的路径。核对对目标 aa[2] 的更新，其他位置只作对照。"
+}

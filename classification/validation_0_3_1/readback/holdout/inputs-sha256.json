@@ -1,0 +1,26 @@
+{
+  "commit": "21a6af4224b7c62681c241236c6850cac3e72109",
+  "shared_files": {
+    "PROMPT.md": "108e2c3bf9ac0c9c6837ee9c90558697158541c2a4b6a36ae9ad0e018ab4cbd7",
+    "RESPONSE.json": "9118781c0a89e8e1f6eceaff3c795e2e3211d95c049b809276371112fd37dc70",
+    "readback.py": "b2476f9a5600542493d3530f51f9d59678b5e459acc9d26acf47e64f663efb48",
+    "replay.py": "faf6cdd39b5b3ac7cfd702e063a00ab73fb3a698dcd249c99ec1b43c4a27462c"
+  },
+  "batch_files": {
+    "execution.json": "87586176e74daa14a91782c861836ff51aff1b71b64501a49ab7be7b76895cdc",
+    "exposures.json": "d6c59fb108d2ac63f37d2bf85ee9002623e638a0fd5f1ca9859abe27ffd65df5",
+    "freeze.json": "e7734033e1f4289518fc9997e3db8d9f08c1ccbd67e16605959e541b57655464",
+    "pre-read-custody.json": "95cfd7b5dcf906e78247e21585ab6ad9120b3bf675dcace59a2881f4d4aa7cd2",
+    "sources.json": "871aea489d72d18ce8fad92dea707eac29cb5cd97f27ee347004c43ab1788489",
+    "first/A.json": "e5d04f4b9d929ccad1945d5573c979326e6f9e26475fcec3123d881dc9cb814c",
+    "first/scopes.json": "38cadabf48084d1786e7e899b9e73b813186be0fe35e89cdabe8f3862ddbdbca",
+    "first/seal.json": "7dfb4a16000376fea01eadbfa19c1c36756b75c249713f01d4ce2f369dcfa32e"
+  },
+  "candidate_files": {
+    "classification/WORKFLOW.md": "65b90d219df5e18a40a4e536e0054bc3438f9fc35046dc8cdfac47e5b7e43df9",
+    "classification/catalog.json": "119a52ac3a8830e030161d1f4f5a2b6ffdfcb9ad6abd1230fdd9b103c1c9dac5",
+    "classification/classify.py": "3f8ec2e1c308ab88524d1f9945209758848f30bdc8e85059f0a2f46ea1050359",
+    "classification/evaluate.py": "9184eabad28ae1992024923ae806ef20014a41e5fbed94c71dd2408d5d765023",
+    "classification/validation_0_3_1/PROMPT.md": "2342da12fa65c4e8611b2368f8670326b5dc10a5bce0030fec618d7e6645acdd"
+  }
+}

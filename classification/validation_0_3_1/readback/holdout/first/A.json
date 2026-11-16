@@ -1,0 +1,113 @@
+{
+  "cases": [
+    {
+      "case_id": "H01",
+      "sources": [
+        {
+          "id": "s1",
+          "kind": "contract",
+          "version": "8b1e49635a488a4b260ef5d5657279585c5a291d",
+          "path": "torch/nn/functional.py",
+          "origin": "https://github.com/pytorch/pytorch/blob/8b1e49635a488a4b260ef5d5657279585c5a291d/torch/nn/functional.py#L2895-L2910",
+          "original_start_line": 2895,
+          "text": "        target (Tensor) : If containing class indices, shape :math:`(N)` where each value is\n            :math:`0 \\leq \\text{targets}[i] \\leq C-1`, or :math:`(N, d_1, d_2, ..., d_K)` with\n            :math:`K \\geq 1` in the case of K-dimensional loss. If containing class probabilities,\n            same shape as the input.\n        weight (Tensor, optional): a manual rescaling weight given to each\n            class. If given, has to be a Tensor of size `C`\n        size_average (bool, optional): Deprecated (see :attr:`reduction`). By default,\n            the losses are averaged over each loss element in the batch. Note that for\n            some losses, there multiple elements per sample. If the field :attr:`size_average`\n            is set to ``False``, the losses are instead summed for each minibatch. Ignored\n            when reduce is ``False``. Default: ``True``\n        ignore_index (int, optional): Specifies a target value that is ignored\n            and does not contribute to the input gradient. When :attr:`size_average` is\n            ``True``, the loss is averaged over non-ignored targets. Note that\n            :attr:`ignore_index` is only applicable when the target contains class indices.\n            Default: -100"
+        },
+        {
+          "id": "s2",
+          "kind": "code",
+          "version": "8b1e49635a488a4b260ef5d5657279585c5a291d",
+          "path": "torch/nn/functional.py",
+          "origin": "https://github.com/pytorch/pytorch/blob/8b1e49635a488a4b260ef5d5657279585c5a291d/torch/nn/functional.py#L2953-L2955",
+          "original_start_line": 2953,
+          "text": "    if size_average is not None or reduce is not None:\n        reduction = _Reduction.legacy_get_string(size_average, reduce)\n    return torch._C._nn.cross_entropy_loss(input, target, weight, _Reduction.get_enum(reduction), ignore_index, label_smoothing)"
+        },
+        {
+          "id": "s3",
+          "kind": "code",
+          "version": "8b1e49635a488a4b260ef5d5657279585c5a291d",
+          "path": "aten/src/ATen/native/LossNLL.cpp",
+          "origin": "https://github.com/pytorch/pytorch/blob/8b1e49635a488a4b260ef5d5657279585c5a291d/aten/src/ATen/native/LossNLL.cpp#L516-L566",
+          "original_start_line": 516,
+          "text": "Tensor cross_entropy_loss_label_smoothing(\n    const Tensor& self,\n    const Tensor& target,\n    const Tensor& weight,\n    int64_t reduction,\n    int64_t ignore_index,\n    double label_smoothing) {\n\n    auto input = at::log_softmax(self, 1, self.scalar_type());\n    auto nllloss = at::nll_loss_nd(input, target, weight, reduction, ignore_index);\n\n    auto n_classes = input.size(1);\n\n    Tensor smooth_loss;\n    if (weight.defined()) {\n      // Expand weight to the correct number of dims for broadcasting with input / target\n      auto weight_broadcast_shape = SmallBuffer<int64_t, 5>(input.dim());\n      std::fill(weight_broadcast_shape.begin(), weight_broadcast_shape.end(), 1);\n      weight_broadcast_shape[1] = weight.size(0);\n      Tensor weight_ = weight.view(weight_broadcast_shape);\n\n      smooth_loss = -(input * weight_).sum(1);\n    } else {\n      smooth_loss = -input.sum(1);\n    }\n\n    if (ignore_index >= 0) {\n      smooth_loss.index_put_({target == ignore_index}, 0.0);\n    }\n\n    Tensor ret;\n    switch (reduction) {\n      case Reduction::Mean:\n        if (weight.defined()) {\n          // TODO: This code can path can be removed if #61309 is resolved\n          // loss is normalized by the weights to be consistent with nll_loss_nd\n          ret = smooth_loss.sum() / weight.gather(0, target.flatten()).sum();\n        } else {\n          ret = smooth_loss.mean();\n        }\n        break;\n      case Reduction::Sum:\n        ret = smooth_loss.sum();\n        break;\n      case Reduction::None:\n        ret = smooth_loss;\n        break;\n      default:\n        TORCH_CHECK(false, \"Invalid reduction type encountered in cross_entropy: \", reduction);\n    }\n    return (1 - label_smoothing) * nllloss + ret * (label_smoothing / n_classes);"
+        },
+        {
+          "id": "s4",
+          "kind": "code",
+          "version": "8b1e49635a488a4b260ef5d5657279585c5a291d",
+          "path": "aten/src/ATen/native/LossNLL.cpp",
+          "origin": "https://github.com/pytorch/pytorch/blob/8b1e49635a488a4b260ef5d5657279585c5a291d/aten/src/ATen/native/LossNLL.cpp#L569-L593",
+          "original_start_line": 569,
+          "text": "Tensor cross_entropy_loss(\n    const Tensor& self,\n    const Tensor& target,\n    const c10::optional<Tensor>& weight,\n    int64_t reduction,\n    int64_t ignore_index,\n    double label_smoothing) {\n  Tensor ret;\n  if (self.sizes() == target.sizes()) {\n    // Assume soft targets when input and target shapes are the same\n    TORCH_CHECK(at::isFloatingType(target.scalar_type()),\n        \"Expected floating point type for target with class probabilities, got \", target.scalar_type());\n    TORCH_CHECK(ignore_index < 0, \"ignore_index is not supported for floating point target\");\n\n    // See [Note: hacky wrapper removal for optional tensor]\n    c10::MaybeOwned<Tensor> weight_maybe_owned = at::borrow_from_optional_tensor(weight);\n    const Tensor& weight_ = *weight_maybe_owned;\n    ret = cross_entropy_loss_prob_target(self, target, weight_, reduction, label_smoothing);\n  } else if (label_smoothing > 0.0) {\n    TORCH_CHECK(label_smoothing <= 1.0, \"label_smoothing must be between 0.0 and 1.0. Got: \", label_smoothing);\n\n    // See [Note: hacky wrapper removal for optional tensor]\n    c10::MaybeOwned<Tensor> weight_maybe_owned = at::borrow_from_optional_tensor(weight);\n    const Tensor& weight_ = *weight_maybe_owned;\n    ret = cross_entropy_loss_label_smoothing(self, target, weight_, reduction, ignore_index, label_smoothing);"
+        }
+      ]
+    },
+    {
+      "case_id": "H02",
+      "sources": [
+        {
+          "id": "s1",
+          "kind": "contract",
+          "version": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "path": "numpy/_core/_add_newdocs.py",
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/_add_newdocs.py#L5828-L5840",
+          "original_start_line": 5828,
+          "text": "add_newdoc('numpy._core', 'ufunc', ('at',\n    \"\"\"\n    at($self, a, indices, b=None, /)\n    --\n\n    at(a, indices, b=None, /)\n\n    Performs unbuffered in place operation on operand 'a' for elements\n    specified by 'indices'. For addition ufunc, this method is equivalent to\n    ``a[indices] += b``, except that results are accumulated for elements that\n    are indexed more than once. For example, ``a[[0,0]] += 1`` will only\n    increment the first element once because of buffering, whereas\n    ``add.at(a, [0,0], 1)`` will increment the first element twice."
+        },
+        {
+          "id": "s2",
+          "kind": "code",
+          "version": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "path": "numpy/_core/tests/test_ufunc.py",
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/tests/test_ufunc.py#L2191-L2213",
+          "original_start_line": 2191,
+          "text": "    @pytest.mark.parametrize(\"a\", (\n                             np.arange(10, dtype=int),\n                             np.arange(10, dtype=_rational_tests.rational),\n                             np.arange(10, dtype=_rational_tests.rational2),\n                             ))\n    def test_ufunc_at_basic(self, a):\n\n        aa = a.copy()\n        np.add.at(aa, [2, 5, 2], 1)\n        assert_equal(aa, [0, 1, 4, 3, 4, 6, 6, 7, 8, 9])\n\n        with pytest.raises(ValueError):\n            # missing second operand\n            np.add.at(aa, [2, 5, 3])\n\n        aa = a.copy()\n        np.negative.at(aa, [2, 5, 3])\n        assert_equal(aa, [0, 1, -2, -3, 4, -5, 6, 7, 8, 9])\n\n        aa = a.copy()\n        b = np.array([100, 100, 100])\n        np.add.at(aa, [2, 5, 2], b)\n        assert_equal(aa, [0, 1, 202, 3, 4, 105, 6, 7, 8, 9])"
+        },
+        {
+          "id": "s3",
+          "kind": "code",
+          "version": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "path": "numpy/_core/src/umath/ufunc_object.c",
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/src/umath/ufunc_object.c#L6328-L6374",
+          "original_start_line": 6328,
+          "text": "static int\ntrivial_at_loop(PyArrayMethodObject *ufuncimpl, NPY_ARRAYMETHOD_FLAGS flags,\n                    PyArrayMapIterObject *iter,\n                    PyArrayObject *op1_array, PyArrayObject *op2_array,\n                    PyArrayMethod_Context *context)\n{\n    int buffersize=0, errormask = 0;\n    int res;\n    char *args[3];\n    npy_intp steps[4];\n    args[0] = (char *) iter->baseoffset;\n    steps[0] = iter->fancy_strides[0];\n    if (ufuncimpl->nin == 1) {\n        args[2] = NULL;\n        steps[2] = 0;\n    } else {\n        args[2] = (char *)PyArray_DATA(op2_array);\n        if (PyArray_NDIM(op2_array) == 0\n            || PyArray_DIM(op2_array, 0) <= 1) {\n            steps[2] = 0;\n        } else {\n            steps[2] = PyArray_STRIDE(op2_array, 0);\n        }\n    }\n\n    if (!(flags & NPY_METH_NO_FLOATINGPOINT_ERRORS)) {\n        npy_clear_floatstatus_barrier((char *)context);\n    }\n\n    do {\n        npy_intp *inner_size = NpyIter_GetInnerLoopSizePtr(iter->outer);\n        npy_intp * indxP = (npy_intp *)iter->outer_ptrs[0];\n        args[1] = (char *)indxP;\n        steps[1] = iter->outer_strides[0];\n        /*\n         * The value of iter->fancy_dims[0] is added to negative indexes\n         * inside the inner loop\n         */\n        steps[3] = iter->fancy_dims[0];\n\n        res = ufuncimpl->contiguous_indexed_loop(\n                context, args, inner_size, steps, NULL);\n\n        if (args[2] != NULL) {\n            args[2] += (*inner_size) * steps[2];\n        }\n    } while (res == 0 && iter->outer_next(iter->outer));"
+        },
+        {
+          "id": "s4",
+          "kind": "code",
+          "version": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "path": "numpy/_core/src/umath/ufunc_object.c",
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/src/umath/ufunc_object.c#L6882-L6903",
+          "original_start_line": 6882,
+          "text": "    if (fast_path == 1) {\n        /*\n         * Try to use trivial loop (1d, no casting, aligned) if\n         * - the matching info has a indexed loop\n         * - idx must be exactly one integer index array\n         * - all operands are 1d\n         * A future enhancement could loosen the restriction on 1d operands\n         * by adding an iteration loop inside trivial_at_loop\n         */\n        if ((ufuncimpl->contiguous_indexed_loop != NULL) &&\n                (PyArray_NDIM(op1_array) == 1)  &&\n                (op2_array == NULL || PyArray_NDIM(op2_array) <= 1) &&\n                (iter->subspace_iter == NULL) && (iter->num_fancy == 1)) {\n            res = trivial_at_loop(ufuncimpl, flags, iter, op1_array,\n                        op2_array, &context);\n\n        }\n        else {\n            /* Couldn't use the fastest path, use the faster path */\n            res = ufunc_at__fast_iter(ufunc, flags, iter, iter2, op1_array,\n                        op2_array, strided_loop, &context, auxdata);\n        }"
+        },
+        {
+          "id": "s5",
+          "kind": "code",
+          "version": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "path": "numpy/_core/src/umath/loops.c.src",
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/src/umath/loops.c.src#L516-L544",
+          "original_start_line": 516,
+          "text": "/**begin repeat1\n * Arithmetic\n * #kind = add, subtract, multiply, bitwise_and, bitwise_or, bitwise_xor#\n * #OP = +, -, *, &, |, ^#\n */\n\nNPY_NO_EXPORT NPY_GCC_OPT_3 int\n@TYPE@_@kind@_indexed(PyArrayMethod_Context *NPY_UNUSED(context),\n                      char **args, npy_intp const *dimensions, npy_intp const *steps,\n                      void *NPY_UNUSED(func))\n{\n    char *ip1 = args[0];\n    char *indxp = args[1];\n    char *value = args[2];\n    npy_intp is1 = steps[0], isindex = steps[1], isb = steps[2];\n    npy_intp shape = steps[3];\n    npy_intp n = dimensions[0];\n    npy_intp i;\n    @type@ *indexed;\n    for(i = 0; i < n; i++, indxp += isindex, value += isb) {\n        npy_intp indx = *(npy_intp *)indxp;\n        if (indx < 0) {\n            indx += shape;\n        }\n        indexed = (@type@ *)(ip1 + is1 * indx);\n        *indexed = *indexed @OP@ *(@type@ *)value;\n    }\n    return 0;\n}"
+        },
+        {
+          "id": "s6",
+          "kind": "code",
+          "version": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "path": "numpy/_core/code_generators/generate_umath.py",
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/code_generators/generate_umath.py#L354-L370",
+          "original_start_line": 354,
+          "text": "defdict = {\n'add':\n    Ufunc(2, 1, Zero,\n          docstrings.get('numpy._core.umath.add'),\n          'PyUFunc_AdditionTypeResolver',\n          TD('?', cfunc_alias='logical_or', dispatch=[('loops_logical', '?')]),\n          TD(no_bool_times_obj, dispatch=[\n              ('loops_arithm_fp', 'fdFD'),\n              ('loops_autovec', ints),\n          ]),\n          [TypeDescription('M', FullTypeDescr, 'Mm', 'M'),\n           TypeDescription('m', FullTypeDescr, 'mm', 'm'),\n           TypeDescription('M', FullTypeDescr, 'mM', 'M'),\n          ],\n          TD(O, f='PyNumber_Add'),\n          indexed=intfltcmplx\n          ),"
+        },
+        {
+          "id": "s7",
+          "kind": "code",
+          "version": "5fcd16dc72cbc4563deec5225e84f3b585e69afe",
+          "path": "numpy/_core/code_generators/generate_umath.py",
+          "origin": "https://github.com/numpy/numpy/blob/5fcd16dc72cbc4563deec5225e84f3b585e69afe/numpy/_core/code_generators/generate_umath.py#L1605-L1647",
+          "original_start_line": 1605,
+          "text": "\n        mlist.append(fmt.format(**args))\n        if uf.typereso == 'NULL':\n            mlist.append(r\"((PyUFuncObject *)f)->type_resolver = NULL;\")\n        elif uf.typereso is not None:\n            mlist.append(rf\"((PyUFuncObject *)f)->type_resolver = &{uf.typereso};\")\n        for c in uf.indexed:\n            # Handle indexed loops by getting the underlying ArrayMethodObject\n            # from the dict in f._loops and setting its field appropriately\n            fmt = textwrap.dedent(\"\"\"\n            {{\n                PyArray_DTypeMeta *dtype = PyArray_DTypeFromTypeNum({typenum});\n                PyObject *info = get_info_no_cast((PyUFuncObject *)f,\n                                                   dtype, {count});\n                Py_DECREF(dtype);\n                if (info == NULL) {{\n                    return -1;\n                }}\n                if (info == Py_None) {{\n                    PyErr_SetString(PyExc_RuntimeError,\n                        \"cannot add indexed loop to ufunc \"\n                        \"{name} with {typenum}\");\n                    return -1;\n                }}\n                if (!PyObject_TypeCheck(info, &PyArrayMethod_Type)) {{\n                    PyErr_SetString(PyExc_RuntimeError,\n                        \"Not a PyArrayMethodObject in ufunc \"\n                        \"{name} with {typenum}\");\n                    return -1;\n                }}\n                ((PyArrayMethodObject*)info)->contiguous_indexed_loop =\n                                                                 {funcname};\n                /* info is borrowed, no need to decref*/\n            }}\n            \"\"\")\n            mlist.append(fmt.format(\n                typenum=f\"NPY_{english_upper(chartoname[c])}\",\n                count=uf.nin + uf.nout,\n                name=name,\n                funcname=f\"{english_upper(chartoname[c])}_{name}_indexed\",\n            ))\n\n        if uf.no_float_errors:"
+        }
+      ]
+    }
+  ]
+}

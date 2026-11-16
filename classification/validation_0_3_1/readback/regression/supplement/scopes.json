@@ -1,0 +1,3 @@
+{
+  "G10": "Quadric ONNX Runtime CPU int8 QLinearConvTranspose，使用 issue 单批单组的固定模型，输入/权重零点取 0，考察输出零点 y_zero_point 为 0、25、-30 的差异。其余 sweep 行仅作原始上下文。"
+}

@@ -1,0 +1,443 @@
+[
+  {
+    "case_id": "G02",
+    "operator": "TransformerEngine PyTorch CUDA moe_permute（index 路径）",
+    "roles": [
+      "rank 内 token–expert 路由槽",
+      "有符号排序键",
+      "num_out_tokens 保留边界",
+      "供 unpermute 使用的 row_id_map"
+    ],
+    "actions": [
+      {
+        "id": "G02-A1",
+        "description": "将全部 token–topK 槽的原始索引作为有符号整数键进行第一次排序，再按 num_out_tokens 划分排序结果并构造 row_id_map。",
+        "role": "unknown",
+        "scope": {
+          "claim": "static",
+          "version": "d73bfa14fb26d186ed8e5eeaad8ef5c1d728cc86",
+          "path": "transformer_engine/pytorch/csrc/extensions/permutation.cpp"
+        },
+        "facts": [
+          {
+            "key": "actual_source",
+            "value": true,
+            "claim_state": "observation",
+            "explanation": "扩展入口直接把 indices 数据指针转为 int*，以 num_tokens * topK 个槽调用键值对排序。包装器将这些键交给 CUB SortPairs。",
+            "anchors": [
+              {
+                "source_id": "s2",
+                "start_line": 31,
+                "end_line": 34,
+                "use": "context",
+                "quote": "  void *indices_ptr = getDataPtr(indices, 0);\n  void *sorted_indices_ptr = getDataPtr(workspace[0], 0);\n  void *row_id_ptr = getDataPtr(workspace[1], 0);\n  void *sorted_row_id_ptr = getDataPtr(workspace[2], 0);"
+              },
+              {
+                "source_id": "s2",
+                "start_line": 39,
+                "end_line": 42,
+                "use": "context",
+                "quote": "  nvte_device_radix_sort_pairs(\n      d_temp_storage, &temp_storage_bytes, reinterpret_cast<int *>(indices_ptr),\n      reinterpret_cast<int *>(sorted_indices_ptr), reinterpret_cast<int *>(row_id_ptr),\n      reinterpret_cast<int *>(sorted_row_id_ptr), num_tokens * topK);"
+              },
+              {
+                "source_id": "s5",
+                "start_line": 2,
+                "end_line": 7,
+                "use": "context",
+                "quote": "void nvte_device_radix_sort_pairs(void *temp_storage, size_t *temp_storage_bytes, int *keys_in,\n                                  int *keys_out, int *values_in, int *values_out,\n                                  size_t num_items) {\n  NVTE_API_CALL(nvte_device_radix_sort_pairs);\n  cub::DeviceRadixSort::SortPairs(temp_storage, *temp_storage_bytes, keys_in, keys_out, values_in,\n                                  values_out, num_items);"
+              }
+            ]
+          },
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "claim_state": "observation",
+            "explanation": "此处仅观察到旧代码中的排序结果消费规则。目标是本 rank 保留的路由槽集合。入口向 nvte_permute 传递排序后的行 ID 和输出数，row-map 按排序位置保留前缀，并把其余槽映射为 -1。",
+            "anchors": [
+              {
+                "source_id": "s2",
+                "start_line": 63,
+                "end_line": 70,
+                "use": "context",
+                "quote": "  auto sorted_row_id_cu = makeTransformerEngineTensor(\n      sorted_row_id_ptr, std::vector<size_t>{static_cast<size_t>(num_tokens * topK)},\n      DType::kInt32);\n  auto row_id_map_cu = makeTransformerEngineTensor(row_id_map);\n\n  nvte_permute(input_cu.data(), permuted_output_cu.data(), sorted_row_id_cu.data(),\n               row_id_map_cu.data(), TensorWrapper().data(), TensorWrapper().data(),\n               TensorWrapper().data(), num_tokens, topK, num_cols, num_out_tokens, stream);"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 11,
+                "end_line": 18,
+                "use": "context",
+                "quote": "  if (input_fwd == nullptr) {\n    // moe_permute_fwd\n\n    int threads = 64;\n    int blocks = (num_rows * topK + threads - 1) / threads;\n\n    moe_permute_row_map<<<blocks, threads, 0, stream>>>(sorted_row_id, row_id_map, num_rows, topK,\n                                                        num_out_tokens);"
+              },
+              {
+                "source_id": "s3",
+                "start_line": 12,
+                "end_line": 21,
+                "use": "context",
+                "quote": "  int source_row = sorted_row_id[idx];\n  int source_token_id = source_row / topK;\n  int source_topK_id = source_row % topK;\n\n  if (idx >= num_out_tokens) {\n    // Set the indices of dropped tokens to -1\n    row_id_map[source_topK_id * num_rows + source_token_id] = -1;\n  } else {\n    // Create a row id map for subsequent unpermute operation\n    row_id_map[source_topK_id * num_rows + source_token_id] = idx;"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "fact_protocol": "classification_facts/0.3.1"
+  },
+  {
+    "case_id": "G06",
+    "operator": "SGLang DSPARK NPU 非 compact target verify",
+    "roles": [
+      "第一条请求的前缀 KV 长度",
+      "本次 verify 草稿区间的长度贡献",
+      "ForwardBatch CPU 长度镜像",
+      "本地图 replay 的 seq_lens 实参"
+    ],
+    "actions": [
+      {
+        "id": "G06-A1",
+        "description": "DSPARK 在普通 NPU target-verify replay 中落入仅 DFlash 元数据路径的回退分支，对已计入本次草稿宽度的 CPU 长度镜像再次加上 captured_req_width，再将结果传给 replay_with_input_update。",
+        "role": "primary",
+        "scope": {
+          "claim": "static",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/hardware_backend/npu/graph_runner/npu_graph_runner.py"
+        },
+        "facts": [
+          {
+            "key": "applicable_contract",
+            "value": true,
+            "claim_state": "derived",
+            "explanation": "本地 replay 长度实参须表达当前请求的准确 KV 长度。对本次 verify 而言，它包含前缀和当前草稿区间。指定 backend 缺少 raw-verify 方法且有 CPU 镜像时，DSPARK 的准备端已将草稿宽度计入镜像。",
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 16,
+                "end_line": 21,
+                "use": "requirement",
+                "quote": "                if _meta_list is not None:\n                    # graph.update must carry the exact KV length already\n                    # computed in forward_metadata.seq_lens_cpu_list (it\n                    # already includes the draft block for DFlash); do not\n                    # recompute and double-add here.\n                    seq_lens = list(_meta_list)"
+              },
+              {
+                "source_id": "s1",
+                "start_line": 24,
+                "end_line": 29,
+                "use": "requirement",
+                "quote": "        seq_lens_cpu_backup = batch.seq_lens_cpu\n        seq_lens_sum_backup = batch.seq_lens_sum\n        if not self._verify_backend_self_adds_seq_lens():\n            if seq_lens_cpu_backup is not None:\n                batch.seq_lens_cpu = seq_lens_cpu_backup + verify_w\n                batch.seq_lens_sum = int(batch.seq_lens_cpu.sum())"
+              },
+              {
+                "source_id": "s5",
+                "start_line": 1,
+                "end_line": 7,
+                "use": "behavior",
+                "quote": "    def _verify_backend_self_adds_seq_lens(self) -> bool:\n        if self._verify_backend_self_adds_seq_lens_cache is None:\n            backend = self.target_worker.model_runner.attn_backend\n            self._verify_backend_self_adds_seq_lens_cache = hasattr(\n                backend, \"make_forward_metadata_from_raw_verify\"\n            )\n        return self._verify_backend_self_adds_seq_lens_cache"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 23,
+                "end_line": 30,
+                "use": "behavior",
+                "quote": "                    # Hybrid attention wrappers may not expose replay metadata.\n                    # Prefer the live CPU mirror to avoid a blocking D2H copy;\n                    # fall back to device lengths when the mirror is unavailable.\n                    if forward_batch.seq_lens_cpu is not None:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens_cpu[: self.raw_bs]\n                            + self.captured_req_width\n                        )"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 47,
+                "end_line": 51,
+                "use": "behavior",
+                "quote": "            output = self.backend.replay_with_input_update(\n                graph_key,\n                seq_lens=seq_lens,\n                attr_name=self._get_update_attr_name(),\n                attr_type=self._get_update_attr_type(),"
+              }
+            ]
+          },
+          {
+            "key": "original_contribution_identity",
+            "value": true,
+            "claim_state": "derived",
+            "explanation": "同源项是第一条请求在这一次 target verify 中的同一个草稿 KV 区间。准备端用 verify_w 表示该区间并计入镜像。ForwardBatch 持有该镜像，回退式又以捕获请求宽度表示同一 replay 请求的 verify 区间并再次计入。给定的两个宽度分别为 8，身份由同一请求、同一 verify 和同一长度角色确定。",
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 16,
+                "end_line": 20,
+                "use": "requirement",
+                "quote": "                if _meta_list is not None:\n                    # graph.update must carry the exact KV length already\n                    # computed in forward_metadata.seq_lens_cpu_list (it\n                    # already includes the draft block for DFlash); do not\n                    # recompute and double-add here."
+              },
+              {
+                "source_id": "s1",
+                "start_line": 14,
+                "end_line": 20,
+                "use": "requirement",
+                "quote": "        verify_input = DFlashVerifyInput(\n            draft_token=verify_ids_2d.reshape(-1),\n            positions=positions_2d.reshape(-1),\n            draft_token_num=verify_w,\n            custom_mask=None,\n            capture_hidden_mode=CaptureHiddenMode.FULL,\n            live_seq_lens_cpu=batch.seq_lens_cpu,"
+              },
+              {
+                "source_id": "s1",
+                "start_line": 24,
+                "end_line": 29,
+                "use": "behavior",
+                "quote": "        seq_lens_cpu_backup = batch.seq_lens_cpu\n        seq_lens_sum_backup = batch.seq_lens_sum\n        if not self._verify_backend_self_adds_seq_lens():\n            if seq_lens_cpu_backup is not None:\n                batch.seq_lens_cpu = seq_lens_cpu_backup + verify_w\n                batch.seq_lens_sum = int(batch.seq_lens_cpu.sum())"
+              },
+              {
+                "source_id": "s6",
+                "start_line": 29,
+                "end_line": 43,
+                "use": "behavior",
+                "quote": "        batch.forward_mode = (\n            ForwardMode.IDLE\n            if batch.forward_mode.is_idle()\n            else ForwardMode.TARGET_VERIFY\n        )\n        if not batch.forward_mode.is_idle():\n            # Rebuild mamba track indices (lazy: gather the positions planned\n            # by mamba_lazy_spec_prepare) and clear the stale extend-time mask\n            # before init_new snapshots them into the verify ForwardBatch.\n            # Same hook eagle/ngram/dspark run before TARGET_VERIFY.\n            prepare_mamba_track_for_verify(batch)\n        verify_forward_batch = ForwardBatch.init_new(\n            batch,\n            target_worker.model_runner,\n            capture_hidden_mode=self.capture_hidden_mode,"
+              },
+              {
+                "source_id": "s7",
+                "start_line": 4,
+                "end_line": 4,
+                "use": "behavior",
+                "quote": "        seq_lens_cpu = batch.seq_lens_cpu"
+              },
+              {
+                "source_id": "s7",
+                "start_line": 36,
+                "end_line": 40,
+                "use": "behavior",
+                "quote": "            seq_lens=batch.seq_lens,\n            out_cache_loc=batch.out_cache_loc,\n            seq_lens_sum=batch.seq_lens_sum,\n            # Inputs aliased by reference from ScheduleBatch\n            seq_lens_cpu=seq_lens_cpu,"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 26,
+                "end_line": 30,
+                "use": "behavior",
+                "quote": "                    if forward_batch.seq_lens_cpu is not None:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens_cpu[: self.raw_bs]\n                            + self.captured_req_width\n                        )"
+              }
+            ]
+          },
+          {
+            "key": "expected_multiplicity",
+            "value": true,
+            "claim_state": "derived",
+            "explanation": "对第一条请求的 replay 长度，前缀后的本次草稿区间应计入一次。按给定值，目标长度为 1000 + 8 = 1008。",
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 16,
+                "end_line": 21,
+                "use": "requirement",
+                "quote": "                if _meta_list is not None:\n                    # graph.update must carry the exact KV length already\n                    # computed in forward_metadata.seq_lens_cpu_list (it\n                    # already includes the draft block for DFlash); do not\n                    # recompute and double-add here.\n                    seq_lens = list(_meta_list)"
+              },
+              {
+                "source_id": "s1",
+                "start_line": 24,
+                "end_line": 29,
+                "use": "requirement",
+                "quote": "        seq_lens_cpu_backup = batch.seq_lens_cpu\n        seq_lens_sum_backup = batch.seq_lens_sum\n        if not self._verify_backend_self_adds_seq_lens():\n            if seq_lens_cpu_backup is not None:\n                batch.seq_lens_cpu = seq_lens_cpu_backup + verify_w\n                batch.seq_lens_sum = int(batch.seq_lens_cpu.sum())"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 26,
+                "end_line": 30,
+                "use": "behavior",
+                "quote": "                    if forward_batch.seq_lens_cpu is not None:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens_cpu[: self.raw_bs]\n                            + self.captured_req_width\n                        )"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 47,
+                "end_line": 49,
+                "use": "behavior",
+                "quote": "            output = self.backend.replay_with_input_update(\n                graph_key,\n                seq_lens=seq_lens,"
+              }
+            ]
+          },
+          {
+            "key": "excess_multiplicity",
+            "value": true,
+            "claim_state": "derived",
+            "explanation": "ForwardBatch 先取得 1008 的镜像，随后恢复 ScheduleBatch 字段只更换原批次的引用。DSPARK 在回退式中从该 1008 再加 8，列表转换和末尾补零保留首项 1016，消费者收到的首项因此包含同一草稿区间两次。",
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 16,
+                "end_line": 21,
+                "use": "requirement",
+                "quote": "                if _meta_list is not None:\n                    # graph.update must carry the exact KV length already\n                    # computed in forward_metadata.seq_lens_cpu_list (it\n                    # already includes the draft block for DFlash); do not\n                    # recompute and double-add here.\n                    seq_lens = list(_meta_list)"
+              },
+              {
+                "source_id": "s1",
+                "start_line": 24,
+                "end_line": 29,
+                "use": "behavior",
+                "quote": "        seq_lens_cpu_backup = batch.seq_lens_cpu\n        seq_lens_sum_backup = batch.seq_lens_sum\n        if not self._verify_backend_self_adds_seq_lens():\n            if seq_lens_cpu_backup is not None:\n                batch.seq_lens_cpu = seq_lens_cpu_backup + verify_w\n                batch.seq_lens_sum = int(batch.seq_lens_cpu.sum())"
+              },
+              {
+                "source_id": "s7",
+                "start_line": 4,
+                "end_line": 4,
+                "use": "behavior",
+                "quote": "        seq_lens_cpu = batch.seq_lens_cpu"
+              },
+              {
+                "source_id": "s7",
+                "start_line": 39,
+                "end_line": 40,
+                "use": "behavior",
+                "quote": "            # Inputs aliased by reference from ScheduleBatch\n            seq_lens_cpu=seq_lens_cpu,"
+              },
+              {
+                "source_id": "s2",
+                "start_line": 13,
+                "end_line": 17,
+                "use": "behavior",
+                "quote": "        verify_forward_batch, _ = verify_input.prepare_for_verify(\n            batch, self.target_worker\n        )\n        batch.seq_lens_cpu = seq_lens_cpu_backup\n        batch.seq_lens_sum = seq_lens_sum_backup"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 26,
+                "end_line": 35,
+                "use": "behavior",
+                "quote": "                    if forward_batch.seq_lens_cpu is not None:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens_cpu[: self.raw_bs]\n                            + self.captured_req_width\n                        )\n                    else:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens.cpu() + self.captured_req_width\n                        )\n                    seq_lens = seq_lens_cpu.tolist() + [0] * (self.bs - self.raw_bs)"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 47,
+                "end_line": 49,
+                "use": "behavior",
+                "quote": "            output = self.backend.replay_with_input_update(\n                graph_key,\n                seq_lens=seq_lens,"
+              }
+            ]
+          },
+          {
+            "key": "implementation_action",
+            "value": true,
+            "claim_state": "derived",
+            "explanation": "npu_graph_runner.py 这段旧代码仅为 is_dflash() 取 replay 元数据。DSPARK 与 DFlash 是不同枚举值，故 DSPARK 将 _meta_list 设为 None，回退分支直接对已扩展的 CPU 镜像加宽。调用处原样转发这一结果。",
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 16,
+                "end_line": 20,
+                "use": "requirement",
+                "quote": "                if _meta_list is not None:\n                    # graph.update must carry the exact KV length already\n                    # computed in forward_metadata.seq_lens_cpu_list (it\n                    # already includes the draft block for DFlash); do not\n                    # recompute and double-add here."
+              },
+              {
+                "source_id": "s3",
+                "start_line": 6,
+                "end_line": 16,
+                "use": "requirement",
+                "quote": "    def is_dflash(self) -> bool:\n        return self == SpeculativeAlgorithm.DFLASH\n\n    def is_uno(self) -> bool:\n        return self == SpeculativeAlgorithm.UNO\n\n    def is_dspark(self) -> bool:\n        return self == SpeculativeAlgorithm.DSPARK\n\n    def is_dflash_family(self) -> bool:\n        return self.is_dflash() or self.is_dspark()"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 10,
+                "end_line": 16,
+                "use": "behavior",
+                "quote": "                if self.model_runner.spec_algorithm.is_dflash():\n                    _attn = self._replay_attn_backend()\n                    _meta = getattr(_attn, \"forward_metadata\", None)\n                    _meta_list = getattr(_meta, \"seq_lens_cpu_list\", None)\n                else:\n                    _meta_list = None\n                if _meta_list is not None:"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 26,
+                "end_line": 30,
+                "use": "behavior",
+                "quote": "                    if forward_batch.seq_lens_cpu is not None:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens_cpu[: self.raw_bs]\n                            + self.captured_req_width\n                        )"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 47,
+                "end_line": 49,
+                "use": "behavior",
+                "quote": "            output = self.backend.replay_with_input_update(\n                graph_key,\n                seq_lens=seq_lens,"
+              }
+            ]
+          },
+          {
+            "key": "causal_role",
+            "value": true,
+            "claim_state": "derived",
+            "explanation": "准备端的第一次加宽已经得到约定长度 1008。replay 回退分支的第二次加宽首次产生 1016，随后的列表构造及实参转发保留首项。若回退在此条件下保留已扩展长度，消费者收到的首项即为 1008。",
+            "anchors": [
+              {
+                "source_id": "s4",
+                "start_line": 16,
+                "end_line": 21,
+                "use": "requirement",
+                "quote": "                if _meta_list is not None:\n                    # graph.update must carry the exact KV length already\n                    # computed in forward_metadata.seq_lens_cpu_list (it\n                    # already includes the draft block for DFlash); do not\n                    # recompute and double-add here.\n                    seq_lens = list(_meta_list)"
+              },
+              {
+                "source_id": "s1",
+                "start_line": 24,
+                "end_line": 29,
+                "use": "behavior",
+                "quote": "        seq_lens_cpu_backup = batch.seq_lens_cpu\n        seq_lens_sum_backup = batch.seq_lens_sum\n        if not self._verify_backend_self_adds_seq_lens():\n            if seq_lens_cpu_backup is not None:\n                batch.seq_lens_cpu = seq_lens_cpu_backup + verify_w\n                batch.seq_lens_sum = int(batch.seq_lens_cpu.sum())"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 26,
+                "end_line": 35,
+                "use": "behavior",
+                "quote": "                    if forward_batch.seq_lens_cpu is not None:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens_cpu[: self.raw_bs]\n                            + self.captured_req_width\n                        )\n                    else:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens.cpu() + self.captured_req_width\n                        )\n                    seq_lens = seq_lens_cpu.tolist() + [0] * (self.bs - self.raw_bs)"
+              },
+              {
+                "source_id": "s4",
+                "start_line": 47,
+                "end_line": 49,
+                "use": "behavior",
+                "quote": "            output = self.backend.replay_with_input_update(\n                graph_key,\n                seq_lens=seq_lens,"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "fact_protocol": "classification_facts/0.3.1"
+  },
+  {
+    "case_id": "G10",
+    "operator": "Quadric ONNX Runtime CPU int8 QLinearConvTranspose",
+    "roles": [
+      "输出零点 y_zero_point",
+      "输出重量化后的 int8 元素",
+      "固定输入和权重下的零点对照"
+    ],
+    "actions": [
+      {
+        "id": "G10-A1",
+        "description": "核对合法的非零输出零点是否作为加数进入固定模型的 CPU 输出重量化路径。",
+        "role": "unknown",
+        "scope": {
+          "claim": "reported",
+          "version": "GitHub issue body updated_at 2026-10-20T05:58:49Z",
+          "path": "https://github.com/quadric-io/onnxruntime/issues/58/#issue-body-markdown"
+        },
+        "facts": [
+          {
+            "key": "actual_source",
+            "value": true,
+            "claim_state": "observation",
+            "explanation": "Issue 的模型构造代码把 int8 的 y_zp 初始化为名为 y_zero_point 的张量，并接到算子的最后一个输入。本观察仅覆盖模型输入连接。",
+            "anchors": [
+              {
+                "source_id": "s1",
+                "start_line": 18,
+                "end_line": 25,
+                "use": "context",
+                "quote": "        numpy_helper.from_array(np.array(Y_SCALE, np.float32), \"y_scale\"),\n        numpy_helper.from_array(np.array(y_zp, np.int8), \"y_zero_point\"),\n    ]\n    node = helper.make_node(\n        \"QLinearConvTranspose\",\n        [\"x\", \"x_scale\", \"x_zero_point\", \"w\", \"w_scale\", \"w_zero_point\",\n         \"y_scale\", \"y_zero_point\"],\n        [\"y\"], domain=\"com.microsoft\","
+              }
+            ]
+          },
+          {
+            "key": "omitted_contribution",
+            "value": true,
+            "claim_state": "hypothesis",
+            "explanation": "输出零点可能在重量化路径被遗漏。固定输入和权重零点为 0 时，三个输出零点设置的报告输出逐元素一致，但这些结果无法定位旧 CPU 路径使用的参数或证明加数缺失。",
+            "anchors": [
+              {
+                "source_id": "s2",
+                "start_line": 1,
+                "end_line": 2,
+                "use": "context",
+                "quote": "  x_zp  w_zp  y_zp   ORT md5       ORT vs reference              ORT vs ORT(all zp=0)\n     0     0     0   6ae30a6778cd  bad   1/147  max|diff|   1    bad   0/147  max|diff|   0"
+              },
+              {
+                "source_id": "s2",
+                "start_line": 9,
+                "end_line": 10,
+                "use": "context",
+                "quote": "     0     0    25   6ae30a6778cd  bad 112/147  max|diff|  26    bad   0/147  max|diff|   0\n     0     0   -30   6ae30a6778cd  bad 115/147  max|diff|  30    bad   0/147  max|diff|   0"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "fact_protocol": "classification_facts/0.3.1"
+  }
+]

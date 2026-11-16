@@ -1,0 +1,531 @@
+{
+  "answer_revision": null,
+  "answer_sha256": "309068929c211d8f860fb686c8b635109c9733b2f32c8a717eb0224f1eae3624",
+  "catalog_version": "0.3",
+  "lock_sha256": "d833a08d0c0a0282f9728b7b4b9a255be21358047f70bf24213714cffc12a32f",
+  "mechanism_namespace": "MECH-v0.3",
+  "note": "Hashes preserve bytes. Human attestation, not the evaluator, establishes isolation and exposure.",
+  "protocol": "classification_only/0.3.1",
+  "review_sha256": "abe005ea99222282eed2fc8a712ff3d7c86e493240374bff818cfcf0bca1eeb2",
+  "runs": [
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "fac7b311 的 s4 L1420–1424 给出标量输出零点，s6 L215–226 证明调用方硬编码 ZeroPoint 在 L222，s7 L1090–1108 和 s8 L1282–1314 证明该实参进入裁剪、加法和写出。只有一个实参替换动作，主角色成立。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C2",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G10-a1",
+              "primary_expected": "leaf:MECH-v0.3:C2",
+              "primary_label_hit": true,
+              "rationale": "y_zero_point=25 或 −30 时，每一目标元素应包含该模型槽位的仿射平移一次，实际收到并加上的是 0，该来源计入零次且没有等价保留。C2 在固定 CPU 路径和所示 SSE2 消费成立。作者报告运行与固定源码未作建链，y_zero_point=0 为本问题的语义对照。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G10",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C2",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/quadric-io/onnxruntime#58",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "QLinearConvTranspose",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:C2",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 1,
+          "independent_defects_claimed": 1,
+          "label_correct": 1,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 1,
+          "primary_label_hit": 1,
+          "strict": 1,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "case_strict": 1,
+        "cases": 1,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "structure": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unresolved_predicted_actions": 0,
+          "unresolved_predicted_roles": 0
+        },
+        "complete_cases_with_role_order": 1,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 0,
+            "eligible": 0
+          }
+        },
+        "confusion": [
+          {
+            "actual": "leaf:MECH-v0.3:C2",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C2"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "QLinearConvTranspose"
+            ],
+            "operators": [
+              "QLinearConvTranspose"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "expected_verdict_counts": {
+          "leaf:MECH-v0.3:C2": 1
+        },
+        "failure_counts": {},
+        "families": 1,
+        "families_strict": 1,
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "actual_supported_statuses": {
+            "leaf": 1
+          },
+          "families": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "status_metrics": {
+          "leaf": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {
+          "leaf:MECH-v0.3:C2": 1
+        },
+        "strict_verdicts": {
+          "leaf:MECH-v0.3:C2": 1
+        }
+      },
+      "run_sha256": "12fffd963c5937f550a1b429118d967d8580546b463b9102f63bdb6549e7dc30"
+    },
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "正确定位 s6 L222 的 `(T)0` 实参，以及 s7 L1098 和 s8 L1282–1314 的真实消费者。该调用足以解释所评路径的输出零点不生效，主动作成立。",
+              "action_resolution": "supported",
+              "actual": "outside:outside_catalog",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [
+                "class_definition"
+              ],
+              "independent_count_outcome": "true_positive",
+              "label_correct": false,
+              "mechanism_correct": false,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "G10-A1",
+              "primary_expected": "leaf:MECH-v0.3:C2",
+              "primary_label_hit": false,
+              "rationale": "参数合同和行为事实均有据，P1/P2 也可排除，但不能由此判目录外。s4 L1420–1424 的非零合法输入是每个输出中应被该消费者加一次的逻辑项，s6 到 s8 已显示其实际被中性零替代并直接写出，符合 C2。R2 提取了消费路径，未提交 C2 的 required_member 和 omitted_contribution 结构事实，属于分类边界识别错误。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": false,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "G10",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:C2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C2",
+              "role": "primary"
+            }
+          },
+          "family_id": "github.com/quadric-io/onnxruntime#58",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "QLinearConvTranspose",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "outside:outside_catalog",
+              "primary",
+              "",
+              "supported",
+              true
+            ]
+          ],
+          "strict": false,
+          "strict_with_role_order": false
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 1,
+          "independent_defects_claimed": 1,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 1,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 1,
+          "strict_independent_defects": 0,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "case_strict": 0,
+        "cases": 1,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "structure": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unresolved_predicted_actions": 0,
+          "unresolved_predicted_roles": 0
+        },
+        "complete_cases_with_role_order": 0,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 1,
+            "eligible": 1
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 0,
+            "eligible": 0
+          }
+        },
+        "confusion": [
+          {
+            "actual": "outside:outside_catalog",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C2"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "QLinearConvTranspose"
+            ],
+            "operators": [],
+            "status": "needs_review",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          }
+        },
+        "expected_verdict_counts": {
+          "leaf:MECH-v0.3:C2": 1
+        },
+        "failure_counts": {
+          "class_definition": 1
+        },
+        "families": 1,
+        "families_strict": 0,
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 0,
+            "eligible": 1
+          },
+          "actual_supported_statuses": {},
+          "families": {
+            "correct": 0,
+            "eligible": 1
+          }
+        },
+        "status_metrics": {
+          "leaf": {
+            "correct": 0,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {},
+        "strict_verdicts": {
+          "outside:outside_catalog": 0
+        }
+      },
+      "run_sha256": "660d00a962ab475f28a8d142681d0ecdd22499baf7c350492a418a93bdadc22b"
+    }
+  ],
+  "scope": "exercise_only",
+  "stability": {
+    "cases": [
+      {
+        "case_id": "G10",
+        "family_id": "github.com/quadric-io/onnxruntime#58",
+        "rationale": "两轮都定位同一固定版本的标量槽位、实参置零、裁剪和整数加法及写回。可复算的底层事实与主动作一致，第二轮只把它表示为参数传递违约，没有形成同一 C2 叶级。原作者运行范围仍独立。",
+        "same": false,
+        "same_allowed_labels": false,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": false,
+        "same_labels_facts_and_action": false,
+        "same_specific_action": true
+      }
+    ],
+    "same_allowed_labels": {
+      "correct": 0,
+      "eligible": 1
+    },
+    "same_and_both_incorrect_cases": 0,
+    "same_cases": 0,
+    "same_causal_structure": {
+      "correct": 1,
+      "eligible": 1
+    },
+    "same_decisive_facts": {
+      "correct": 1,
+      "eligible": 1
+    },
+    "same_labels": {
+      "correct": 0,
+      "eligible": 1
+    },
+    "same_labels_facts_and_action": {
+      "correct": 0,
+      "eligible": 1
+    },
+    "same_specific_action": {
+      "correct": 1,
+      "eligible": 1
+    }
+  }
+}

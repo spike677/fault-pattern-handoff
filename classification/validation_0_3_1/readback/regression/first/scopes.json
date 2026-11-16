@@ -1,0 +1,5 @@
+{
+  "G02": "TransformerEngine PyTorch CUDA moe_permute 的 index 路径，只评 rank 内第一次路由排序使用的键以及按 num_out_tokens 划分排序结果的规则。例子的两种路由状态和本地输出数见 issue 片段。",
+  "G06": "SGLang DSPARK 的 NPU 非 compact target verify。限定普通非 DeepSeek MLA 路径，attention backend 不提供 `make_forward_metadata_from_raw_verify`，CPU seq_lens mirror 存在。评估本地 replay 的第一条请求长度实参，令前缀长为 1000，本次 verify 与 capture 宽度均为 8。",
+  "G10": "Quadric ONNX Runtime CPU int8 QLinearConvTranspose，使用 issue 单批单组的固定模型，输入/权重零点取 0，考察输出零点 y_zero_point 为 0、25、-30 的差异。其余 sweep 行仅作原始上下文。"
+}

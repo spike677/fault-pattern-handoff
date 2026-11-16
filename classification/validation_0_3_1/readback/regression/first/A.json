@@ -1,0 +1,172 @@
+{
+  "cases": [
+    {
+      "case_id": "G02",
+      "sources": [
+        {
+          "id": "s1",
+          "version": "GitHub issue body updated_at 2026-05-11T20:57:17Z",
+          "path": "https://github.com/NVIDIA/TransformerEngine/issues/2908/#issue-body-markdown",
+          "kind": "contract",
+          "origin": "https://github.com/NVIDIA/TransformerEngine/issues/2908",
+          "original_start_line": 98,
+          "text": "On Rank 0 we mask out non-local experts:\n  a → [ 0, -1]    # E3 not on this rank\n  b → [-1,  1]\n  c → [-1, -1]\n  num_out_tokens = 2\n```\n\nEach rank then calls `moe_permute` with its masked indices, expecting `-1` slots to be skipped."
+        },
+        {
+          "id": "s2",
+          "version": "d73bfa14fb26d186ed8e5eeaad8ef5c1d728cc86",
+          "path": "transformer_engine/pytorch/csrc/extensions/permutation.cpp",
+          "kind": "code",
+          "origin": "https://github.com/NVIDIA/TransformerEngine/blob/d73bfa14fb26d186ed8e5eeaad8ef5c1d728cc86/transformer_engine/pytorch/csrc/extensions/permutation.cpp#L11-L82",
+          "original_start_line": 11,
+          "text": "std::tuple<at::Tensor, at::Tensor, std::vector<at::Tensor>> moe_permute_fwd(\n    at::Tensor input, const DType dtype, at::Tensor indices, int64_t num_out_tokens,\n    std::vector<at::Tensor> workspace, int64_t max_expanded_token_num) {\n  const int num_tokens = input.size(0);\n  int num_cols = input.size(1);\n  const int topK = indices.size(1);\n\n  // Initialize the workspace on the first run\n  if (workspace.empty()) {\n    auto options =\n        torch::TensorOptions().dtype(torch::kInt32).device(torch::kCUDA).requires_grad(false);\n\n    at::Tensor sorted_indices = torch::empty(max_expanded_token_num, options);\n    at::Tensor row_id = torch::range(0, max_expanded_token_num - 1, 1, options);\n    at::Tensor sorted_row_id =\n        torch::empty(max_expanded_token_num,\n                     torch::dtype(torch::kInt32).device(torch::kCUDA).requires_grad(false));\n\n    size_t temp_storage_bytes = 0;\n    nvte_device_radix_sort_pairs(nullptr, &temp_storage_bytes, nullptr, nullptr, nullptr, nullptr,\n                                 max_expanded_token_num);\n    at::Tensor temp_storage = torch::empty(\n        temp_storage_bytes, torch::dtype(torch::kInt8).device(torch::kCUDA).requires_grad(false));\n\n    workspace.push_back(sorted_indices);\n    workspace.push_back(row_id);\n    workspace.push_back(sorted_row_id);\n    workspace.push_back(temp_storage);\n  }\n\n  void *indices_ptr = getDataPtr(indices, 0);\n  void *sorted_indices_ptr = getDataPtr(workspace[0], 0);\n  void *row_id_ptr = getDataPtr(workspace[1], 0);\n  void *sorted_row_id_ptr = getDataPtr(workspace[2], 0);\n\n  void *d_temp_storage = getDataPtr(workspace[3], 0);\n  size_t temp_storage_bytes = std::numeric_limits<size_t>::max();\n\n  nvte_device_radix_sort_pairs(\n      d_temp_storage, &temp_storage_bytes, reinterpret_cast<int *>(indices_ptr),\n      reinterpret_cast<int *>(sorted_indices_ptr), reinterpret_cast<int *>(row_id_ptr),\n      reinterpret_cast<int *>(sorted_row_id_ptr), num_tokens * topK);\n\n  // Output buffer alloc\n  num_out_tokens = (num_out_tokens > 0) ? num_out_tokens : num_tokens * topK;\n  at::Tensor permuted_output =\n      torch::empty({num_out_tokens, num_cols},\n                   torch::dtype(input.scalar_type()).device(torch::kCUDA).requires_grad(false));\n  at::Tensor row_id_map = torch::empty(\n      {num_tokens * topK}, torch::dtype(torch::kInt32).device(torch::kCUDA).requires_grad(false));\n\n  auto stream = at::cuda::getCurrentCUDAStream().stream();\n\n  auto input_cu = makeTransformerEngineTensor(\n      input.data_ptr(),\n      std::vector<size_t>{static_cast<size_t>(input.size(0)), static_cast<size_t>(num_cols)},\n      dtype);\n  auto permuted_output_cu =\n      makeTransformerEngineTensor(permuted_output.data_ptr(),\n                                  std::vector<size_t>{static_cast<size_t>(permuted_output.size(0)),\n                                                      static_cast<size_t>(num_cols)},\n                                  dtype);\n  auto sorted_row_id_cu = makeTransformerEngineTensor(\n      sorted_row_id_ptr, std::vector<size_t>{static_cast<size_t>(num_tokens * topK)},\n      DType::kInt32);\n  auto row_id_map_cu = makeTransformerEngineTensor(row_id_map);\n\n  nvte_permute(input_cu.data(), permuted_output_cu.data(), sorted_row_id_cu.data(),\n               row_id_map_cu.data(), TensorWrapper().data(), TensorWrapper().data(),\n               TensorWrapper().data(), num_tokens, topK, num_cols, num_out_tokens, stream);\n\n  return std::make_tuple(permuted_output, row_id_map, workspace);"
+        },
+        {
+          "id": "s3",
+          "version": "d73bfa14fb26d186ed8e5eeaad8ef5c1d728cc86",
+          "path": "transformer_engine/common/permutation/permutation.cu",
+          "kind": "code",
+          "origin": "https://github.com/NVIDIA/TransformerEngine/blob/d73bfa14fb26d186ed8e5eeaad8ef5c1d728cc86/transformer_engine/common/permutation/permutation.cu#L13-L35",
+          "original_start_line": 13,
+          "text": "static __global__ void moe_permute_row_map(const int *sorted_row_id, int *row_id_map,\n                                           const int num_rows, const int topK,\n                                           const int num_out_tokens) {\n  // Each block corresponds to one source token\n  // row_id_map[topK][num_rows]\n  const int bid = blockIdx.x;\n  const int tid = threadIdx.x;\n  const int idx = bid * blockDim.x + tid;\n\n  if (idx >= num_rows * topK) return;\n\n  int source_row = sorted_row_id[idx];\n  int source_token_id = source_row / topK;\n  int source_topK_id = source_row % topK;\n\n  if (idx >= num_out_tokens) {\n    // Set the indices of dropped tokens to -1\n    row_id_map[source_topK_id * num_rows + source_token_id] = -1;\n  } else {\n    // Create a row id map for subsequent unpermute operation\n    row_id_map[source_topK_id * num_rows + source_token_id] = idx;\n  }\n}"
+        },
+        {
+          "id": "s4",
+          "version": "d73bfa14fb26d186ed8e5eeaad8ef5c1d728cc86",
+          "path": "transformer_engine/common/permutation/permutation.cu",
+          "kind": "code",
+          "origin": "https://github.com/NVIDIA/TransformerEngine/blob/d73bfa14fb26d186ed8e5eeaad8ef5c1d728cc86/transformer_engine/common/permutation/permutation.cu#L228-L246",
+          "original_start_line": 228,
+          "text": "void nvte_permute_launcher(const T *input, T *output, const int *sorted_row_id, int *row_id_map,\n                           const float *prob, float *prob_grad, const T *input_fwd,\n                           const int num_rows, const int topK, const int num_cols,\n                           const int num_out_tokens, cudaStream_t stream) {\n  using TCompute = typename std::conditional<(std::is_same<T, __nv_fp8_e5m2>::value ||\n                                              std::is_same<T, __nv_fp8_e4m3>::value),\n                                             half, T>::type;\n\n  static constexpr int kElementsPerAccess = 16 / sizeof(T);\n\n  if (input_fwd == nullptr) {\n    // moe_permute_fwd\n\n    int threads = 64;\n    int blocks = (num_rows * topK + threads - 1) / threads;\n\n    moe_permute_row_map<<<blocks, threads, 0, stream>>>(sorted_row_id, row_id_map, num_rows, topK,\n                                                        num_out_tokens);\n    NVTE_CHECK_CUDA(cudaGetLastError());"
+        },
+        {
+          "id": "s5",
+          "version": "d73bfa14fb26d186ed8e5eeaad8ef5c1d728cc86",
+          "path": "transformer_engine/common/permutation/permutation.cu",
+          "kind": "code",
+          "origin": "https://github.com/NVIDIA/TransformerEngine/blob/d73bfa14fb26d186ed8e5eeaad8ef5c1d728cc86/transformer_engine/common/permutation/permutation.cu#L369-L376",
+          "original_start_line": 369,
+          "text": "\nvoid nvte_device_radix_sort_pairs(void *temp_storage, size_t *temp_storage_bytes, int *keys_in,\n                                  int *keys_out, int *values_in, int *values_out,\n                                  size_t num_items) {\n  NVTE_API_CALL(nvte_device_radix_sort_pairs);\n  cub::DeviceRadixSort::SortPairs(temp_storage, *temp_storage_bytes, keys_in, keys_out, values_in,\n                                  values_out, num_items);\n}"
+        }
+      ]
+    },
+    {
+      "case_id": "G06",
+      "sources": [
+        {
+          "id": "s1",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/speculative/dspark_components/dspark_verify.py",
+          "kind": "code",
+          "origin": "https://github.com/sgl-project/sglang/blob/52604e1d46c1afb209b50f97174b6d0978a580fb/python/sglang/srt/speculative/dspark_components/dspark_verify.py#L302-L340",
+          "original_start_line": 302,
+          "text": "    def run_non_compact(\n        self,\n        *,\n        batch: ScheduleBatch,\n        draft_input: DFlashDraftInputV2,\n        verify_ids_2d: torch.Tensor,\n        verify_window: VerifyWindow,\n        sampling_info,\n    ) -> TargetVerifyResult:\n        verify_w = self.verify_num_draft_tokens\n        positions_2d = verify_window.positions_2d\n        verify_cache_loc = verify_window.verify_cache_loc\n\n        verify_input = DFlashVerifyInput(\n            draft_token=verify_ids_2d.reshape(-1),\n            positions=positions_2d.reshape(-1),\n            draft_token_num=verify_w,\n            custom_mask=None,\n            capture_hidden_mode=CaptureHiddenMode.FULL,\n            live_seq_lens_cpu=batch.seq_lens_cpu,\n            iteration_ids=verify_window.iteration_ids,\n        )\n        batch.out_cache_loc = verify_cache_loc\n        seq_lens_cpu_backup = batch.seq_lens_cpu\n        seq_lens_sum_backup = batch.seq_lens_sum\n        if not self._verify_backend_self_adds_seq_lens():\n            if seq_lens_cpu_backup is not None:\n                batch.seq_lens_cpu = seq_lens_cpu_backup + verify_w\n                batch.seq_lens_sum = int(batch.seq_lens_cpu.sum())\n            elif draft_input.nxt_kv_lens_cpu is not None:\n                batch.seq_lens_cpu = draft_input.nxt_kv_lens_cpu\n                batch.seq_lens_sum = int(draft_input.nxt_kv_lens_sum)\n\n        result = self._forward_prepared_verify(\n            batch=batch,\n            verify_input=verify_input,\n            seq_lens_cpu_backup=seq_lens_cpu_backup,\n            seq_lens_sum_backup=seq_lens_sum_backup,\n        )"
+        },
+        {
+          "id": "s2",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/speculative/dspark_components/dspark_verify.py",
+          "kind": "code",
+          "origin": "https://github.com/sgl-project/sglang/blob/52604e1d46c1afb209b50f97174b6d0978a580fb/python/sglang/srt/speculative/dspark_components/dspark_verify.py#L351-L374",
+          "original_start_line": 351,
+          "text": "    def _forward_prepared_verify(\n        self,\n        *,\n        batch: ScheduleBatch,\n        verify_input: DFlashVerifyInput,\n        seq_lens_cpu_backup,\n        seq_lens_sum_backup,\n    ) -> TargetVerifyResult:\n        if verify_input.live_seq_lens_cpu is None and self._target_is_dsv41:\n            verify_input.candidate_max_seq_len_upper_bound = (\n                candidate_request_length_bound(batch.reqs, self.verify_num_draft_tokens)\n            )\n        verify_forward_batch, _ = verify_input.prepare_for_verify(\n            batch, self.target_worker\n        )\n        batch.seq_lens_cpu = seq_lens_cpu_backup\n        batch.seq_lens_sum = seq_lens_sum_backup\n\n        target_out = self.target_worker.forward_batch_generation(\n            batch=None,\n            forward_batch=verify_forward_batch,\n            is_verify=True,\n            skip_attn_backend_init=True if not _is_npu else None,\n        )"
+        },
+        {
+          "id": "s3",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/speculative/spec_info.py",
+          "kind": "contract",
+          "origin": "https://github.com/sgl-project/sglang/blob/52604e1d46c1afb209b50f97174b6d0978a580fb/python/sglang/srt/speculative/spec_info.py#L111-L127",
+          "original_start_line": 111,
+          "text": "        return self == SpeculativeAlgorithm.EAGLE3\n\n    def is_frozen_kv_mtp(self) -> bool:\n        return self == SpeculativeAlgorithm.FROZEN_KV_MTP\n\n    def is_dflash(self) -> bool:\n        return self == SpeculativeAlgorithm.DFLASH\n\n    def is_uno(self) -> bool:\n        return self == SpeculativeAlgorithm.UNO\n\n    def is_dspark(self) -> bool:\n        return self == SpeculativeAlgorithm.DSPARK\n\n    def is_dflash_family(self) -> bool:\n        return self.is_dflash() or self.is_dspark()\n"
+        },
+        {
+          "id": "s4",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/hardware_backend/npu/graph_runner/npu_graph_runner.py",
+          "kind": "code",
+          "origin": "https://github.com/sgl-project/sglang/blob/52604e1d46c1afb209b50f97174b6d0978a580fb/python/sglang/srt/hardware_backend/npu/graph_runner/npu_graph_runner.py#L372-L423",
+          "original_start_line": 372,
+          "text": "        if not (\n            is_deepseek_dsa(self.model_runner.model_config.hf_config)\n            or is_deepseek_v4(self.model_runner.model_config.hf_config)\n        ):\n            if forward_batch.forward_mode.is_target_verify():\n                # Only DFlash refreshes forward_metadata.seq_lens_cpu_list at\n                # replay; other algorithms keep the capture-time list, so\n                # recompute from the live batch as before — reading the\n                # backend list there would replay stale capture-time lengths.\n                if self.model_runner.spec_algorithm.is_dflash():\n                    _attn = self._replay_attn_backend()\n                    _meta = getattr(_attn, \"forward_metadata\", None)\n                    _meta_list = getattr(_meta, \"seq_lens_cpu_list\", None)\n                else:\n                    _meta_list = None\n                if _meta_list is not None:\n                    # graph.update must carry the exact KV length already\n                    # computed in forward_metadata.seq_lens_cpu_list (it\n                    # already includes the draft block for DFlash); do not\n                    # recompute and double-add here.\n                    seq_lens = list(_meta_list)\n                else:\n                    # Hybrid attention wrappers may not expose replay metadata.\n                    # Prefer the live CPU mirror to avoid a blocking D2H copy;\n                    # fall back to device lengths when the mirror is unavailable.\n                    if forward_batch.seq_lens_cpu is not None:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens_cpu[: self.raw_bs]\n                            + self.captured_req_width\n                        )\n                    else:\n                        seq_lens_cpu = (\n                            forward_batch.seq_lens.cpu() + self.captured_req_width\n                        )\n                    seq_lens = seq_lens_cpu.tolist() + [0] * (self.bs - self.raw_bs)\n            else:\n                # Reuse the live CPU mirror when available to avoid\n                # a blocking D2H copy.\n                if forward_batch.seq_lens_cpu is not None:\n                    seq_lens = forward_batch.seq_lens_cpu[: self.raw_bs].tolist() + [\n                        0\n                    ] * (self.bs - self.raw_bs)\n                else:\n                    seq_lens = forward_batch.seq_lens.cpu().tolist() + [0] * (\n                        self.bs - self.raw_bs\n                    )\n            output = self.backend.replay_with_input_update(\n                graph_key,\n                seq_lens=seq_lens,\n                attr_name=self._get_update_attr_name(),\n                attr_type=self._get_update_attr_type(),\n            )"
+        },
+        {
+          "id": "s5",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/speculative/dspark_components/dspark_verify.py",
+          "kind": "code",
+          "origin": "https://github.com/sgl-project/sglang/blob/52604e1d46c1afb209b50f97174b6d0978a580fb/python/sglang/srt/speculative/dspark_components/dspark_verify.py#L540-L546",
+          "original_start_line": 540,
+          "text": "    def _verify_backend_self_adds_seq_lens(self) -> bool:\n        if self._verify_backend_self_adds_seq_lens_cache is None:\n            backend = self.target_worker.model_runner.attn_backend\n            self._verify_backend_self_adds_seq_lens_cache = hasattr(\n                backend, \"make_forward_metadata_from_raw_verify\"\n            )\n        return self._verify_backend_self_adds_seq_lens_cache"
+        },
+        {
+          "id": "s6",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/speculative/dflash_info.py",
+          "kind": "code",
+          "origin": "https://github.com/sgl-project/sglang/blob/52604e1d46c1afb209b50f97174b6d0978a580fb/python/sglang/srt/speculative/dflash_info.py#L69-L116",
+          "original_start_line": 69,
+          "text": "    def prepare_for_verify(\n        self,\n        batch: ScheduleBatch,\n        target_worker: TpModelWorker,\n        *,\n        defer_metadata_init: bool = False,\n    ) -> tuple[ForwardBatch, bool]:\n        \"\"\"Prepare a DFLASH verify forward batch for overlap scheduling.\n\n        The caller computes and stores `batch.out_cache_loc` before this\n        method is called. Deferred callers leave attention/graph planning to\n        ModelRunner, after DP/EP padding has finalized the runtime shapes.\n        \"\"\"\n        from sglang.srt.speculative.spec_utils import prepare_mamba_track_for_verify\n\n        batch.input_ids = self.draft_token\n        batch.spec_info = self\n        if _is_npu and not batch.forward_mode.is_idle():\n            from sglang.srt.hardware_backend.npu.dsv4.dsv4_common_hooks import (\n                maybe_build_dsv4_verify_bundle,\n            )\n\n            batch.out_cache_loc_dsv4 = maybe_build_dsv4_verify_bundle(\n                batch,\n                self.draft_token_num,\n                live_seq_lens_cpu=self.live_seq_lens_cpu,\n            )\n\n        batch.forward_mode = (\n            ForwardMode.IDLE\n            if batch.forward_mode.is_idle()\n            else ForwardMode.TARGET_VERIFY\n        )\n        if not batch.forward_mode.is_idle():\n            # Rebuild mamba track indices (lazy: gather the positions planned\n            # by mamba_lazy_spec_prepare) and clear the stale extend-time mask\n            # before init_new snapshots them into the verify ForwardBatch.\n            # Same hook eagle/ngram/dspark run before TARGET_VERIFY.\n            prepare_mamba_track_for_verify(batch)\n        verify_forward_batch = ForwardBatch.init_new(\n            batch,\n            target_worker.model_runner,\n            capture_hidden_mode=self.capture_hidden_mode,\n            return_hidden_states_before_norm=False,\n            ragged_verify_layout=self.ragged_verify_layout,\n            iteration_ids=self.iteration_ids,\n            write_cols=self.iteration_cols,\n        )"
+        },
+        {
+          "id": "s7",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/model_executor/forward_batch_info.py",
+          "kind": "code",
+          "origin": "https://github.com/sgl-project/sglang/blob/52604e1d46c1afb209b50f97174b6d0978a580fb/python/sglang/srt/model_executor/forward_batch_info.py#L1014-L1059",
+          "original_start_line": 1014,
+          "text": "        # ScheduleBatch.sampling_info is already swapped to the forward-only\n        # copy by Scheduler.run_batch under overlap mode (see save/restore\n        # block there). Use it directly.\n        seq_lens_cpu = batch.seq_lens_cpu\n\n        # TODO(seq-lens-removal): the whole ScheduleBatch seq_lens family\n        # (incl. seq_lens_sum) is slated for removal in favor of kv-committed\n        # lengths, so this init_new-time backfill onto the ScheduleBatch is\n        # tolerated for now despite the init_new-must-not-mutate-SB rule.\n        if batch.seq_lens_sum is None and seq_lens_cpu is not None:\n            batch.seq_lens_sum = int(seq_lens_cpu.sum())\n\n        contains_last_prefill_chunk = False\n        if batch.forward_mode.is_extend_without_speculative():\n            decoding_req_ids = {id(req) for req in (batch.decoding_reqs or ())}\n            contains_last_prefill_chunk = any(\n                req.extend_end == len(req.full_untruncated_fill_ids)\n                for req in batch.reqs\n                if id(req) not in decoding_req_ids\n            )\n\n        from sglang.srt.model_executor.model_runner import ModelRunner\n\n        # Only a real ModelRunner owns watermark state; lightweight stand-ins skip it.\n        watermark_state = (\n            model_runner.watermark_state\n            if isinstance(model_runner, ModelRunner)\n            else None\n        )\n        ret = cls(\n            # Required core inputs\n            forward_mode=batch.forward_mode,\n            batch_size=len(batch.seq_lens),\n            input_ids=batch.input_ids,\n            req_pool_indices=batch.req_pool_indices,\n            seq_lens=batch.seq_lens,\n            out_cache_loc=batch.out_cache_loc,\n            seq_lens_sum=batch.seq_lens_sum,\n            # Inputs aliased by reference from ScheduleBatch\n            seq_lens_cpu=seq_lens_cpu,\n            max_seq_len_host=getattr(batch, \"max_seq_len_host\", None),\n            req_pool_indices_cpu=(\n                getattr(batch, \"req_pool_indices_cpu\", None)\n                if batch.forward_mode.is_extend_without_speculative()\n                else None\n            ),"
+        },
+        {
+          "id": "s8",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/hardware_backend/npu/dsv4/dsv4_common_hooks.py",
+          "kind": "code",
+          "origin": "https://github.com/sgl-project/sglang/blob/52604e1d46c1afb209b50f97174b6d0978a580fb/python/sglang/srt/hardware_backend/npu/dsv4/dsv4_common_hooks.py#L253-L270",
+          "original_start_line": 253,
+          "text": "def maybe_build_dsv4_verify_bundle(\n    batch: ScheduleBatch,\n    draft_token_num: int,\n    *,\n    live_seq_lens_cpu: torch.Tensor | None = None,\n):\n    \"\"\"Build the DSV4 cache-location view for one target-verify pass.\n\n    Spec-v2 reserves cache ahead of time, so target verify must select only the\n    current draft interval from the per-request DSV4 tables instead of reusing\n    the larger allocation bundle produced during decode preparation.\n    \"\"\"\n    pool = batch.req_to_token_pool\n    if not hasattr(pool, \"req_to_c128_sidecar\"):\n        return None\n    reserve_bundle = batch.out_cache_loc_dsv4\n    if reserve_bundle is None:\n        return None"
+        },
+        {
+          "id": "s9",
+          "version": "52604e1d46c1afb209b50f97174b6d0978a580fb",
+          "path": "python/sglang/srt/speculative/spec_utils.py",
+          "kind": "code",
+          "origin": "https://github.com/sgl-project/sglang/blob/52604e1d46c1afb209b50f97174b6d0978a580fb/python/sglang/srt/speculative/spec_utils.py#L1069-L1096",
+          "original_start_line": 1069,
+          "text": "def prepare_mamba_track_for_verify(batch: ScheduleBatch) -> None:\n    \"\"\"Rebuild mamba track indices from reqs before a TARGET_VERIFY forward.\n\n    Spec batches skip the refresh in prepare_for_decode, and filter/merge\n    null these fields, so they must be rebuilt right before verify. Clearing\n    the mask also keeps a stale extend-time mask from triggering in-forward\n    tracking during TARGET_VERIFY; tracking is done in\n    commit_mamba_states_after_verify instead.\n\n    Lazy: gather the positions planned by mamba_lazy_spec_prepare. Runs\n    inside forward isolation, so it must not mutate req/pool state.\n    \"\"\"\n    if not get_exec().mamba.enable_mamba_extra_buffer:\n        return\n    track_positions = None\n    if get_exec().mamba.enable_mamba_extra_buffer_lazy:\n        track_positions = batch.mamba_lazy_spec_track_positions_cpu\n        assert track_positions is not None and len(track_positions) == len(\n            batch.reqs\n        ), (\n            \"lazy spec verify without a track plan: mamba_lazy_spec_prepare \"\n            \"must run in prepare_for_decode for every spec decode iteration\"\n        )\n    if track_positions is None and _VERIFY_TRACK_INDICES is not None:\n        _VERIFY_TRACK_INDICES.set_from_reqs(batch)\n    else:\n        set_mamba_track_indices_from_reqs(batch, track_positions)\n    batch.mamba_track_mask = None"
+        }
+      ]
+    },
+    {
+      "case_id": "G10",
+      "sources": [
+        {
+          "id": "s1",
+          "version": "GitHub issue body updated_at 2026-10-20T05:58:49Z",
+          "path": "https://github.com/quadric-io/onnxruntime/issues/58/#issue-body-markdown",
+          "kind": "contract",
+          "origin": "https://github.com/quadric-io/onnxruntime/issues/58",
+          "original_start_line": 35,
+          "text": "N, C_IN, H, W = 1, 2, 4, 4\nC_OUT, KH, KW = 3, 3, 3\nSTRIDES, PADS, DILATIONS = [2, 2], [1, 1, 1, 1], [1, 1]\nX_SCALE, W_SCALE, Y_SCALE = 0.03, 0.02, 0.05\n\nX_Q = np.random.randint(-128, 128, size=(N, C_IN, H, W)).astype(np.int8)\nW_Q = np.random.randint(-127, 128, size=(C_IN, C_OUT, KH, KW)).astype(np.int8)\n\n\ndef build_qlct(x_zp, w_zp, y_zp, path=None):\n    \"\"\"Single-node com.microsoft::QLinearConvTranspose, int8 in / int8 out.\"\"\"\n    inits = [\n        numpy_helper.from_array(np.array(X_SCALE, np.float32), \"x_scale\"),\n        numpy_helper.from_array(np.array(x_zp, np.int8), \"x_zero_point\"),\n        numpy_helper.from_array(W_Q, \"w\"),\n        numpy_helper.from_array(np.array(W_SCALE, np.float32), \"w_scale\"),\n        numpy_helper.from_array(np.array(w_zp, np.int8), \"w_zero_point\"),\n        numpy_helper.from_array(np.array(Y_SCALE, np.float32), \"y_scale\"),\n        numpy_helper.from_array(np.array(y_zp, np.int8), \"y_zero_point\"),\n    ]\n    node = helper.make_node(\n        \"QLinearConvTranspose\",\n        [\"x\", \"x_scale\", \"x_zero_point\", \"w\", \"w_scale\", \"w_zero_point\",\n         \"y_scale\", \"y_zero_point\"],\n        [\"y\"], domain=\"com.microsoft\",\n        kernel_shape=[KH, KW], strides=STRIDES, pads=PADS,\n        dilations=DILATIONS, group=1,\n    )\n    graph = helper.make_graph(\n        [node], \"qlct\",\n        [helper.make_tensor_value_info(\"x\", TensorProto.INT8, [N, C_IN, H, W])],\n        [helper.make_tensor_value_info(\"y\", TensorProto.INT8, [N, C_OUT, 7, 7])],\n        initializer=inits,\n    )\n    model = helper.make_model(graph, opset_imports=[\n        helper.make_opsetid(\"\", 17), helper.make_opsetid(\"com.microsoft\", 1)])\n    model.ir_version = 9\n    if path:\n        onnx.save(model, path)\n    return model"
+        },
+        {
+          "id": "s2",
+          "version": "GitHub issue body updated_at 2026-10-20T05:58:49Z",
+          "path": "https://github.com/quadric-io/onnxruntime/issues/58/#issue-body-markdown",
+          "kind": "report",
+          "origin": "https://github.com/quadric-io/onnxruntime/issues/58",
+          "original_start_line": 196,
+          "text": "  x_zp  w_zp  y_zp   ORT md5       ORT vs reference              ORT vs ORT(all zp=0)\n     0     0     0   6ae30a6778cd  bad   1/147  max|diff|   1    bad   0/147  max|diff|   0\n   -40     0     0   6ae30a6778cd  bad 129/147  max|diff| 203    bad   0/147  max|diff|   0\n    64     0     0   6ae30a6778cd  bad 121/147  max|diff| 255    bad   0/147  max|diff|   0\n  -128     0     0   6ae30a6778cd  bad 134/147  max|diff| 255    bad   0/147  max|diff|   0\n   127     0     0   6ae30a6778cd  bad 121/147  max|diff| 255    bad   0/147  max|diff|   0\n     0     7     0   6ae30a6778cd  bad 104/147  max|diff|  22    bad   0/147  max|diff|   0\n     0    -9     0   6ae30a6778cd  bad 107/147  max|diff|  28    bad   0/147  max|diff|   0\n     0     0    25   6ae30a6778cd  bad 112/147  max|diff|  26    bad   0/147  max|diff|   0\n     0     0   -30   6ae30a6778cd  bad 115/147  max|diff|  30    bad   0/147  max|diff|   0"
+        },
+        {
+          "id": "s3",
+          "version": "GitHub issue body updated_at 2026-10-20T05:58:49Z",
+          "path": "https://github.com/quadric-io/onnxruntime/issues/58/#issue-body-markdown",
+          "kind": "issue",
+          "origin": "https://github.com/quadric-io/onnxruntime/issues/58",
+          "original_start_line": 260,
+          "text": "## Environment\n\n- SDK Version: 26.08\n- onnxruntime: 1.20.0, CPUExecutionProvider\n- Op: `com.microsoft::QLinearConvTranspose`, `T1=T2=T3=int8`, `T4=int32`"
+        }
+      ]
+    }
+  ]
+}

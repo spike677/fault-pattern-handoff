@@ -1,0 +1,115 @@
+{
+  "judge_id": "codex-coordinator:post-lock-new-case-review",
+  "lock_sha256": "d89d9cb08f76eef40445b9979f573778ca2b7ed3decdc8a3c752b3371f0f83d1",
+  "answer_sha256": "a6fffaf516ba575d96d851da22cc354a36d46006ae04ffcaa3510bf3e0e91e23",
+  "runs": [
+    {
+      "run_sha256": "3b4b28b21f37db6b6288f1bba4fd5b204368f710ac7dabba800f759cf96e9895",
+      "cases": [
+        {
+          "case_id": "H01",
+          "actions": [
+            {
+              "prediction_id": "H01-gather",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。",
+              "rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。",
+              "failure_causes": []
+            },
+            {
+              "prediction_id": "H01-normalizer",
+              "expected_id": null,
+              "facts_supported": true,
+              "action_correct": false,
+              "role_supported": true,
+              "action_rationale": "s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。 封存参考只列了 P2 主动作，未列这项下游关系。",
+              "rationale": "s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。 封存参考只列了 P2 主动作，未列这项下游关系。",
+              "failure_causes": [
+                "sample_or_answer"
+              ]
+            }
+          ]
+        },
+        {
+          "case_id": "H02",
+          "actions": [
+            {
+              "prediction_id": "H02-indexed-add",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。",
+              "rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。",
+              "failure_causes": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run_sha256": "c1e8aac38e68f0801ac69d4d8e8c28d79e556c6c9b590b422429f428bb4a0522",
+      "cases": [
+        {
+          "case_id": "H01",
+          "actions": [
+            {
+              "prediction_id": "H01-A1",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。",
+              "rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。",
+              "failure_causes": []
+            },
+            {
+              "prediction_id": "H01-A2",
+              "expected_id": null,
+              "facts_supported": true,
+              "action_correct": false,
+              "role_supported": true,
+              "action_rationale": "s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。 封存参考只列了 P2 主动作，未列这项下游关系。",
+              "rationale": "s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。 封存参考只列了 P2 主动作，未列这项下游关系。",
+              "failure_causes": [
+                "sample_or_answer"
+              ]
+            }
+          ]
+        },
+        {
+          "case_id": "H02",
+          "actions": [
+            {
+              "prediction_id": "H02-A1",
+              "expected_id": "expected-1",
+              "facts_supported": true,
+              "action_correct": true,
+              "role_supported": true,
+              "action_rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。",
+              "rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。",
+              "failure_causes": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "stability": [
+    {
+      "case_id": "H01",
+      "same_decisive_facts": true,
+      "same_specific_action": true,
+      "rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。"
+    },
+    {
+      "case_id": "H02",
+      "same_decisive_facts": true,
+      "same_specific_action": true,
+      "rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "a_sha256": "e5d04f4b9d929ccad1945d5573c979326e6f9e26475fcec3123d881dc9cb814c",
+  "answer_reviewer_id": "local-codex-exec:01a1e30e-6ef8-75e0-8aa9-02ee6cb11c72",
+  "b_sha256": "a6fffaf516ba575d96d851da22cc354a36d46006ae04ffcaa3510bf3e0e91e23",
+  "case_count": 2,
+  "curator_id": "codex-coordinator:new-source-curation",
+  "freeze_sha256": "e7734033e1f4289518fc9997e3db8d9f08c1ccbd67e16605959e541b57655464",
+  "kind": "exercise",
+  "protocol": "classification_only/0.3.1",
+  "sealed_at": "2026-11-16T06:33:31.076494+00:00"
+}

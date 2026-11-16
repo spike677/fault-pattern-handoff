@@ -1,0 +1,861 @@
+{
+  "answer_revision": {
+    "original_sha256": "a6fffaf516ba575d96d851da22cc354a36d46006ae04ffcaa3510bf3e0e91e23",
+    "reason": "受评范围包含 gather 状态处理的结果。封存参考只列了主动作。s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。",
+    "reviewer_id": "codex-coordinator:post-lock-scope-audit"
+  },
+  "answer_sha256": "474275754c006036bbba3985084fcb1f8d7293d1715a8cbe04d76d0d8db15277",
+  "catalog_version": "0.3",
+  "lock_sha256": "d89d9cb08f76eef40445b9979f573778ca2b7ed3decdc8a3c752b3371f0f83d1",
+  "mechanism_namespace": "MECH-v0.3",
+  "note": "Hashes preserve bytes. Human attestation, not the evaluator, establishes isolation and exposure.",
+  "protocol": "classification_only/0.3.1",
+  "review_sha256": "93c58884fcfe5a9721884fc739165afd47f5f5ef54455e62e867e342df127f4d",
+  "runs": [
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:P2",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:P2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "H01-gather",
+              "primary_expected": "leaf:MECH-v0.3:P2",
+              "primary_label_hit": true,
+              "rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            },
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C1",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C1"
+              ],
+              "expected_id": "expected-2",
+              "expected_role": "downstream",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "downstream",
+              "prediction_id": "H01-normalizer",
+              "primary_expected": "leaf:MECH-v0.3:C1",
+              "primary_label_hit": true,
+              "rationale": "s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": "expected-1"
+            }
+          ],
+          "case_id": "H01",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ],
+            [
+              "expected-2",
+              "downstream",
+              "expected-1"
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:P2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:P2",
+              "role": "primary"
+            },
+            "expected-2": {
+              "allowed": [
+                "leaf:MECH-v0.3:C1"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C1",
+              "role": "downstream"
+            }
+          },
+          "family_id": "github.com/pytorch/pytorch!69511",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "PyTorch cross_entropy",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:P2",
+              "primary",
+              "",
+              "supported",
+              true
+            ],
+            [
+              "expected-2",
+              "leaf:MECH-v0.3:C1",
+              "downstream",
+              "expected-1",
+              "supported",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。",
+              "action_resolution": "unresolved",
+              "actual": "outside:compliant",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "outside:compliant"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "H02-indexed-add",
+              "primary_expected": "outside:compliant",
+              "primary_label_hit": true,
+              "rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "H02",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "outside:compliant"
+              ],
+              "concrete_action_expected": false,
+              "primary": "outside:compliant",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/numpy/numpy!33326",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "NumPy add.at",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "outside:compliant",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 3,
+          "independent_defects_claimed": 1,
+          "label_correct": 3,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 3,
+          "primary_label_hit": 3,
+          "strict": 3,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "case_strict": 2,
+        "cases": 2,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "structure": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "unresolved_predicted_actions": 1,
+          "unresolved_predicted_roles": 1
+        },
+        "complete_cases_with_role_order": 2,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "confusion": [
+          {
+            "actual": "leaf:MECH-v0.3:C1",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C1"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:P2",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:P2"
+          },
+          {
+            "actual": "outside:compliant",
+            "count": 1,
+            "expected": "outside:compliant"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "PyTorch cross_entropy"
+            ],
+            "operators": [
+              "PyTorch cross_entropy"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "PyTorch cross_entropy"
+            ],
+            "operators": [
+              "PyTorch cross_entropy"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          }
+        },
+        "expected_verdict_counts": {
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:P2": 1,
+          "outside:compliant": 1
+        },
+        "failure_counts": {},
+        "families": 2,
+        "families_strict": 2,
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "actual_supported_statuses": {
+            "leaf": 2,
+            "outside:compliant": 1
+          },
+          "families": {
+            "correct": 2,
+            "eligible": 2
+          }
+        },
+        "status_metrics": {
+          "leaf": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "outside:compliant": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:P2": 1,
+          "outside:compliant": 1
+        },
+        "strict_verdicts": {
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:P2": 1,
+          "outside:compliant": 1
+        }
+      },
+      "run_sha256": "3b4b28b21f37db6b6288f1bba4fd5b204368f710ac7dabba800f759cf96e9895"
+    },
+    {
+      "cases": [
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:P2",
+              "count_as_independent": true,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:P2"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "primary",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "true_positive",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "primary",
+              "prediction_id": "H01-A1",
+              "primary_expected": "leaf:MECH-v0.3:P2",
+              "primary_label_hit": true,
+              "rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            },
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。",
+              "action_resolution": "supported",
+              "actual": "leaf:MECH-v0.3:C1",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "leaf:MECH-v0.3:C1"
+              ],
+              "expected_id": "expected-2",
+              "expected_role": "downstream",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "downstream",
+              "prediction_id": "H01-A2",
+              "primary_expected": "leaf:MECH-v0.3:C1",
+              "primary_label_hit": true,
+              "rationale": "s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": "expected-1"
+            }
+          ],
+          "case_id": "H01",
+          "causal_signature": [
+            [
+              "expected-1",
+              "primary",
+              ""
+            ],
+            [
+              "expected-2",
+              "downstream",
+              "expected-1"
+            ]
+          ],
+          "expected_independent_actions": 1,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "leaf:MECH-v0.3:P2"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:P2",
+              "role": "primary"
+            },
+            "expected-2": {
+              "allowed": [
+                "leaf:MECH-v0.3:C1"
+              ],
+              "concrete_action_expected": true,
+              "primary": "leaf:MECH-v0.3:C1",
+              "role": "downstream"
+            }
+          },
+          "family_id": "github.com/pytorch/pytorch!69511",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "PyTorch cross_entropy",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "leaf:MECH-v0.3:P2",
+              "primary",
+              "",
+              "supported",
+              true
+            ],
+            [
+              "expected-2",
+              "leaf:MECH-v0.3:C1",
+              "downstream",
+              "expected-1",
+              "supported",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        },
+        {
+          "actions": [
+            {
+              "accepted_alternative_label": false,
+              "action_correct": true,
+              "action_rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。",
+              "action_resolution": "unresolved",
+              "actual": "outside:compliant",
+              "count_as_independent": false,
+              "double_count": false,
+              "expected": [
+                "outside:compliant"
+              ],
+              "expected_id": "expected-1",
+              "expected_role": "unknown",
+              "facts_supported": true,
+              "failure_causes": [],
+              "independent_count_outcome": "not_claimed",
+              "label_correct": true,
+              "mechanism_correct": true,
+              "over_abstention": false,
+              "partial_parent": false,
+              "predicted_role": "unknown",
+              "prediction_id": "H02-A1",
+              "primary_expected": "outside:compliant",
+              "primary_label_hit": true,
+              "rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。",
+              "relationship_correct": true,
+              "role_exact": true,
+              "role_supported": true,
+              "strict": true,
+              "unresolved_implementation_action": false,
+              "unsupported_attribution": false,
+              "upstream_expected_id": null
+            }
+          ],
+          "case_id": "H02",
+          "causal_signature": [
+            [
+              "expected-1",
+              "unknown",
+              ""
+            ]
+          ],
+          "expected_independent_actions": 0,
+          "expected_verdicts": {
+            "expected-1": {
+              "allowed": [
+                "outside:compliant"
+              ],
+              "concrete_action_expected": false,
+              "primary": "outside:compliant",
+              "role": "unknown"
+            }
+          },
+          "family_id": "github.com/numpy/numpy!33326",
+          "missed_independent_action_ids": [],
+          "missing_independent_actions": 0,
+          "omissions": {},
+          "operator": "NumPy add.at",
+          "root_order_rationale": null,
+          "root_order_unspecified": false,
+          "signature": [
+            [
+              "expected-1",
+              "outside:compliant",
+              "unknown",
+              "",
+              "unresolved",
+              false
+            ]
+          ],
+          "strict": true,
+          "strict_with_role_order": true
+        }
+      ],
+      "metrics": {
+        "accepted_alternatives": [],
+        "action_counts": {
+          "facts_supported": 3,
+          "independent_defects_claimed": 1,
+          "label_correct": 3,
+          "label_match_with_failed_evidence": 0,
+          "misclassified_actions": 0,
+          "missing_actions": 0,
+          "missing_independent_actions": 0,
+          "predicted_actions": 3,
+          "primary_label_hit": 3,
+          "strict": 3,
+          "strict_independent_defects": 1,
+          "strict_unresolved_implementation_actions": 0,
+          "unexpected_actions": 0,
+          "unresolved_implementation_actions": 0
+        },
+        "case_strict": 2,
+        "cases": 2,
+        "causal_metrics": {
+          "role_and_edges_exact": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "structure": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "unresolved_predicted_actions": 1,
+          "unresolved_predicted_roles": 1
+        },
+        "complete_cases_with_role_order": 2,
+        "concrete_action_metrics": {
+          "known": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "unknown_false_confirmation": 0,
+          "unknown_retained": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "confusion": [
+          {
+            "actual": "leaf:MECH-v0.3:C1",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:C1"
+          },
+          {
+            "actual": "leaf:MECH-v0.3:P2",
+            "count": 1,
+            "expected": "leaf:MECH-v0.3:P2"
+          },
+          {
+            "actual": "outside:compliant",
+            "count": 1,
+            "expected": "outside:compliant"
+          }
+        ],
+        "coverage": {
+          "MECH-v0.3:C1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "PyTorch cross_entropy"
+            ],
+            "operators": [
+              "PyTorch cross_entropy"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          },
+          "MECH-v0.3:C2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:C3": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:L2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P1": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 0,
+            "eligible_operators": [],
+            "operators": [],
+            "status": "unverified",
+            "supported_families": 0
+          },
+          "MECH-v0.3:P2": {
+            "accepted_alternative_families": 0,
+            "cross_operator_observed": false,
+            "eligible_families": 1,
+            "eligible_operators": [
+              "PyTorch cross_entropy"
+            ],
+            "operators": [
+              "PyTorch cross_entropy"
+            ],
+            "status": "observed_in_batch",
+            "supported_families": 1
+          }
+        },
+        "expected_verdict_counts": {
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:P2": 1,
+          "outside:compliant": 1
+        },
+        "failure_counts": {},
+        "families": 2,
+        "families_strict": 2,
+        "independent_reconciliation": {
+          "claimed": 1,
+          "duplicates": 0,
+          "expected": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_positive": 1
+        },
+        "mechanism_metrics": {
+          "actions": {
+            "correct": 3,
+            "eligible": 3
+          },
+          "actual_supported_statuses": {
+            "leaf": 2,
+            "outside:compliant": 1
+          },
+          "families": {
+            "correct": 2,
+            "eligible": 2
+          }
+        },
+        "status_metrics": {
+          "leaf": {
+            "correct": 2,
+            "eligible": 2
+          },
+          "outside:compliant": {
+            "correct": 1,
+            "eligible": 1
+          }
+        },
+        "strict_primary_verdicts": {
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:P2": 1,
+          "outside:compliant": 1
+        },
+        "strict_verdicts": {
+          "leaf:MECH-v0.3:C1": 1,
+          "leaf:MECH-v0.3:P2": 1,
+          "outside:compliant": 1
+        }
+      },
+      "run_sha256": "c1e8aac38e68f0801ac69d4d8e8c28d79e556c6c9b590b422429f428bb4a0522"
+    }
+  ],
+  "scope": "exercise_only",
+  "stability": {
+    "cases": [
+      {
+        "case_id": "H01",
+        "family_id": "github.com/pytorch/pytorch!69511",
+        "rationale": "s1 12–15 同版约定要排除与 ignore_index 匹配的目标。s2、s4 正确转发参数。s3 27–29 已识别 target=0 为忽略状态，但 s3 36–37 将完整 target 作为 weight.gather 的普通索引，使 weight[0]=2 进入受评分母。P2 成立，留为唯一独立主动作。s3 36–37 直接对 gather 的输出求和。忽略位置的 weight[0]=2 无资格进入该分母，但实际与 weight[1]=3 一起进入求和。改正上游索引选择后仍运行原 sum，额外项即消失。C1 是有据的下游参与关系，独立计数仍为一个。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      },
+      {
+        "case_id": "H02",
+        "family_id": "github.com/numpy/numpy!33326",
+        "rationale": "s1 8–13 规定重复目标逐次累加。s2 20–23 固定整数用例。s3 传入非标量 b 的步长，s5 20–26 逐项推进 index 与 b 并原地更新。b[0]、b[2] 各为独立槽位、各计 1 次。结果为 202，合规。",
+        "same": true,
+        "same_allowed_labels": true,
+        "same_and_both_incorrect": false,
+        "same_causal_structure": true,
+        "same_decisive_facts": true,
+        "same_labels": true,
+        "same_labels_facts_and_action": true,
+        "same_specific_action": true
+      }
+    ],
+    "same_allowed_labels": {
+      "correct": 2,
+      "eligible": 2
+    },
+    "same_and_both_incorrect_cases": 0,
+    "same_cases": 2,
+    "same_causal_structure": {
+      "correct": 2,
+      "eligible": 2
+    },
+    "same_decisive_facts": {
+      "correct": 2,
+      "eligible": 2
+    },
+    "same_labels": {
+      "correct": 2,
+      "eligible": 2
+    },
+    "same_labels_facts_and_action": {
+      "correct": 2,
+      "eligible": 2
+    },
+    "same_specific_action": {
+      "correct": 2,
+      "eligible": 2
+    }
+  }
+}
