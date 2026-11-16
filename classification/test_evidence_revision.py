@@ -104,6 +104,15 @@ class EvidenceRevision(unittest.TestCase):
         self.assertEqual((resolved["action_resolution"], resolved["role"]), ("supported", "primary"))
         self.assertTrue(resolved["count_as_independent"])
 
+    def test_parameter_parent_with_known_action_does_not_request_it_again(self):
+        output = self.result(*(self.fact(key) for key in (
+            "applicable_contract", "parameter_violation", "correct_source",
+            "state_treatment_allowed", "implementation_action", "causal_role",
+        )))
+        self.assertEqual((output["status"], output["parent_id"]), ("parent", "parameter"))
+        self.assertEqual(output["action_resolution"], "supported")
+        self.assertNotIn("observed_implementation_action", output["missing"])
+
     def test_new_diff_line_and_unfounded_derivation_do_not_prove_old_behavior(self):
         for anchors in ([self.anchor("patch", "behavior", 1)],
                         [self.anchor("contract", "requirement"), self.anchor("patch", "behavior", 2)]):

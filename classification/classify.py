@@ -496,6 +496,8 @@ def verdict(action, sources, catalog, revised=False):
          "pattern_ref": f"{namespace}:{check['pattern_id']}"}
         for check in neighbors
     ]
+    action_key = "implementation_action"
+    action_proven = action_key in true and explained_scoped_fact(action_key, facts, sources, scope)
     missing = set(scope_missing)
     if insufficient_participation and "actual_contribution" not in false:
         missing.add("actual_contribution")
@@ -509,7 +511,8 @@ def verdict(action, sources, catalog, revised=False):
                 if len(check["missing"]) == fewest:
                     missing.update(check["missing"])
         if not missing and not (core or leaf):
-            missing.add("observed_implementation_action")
+            if not (revised and result["status"] == "parent" and action_proven):
+                missing.add("observed_implementation_action")
             if "applicable_contract" not in true:
                 missing.add("applicable_contract")
     positive_verdict = (
@@ -525,8 +528,7 @@ def verdict(action, sources, catalog, revised=False):
             revised and result["status"] == "parent"
         )
         if positive_verdict and requires_action_evidence:
-            action_key = "implementation_action"
-            action_supported = action_key in true and explained_scoped_fact(action_key, facts, sources, scope)
+            action_supported = action_proven
             if not action_supported:
                 if action_key not in false and action_key not in disputed:
                     missing.add(action_key)
