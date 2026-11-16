@@ -1,0 +1,1974 @@
+{
+  "title": "历史 FM/N 53 条身份、条款与裁决",
+  "as_of": "2026-11-16",
+  "comparison_baseline": "MECH-v0.3",
+  "inventory": {
+    "FM": 29,
+    "N": 24,
+    "frozen_v16": 31
+  },
+  "definition_recovery_counts": {
+    "RECOVERED": 47,
+    "UNRESOLVED": 6
+  },
+  "definition_scope": "RECOVERED 表示从可见归档能可靠表达条款。完整 V15 原始目录和成员表仍待补。UNRESOLVED 保留可见历史叙述、条件和取证方向。",
+  "identity_scope": "RULING_CONFLICT 表示存在已定位的编号冲突。保留各版本来源，按逐条说明使用。",
+  "condition_scope": "触发条件用于构造和查找静态路径，设备实际运行与故障覆盖沿用证据状态。决定性判据要求适用约定及旧侧生效动作。",
+  "not_in_archived_inventory": {
+    "N14": "历史上曾列为候选，未进入 V16 冻结的 53 项比较范围。",
+    "N18": "历史上曾列为候选，未进入 V16 冻结的 53 项比较范围。",
+    "N19": "历史上曾列为候选，未进入 V16 冻结的 53 项比较范围。"
+  },
+  "records": [
+    {
+      "id": "FM-01",
+      "name": "空任务调度入口保护缺失",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "有效任务域、调度入口、空结果和终止义务",
+      "necessary_conditions": "合法调用的有效任务数为零，约定要求短路或返回空结果，实际调度入口不支持零工作",
+      "error_action": "在零有效任务时仍构建并启动 ElementwiseSch 等工作调度",
+      "failed_relation": "入口生效条件与零任务调用的终止义务失配",
+      "trigger_conditions": "真正没有有效任务的形状或有效长度。Softsign 归档为 [0]",
+      "candidate_search_predicates": "blockNum、zero-work、空张量入口、调度器构造",
+      "decisive_predicates": "固定合法空输入后追踪 tiling 得到的有效任务数和进入旧入口的判断。确认零任务不满足该调度器的运行前提",
+      "neighbor_exclusion_predicates": "同存储空结果已合法短路。仍有在途任务的流水排空用 N17。规定输出未物化用 N02",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "空任务调度与终止",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "V16 的首错是零有效任务仍进入不支持空任务的调度入口。因为这条路径原本没有计算项，不能由空工作量推导 C2。若仍应写出空归约规定值，另核输出义务或既存贡献的去向。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留空任务调度候选。以 Softsign 空工作和 EX-36 已预载待排空任务作边界对照。Embedding 反向 NaN 的原始历史机制继续待核。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "原失败数值未给，未本机NPU复跑。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-02",
+      "name": "形状推导错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "输入逻辑形状、归约轴和输出 shape/rank 元数据",
+      "necessary_conditions": "能由接口约定推得目标输出各轴和动态维。旧图或 Host 在首次消费前给出不同元数据",
+      "error_action": "仅修改一条归一化轴或用错误规则保留维度",
+      "failed_relation": "输出形状、分配和后续元数据消费者违反同一逻辑形状契约",
+      "trigger_conditions": "多轴归一化或足以区分维度规则的 shape。单轴可作为对照",
+      "candidate_search_predicates": "InferShape、SetDim、rank、keepdim、未知维",
+      "decisive_predicates": "以原合同推导每个输出轴并与旧 InferShape 的目标值逐维比对。绑定被消费的错误元数据",
+      "neighbor_exclusion_predicates": "形状正确后的一般偏移用 N20。合法输入被形状校验拒绝用 N21",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "形状推导",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "该模式的首错是输出 shape、rank 或动态维元数据。错误 shape 可能改变分配或后续寻址，但 L1 要求已受支持的原视图及可定位的密排地址项。元数据错误也不能替代 C 类对具体逻辑项参与的证明。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留形状推导为目录外候选，以多轴归一化与单轴可正确的形状作近邻。标记由上游形状错误传播的后果。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "现场dtype及数值未给；未运行设备。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-03",
+      "name": "越界读写：tiling切分策略的逻辑错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "Tiling 切分边界、任务域与实际内存访问足迹",
+      "necessary_conditions": "旧切分公式错误，具体任务的生效访问由该公式引起越界",
+      "error_action": "待核。已有材料可定位到非对齐输入，仍缺旧切分公式和实际访存",
+      "failed_relation": "待核。历史条款要求错误切分使实际读写超出对象合法区间",
+      "trigger_conditions": "历史报告提及大 batch 与未按 32B 对齐的 indices。触发链待核",
+      "candidate_search_predicates": "tile 边界、核区间、对齐长度、访存上下界",
+      "decisive_predicates": "取同构建分核或块边界及真实读写区间，显式重算越界因果。当前代表缺这些材料",
+      "neighbor_exclusion_predicates": "非对齐输入或超差单独保留为线索。确证的规划首错归 FM-11，越界作为后果",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "历史条款同时要求 tiling 切分边界公式失效和实际越界。非对齐 indices、较大 batch、超差均不足以证明其中任一条。L2 另要求单位或宽度转换错误，C1 另要求无资格逻辑项确实贡献。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留身份待核。若新证据闭合任务规划与越界因果，采用 FM-11 规划归属并单记越界后果，除非证明独立访存规则同时失效。",
+        "conditional_merge_or_alias": "FM-11",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "历史条款同时要求 tiling 切分边界公式失效和实际越界。非对齐 indices、较大 batch、超差均不足以证明其中任一条。L2 另要求单位或宽度转换错误，C1 另要求无资格逻辑项确实贡献。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-04",
+      "name": "越界读写：偏移量计算错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "已选语义对象、分区或窗口的地址偏移、合法访问区间",
+      "necessary_conditions": "对象明确，旧的实际偏移违约，额外证明该偏移使相应访问越界",
+      "error_action": "计算分区、窗口或搬运偏移时选错局部基址或偏移公式",
+      "failed_relation": "偏移到访问范围的映射越过对象合法边界",
+      "trigger_conditions": "分区切换、跨 workspace 槽、能使实际偏移越过边界的布局",
+      "candidate_search_predicates": "gmOffset、workspace 槽、offset/stride、区间终点",
+      "decisive_predicates": "固定输入逻辑位置、工作区分配和目标，因此可逐项复算旧偏移与实际足迹。若要接 L1/L2，分别再证生效原视图密排假设或单位误换",
+      "neighbor_exclusion_predicates": "地址错位仍在合法对象内归宽 N20。正确起址但搬运长度越界用 FM-19。整数回绕查 FM-16",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "L1",
+          "L2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "L1",
+            "status": "条款交集待核",
+            "required_intersection": "同时证明错误偏移造成越界，以及受支持原视图被密排公式实际寻址。",
+            "representative_support_and_limits": "AllGatherMatmulV2 旧归档为 workspace 槽偏移，未见密排行起点假设。"
+          },
+          {
+            "mode": "L2",
+            "status": "条款交集待核",
+            "required_intersection": "同一责任偏移的单位换算错误并导致越界。",
+            "representative_support_and_limits": "旧 workspace 代表的实际单位未变。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "部分重叠",
+        "decisive_difference": "交集是同一责任偏移项在造成实际越界的同时满足 L1 的原视图密排假设，或满足 L2 的存储单位换算错误。V16 的历史别名 N20 更广。AllGatherMatmul 的历史代表把最终写回压进两槽 workspace，偏移公式单位未变，也未采用密排视图假设。"
+      },
+      "handling": {
+        "proposal": "归并为历史别名或子型",
+        "details": "保留 FM-04 作为 N20 历史检索别名和越界后果索引。遇到明确的视图或单位谓词才登记相应 v0.3 子机制。",
+        "conditional_merge_or_alias": "N20",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "按固定作用域使用。其他版本、历史成员完整性和设备运行按各自来源核定。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-05",
+      "name": "同步依赖与屏障协议错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "生产者、消费者、活跃缓冲、事件或屏障参与者",
+      "necessary_conditions": "同一路径有可举证的先后、可见性、代际或参与协议。旧实现允许该依赖被违反",
+      "error_action": "遗漏所需等待，使用跨代同一 flag，或提前退出使屏障参与者不足",
+      "failed_relation": "消费者过早读、存储过早复用或集合协议无法完成",
+      "trigger_conditions": "多轮重用 UB、跨轮残留标志或无有效计算但仍需参与的核",
+      "candidate_search_predicates": "WaitFlag/SetFlag、PipeBarrier、SyncAll、FreeTensor、代际 flag",
+      "decisive_predicates": "画出生产、发布、等待、消费及复用边。取证缺失的必要边、可接受的旧代 flag 或缺席参与者",
+      "neighbor_exclusion_predicates": "资源归还错配用可靠性。即使等待均正确也发生的存储覆盖用 N22。初态缺写用 N01",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "同步协议",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "首错是数据可见性或必要先后关系破坏，也包括事件代际及屏障参与协议。旧 flag 被下一轮接受与真正的同源项 C3 重复计入分属不同证据链。可以支持同一案件的独立局部关系，但需要追踪实际贡献。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留同步协议候选。用必要等待、事件代际、集合屏障作为三种已有子型，配资源配对异常作边界对照。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "V3D共用该kernel路径依赖PR关联及说明，未取本版本未改动入口进一步证明。 空shape修复是关联PR独立明确规则，与原大shape失败因果无直接材料。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-06",
+      "name": "缓存索引映射错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "缓存逻辑 token、序列、批次、块表和物理槽",
+      "necessary_conditions": "缓存映射合同明确，生效读写使用了错配的逻辑块、批次或局部偏移",
+      "error_action": "用与缓存物理批次归属不一致的 Block Table 下标或偏移",
+      "failed_relation": "逻辑位置所绑定的缓存槽或数据归属失效",
+      "trigger_conditions": "非首批、跨块或页表非恒等映射。原案报告了特定形状",
+      "candidate_search_predicates": "Block Table、batch offset、paged KV cache、缓存槽读写",
+      "decisive_predicates": "按相同 token 和 batch 复算期望物理槽与真实读取。比较 L1 时补原受支持视图和旧密排式",
+      "neighbor_exclusion_predicates": "缓存索引正确但内容过期优先 N01。缓存地址整数表示不足查 FM-16",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "L1"
+        ],
+        "mode_projections": [
+          {
+            "mode": "L1",
+            "status": "条款交集待核",
+            "required_intersection": "受支持的非连续缓存视图被错误按连续布局寻址。",
+            "representative_support_and_limits": "旧缓存代表为块表和批偏移失配，原 stride 及生效地址式待核。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "部分重叠",
+        "decisive_difference": "缓存逻辑索引到物理槽的映射可以在受支持的非连续缓存视图上错误使用密排地址，此交集才满足 L1。当前可见历史案例仅报告 Block Table 与批偏移失配，未证明原视图、密排公式或单位错误。驻留缓存失效又需要另一条状态契约。"
+      },
+      "handling": {
+        "proposal": "归并为历史别名或子型",
+        "details": "保留 N20 地址映射检索别名，原缓存代表待核。只有消费路径使用密排公式并满足 L1 适用条件时采用 L1。",
+        "conditional_merge_or_alias": "N20",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "按固定作用域使用。其他版本、历史成员完整性和设备运行按各自来源核定。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-07",
+      "name": "数据排布转换错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "源和目标物理排布、对应逻辑元素及块填充值",
+      "necessary_conditions": "存在真实执行的排布变换，目标逻辑到物理映射有契约，旧变换结果违反元素排列或填充",
+      "error_action": "旧代表待核。候选动作是执行显式重排时写错目标位置或目标填充",
+      "failed_relation": "显式格式转换没保留同一逻辑张量的目标表示",
+      "trigger_conditions": "实际触发布局转换且区分排列的形状。可用唯一值标记各元素",
+      "candidate_search_predicates": "ND/NZ 等转换、permute/reorder、分块填充",
+      "decisive_predicates": "逐元素配对逻辑坐标及两种格式的物理位置，重算旧转换消费者取值。固定代表目前先证 CubeFormat 选路",
+      "neighbor_exclusion_predicates": "只选错模板归 FM-12。正确布局内的单个寻址公式用 N20。同宽数据位型解释用 N13",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "该定义需要旧布局转换实际产生错误的元素排列或块填充。V18 代表先错在 CubeFormat 模板准入，以 bias 开关代替布局开关，V16 归 FM-12。未给正确支持目标视图却套密排地址的同案证据，也未看到 element、byte、bit 换算错误。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留显式元素重排候选待核。取得真实转换的逻辑元素到目标坐标的旧侧证据后再比较 L1/L2。模板选错按 FM-12 审理。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "该定义需要旧布局转换实际产生错误的元素排列或块填充。V18 代表先错在 CubeFormat 模板准入，以 bias 开关代替布局开关，V16 归 FM-12。未给正确支持目标视图却套密排地址的同案证据，也未看到 element、byte、bit 换算错误。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-08",
+      "name": "计算精度策略或类型转换路径不当",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "算术 operand、实际 dtype、表示或舍入节点、选定算术原语",
+      "necessary_conditions": "约定明确可接受数值语义，旧路径的运算类型、转换时机、中转表示或精度原语造成可定位的违约",
+      "error_action": "过早 Cast 成较窄格式再求补数，或用错误中间类型进行逐次归约",
+      "failed_relation": "同一数据在适用节点应保留的精度或表示失效",
+      "trigger_conditions": "Double p 接近 1、跨 rank 每步舍入有差异、需保留高整数位的输入",
+      "candidate_search_predicates": "Cast、GetFirstValueAsFloat、FP32 accumulator、HF32/Div/Sqrt 模式",
+      "decisive_predicates": "固定语义目标、输入和实际 dtype。复算首处丢失信息及后续消费者。EX-37 须依据逐 rank 寄存舍入合同",
+      "neighbor_exclusion_predicates": "只换求值式或分组查 FM-09/FM-10。有限范围首次超界查 FM-17。舍入枚举错查 N15",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "数据表示与精度策略",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "同一来源或同一成员集合仍可由错误 dtype、中转表示、舍入位置或精度原语策略产生错误结果。先窄化 p 再计算补数与 P1 来源错读、P2 哨兵误解释均有不同必要条件。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "列为七条之外的数值策略候选。保留算术中转、转换时机、原语精度三个对照方向，与 FM-09 及 N15 逐例核对。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "原失败dtype/p/seed/offset未公开；不影响DOUBLE合法反例的源级因果闭合，原随机用例是否同一值仍未知。 随机核使用prob的比较阈值、概率端点及缩放消费链仍需设备/精确kernel验证；删除范围检查的影响不当作本条根因。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-09",
+      "name": "数学等价但计算结果不等价",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "数学目标、代数表达式或近似算法及实际求值",
+      "necessary_conditions": "固定同一数学目标和容差。旧等价表达式或针对同一目标的近似在实际算术中违约",
+      "error_action": "先求舍入后的 1+小量再 Log，或使用不能满足误差预算的近似式",
+      "failed_relation": "规定数学目标到有限精度结果的稳定性或误差约束失效",
+      "trigger_conditions": "对数输入差值大使 exp 项很小，或落在逼近误差大的区间",
+      "candidate_search_predicates": "log1p、消减、吸收、近似阶数、拟合系数",
+      "decisive_predicates": "用稳定同目标实现或约定误差上界对比旧路径。固定原项集合、重数、舍入位点，找到偏差形成处",
+      "neighbor_exclusion_predicates": "精确语义也不等价用 N25。纯加法树次序用 FM-10。未到达目标的必要项用 C2",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "有限精度求值及近似",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "首错可发生在实际执行的中间算术。有限精度把小校正量吸收，与 C2 要求的逻辑项原本应到达结果却在路径上失踪不同。数学目标本身也错时应进一步区分 N25。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留有限精度表达式或近似契约候选。用 LogAddExp 的吸收、EX-25 的近似误差、EX-08 的精确离散谓词作边界。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "新增StableLog1p各中间分支可能先产生0/0再被Select丢弃，异常值完整行为需设备验证。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-10",
+      "name": "浮点数累加序不当",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "归约目标、全部逻辑项及重数、浮点分组和加法树",
+      "necessary_conditions": "相同数学结果和项账本，类型受控，浮点累加分组或结合顺序改变到违反约定",
+      "error_action": "模板中使用不同配对顺序，如分两条累加链与串行单链",
+      "failed_relation": "同一项集合的加法树造成不同舍入链，违背适用的精度或执行一致性要求",
+      "trigger_conditions": "多项、动态范围大或抵消强，并选到不同归约分组",
+      "candidate_search_predicates": "reduce tree、pairwise、accumulate、模板块宽、不同累加链",
+      "decisive_predicates": "先核逐来源成员与次数一致，再固定 dtype 重放两棵加法树。将差分与该路径的约定对比",
+      "neighbor_exclusion_predicates": "漏项与超重数分别查 C2 和 C3。改变累加 dtype 或转换位置查 FM-08",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "浮点累加次序",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "该类需要相同成员集合和重数，只改变浮点累加树或分组。C2、C3 各需证实少贡献或超重数。在 TFScatterAdd 归组错误等案件中应先区分累加顺序、索引对应和运行确定性。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留累加次序候选和 C2/C3 硬负对照。审核时验证成员、重数和 dtype 保持一致，再推导顺序导致的有限精度差异。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "按固定作用域使用。其他版本、历史成员完整性和设备运行按各自来源核定。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-11",
+      "name": "tiling切分策略的逻辑异常",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "Tiling 核分工、块和行处理单元、并存缓冲预算、设备任务消费者",
+      "necessary_conditions": "规划输入和消费者约束成立，首个错误是任务域、切分粒度或驻留资源预算的输出",
+      "error_action": "调整核块长度时沿用旧任务数，切碎应完整处理的行，或少计并存缓冲",
+      "failed_relation": "执行计划的覆盖、处理粒度或资源容量与后续执行契约冲突",
+      "trigger_conditions": "余量或对齐阈值、真实下 pad 大于编码范围、多个缓冲并存或容量搜索只有一个可行因子",
+      "candidate_search_predicates": "tiling block/core、tile 元数据、UB/L1 budget、容量搜索",
+      "decisive_predicates": "重算合法任务及各阶段的容量和消费者。用计划到实际执行的链证明 C1/C2 附加关系",
+      "neighbor_exclusion_predicates": "单个缓冲容量查 N11。既有策略的准入用 FM-12。已定任务内循环用 N17",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "C1",
+          "C2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "C1",
+            "status": "条件待证",
+            "required_intersection": "错误规划将无资格基础块交给真实梯度消费者。",
+            "representative_support_and_limits": "EX-13 已有首小块代理谓词证据，梯度消费未闭合。"
+          },
+          {
+            "mode": "C2",
+            "status": "静态条件支持",
+            "required_intersection": "合法任务中具体必需计算项失去实际到达路径。",
+            "representative_support_and_limits": "EX-34 限真实下 pad>255 造成了有效 M 短缺及卷积漏贡献。EX-13 另一方向仍待梯度消费。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "部分重叠",
+        "decisive_difference": "任务覆盖和容量规划可以成为同一执行边界上的参与错误。EX-13 的旧路径只查聚合块首元素并无条件推进内块，已形成无效基本块进入计算或漏掉后续合法块的路径。EX-34 的旧 M 范围会缩小或跳过仍有真实贡献的块。单独的 buffer 预算过小、漏搜容量解或空核元数据不充分。"
+      },
+      "handling": {
+        "proposal": "细分或成对验证",
+        "details": "保留 FM-11 首错的规划身份。仅当必要项或无效项及其消费者落实到本版本时附 C1/C2，按同一错误动作记录。规划容量和有效域扩库时分开审。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "dtype/shape/实际错误值未知。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-12",
+      "name": "执行策略或模板选路判断错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "执行模板或策略、准入谓词、待履行的输入语义和功能",
+      "necessary_conditions": "有已存在的策略及适用边界，旧实际选中的分支不能满足调用要求",
+      "error_action": "依据不完整的能力条件把需融合 Add/Mul 的 DP tile 放入 StreamK 等不适用路径",
+      "failed_relation": "实际派发与所选实现的能力或语义域失配",
+      "trigger_conditions": "同时含纯 SK 与 DP 的尺寸分界，或可广播 mask 与 per-batch 模板的边界",
+      "candidate_search_predicates": "IsCapable、tiling key、dispatch、if constexpr、策略优先级",
+      "decisive_predicates": "从参数及生效条件追到旧分支，核对所需能力、真正消费者和能处理该输入的参照路径",
+      "neighbor_exclusion_predicates": "没有可用后端且漏拒查 FM-14。计划切分用 FM-11。正确实现内部忽略控制值查 N26",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "执行策略或模板准入",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "该模式证明既有策略的准入或选择谓词与所需能力不匹配。FusedMatmul 的 DP 路径缺融合 Mul 可以直接说明错用模板和步骤未执行。若要补记 C2，还须标出该边界的具体必需逻辑项与遗漏去向。FlashAttentionScore 误选逐 batch 掩码属于策略选择，物理越界也不能代替 C1 参与证明。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留执行策略候选及能访问两类分区的用例。只在输出边界有具体缺失计算项的独立证据时补记 C2，仍保留错选策略首错。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "两个现场完整dtype/shape与融合标量未知。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-13",
+      "name": "确定性计算未实现",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "指定后端和模式的确定性要求、同输入多次执行结果、执行顺序",
+      "necessary_conditions": "该版本明确承诺适用确定性，旧实现中存在可达的不受控执行行为或同条件重复结果违约",
+      "error_action": "待核。ScatterAdd 归档报告字节比较失败，旧侧非确定性来源待证",
+      "failed_relation": "结果未满足约定的重复执行一致性",
+      "trigger_conditions": "固定版本、后端、确定性配置、输入、随机状态和相关运行选项，多次执行",
+      "candidate_search_predicates": "deterministic 开关、原子更新、调度顺序和重复运行",
+      "decisive_predicates": "绑定同版本明确确定性声明及旧机制。重复执行或固定证据要能区分中间归约树变化和跨实现映射",
+      "neighbor_exclusion_predicates": "固定 seed 在两个实现上结果不同可源于固定分块映射。单次误差只支持数值差异",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "需要对应版本、模式、后端和运行条件下的确定性声明及实现缺口。固定 seed 对标差异可以来自确定的分块映射或排序契约错误。重复执行结果不一致也不足以证明某项 C3 超重数。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留历史确定性身份待核。后续找有声明、可达旧侧缺陷和同条件重复执行证据的样本，用跨实现序列不兼容作对照。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "需要对应版本、模式、后端和运行条件下的确定性声明及实现缺口。固定 seed 对标差异可以来自确定的分块映射或排序契约错误。重复执行结果不一致也不足以证明某项 C3 超重数。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-14",
+      "name": "后端不支持场景未拦截",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "目标硬件、执行后端、指令或类型的支持边界、接口准入",
+      "necessary_conditions": "该具体平台和版本有不支持的约定且实际被放行进入相应路径",
+      "error_action": "在 tiling 守卫未拦截已知不支持的 DMA 配置",
+      "failed_relation": "实现入口准入范围超出后端或指令实际可执行域",
+      "trigger_conditions": "该后端特有的 dtype、布局、指令规格或 DMA 配置",
+      "candidate_search_predicates": "SoC guard、capability matrix、isDmaFlag、unsupported dtype",
+      "decisive_predicates": "取得精确目标能力和旧准入判定，确认实际进入不支持路径。现场错误另记",
+      "neighbor_exclusion_predicates": "有适用模板却选错用 FM-12。合法请求误拒用 N21。只凭编译报错保留待核",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "后端能力准入",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "需要明确同版本的硬件或所选后端能力限制，首错是把不支持的路径放行。设备参数读取可以正确，P1/P2 所要求的参数来源或特殊状态错误不由错误准入推出。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留后端能力接口候选。分别记录没有可用后端与存在可用后端却错选的条件，后一类交 FM-12 评审。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "现场dtype/shape未知；issue平台与DAV_5102标识关系未证明，不强行等同。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-15",
+      "name": "NPU适配参数处理异常",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "请求编译的目标设备属性、宿主资源配置和读取或传递的参数",
+      "necessary_conditions": "目标资源语义和实际来源/传递值可绑定。二者语义或值不等价的具体步骤已定位",
+      "error_action": "离线编译的 helper 查询宿主 runtime 的 core/UB 资源，或错误传递已确认的目标配置",
+      "failed_relation": "生成实现使用的设备能力违背目标编译对象",
+      "trigger_conditions": "宿主 SoC 与编译目标的资源不一致，或离线环境无宿主设备可查询",
+      "candidate_search_predicates": "PlatformManager/context、coreNum、ubSize、target SoC",
+      "decisive_predicates": "对同一资源参数回溯请求目标和旧 helper 的实际取值。证实来源角色不等价时接 P1",
+      "neighbor_exclusion_predicates": "目标配置正确后的错误选路用 FM-12。普通接口参数宽条款查 N07",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "P1"
+        ],
+        "mode_projections": [
+          {
+            "mode": "P1",
+            "status": "静态支持",
+            "required_intersection": "资源参数在目标设备和宿主设备之间采用不等价来源。",
+            "representative_support_and_limits": "固定 IsFinite 旧 helper 从宿主 runtime 取 core/UB，预期为请求指定目标。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "限定复用",
+        "decisive_difference": "设备资源配置本身若从语义不同的来源取得，满足 P1 同一参数角色的错源谓词。IsFinite 离线编译中请求的是目标 SoC 的核数与 UB，旧 helper 用运行宿主查询结果。FM-15 还包括读取正确之后的设备配置传递错误，只有实际又改换来源的子型才落在 P1。"
+      },
+      "handling": {
+        "proposal": "复用有据局部关系",
+        "details": "复用 P1 的既有 ID 记录设备参数错源子型，同时保留 FM-15 历史范围。选用宿主与目标能力不等的条件检验源语义。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "具体错误核数/UB和离线报错日志未给，不能编造错误码。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-16",
+      "name": "整数计数、索引或偏移的位宽不足",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "索引、计数或偏移的整数载体、乘加中间值及地址消费者",
+      "necessary_conditions": "同版本合法输入触发了正确数学整数值超出实际类型范围或符号域，出现实际截断或回绕",
+      "error_action": "在 32 位 workspace offset 上累加字节偏移，超界后继续向消费者交付截断结果",
+      "failed_relation": "精确整数位置或计数的表示与实际值失配",
+      "trigger_conditions": "大形状、大 stride 或多段工作区累加使旧类型临界范围被跨越",
+      "candidate_search_predicates": "uint32_t、窄化、乘步长、offset 累积、宽索引选择",
+      "decisive_predicates": "按实际操作数类型逐个复算乘积、累加和赋值，再与可表示范围比对。验证宽化后首错消失的条件",
+      "neighbor_exclusion_predicates": "单位误换查 L2。经过浮点中转失去低位查 FM-29。宽模板未派发要定位 FM-12",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "整数表示位宽",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "合法整数值超过载体位宽后截断或回绕，在单位换算完全正确时也会发生，L2 显式排除此类。若首错是未按规模选择已有宽索引实现，先记录选路，必要时再证实际位宽错误。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留整数表示位宽候选。核对每个算术中间项而非仅结果变量的类型，用地址单位错误与 32 位派发错误作近邻。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "values/indices区域交换本身在所有消费者均使用显式指针时不必然影响正确性，缺消费者约定证据，未单列成独立根因。 初始乘积和lastAxisNumForSort*unsortedDimNumForSort的两个操作数仍可能为32位，改结果变量64位不能自动保护求值乘法；更大元素数量域需额外核验。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-17",
+      "name": "浮点数值范围溢出",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "有限输入、中间浮点或累加器格式、目标结果",
+      "necessary_conditions": "有限输入形成了超出真实格式有限范围的中间结果，且约定存在可接受的稳定路径或结果",
+      "error_action": "先对最终应屏蔽的 x 缩放，放大后溢出，再与零相乘",
+      "failed_relation": "中间格式的数值范围与可接受结果之间的有效表示失配",
+      "trigger_conditions": "靠近格式上界的有限数据与较大 scale。DropOut 示范可在丢弃位置引出 Inf×0",
+      "candidate_search_predicates": "乘法链、max finite、accumulator、转换位点、Inf/NaN",
+      "decisive_predicates": "复算各中间数学值，绑定实际格式和首个越界节点。对照合法稳定表达式",
+      "neighbor_exclusion_predicates": "已存在的 NaN/Inf 用 N16。有限舍入差异用 FM-08/FM-09。真实累加器超界按 FM-28 子型检索",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "浮点范围",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "有限输入导致某个确切中间值超出实际浮点格式范围，位宽属于数值表示。L2 的宽度约束的是存储寻址单位。与已有 NaN/Inf 的传播不同，也没有逻辑项重数变化的必要条件。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留浮点范围溢出候选。登记首个有限值超范围的变量、类型和时机，以 FM-08 的有限舍入及 N16 的非有限输入作近邻。设备和累加器分型留在同一谱系。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "若x本身Inf则Inf*0仍NaN，新顺序不解决；keep0须独立早退。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-18",
+      "name": "算子实现精度不一致：指数函数精度实现错误",
+      "historical_identity_status": "UNRESOLVED",
+      "object_and_semantic_role": "指数相关接口、实际数值原语及期望误差约定均待核",
+      "necessary_conditions": "UNRESOLVED。缺可确认的算子身份、版本和精度合同",
+      "error_action": "UNRESOLVED。源端指数相关动作未定位",
+      "failed_relation": "UNRESOLVED。还无法归因于原语精度、有限求值或范围",
+      "trigger_conditions": "归档只述相关函数结果异常，输入域与失败路径待核",
+      "candidate_search_predicates": "指数函数相关符号、误差报告和实际源码入口，仅用于找证",
+      "decisive_predicates": "核对原函数真实身份、固定同版公式、原语精度和首个失败样本后按 FM-08、FM-09 或 FM-17 审",
+      "neighbor_exclusion_predicates": "函数名、任务评分下降或仅称结果不准均仅作为线索",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "归档拼写 Tensor.exponoential_ 对应的算子身份、数值约定、近似公式和旧侧消费者均未核定。无法区分指数精度算法、普通计算类型、中间溢出或其他实际机制。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留待核。找到可核的真实实现再先对照 FM-08/FM-09，暂不采纳模式。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "归档拼写 Tensor.exponoential_ 对应的算子身份、数值约定、近似公式和旧侧消费者均未核定。无法区分指数精度算法、普通计算类型、中间溢出或其他实际机制。"
+      },
+      "definition_status": "UNRESOLVED"
+    },
+    {
+      "id": "FM-19",
+      "name": "越界读写：访存范围错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "合法内存对象、访问起址及真实 load/store 长度或足迹",
+      "necessary_conditions": "对象边界可确定，动作执行的实际访问覆盖了对象外地址",
+      "error_action": "搬运一个固定 32B 块写输出，对不足 32B 的合法区间没有保护",
+      "failed_relation": "物理读写范围超过对应对象的有效区间",
+      "trigger_conditions": "实际输出不足硬件最小传输粒度，或在最后一个不足整块的区域",
+      "candidate_search_predicates": "DataCopy、blockLen、对齐尾长、对象容量、偏移回退",
+      "decisive_predicates": "按指令真实搬运粒度计算实际半开访问区间，并与合法对象区间比较。把受损对象与错误码或输出污染分别举证",
+      "neighbor_exclusion_predicates": "计划、起址或循环首错已定位时保留其根因。分配内未合格项确实参与另查 C1",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "物理访存足迹",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "V16 窄谓词检查对物理对象的负载或存储足迹长度是否合法。C1 要求额外的逻辑项在目标计算中有实际贡献。Inc 的越界写由 32B 搬运长度触发，正确地址单位未阻止范围违规。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留物理访存足迹候选。分开记录合法对象边界、实际有效搬运长度与恶化后果。地址、规划或循环已有直接错误时标注其因果角色。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "不要把新增example当原始现场；此条无原始可执行输入。 本条只确认clearBlkNum=0问题，不据相邻未改尾块代码扩大为所有尾块均错误。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-20",
+      "name": "私有数据格式视图操作不兼容",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "逻辑 view、私有物理格式、storageShape/stride 及消费者",
+      "necessary_conditions": "适用版本明确视图或转换许可，旧路径把不适用的私有/普通格式元数据或寻址规则用于该视图",
+      "error_action": "为实际 ND view 写入 NZ 专属块轴参数等错误形状字段",
+      "failed_relation": "逻辑 view 与底层物理布局的映射契约失效",
+      "trigger_conditions": "私有格式的合法 view 或普通 ND view 显露 NZ 假设的分支",
+      "candidate_search_predicates": "as_strided、FRACTAL_NZ、NC1HWC0、storageShape、view 构造",
+      "decisive_predicates": "固定格式、原视图与目标路径合同，逐个追实际消费的字段/地址。只有旧密排式直接作用于受支持原视图才落入 L1",
+      "neighbor_exclusion_predicates": "合法拒绝不支持的视图。已正确正规化后采用密排公式。显式元素重排错误查 FM-07",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "L1"
+        ],
+        "mode_projections": [
+          {
+            "mode": "L1",
+            "status": "条款交集待核",
+            "required_intersection": "受支持原视图具有非密排步长，生效消费者的具体地址项错误使用密排。",
+            "representative_support_and_limits": "固定 QBMM 已证 ND view 被写 NZ 元数据，密排寻址交集仍待核。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "部分重叠",
+        "decisive_difference": "私有格式的 view 合同也可能明确接纳原视图，且责任消费者错误用密排地址。这一窄交集满足 L1。正确拒绝不受支持的 as_strided 不成立。V16 QuantBatchMatmul 错在把 ND view 的 storageShape 套 NZ 字段，没有被消费的密排行步长首错证据。"
+      },
+      "handling": {
+        "proposal": "细分或成对验证",
+        "details": "继续保留私有格式 view 契约候选。确定私有视图的支持状态、是否完成转换及实际用到的地址项后再选择 L1。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "原shape/输出dtype及UNDEFINED如何产生未公开；不影响已证ND被NZ公式改写这一首错。 Shape低rank越界是否抛错或破坏其他字段需同版框架索引实现，不能猜定。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-21",
+      "name": "精度溢出：特定硬件数值格式导致精度溢出",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "指定硬件、实际浮点计算路径和物理数值格式",
+      "necessary_conditions": "设备制约明确，有限中间值超过该格式的有限范围，并违背该路径数值约定",
+      "error_action": "旧代表待核。候选动作为在实际设备窄格式内执行超范围计算",
+      "failed_relation": "特定硬件格式的有限表示范围无法维持算子合同",
+      "trigger_conditions": "归档报告 310P、FP16 路径下偶发超差或溢出。确切输入待核",
+      "candidate_search_predicates": "硬件标记、FP16 中间格式、溢出报告、铸型及累加节点",
+      "decisive_predicates": "取绑定版本的算术表达式、中间 dtype 和首个超范围值，并与该路径参考规则比较",
+      "neighbor_exclusion_predicates": "只有平台相关超差或 NaN。若与普通浮点范围溢出同机制，保留 FM-17 设备子型",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "硬件标签和偶现超差不足以定位第一处超范围有限值。确证实际浮点中间格式、运算和首错之后，仍应与 FM-17 同机制比较。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留历史设备专项待核。若证实同一浮点范围规则，归 FM-17 设备子型。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "硬件标签和偶现超差不足以定位第一处超范围有限值。确证实际浮点中间格式、运算和首错之后，仍应与 FM-17 同机制比较。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-22",
+      "name": "边界值异常",
+      "historical_identity_status": "UNRESOLVED",
+      "object_and_semantic_role": "历史边界输入或中间数值、端点分支及实际消费者",
+      "necessary_conditions": "UNRESOLVED。归档未给共同的根动作条件",
+      "error_action": "UNRESOLVED。零宽区间重算、哨兵识别、定义域保护等须按个案定位",
+      "failed_relation": "UNRESOLVED。边界值或 NaN 现象可对应多类语义失配",
+      "trigger_conditions": "零宽或窄区间、定义域边沿、精确端点",
+      "candidate_search_predicates": "min==max、负方差、零宽区间、端点下的分支切换",
+      "decisive_predicates": "构造边界左右和端点，追第一个违约表达式或谓词。HistogramV2 归档支持平台条件极性错，应按 N26 评估",
+      "neighbor_exclusion_predicates": "端点输入、精度异常或非有限输出只作触发/现象。按已证具体根因入类",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "边界值描述适用输入或症状。它可以触发参数哨兵、定义域处理、分桶控制或无效成员纳入等不同机制。HistogramV2 的代表有正确读取平台条件后判断极性取反的具体代码，不能为宽泛边界类建立共同必要动作。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留触发条件索引和历史身份。实际根因单独重判，例如 HistogramV2 的自动范围控制归 N26，只有证明特殊状态契约错误的子案才用 P2。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "边界值描述适用输入或症状。它可以触发参数哨兵、定义域处理、分桶控制或无效成员纳入等不同机制。HistogramV2 的代表有正确读取平台条件后判断极性取反的具体代码，不能为宽泛边界类建立共同必要动作。"
+      },
+      "definition_status": "UNRESOLVED"
+    },
+    {
+      "id": "FM-23",
+      "name": "融合算子反量化位置不当",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "量化值域、反量化 scale、bias 和融合计算阶段",
+      "necessary_conditions": "接口给出各项应处的域。旧流程在不等价的阶段执行反量化或加偏置",
+      "error_action": "将应在反量化之后相加的实数 bias 提前累加到待缩放的 L0C",
+      "failed_relation": "实数 bias 被量化比例错误作用，计算图或融合实现不再满足原公式",
+      "trigger_conditions": "scale 非恒等且 bias 非零，且走受影响的融合/量化流程",
+      "candidate_search_predicates": "Dequantize、scale、bias epilogue、L0C、融合节点顺序",
+      "decisive_predicates": "同版对照目标公式，分别展开旧值流与期望值流。检查实际 bias 的加入点和比例作用对象",
+      "neighbor_exclusion_predicates": "bias 仍参与而受到错误缩放，区分 C2。正确对象中的量化分组地址错误查 N06。舍入路径查 FM-08/N15",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "量化计算阶段",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "同样的 bias 和 scale 都可在旧路径出现，但 bias 若加在反量化前会随之缩放，改变计算域及公式。L2 的转换是地址单位，C2 需要逻辑计算项消失，本案 bias 仍参与。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留量化计算阶段顺序候选。按公式分别核对 bias 所在值域以及 scale 的实际作用对象，与步骤遗漏及参数分组映射作近邻。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "完整shape和输出dtype未公开；不把全部FP8 bias或所有scale类型都列同范围。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-24",
+      "name": "输入强制降精度导致精度丢失",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "原精度输入标量或张量、提前 Cast 及后续需要该信息的运算",
+      "necessary_conditions": "合法较高精度输入在进入计算前被不可逆窄化，且后续语义依赖丢失部分",
+      "error_action": "旧案例报告将 Logspace 的 start/end/base 提前转为输出 dtype。旧路径仍待核",
+      "failed_relation": "输入到实际计算的表示在契约允许的舍入位置之前丢失信息",
+      "trigger_conditions": "高精输入在窄化后合并到相同值，且其差别本应影响后续计算",
+      "candidate_search_predicates": "输入 Cast、按输出 dtype 做预转换、半精路径",
+      "decisive_predicates": "固定同一输入，逐节点比较按旧输入 Cast 与按合同在后续节点 Cast 的值流",
+      "neighbor_exclusion_predicates": "精度契约允许的低精近似。正确值读取后的此动作依 FM-08 谱系，P1/P2 各需来源或特殊状态事实",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "输入转换时机",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "输入首先取自正确值，过早窄化才丢失信息。与 P1 非等价来源、P2 特殊状态转换和 C2 漏掉计算项均有不同必要条件。"
+      },
+      "handling": {
+        "proposal": "归并为历史别名或子型",
+        "details": "将输入阶段降精保留为 FM-08 子型建议，勿因出现低精度结果扩大。V16 历史独立身份继续待核。",
+        "conditional_merge_or_alias": "FM-08",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "按固定作用域使用。其他版本、历史成员完整性和设备运行按各自来源核定。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-25",
+      "name": "tiling切分策略不同分支处理精度不一致",
+      "historical_identity_status": "UNRESOLVED",
+      "object_and_semantic_role": "同算子多个合法 tiling 变体、分块配置及比较输出",
+      "necessary_conditions": "UNRESOLVED。已知比较需同合同且变体均合法，共同错误动作仍缺",
+      "error_action": "UNRESOLVED。PageAttention 已报道不同 blockSize 结果不一致，分支内首错待核",
+      "failed_relation": "UNRESOLVED。变体可在累加树、类型、同步或项参与上发生不同失效",
+      "trigger_conditions": "同值输入分别强制不同受支持的 blockSize/tiling",
+      "candidate_search_predicates": "跨模板比较、blockSize、可切换策略、确定性报告",
+      "decisive_predicates": "固定调用及比较合同，切换唯一规划开关，定位各路径最早分歧的实际动作",
+      "neighbor_exclusion_predicates": "各种合法结果差异须按合同阈值判断。切分差异本身只登记为测试构造",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "多个合法执行变体间的超差或不一致是比较条件。根因可能是不同的精度策略、有限求值、策略选择、同步或计算项参与。单凭分块大小不同无法定位同一责任动作，更无法判 C2。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留跨执行变体验证视角。已定位的案例用实际规则分类。原 PageAttention 无源码级数值规则时维持待核。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "多个合法执行变体间的超差或不一致是比较条件。根因可能是不同的精度策略、有限求值、策略选择、同步或计算项参与。单凭分块大小不同无法定位同一责任动作，更无法判 C2。"
+      },
+      "definition_status": "UNRESOLVED"
+    },
+    {
+      "id": "FM-26",
+      "name": "矩阵乘加融合后数据格式转换精度丢失",
+      "historical_identity_status": "UNRESOLVED",
+      "object_and_semantic_role": "矩阵乘融合开关、算术中间表示、布局转换入口及其消费者",
+      "necessary_conditions": "UNRESOLVED。疑似格式转换和实际消费缺同版原件",
+      "error_action": "UNRESOLVED。报告只给融合在线编译和二进制输出差异",
+      "failed_relation": "UNRESOLVED。须区分物理排布、数据类型和舍入阶段",
+      "trigger_conditions": "MatmulAtomicAddUbFusion 融合路径，分别在线编译和二进制执行",
+      "candidate_search_predicates": "融合开关、NZ/ND 转换、Cast、同算子不同编译路径",
+      "decisive_predicates": "固定两个构建和输入，追入首个转换前后实际布局与表示。只给结果差异时保留待核",
+      "neighbor_exclusion_predicates": "重新分配张量、排布变换、有限舍入及模板选路分别按真实代码归类",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "在线编译与二进制输出不同只锁定比较维度。需要固定源码辨别元素排列、位置映射、算术 dtype 或中间舍入。只有其中已实证的密排假设或寻址单位转换可进入 L1/L2。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留历史身份待核。先定位转换到底改变了何种表示及其首次消费，再与 FM-07、FM-08 比较。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "在线编译与二进制输出不同只锁定比较维度。需要固定源码辨别元素排列、位置映射、算术 dtype 或中间舍入。只有其中已实证的密排假设或寻址单位转换可进入 L1/L2。"
+      },
+      "definition_status": "UNRESOLVED"
+    },
+    {
+      "id": "FM-27",
+      "name": "通信量化与反量化精度损失",
+      "historical_identity_status": "UNRESOLVED",
+      "object_and_semantic_role": "跨设备通信前后数值、量化和反量化参数及输出误差约定",
+      "necessary_conditions": "UNRESOLVED。历史提案说明有损通信场景，未定位共同违约动作",
+      "error_action": "UNRESOLVED。需由个案证明量化参数、舍入、饱和或反量化位置的实际错误",
+      "failed_relation": "UNRESOLVED。量化步长与通信误差预算可能涉及不同失效关系",
+      "trigger_conditions": "跨 rank 有损通信，对近边界值或不同 scale/zero-point 确认实际路径",
+      "candidate_search_predicates": "quantize/dequantize、scale、zero-point、饱和、通信精度",
+      "decisive_predicates": "同时绑定通信前后语义合同、首个实际错变换及下游结果。对照 EX-37 的舍入链",
+      "neighbor_exclusion_predicates": "符合预算的压缩误差。逐 rank 累加 dtype 错按 FM-08。反量化阶段错误参照 FM-23",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "通信压缩只说明传输采用较低或有损表示。要建立机理需查明违反约定的量化或反量化规则、scale/zero-point 选择、舍入或饱和及实际输出。通信场景无法单独决定七条任何一项。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留研究候选。找同时给出通信契约、错误规则和输出证据的跨 rank 样本，再与 FM-08、N15、FM-23 比较。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "通信压缩只说明传输采用较低或有损表示。要建立机理需查明违反约定的量化或反量化规则、scale/zero-point 选择、舍入或饱和及实际输出。通信场景无法单独决定七条任何一项。"
+      },
+      "definition_status": "UNRESOLVED"
+    },
+    {
+      "id": "FM-28",
+      "name": "累加器溢出",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "内部浮点累加器、实际格式和逐步局部和",
+      "necessary_conditions": "实际内部累加器范围已知，合法数据累加中间值超出此范围，违背结果约定",
+      "error_action": "按不足范围的累加格式执行累加。历史独立现场待核",
+      "failed_relation": "中间局部和无法由实际累加器表示",
+      "trigger_conditions": "部分和在宽参考中有限，真实累加器在某一步越过最大有限值",
+      "candidate_search_predicates": "accumulator dtype、reduce sum、partial sum、超范围",
+      "decisive_predicates": "逐项算出第一处超范围的中间值，验证真实累加器格式及 Inf/NaN 或溢出后果",
+      "neighbor_exclusion_predicates": "所有中间值在范围内的分组误差用 FM-10。输出 Cast 饱和另查 N15。按 FM-17 保留专项检索",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "累加器范围",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "该子型的首错在累加器实际格式的有限范围，范围内的浮点次序变化另归 FM-10。真实累加器溢出可以保留所有原贡献，因此 C2/C3 各自的重数谓词不能推出。"
+      },
+      "handling": {
+        "proposal": "归并为历史别名或子型",
+        "details": "保留 FM-17 的专项检索别名，实际累加器格式、中间值和首次溢出需有证。无需并行增加机理 ID。",
+        "conditional_merge_or_alias": "FM-17",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "按固定作用域使用。其他版本、历史成员完整性和设备运行按各自来源核定。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "FM-29",
+      "name": "地址表示精度丢失",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "精确逻辑索引/计数、整数偏移、浮点中转及地址消费者",
+      "necessary_conditions": "原整数合法可表示，经实际浮点表示后不能精确保留，误差被拿来形成实际偏移或位置",
+      "error_action": "将整数地址或偏移送入浮点排序/中转后再还原。归档原转换链仍待核",
+      "failed_relation": "逻辑位置与实际准确地址的对应被表示失真破坏",
+      "trigger_conditions": "较大 stride 或地址超过实际浮点格式可逐整数表示的域，比如 FP32 在 2^24 之后相邻整数可合并",
+      "candidate_search_predicates": "sort dtype、int→float→int、地址中转、精确整数边界",
+      "decisive_predicates": "跟同一个整数逐步追 Cast、算子输出和真实地址，比较同单位的精确整数路径与浮点路径",
+      "neighbor_exclusion_predicates": "纯整数窄化用 FM-16。地址单位转换错误用 L2。只有大索引症状无法据此定类",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "整数地址的浮点中转精度",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "地址或计数可一直使用相同单位，却因整数经浮点中转而被舍入，L2 的单位转换必要条件仍缺。也要与纯整数位宽截断 FM-16 区分。"
+      },
+      "handling": {
+        "proposal": "归并为历史别名或子型",
+        "details": "保留 FM-08 之下的表示精度检索子型。没有实际整数到 float 到整数的地址链与消费者时维持待核。",
+        "conditional_merge_or_alias": "FM-08",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "按固定作用域使用。其他版本、历史成员完整性和设备运行按各自来源核定。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N01",
+      "name": "输出缓冲区初始化错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "缓冲或局部状态、要求初值、任务隔离边界和首个消费者",
+      "necessary_conditions": "当前任务按约定应新建初态或复位现有状态。旧初态未写或前一任务状态被后续观察",
+      "error_action": "零分支只清零 attentionOut，漏写逐项 max/sum 初值。宽条款还含复用已消耗的掩码状态",
+      "failed_relation": "规定初值或任务隔离失效，首个消费者读到未初始化或过期状态",
+      "trigger_conditions": "要求返回统计量的 SFA 空分支。宽条款用第二行或下一轮触发",
+      "candidate_search_predicates": "Init、reset、状态持久化、returnSoftmaxLse、UpdateMask",
+      "decisive_predicates": "跟踪状态的初始化、复位、第一次读取和输出边。C2 还需要证明该状态导致确切合法 lane 无法到达目标",
+      "neighbor_exclusion_predicates": "最终结果缺 Copy/Store 用 N02。正确初态被活跃缓冲覆盖用 N22。依赖等待用 FM-05",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "C2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "C2",
+            "status": "补证后静态支持",
+            "required_intersection": "已消耗的前任务状态使当前必需 lane 没有实际贡献。",
+            "representative_support_and_limits": "EX-01 固定原包缺写回。实际父提交的两个 DataCopy 补证成立。SFA 冻结初值例不提供 C2 代表。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [
+          "C1",
+          "C3"
+        ],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "部分重叠",
+        "decisive_difference": "至少绑定应建立或复位的状态及第一个实际消费者。原 SFA 的零分支缺写 max/sum 初值，证明统计输出初始化缺陷。已知没有写初值的事实不能单独证明某个必要计算项漏算。EX-01 的补证版中，已耗状态令必要 lane 在真实写回消失，另支持 C2。"
+      },
+      "handling": {
+        "proposal": "细分或成对验证",
+        "details": "冻结原 SFA 为初始化反例。历史状态复位可作为独立行为候选。EX-01 只在消费链闭合时映射 C2。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "SFA 冻结初值条款与历史缓存有效性/跨行复位应分开审；SFA 原件中的 returnSoftmaxLse 路径限定须保留。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N02",
+      "name": "空索引分支未覆盖",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "合法分支、必需输出对象、Copy/Store 与执行器",
+      "necessary_conditions": "当前路径保证一个实际可读的输出，生效实现提前结束且无其他合法物化或共享结果路径",
+      "error_action": "空索引返回成功和空 executor，没有追加 self→out 的 ViewCopy",
+      "failed_relation": "逻辑恒等结果没有建立为约定中调用方可观察的输出",
+      "trigger_conditions": "非空 self 与零元素 index，out 需要实际物化",
+      "candidate_search_predicates": "early return、IsEmpty、ViewCopy、Store、executor",
+      "decisive_predicates": "同版本合同确认恒等输出义务，跟踪 executor 或写回是否存在，验证别名条件及调用方所见",
+      "neighbor_exclusion_predicates": "真空任务没有物化义务用 FM-01。输出与合法别名共享已经满足契约。统计初值另查 N01",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "输出物化",
+        "related_but_unmapped_modes": [
+          "C2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "IndexFill 的空 index 是合法恒等场景，实际早退遗漏 executor 的 self→out 物化义务。现有 C2 还需找到相对于一个目标结果的特定必需计算项及未保留的贡献，不能单凭无输出或未复制整张量确认。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留必要输出未物化候选。用空任务无输出义务和同存储合法别名对照。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "历史条款可涵盖其他最终写回，V16 冻结的空 index 代表只证实该子范围。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N03",
+      "name": "核内缓冲区同步缺失",
+      "historical_identity_status": "RULING_CONFLICT",
+      "object_and_semantic_role": "核内 V/MTE3 流水、队列端点、缓冲生产者与消费者",
+      "necessary_conditions": "固定原身份要求真实的核内生产消费依赖和失效等待。InplaceApplyMomentum 的首错时序仍待核",
+      "error_action": "旧代码写 VECIN 后用 V 内屏障再由 MTE3 搬出。是否缺跨流水握手及标量读错的先后待核",
+      "failed_relation": "应在 MTE3 读之前发布的数据可能不可见。当前原例尚未闭合该因果",
+      "trigger_conditions": "旧 FP32 回写、多核或单元素路径，实际队列依赖与标量读值待核",
+      "candidate_search_predicates": "VECIN/VECOUT、EnQue/DeQue、PipeBarrier、V_MTE3",
+      "decisive_predicates": "固定同构建生成指令并追真实的生产、等待和搬出。对比设备标量读的首个实际值",
+      "neighbor_exclusion_predicates": "正确同步仍读错语义源对应 EX-32 候选。资源归还错误另查可靠性。N03 编号冲突不覆盖同步身份",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "核内同步",
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "不同机制",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "历史原身份是核内缓冲区同步，需确认真实 V→MTE3 生产消费依赖、队列端点和消费者读取时序。V16 中另有后期语义对象绑定文本，与该 ID 冲突；正确同步仍读错源对应 EX-32 的独立候选。同步缺失本身没有证明 P、L 或 C 的决定性事实。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留原 ID 与 InplaceApplyMomentum 代表。只在同步首错确认后审是否为 FM-05 子例；EX-32 另立候选。",
+        "conditional_merge_or_alias": "FM-05",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "VECIN/VECOUT、标量读取和实际依赖的首错先后依赖故障调用物证；原代表未闭环。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N04",
+      "name": "归约累加逻辑错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "已产生的局部和、有效分片身份、最终归约目标和写回",
+      "necessary_conditions": "一个或多个独立分片已产生且必需进入同一目标，旧累加以赋值覆盖早先贡献，没有替代路径",
+      "error_action": "每轮把当前 vecOut 覆盖到 dsinkCalc，使已产生的前一块不保留",
+      "failed_relation": "最终归约缺少有效分片的应有计入次数",
+      "trigger_conditions": "同一输出至少跨两个有效分片。单分片作为对照",
+      "candidate_search_predicates": "reduction partial、循环赋值、workspace 累加、最终写回",
+      "decisive_predicates": "逐分片核来源、值和应有重数，追覆盖点与唯一写回，证明前项未由其他路径到达",
+      "neighbor_exclusion_predicates": "所有原项仍在的归约顺序变化用 FM-10。整个阶段未执行用 N05。两种动作独立举证",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "C2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "C2",
+            "status": "静态支持",
+            "required_intersection": "已产且必需的分片被后一次赋值覆盖，缺替代累计。",
+            "representative_support_and_limits": "固定 CASE-0533-M1 的 dsink 循环覆盖。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [
+          "C3"
+        ],
+        "comparison_relation": "历史下位",
+        "handling_relation": "上位／下位关系",
+        "decisive_difference": "FlashAttentionScoreGrad 的各分片局部和已经存在，后续赋值覆盖仍需计入的前一分片，总和少了前一项。固定条款要求局部和被覆盖，比 C2 的一般必需项遗漏更窄。所有分片均参与、只改变加法顺序时须排除 C2。"
+      },
+      "handling": {
+        "proposal": "复用有据局部关系",
+        "details": "以 C2 记录局部关系，保留 N04 为已生成分片被覆盖的回归子机制。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "每案仍查前一分片没有由独立后续路径累计。EX-03 的归约容量与漏项须单独核。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N05",
+      "name": "融合计算步骤遗漏",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "选定实现、约定必要计算阶段或分支主体、输出消费者",
+      "necessary_conditions": "旧可达实现按合同必须执行整个阶段，实际跳过或未实现。若接 C2，需证所漏必需项及唯一出口",
+      "error_action": "FAG NZ 后处理没有执行 dsink 搬入、累加和写出",
+      "failed_relation": "规定阶段在实际工作流中缺失，使该阶段的输出义务或逻辑贡献未达目标",
+      "trigger_conditions": "NZ 且有 sink 梯度输出义务，另外检查无需 sink 的合法情况",
+      "candidate_search_predicates": "fused epilogue、NZProcess、缺少的阶段调用或分支主体",
+      "decisive_predicates": "沿既选路径核阶段入口、各必需动作与写回，排查是否存在同语义的替代实现。绑定已证首错层级",
+      "neighbor_exclusion_predicates": "错误放行不支持融合的模板先归 FM-12。只缺某一已产局部贡献用 N04。合法省略与重排应按合同判断",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "C2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "C2",
+            "status": "静态支持",
+            "required_intersection": "已选实现漏整个必需阶段，缺失的具体贡献无替代路径。",
+            "representative_support_and_limits": "补充代表 EX-04 的 NZ sink 梯度。原固定 FusedMatmul 首错属于 FM-12。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "限定复用",
+        "decisive_difference": "已选实现缺整个计算阶段属于动作层级。仅当该缺阶段使目标结果的必需项无替代写回时可另判 C2，FAG 的 NZ sink 导数路径是直接对照。原 FusedMatmul 锚的首错是 IsCapable 放行不能做所需融合的 DP 分区，V16 仍归 FM-12。"
+      },
+      "handling": {
+        "proposal": "恢复审核身份",
+        "details": "保留 N05 历史独立审核身份，用 FAG-M2 补证对照。对具体作用域判 C2，并保留缺阶段或策略派发的动作。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "FAG-M2 是追加锚点，未替换原锚。完整 sink 义务和 NZ 路径语义需随原件保留。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N06",
+      "name": "量化参数分组偏移错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "量化 scale/offset/zero-point 参数对象、逻辑数据组和组基址",
+      "necessary_conditions": "已选对参数对象，但实际参数索引与当前数据的组身份不一致",
+      "error_action": "非首组计算 offsetScale 时遗漏 groupIdx 对组基址的贡献",
+      "failed_relation": "分组数据与该组量化参数的配对失效",
+      "trigger_conditions": "多组且组间量化参数可区分。单组和参数相同可掩盖错址",
+      "candidate_search_predicates": "groupIdx、cinG、offsetScale、grouped quantization",
+      "decisive_predicates": "从同版量化合同推导组→参数元素映射并复算实际读偏移。确认首错在正确对象内",
+      "neighbor_exclusion_predicates": "数值缩放公式错查 FM-23/N25。语义不同的接口参数错读查 P1。视图密排或错换地址单位需独立证据",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": "address",
+        "directory_gap_or_other": "寻址上位",
+        "related_but_unmapped_modes": [
+          "L1",
+          "L2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "ExtendConvTranspose 已选对 scale 参数对象，组基址未随 group 变，导致非首组仍从首组读。错误是对象内地址偏移项，未采用连续布局自替原视图，也未在 element/bit/byte 间错换算。"
+      },
+      "handling": {
+        "proposal": "归并为历史别名或子型",
+        "details": "接受在历史标注下合入 N20 的量化分组子机制。当前可作寻址上位和 L1/L2 近邻反例，保留一般基址机制缺口。",
+        "conditional_merge_or_alias": "N20",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "仅对固定量化 group offset 作对应，其他分组算法和乘除公式另核。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N07",
+      "name": "类型转换缺失",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "Host/图的参数槽位、预期消费者类型、缺省/特殊状态、透传数量",
+      "necessary_conditions": "同版本同路径有明确边界语义，实际读取、编码、转换、透传或数量违反该语义",
+      "error_action": "冻结代表把 double epsilon 原样传给期望 float 的消费者。宽条款另含错槽、误解状态、漏透传与数量错误",
+      "failed_relation": "接口侧正确参数角色、数值或数量没有合法抵达消费边界",
+      "trigger_conditions": "跨 dtype 的合法 epsilon、不同角色的同类型槽、显式值与缺省值、元素数量与字节数不同",
+      "candidate_search_predicates": "GetAttrPointer、OP_ATTR、Cast、默认值、wrapper、len/sizeof、schema",
+      "decisive_predicates": "并排绑定预期和实际来源、值、类型与消费者。只有语义错源接 P1。正确取得已定义特殊状态后错误处理才接 P2",
+      "neighbor_exclusion_predicates": "合法等价参数别名、正确传递及专门处理。普通 Cast 或长度参数不可仅凭异常值判 P1/P2/L2",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "P1",
+          "P2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "P1",
+            "status": "静态支持",
+            "required_intersection": "宽条款内的实际读取来源与预期槽或字段语义不等价。",
+            "representative_support_and_limits": "EX-29 的 V2 图属性槽。冻结 epsilon 的普通转换不适用。"
+          },
+          {
+            "mode": "P2",
+            "status": "条款交集待核",
+            "required_intersection": "宽条款内已正确取得且有特定版本语义的哨兵、默认或可选状态，在旧路径被错误按普通值解释。",
+            "representative_support_and_limits": "当前 N07 冻结代表为普通 epsilon 转换。EX-19 尚缺合法负值及未设合同。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [
+          "L2"
+        ],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "部分重叠",
+        "decisive_difference": "冻结 N07 代表从正确位置读取 epsilon，遗漏 double 到 float 的数值转换，符合现行 P1/P2 排除。V16 较宽条款中的 EX-29 错槽位可按不等价来源对齐 P1；已正确读入带明确特殊语义的参数却按不适用普通值处理，才对齐 P2。包装层丢传和普通数量单位也不能按值异常硬归 P1。"
+      },
+      "handling": {
+        "proposal": "细分或成对验证",
+        "details": "拆分历史宽条款。语义槽位复用 P1，满足特殊状态谓词的个案复用 P2，Host 数值转换和数量单位作为目录外候选。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "N07 归档窄锚已支持转换，P2 对应是宽条款交集；EX-19 仍缺合法负值合同。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N08",
+      "name": "符号位提取语义实现错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "布尔谓词、符号位或参与门控的输入与结果",
+      "necessary_conditions": "同版本定义给出布尔真值表，旧实现对合法输入给出不同状态。若判参与类，必须定位失效门控的真实计算消费",
+      "error_action": "以 x<0 取代符号位提取或用错误的逻辑比较选择分支",
+      "failed_relation": "布尔判据或门控关系违背接口语义",
+      "trigger_conditions": "负零正零、NaN、临界等值点，或有效条件不同的多个 DB",
+      "candidate_search_predicates": "Less/Greater、signbit、比较极性、布尔组合、mask 条件",
+      "decisive_predicates": "为原表达式和约定生成真值对照。再检查角色是输出布尔值还是决定可辨认逻辑项使能的门控",
+      "neighbor_exclusion_predicates": "仅替换布尔结果而无额外/缺失贡献时留目录外。有限精度误差用相应数值类。旧特殊值合同不清时待核",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "C1",
+          "C2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "C1",
+            "status": "条款交集待核",
+            "required_intersection": "失效布尔谓词门控使无资格项在目标中实际贡献。",
+            "representative_support_and_limits": "Signbit 输出布尔值不具此消费者。EX-05 需要补真实 bias 消费。"
+          },
+          {
+            "mode": "C2",
+            "status": "条款交集待核",
+            "required_intersection": "失效布尔谓词门控排除必需计算项，并缺替代贡献。",
+            "representative_support_and_limits": "EX-05 的目标和真实 bias 消费未闭合。EX-06 的例已在 N16 的非有限路径保留静态条件。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "部分重叠",
+        "decisive_difference": "Signbit 的 x<0 与 IEEE signbit 在 -0 上输出不等价，是布尔值计算本身的错误。更宽的历史布尔条款用于门控时，只有证明无资格项实际入算或者必需项漏计，才另支持 C1 或 C2。无序 NaN 语义及分支准入还须分开。"
+      },
+      "handling": {
+        "proposal": "细分或成对验证",
+        "details": "保留比较/布尔公式候选；用同一谓词作结果与作参与门控的近邻对照。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "Signbit 原例不证明 C1/C2；EX-05/06 的约定、目标和消费者必须按个案绑定。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N09",
+      "name": "索引轴序映射错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "返回 indices/argmax/路由 ID、被选轴、逻辑输出位置",
+      "necessary_conditions": "输出索引约定明确，实际物化索引的轴序或编码与同一结果的选中项不一致",
+      "error_action": "对非尾轴也用扁平行优先尾轴规则产生 TopKCopy 的输出索引",
+      "failed_relation": "实际结果值与返回索引在规定轴或编码上不能对应",
+      "trigger_conditions": "非尾维、sorted=false 且 k 等于排序轴长度触发快捷路径",
+      "candidate_search_predicates": "indices output、argmax、TopKCopy、flatten、Arange、正轴转换",
+      "decisive_predicates": "固定输出值或被选择成员，在非尾轴逐坐标手算预期索引并与旧输出比对",
+      "neighbor_exclusion_predicates": "输入地址错误另查 N20。索引表示溢出另查 FM-16。合规的平局索引集合按接口保留",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "输出索引编码",
+        "related_but_unmapped_modes": [
+          "L1",
+          "L2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "Topk 的正确排序或选择轴与回填输出 index 的逻辑轴不一致。错误对象是输出索引表示，现有 L1/L2 需要实际存储地址、原视图或单位事实。若另有消费者拿错 index 作地址，须独立证明该次存储映射。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留输出索引编码候选。先按输出 index 契约复算。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "输出 axis/编码与输入寻址分开；整数溢出和不稳定排序也需分别判断。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N10",
+      "name": "Mask寻址错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "掩码物理索引、lane 资格、状态计数及 Store/归约消费者",
+      "necessary_conditions": "mask 表示及适用资格域已知，实际读取、生成或应用改变了消费者看到的 mask。若涉及参与还须追到目标",
+      "error_action": "用元素偏移作为位打包掩码的字节地址，或用一个 mask 覆盖另一个必须取交集的 mask",
+      "failed_relation": "mask 表示、位置或门控结果与应作用 lane 的语义错配",
+      "trigger_conditions": "跨掩码打包字节、多批次、剩余长度非满块、结构与长度 mask 不同",
+      "candidate_search_predicates": "maskLocal、UpdateMask、Select、bit packing、LoadAlign、掩码覆盖",
+      "decisive_predicates": "分开复算物理地址及逐 lane 的真实选择结果。对单位错用证 L2。对 C1/C2 核同版合同和消费链",
+      "neighbor_exclusion_predicates": "正确位打包与掩码交集。只读但最终被中性化。读写 dtype 宽度失配另审 N12",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "L2",
+          "C1",
+          "C2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "L2",
+            "status": "静态支持",
+            "required_intersection": "掩码地址在位、字节和元素间实际采用错误换算。",
+            "representative_support_and_limits": "固定 ForeachLerpList 的元素偏移用作位打包掩码字节索引。"
+          },
+          {
+            "mode": "C1",
+            "status": "静态条件支持",
+            "required_intersection": "错误掩码使无资格 lane 真实参与目标归约。",
+            "representative_support_and_limits": "EX-12 限超 handleSize 的 lane 被结构掩码放行且由实际归约消费。"
+          },
+          {
+            "mode": "C2",
+            "status": "静态条件支持",
+            "required_intersection": "错误掩码消耗或读取屏蔽必需 lane，没有后续补偿。",
+            "representative_support_and_limits": "EX-09 限后续真实消费剩余计数及缺失 lane。EX-01 C2 另有父版本补证。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "限定复用",
+        "decisive_difference": "原 ForeachLerpList 以元素 offset 索引每元素一位的 mask 字节区，支持 L2，修复实际为每批重新生成 mask 并从 0 消费，单写 offset/8 不能完整描述。历史还有掩码状态和谓词，只有实际计算消费者证明额外或缺失项时另映射 C1/C2。"
+      },
+      "handling": {
+        "proposal": "复用有据局部关系",
+        "details": "保留原例的 N20 历史归属并复用 L2。把掩码生成/消费与物理位址分项，EX-01 用原版和补证版固定证据差异。",
+        "conditional_merge_or_alias": "N20",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "掩码长度/值可疑不能独立填 C1/C2。L2 需要存储宽度、offset 单位及实际 Select。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N11",
+      "name": "中间缓冲容量计算错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "单个工作区或内部缓冲、需求峰值、槽数、分配和可用预算",
+      "necessary_conditions": "固定生命周期和执行路径可计算实际所需容量，同一实体的分配大小、槽或单位不足或不合规",
+      "error_action": "计算 queueSizeW/H 截断真实插值支持范围低估容量，或按错误预算冗余分配",
+      "failed_relation": "分配资源无法覆盖定义中的 live 集合或违反可用上限",
+      "trigger_conditions": "特定缩放比使真实需求介于整数容量之间，或资源峰值逼近预算",
+      "candidate_search_predicates": "queueSize、workspace size、UB/L1 slot、向上取整、capacity",
+      "decisive_predicates": "按实际同时存活元素和生命周期复算最小需求及真实分配。另查是否造成实际越界或影响输出",
+      "neighbor_exclusion_predicates": "多个缓冲共同驻留的计划成本优先 FM-11。已分配足够而地址公式错用 N20。生命周期冲突用 N22",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "缓冲需求或容量",
+        "related_but_unmapped_modes": [
+          "L2",
+          "C2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "UpsampleBicubic2DAaGrad 的 queueSizeW/H 需求上界少计，首先违反容量预算，不能从扩容推断某条实际地址错、或某项被遗漏。历史总预算条款还须区分 FM-11 多个并存缓冲的整体驻留成本。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留中间实体容量候选。把容量、不合法实际访问和漏算结果分开记录。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "证明最小需求、分配/枚举上界及适用窗口。只在后果有独立证据时加记寻址或计算项关系。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N12",
+      "name": "中间输出张量类型分配错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "生产/消费张量、缓冲分配、读写元素类型、位宽及签名",
+      "necessary_conditions": "相同数据对象的生产、分配和实际消费的解释必须一致。至少一处规定类型或实际宽度有充分证据",
+      "error_action": "以 BF16 指针读取按 FP32 生产的标量首两字节。原 ReduceAll 真实写宽仍待核",
+      "failed_relation": "同一物理数据在生产消费的 dtype/宽度协议上发生冲突",
+      "trigger_conditions": "不同字宽生产与消费、标量视图、会区分解释结果的原始位型",
+      "candidate_search_predicates": "reinterpret、buffer allocation、kernel output dtype、pointer cast、launcher 描述",
+      "decisive_predicates": "同时核准同对象分配单位、生产写入宽度与消费读入类型。ReduceAll 需要实际设备内核写宽证据",
+      "neighbor_exclusion_predicates": "只错图声明且执行已拒绝的数据另审元数据。跨地址单位换算用 L2。同宽保位冲突用 N13",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "生产消费存储宽度",
+        "related_but_unmapped_modes": [
+          "L2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "这里首先是生产者/消费者或分配/写回的 dtype/宽度协议不一致。EX-21 Foreach 按 BF16 读取 FP32 scalar 的首两字节，是读取解释及宽度错，不能由位宽差直接推出 L2 地址单位错。原 ReduceAll 改了 launcher 描述，A3 内核真实字节仍待核。"
+      },
+      "handling": {
+        "proposal": "恢复审核身份",
+        "details": "恢复存储宽度合同的审核身份。以 Foreach 作独立补证，保留 ReduceAll 为未闭环原代表。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "缺原 ReduceAll A3 产出 dtype/写宽、实际写入字节及首错因果；相邻 ReduceAll 填充分支对照另案。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N13",
+      "name": "数据位型解释错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "同宽位串、数值编码、格式搬运及实际算术步骤",
+      "necessary_conditions": "规定是保位操作，实际同宽位串被另一套数值编码赋义并参与可改位的算术",
+      "error_action": "将 BF16 以 ReinterpretCast<half> 送 Muls 当作格式搬运",
+      "failed_relation": "规定的输入位型和输出位型不能一一保留",
+      "trigger_conditions": "两编码对同一位串的解释不同，例如可能被改写的 NaN 位型",
+      "candidate_search_predicates": "ReinterpretCast、Muls、BF16/FP16 同宽、保位 copy",
+      "decisive_predicates": "以位模式构造对照，逐步复算编码解释与输出位串。实机精确 NaN 位型须据版本记录",
+      "neighbor_exclusion_predicates": "合法位搬运和真实数值 Cast。生产消费实际字宽不一致用 N12。物理地址换算用 L2",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "同宽位型解释",
+        "related_but_unmapped_modes": [
+          "L2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "MatMulV3 需保留相同宽度的 BF16 位串，旧 NZ→ND 用 half 算术搬运，算术可改写 NaN 位型。地址、宽度均可正确，违约发生在编码解释或算术，不能归入 L2。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留保位搬运候选。与真实数值 Cast 和生产消费宽度不匹配做对照。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "以 NaN 等可区分载荷和保位合同验证。ReinterpretCast 本身只改解释，失败依赖后续算术。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N15",
+      "name": "舍入模式选用错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "数值转换、舍入枚举、取值范围边界和生效饱和控制",
+      "necessary_conditions": "同版本合同明确舍入/饱和规则和位置，旧转换实际采用不符合该规则的模式或控制状态",
+      "error_action": "使用 CAST_CEIL 替代 CAST_RINT，或以 NO_SAT 且全局条件不满足执行窄化",
+      "failed_relation": "预期的量化/转换数值与实际舍入或饱和输出不一致",
+      "trigger_conditions": "临近半 ULP 的输入、符号两侧或超可表示范围的有限值",
+      "candidate_search_predicates": "CAST_CEIL/CAST_RINT、NO_SAT、saturate mode、conversion trait",
+      "decisive_predicates": "固定合同与实际模式，复算正负边界和溢出区间。检查全局控制使本地策略是否生效",
+      "neighbor_exclusion_predicates": "仅参考中间 dtype 不构成唯一合同。中间范围首次溢出查 FM-17。哨兵状态语义另查 P2",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "数值舍入与饱和",
+        "related_but_unmapped_modes": [
+          "P2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "Sqrt 代表实际执行转换时选 CAST_CEIL 而改为 CAST_RINT，历史还含饱和。错的是数值舍入或饱和选择。当前 P2 须有已经正确读到带明确定义的特殊参数状态；普通数值转换模式与参数哨兵不是同一事实。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保持数值转换合同候选。分别核对舍入枚举、舍入发生位置及饱和全局控制前提。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "对应版本的舍入/饱和约定须正向证明；缺合同不凭 head 或参考 dtype 批准。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N16",
+      "name": "非有限值处理错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "已经存在的非有限输入/状态、算术数据或内部协议标记及消费者",
+      "necessary_conditions": "NaN 或 Inf 已存在，且该版本对合法输入或状态定义了应当的传播、归一化或协议解释",
+      "error_action": "将既存 NaN 压成有限值，错误掩掉应透传梯度，或把 POS_INF LSE 标记直接送常规 max/sub",
+      "failed_relation": "约定的非有限传播、特殊值或内部无贡献状态含义失效",
+      "trigger_conditions": "合法 NaN/Inf，或存在无贡献与有效分片混合的 LSE",
+      "candidate_search_predicates": "isnan/isinf、fminf、Inf−Inf、compare/select、LSE sentinel",
+      "decisive_predicates": "固定输入的值类别和语义角色，重放实际 DAG。若要 C2，再绑定应透传的具体梯度及下游目标",
+      "neighbor_exclusion_predicates": "有限输入在本步算术产生 Inf/NaN 用 FM-17 或公式定义域。接口参数哨兵用 P2。原 GridSampler 仍待同版契约",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "非有限输入及内部标记协议",
+        "related_but_unmapped_modes": [
+          "P2",
+          "C2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "已有 NaN/Inf 的传播或解释未满足同版本特殊值约定。算术输入、LSE 内部协议标记不自动成为 P2 的接口参数特殊状态；NaN 被 fminf 替换也不能仅按结果值变化推断逻辑项未计入。"
+      },
+      "handling": {
+        "proposal": "恢复审核身份",
+        "details": "恢复非有限值机制审核。用 Cdist 的特殊值证据及可绑定 DAG 的 ThresholdGrad 个案作补充，区分有限运算中新产生的非有限与原 GridSampler 未闭环。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "GridSampler reflection 原非有限行为的适用合同、设备首差和真实调用待核。旧替换/新谓词 diff 只证明改变。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N17",
+      "name": "尾块执行条件错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "已规划任务、loop 游标、最后一块、已启动的异步任务和消费边",
+      "necessary_conditions": "任务集合和运行路径可知，旧循环边界、步进、尾长或 drain 对其中任务执行错",
+      "error_action": "整除时以余数 0 当末个整块的有效长度，或末批空时跳过先前在途任务的排空",
+      "failed_relation": "既定执行计划中的任务没有按规定次数、长度或完成顺序执行",
+      "trigger_conditions": "整除/非整除输入、同一源行分多批、空末批但尚有已预载的计算",
+      "candidate_search_predicates": "loopTail、loopNum、++cursor、remaining、drain、last batch",
+      "decisive_predicates": "逐轮列合法任务及旧循环实际读写，查首个差异。要复用 C2 应把未完成任务的具体必要贡献追到目标",
+      "neighbor_exclusion_predicates": "合法零尾且没有待完成任务。规划已经下发错误任务用 FM-11。重复物理动作不能直接判 C3",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "C2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "C2",
+            "status": "静态条件支持",
+            "required_intersection": "既定循环或排空遗漏的任务确含应到达目标的必要贡献。",
+            "representative_support_and_limits": "EX-36 限已经预载且没有替代 drain 的执行路径。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [
+          "C1",
+          "C3"
+        ],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "部分重叠",
+        "decisive_difference": "Linspace 用余数 0 作最后一轮有效长度，忽略整除时仍有一个完整尾任务。循环与排空动作的直接错误比 C2 广，只有证明目标结果的必需项因循环边界漏算且没有等价路径，才加记 C2。重复搬运或覆盖也不等价于 C3 的同源项实际多次累加。"
+      },
+      "handling": {
+        "proposal": "细分或成对验证",
+        "details": "把尾块、游标、在途任务 drain 作为独立动作；确认漏算局部关系时复用 C2。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "末轮留空与真正零任务不同；分块规划、队列排空和正常尾内长度分别核。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N20",
+      "name": "地址偏移或步长计算错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "正确语义对象、逻辑坐标、基址、stride、存储地址单位和真实消费者",
+      "necessary_conditions": "应读写对象与逻辑位置固定，实际对象内映射与适用布局/单位不符",
+      "error_action": "对非连续行使用逻辑列数代替物理行距，或漏组基址，或把元素偏移当掩码字节索引",
+      "failed_relation": "同一正确对象中逻辑位置对应的物理地址失配",
+      "trigger_conditions": "非连续视图、非首组、掩码跨字节或多分区偏移",
+      "candidate_search_predicates": "offset、stride、row start、base pointer、layout、element/byte/bit",
+      "decisive_predicates": "在同输入和对象内逐项核基址、各轴 stride 及单位。带入能区分地址的合法坐标。L1/L2 分别按各自证据闭合",
+      "neighbor_exclusion_predicates": "对象本身选错查 EX-32。视图合法复制后用密排符合契约。数值位宽或索引表示溢出另查 FM-16",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "L1",
+          "L2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "L1",
+            "status": "静态支持",
+            "required_intersection": "正确对象内真实地址将已支持非连续原视图按密排读取或写回。",
+            "representative_support_and_limits": "固定 Concat 的块内行起点。一般组基址遗漏仍仅寻址上位。"
+          },
+          {
+            "mode": "L2",
+            "status": "静态支持",
+            "required_intersection": "正确对象内偏移的 element、byte、bit 或存储宽度换算违约。",
+            "representative_support_and_limits": "ForeachLerpList 固定代表曾挂 N10，该实例历史并列 N20。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "历史上位",
+        "handling_relation": "上位／下位关系",
+        "decisive_difference": "对象已经选对后，N20 含一般 offset/stride/基址及单位错误。固定 Concat 以逻辑列数做原非连续视图的块内起点，满足 L1；旧 Foreach mask 把元素 offset 当字节索引，满足 L2。N06 量化组基址遗漏落在历史 N20，当前七叶之外。"
+      },
+      "handling": {
+        "proposal": "复用有据局部关系",
+        "details": "以 L1、L2 复用可区分子型，剩余一般基址和步长留寻址上位或另审子类。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "还需区分正常连续化后的密排行公式、同对象坐标错、语义缓冲选错及容量预算。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N21",
+      "name": "输入形状校验依据错误（条件批准／需核验）",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "接口合法输入域、逻辑 view、验证所依据的实际元数据",
+      "necessary_conditions": "同版本明确允许该输入或必须拒绝某输入，实际验证谓词错误地改变接受结果",
+      "error_action": "用底层 Storage Shape 校验合法的二维逻辑 View，导致入口拒绝",
+      "failed_relation": "实现接受域与接口约定的合法域不一致",
+      "trigger_conditions": "逻辑二维 view 由一维存储构建，或其他逻辑形状与底层元数据不同的合法输入",
+      "candidate_search_predicates": "ValidateInputShape、GetStorageShape、GetViewShape、rank guard",
+      "decisive_predicates": "核准同版接口合法性，逐行重算实际校验谓词并绑定返回状态及执行前位置",
+      "neighbor_exclusion_predicates": "合规拒绝不支持输入。已经接受后才发生的寻址错误查 L1/N20。目标后端确实不支持查 FM-14",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "输入合法域校验",
+        "related_but_unmapped_modes": [
+          "P1",
+          "L1"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "ThnnFusedLstmCellGrad 用底层 Storage 形状验证逻辑 View，错误行为是对合法输入的拒绝，尚不能证明计算路径曾消费连续布局地址或错读参数来源。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "条件保留输入有效域判定候选。把合法性、校验谓词和实际拒绝分别绑定同版本。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "原 V16 保留条件审批，其他非法漏拒、类型准入和硬件不支持不得批量归入。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N22",
+      "name": "缓冲区错误复用",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "活跃逻辑值、物理缓冲/别名、所有权和仍合法的消费者",
+      "necessary_conditions": "在最后合法消费前，存储被另一个动作复用、覆盖或结束生命周期，消费者仍观察该地址或借用视图",
+      "error_action": "将另一个中间结果写入仍活跃的 Erf 临时区，或在框架二次 CopyIn 覆写已经准备的 UB",
+      "failed_relation": "逻辑值的活跃期与物理存储所有权期间冲突",
+      "trigger_conditions": "复用启用、Erf 路径、最后一次消费之前发生重叠工作或跨生命周期借用",
+      "candidate_search_predicates": "buffer alias、FreeTensor、lifetime、initializer_list、CopyIn、临时区",
+      "decisive_predicates": "把创建、读写、覆盖、销毁和最后消费者映射到同一存储区间。用正确同步条件对照是否仍覆盖",
+      "neighbor_exclusion_predicates": "错误仅来自时序/可见性查 FM-05。单纯初始化缺失用 N01。事件 ID 归还配对为可靠性线索",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "活跃存储生命周期",
+        "related_but_unmapped_modes": [
+          "C1",
+          "C2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "GeGLUGradV2 的活跃中间值在合法消费者之前被临时写覆盖，存储甚至完全在合法分配内。先证对象的生命周期、覆盖和后续读；只有另证目标计算项的资格或次数受损才记录 C 关系。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "保留活跃存储生命周期候选。区分确定覆盖、同步可见性、缓存过期和语言级借用视图悬空。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "可靠性线索可缺独立数值传播；不能仅凭逻辑数据损坏宣称额外或缺失项。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N23",
+      "name": "裁剪边界判断错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "空间坐标、窗口或裁剪几何、边缘梯度和具体位置的有效域",
+      "necessary_conditions": "目标坐标的有效贡献域可按前向或采样合同算出，旧边界谓词/拼接几何与该域不一致",
+      "error_action": "以中心越界 IsCut 整体早退置零，或把头尾重叠等号场景错合并到一侧",
+      "failed_relation": "实际使用的空间参与/覆盖范围违背几何合同",
+      "trigger_conditions": "负 padding、中心越界但边缘贡献非空、头尾长度恰好相等或插值边界",
+      "candidate_search_predicates": "IsCut、CalScope、negative pad、clip、edge、overlap",
+      "decisive_predicates": "手算给定目标坐标的实际应有域并追旧消费。边缘早退只有漏掉具体必需贡献时接 C2。无资格贡献真实消费才接 C1",
+      "neighbor_exclusion_predicates": "空贡献区间合规置零。仅物理地址单位或步长另查 L1/L2。权重公式在合法地址内错误可归几何公式",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "C1",
+          "C2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "C1",
+            "status": "条款交集待核",
+            "required_intersection": "空间有效域错使无资格项在目标中实际贡献。",
+            "representative_support_and_limits": "几何错误、范围越出或已中性化读取只能作线索。"
+          },
+          {
+            "mode": "C2",
+            "status": "静态条件支持",
+            "required_intersection": "边界判断截断了应该非空的几何贡献区间，必要梯度项未达目标。",
+            "representative_support_and_limits": "固定 PadV3Grad edge 老 IsCut 早退，外部 pads 到内部失败坐标仍缺完整绑定。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [
+          "L1"
+        ],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "限定复用",
+        "decisive_difference": "PadV3Grad edge 的固定旧侧 IsCut 早退在中心越界但复制梯度区间仍非空时跳过 CalScope/累加，条件性支持 C2。更宽的几何定义也可导致无资格项实际累计而支持 C1；空间索引随几何规则变化、无明确项参与失配时，仍是几何动作。"
+      },
+      "handling": {
+        "proposal": "复用有据局部关系",
+        "details": "复用 C2 的有据局部关系，保留几何边界候选；以合法空区间、非空边缘贡献和普通插值坐标作近邻。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "固定原例的未改 CalPos 版本及外部 pads 到内部失败坐标的完整绑定待核，限制为满足已知条件的静态路径。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N24",
+      "name": "Padding哨兵值处理错误",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "padding_idx、表示禁用 padding 的哨兵、真实行索引和聚合消费者",
+      "necessary_conditions": "同版本正确读取预期 padding 参数，特殊状态含义明确，旧代码按普通负索引路径使真实成员过滤发生变化",
+      "error_action": "把代表 None 的 -1 加 numEmbeddings 并把末行当作应排除项。关联 head 则错读了布尔槽",
+      "failed_relation": "禁用 padding 的语义被解释为正常 padding 行，聚合成员发生错误过滤",
+      "trigger_conditions": "省略 padding 或传入契约哨兵并且 indices 包含受误排末行，显式合法 padding 作对照",
+      "candidate_search_predicates": "padding_idx、None、-1、负下标归一化、GetAttrPointer",
+      "decisive_predicates": "固定旧调用的默认值生成、实际读取和归一化消费。旧 P2 与修改版错槽 P1 分别证明",
+      "neighbor_exclusion_predicates": "普通合法负索引的归一化。关联 head 读错槽按 P1。仅知道 -1 值而缺合同的路径留待核",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "P2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "P2",
+            "status": "静态支持",
+            "required_intersection": "正确读到有明确语义的 padding 禁用状态，却按普通负下标解释。",
+            "representative_support_and_limits": "EmbeddingBag a6b0013 旧版本。关联 4bdd6c4 头版本错读布尔槽，单列 P1 近邻。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [
+          "P1",
+          "C1",
+          "C2"
+        ],
+        "comparison_relation": "历史下位",
+        "handling_relation": "上位／下位关系",
+        "decisive_difference": "P2 覆盖一般有约定的特殊参数，历史 N24 专指 padding 禁用等哨兵。v0.3 明确区分正确读 padding_idx 后把 -1 当正常负索引的旧版 P2，和从 include_last_offset 布尔槽读入的修订版 P1。两版本动作与作用域分开。"
+      },
+      "handling": {
+        "proposal": "复用有据局部关系",
+        "details": "P2 复用哨兵子型；把修订版保留作 P1 近邻。历史零可靠成员标记依 V16 保留，后续静态补证单列。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "V16 原成员/批准状态与二次阅读并存；关联 head 不能作为成功修复 oracle，实际故障调用/更后修复仍待证。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N25",
+      "name": "梯度公式系数遗漏",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "精确计算公式、乘性系数、常数、加法成员或归约中性元",
+      "necessary_conditions": "同版本公式明确，旧计算在精确算术语义就不等价。若接 C 类再证明参与成员而非系数值",
+      "error_action": "GroupNormSwishGrad 缺乘 swishScale，或将非中性填充值纳入 max",
+      "failed_relation": "规定函数、系数、权重或归约中性元语义失效",
+      "trigger_conditions": "swishScale 异于等效默认值。max 对齐填充遇全负有效窗",
+      "candidate_search_predicates": "系数常量、mul/div、neutral element、公式 DAG、补零",
+      "decisive_predicates": "展开旧新精确公式，固定项账本和目标角色。用显式反例验证非等价。若涉及额外/缺失贡献，标出实际项和消费",
+      "neighbor_exclusion_predicates": "数学等价但有限精度不稳用 FM-09。系数漏乘本身不证明缺独立加数。合规中性化不构成 C1",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [
+          "C1",
+          "C2"
+        ],
+        "mode_projections": [
+          {
+            "mode": "C1",
+            "status": "静态支持",
+            "required_intersection": "错误的非中性填充值在约定之外作为目标的实际计算项。",
+            "representative_support_and_limits": "EX-15 全负合法窗中对齐零赢得 max。"
+          },
+          {
+            "mode": "C2",
+            "status": "条款交集待核",
+            "required_intersection": "精确公式漏掉的是具有身份和义务的逻辑计算项。",
+            "representative_support_and_limits": "固定 GroupNormSwishGrad 漏系数为目录外精确公式动作。"
+          }
+        ],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [],
+        "comparison_relation": "部分重叠",
+        "handling_relation": "部分重叠",
+        "decisive_difference": "GroupNormSwishGrad 的冻结代表是漏乘 swishScale 系数，乘性系数是公式参数，不能自动叫作少一项独立逻辑贡献。历史广义必要项遗漏与 C2 有交集；EX-15 的无效对齐零在全负 max 中实际胜出支持 C1，属于中性元特例。"
+      },
+      "handling": {
+        "proposal": "细分或成对验证",
+        "details": "拆开精确公式、合法填充值中性化与真实贡献缺项。优先复用有证据的 C 局部关系，系数遗漏保留目录外候选。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "区分所有项保留但有限精度实现差异，以及结果公式中漏系数和少了一个语义成员。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N26",
+      "name": "舍入操作分支实现错误（条件批准／需核验）",
+      "historical_identity_status": "RECOVERED",
+      "object_and_semantic_role": "已读的 reduction、decimals 或模式控制值、执行分支及消费者",
+      "necessary_conditions": "该参数确实传入且契约要求其普通合法值改变操作，旧实现忽略、反转或未在所需路径落实",
+      "error_action": "所有 INT32 走 identity DAG，未根据负 decimals 启用 10 的幂舍入",
+      "failed_relation": "已宣告的操作控制语义未影响实际计算",
+      "trigger_conditions": "合法负 decimals、可改变计算的 reduction/mode，以及能区分两个分支的输入",
+      "candidate_search_predicates": "control attribute、mode gate、RoundInt、decimals sign、branch predicate",
+      "decisive_predicates": "绑定参数出生点、实际读取、分支条件和结果。用不同合法值保证正确路径预期结果可区别",
+      "neighbor_exclusion_predicates": "真正特殊状态被误作普通值才用 P2。错槽用 P1。选错已有模板而非实现内部无效查看 FM-12",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": "操作控制参数未落实",
+        "related_but_unmapped_modes": [
+          "P1",
+          "P2"
+        ],
+        "comparison_relation": "不同机制",
+        "handling_relation": "独立新增候选",
+        "decisive_difference": "Round 的负 decimals 是该操作的合法精度选择，正确读到后仍走整数 identity，违反一般操作调度语义。不能因参数为负就当作 P2 特殊哨兵，也未证 P1 错槽位。普通执行参数未生效比 P2 的必要状态处理更宽。"
+      },
+      "handling": {
+        "proposal": "保留目录外方向",
+        "details": "条件保留操作控制参数未落实候选。把 Round 固定源码机制与原 Issue/PR 绑定分开，并和参数哨兵路径作对照。",
+        "conditional_merge_or_alias": null,
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "按目标版本核实负 decimals 的合同和相关故障路径；不外推到全部控制参数。"
+      },
+      "definition_status": "RECOVERED"
+    },
+    {
+      "id": "N27",
+      "name": "控制计数器整数溢出",
+      "historical_identity_status": "UNRESOLVED",
+      "object_and_semantic_role": "归档特例中的整数控制计数器和实际类型，独立作用域待核",
+      "necessary_conditions": "UNRESOLVED。现有谓词要求合法应有控制计数超过真实整数载体范围，原代表和独立条款仍待补齐",
+      "error_action": "UNRESOLVED。没有固定历史实现能定位计数器第一次回绕",
+      "failed_relation": "UNRESOLVED。暂无法证明相对于 FM-16 的独立失效关系",
+      "trigger_conditions": "可候选筛查逼近整数表示上限的控制计数。历史实参待核",
+      "candidate_search_predicates": "counter、uint32/uint64、循环计数窄化",
+      "decisive_predicates": "需要初值与真值链、实际类型、首处溢出和受影响消费者。证明仅改宽即可消除该首错",
+      "neighbor_exclusion_predicates": "EX-09 多减一次计数即使加宽仍错。L2 处理寻址单位。相同位宽机制归 FM-16 的专项检索",
+      "current_mapping": {
+        "version": "0.3",
+        "leaf_modes": [],
+        "mode_projections": [],
+        "catalog_parent": null,
+        "directory_gap_or_other": null,
+        "related_but_unmapped_modes": [
+          "L2"
+        ],
+        "comparison_relation": "待核",
+        "handling_relation": "待核／不纳入机理目录",
+        "decisive_difference": "目前仅定位 V16 必要谓词及保留特例决定。正确应有控制计数已经超出整数表示才符合该特例；EX-09 的二次扣减即使加宽仍错，构成反例。L2 明确排除整数溢出。"
+      },
+      "handling": {
+        "proposal": "待核",
+        "details": "保留历史特例待核及七模式边界。现有材料不支持增加独立模式。",
+        "conditional_merge_or_alias": "FM-16",
+        "formally_approved_by_this_review": false,
+        "remaining_verification": "V16 主目录没有冻结定义、固定代表或完整历史成员。不能从 53 项检索范围推导已采纳状态。"
+      },
+      "definition_status": "UNRESOLVED"
+    }
+  ]
+}

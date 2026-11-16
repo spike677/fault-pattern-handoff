@@ -1,0 +1,186 @@
+{
+  "namespace": "v0.4-proposals",
+  "decision_baseline": "MECH-v0.3",
+  "formal_release_status": "NOT_ADMITTED",
+  "proposals": [
+    {
+      "id": "NUM-01",
+      "priority": "P0",
+      "title": "运行累加状态精度违约",
+      "status": "candidate",
+      "object_role": "单个目标归约的运行累加状态，和随后用于输出的消费值。",
+      "contract": "在目标旧版本、路径及精度约定下，运行状态应使用明确要求的精度。",
+      "wrong_action": "旧路径在每步更新时保存过窄的累加状态，直到消费前才转换为所需类型。",
+      "independence": "固定有效项、贡献次数、顺序与系数后，偏差已由中间类型产生；C2/C3 的项身份与重数条件均无变化。",
+      "near_neighbor": "FP32 累加后按约定降精写回。EX-37 的契约是逐 rank 在 y_type 中舍入，用来辨别不同舍入时机。",
+      "evidence": [
+        {
+          "case": "上一轮 E06",
+          "source": "https://github.com/ggml-org/llama.cpp/blob/af6b5243d6871923dfecbe06814bd566d9dc383b/ggml/src/ggml-cpu/ops.cpp#L8966-L9018",
+          "kind": "fixed_old_code",
+          "anchor": "accumulate"
+        },
+        {
+          "case": "EX-37",
+          "source": "https://gitcode.com/cann/ops-transformer/merge_requests/8544",
+          "kind": "boundary_comparison",
+          "anchor": "历史 45 EX 映射 EX-37"
+        }
+      ],
+      "trigger": "选长归约或累积状态可能超出窄类型范围的输入，固定实际支持和 dtype。",
+      "detector": "核对同版精度要求、运行状态每次写回类型、输入项与最终消费。只改变状态类型做精确对照。",
+      "simulation": "保持操作与项次不变，在每步写回窄化状态，记录第一个不可恢复的数值差。",
+      "missing_for_promotion": "补另一独立家族和绑定同一精度约定的反向对照，分开评估 dtype、次序和输出 Cast。"
+    },
+    {
+      "id": "NUM-02",
+      "priority": "P0",
+      "title": "消减导致的方差求值失稳",
+      "status": "candidate",
+      "object_role": "高基线、小扰动数据的方差中间值及其归一化消费者。",
+      "contract": "对受评输入和现行允许精度，方差计算应满足该路径的数值约定。",
+      "wrong_action": "用原始二阶矩和均值平方作相减，舍入抹掉低方差差值，继续消费失真的方差。",
+      "independence": "所有样本可按约定计入，地址、参数来源和运行状态类型可同时正确；问题发生在公式的有限精度求值。",
+      "near_neighbor": "保持同类型但先减去均值后计算中心矩的路径。EX-25 的近似阶数只有在算法误差约定明确时才能判。",
+      "evidence": [
+        {
+          "case": "上一轮 G05",
+          "source": "https://github.com/microsoft/onnxruntime/blob/a926b837fb8a39b0e4840fcb997ff1336cdf5db1/onnxruntime/contrib_ops/cuda/bert/skip_layer_norm_impl.cu#L114-L171",
+          "kind": "fixed_old_code",
+          "anchor": "小核实际选择条件"
+        },
+        {
+          "case": "FM-09",
+          "source": "../history_mapping/historical_catalog_53.json",
+          "kind": "historical_mode",
+          "anchor": "FM-09"
+        },
+        {
+          "case": "EX-25",
+          "source": "https://gitcode.com/cann/ops-math/merge_requests/4131",
+          "kind": "neighbor",
+          "anchor": "EX-25"
+        }
+      ],
+      "trigger": "固定同形状、同路径，在输入加大公共基线并保持小扰动。",
+      "detector": "同时复算样本项集合、中心矩、旧有限精度表达式及其后续消费。",
+      "simulation": "用原始矩相减代替中心化求值，比较中间方差和输出。",
+      "missing_for_promotion": "补同机理不同算子的旧实现及可追溯逆对照，核误差约定和适用输入域。"
+    },
+    {
+      "id": "CTRL-01",
+      "priority": "P0",
+      "title": "中间缓冲的语义角色错绑",
+      "status": "candidate",
+      "object_role": "生产端的中间 score 缓冲 S、目标缓冲 D 和排序前复制消费者。",
+      "contract": "无 bias 路径应向候选排序交付由生产端生成的 score。",
+      "wrong_action": "无 bias 旧侧将待写 D 同时当作复制源，再将结果写回 D，生产的 S 没有被这个复制动作读取。",
+      "independence": "两个缓冲可具相同形状、类型与地址单位；错误是阶段间源对象绑定，与 P1 的算子参数来源或 L1/L2 的对象内寻址不同。",
+      "near_neighbor": "S 与 D 在合同允许下已指向同一活跃、正确生成的 score 时，可以合法原地操作。C1/C2 属性需追到同一目标排序的实际逻辑项。",
+      "evidence": [
+        {
+          "case": "EX-32",
+          "source": "https://gitcode.com/cann/ops-transformer/merge_requests/5059",
+          "kind": "fixed_old_hunk",
+          "anchor": "225/227、298，固定修复 10815a6cc04aa83cba0206a79870731cba958b01"
+        }
+      ],
+      "trigger": "关闭 bias，并使 S 与 D 内容可识别，保持其它分支语义。",
+      "detector": "核生产缓冲身份、实参和旧复制读取，单独验证同 diff 的同步变化。",
+      "simulation": "把一个阶段输出的正常输入替换成同形状待写缓冲，观察实际读源及后续候选。",
+      "missing_for_promotion": "现有完整父提交和屏障变动的独立运行闭环不足。补独立实现与有别名许可的反向对照。"
+    },
+    {
+      "id": "CTRL-02",
+      "priority": "P0",
+      "title": "可行计划候选被提前跳过",
+      "status": "candidate",
+      "object_role": "规划器内部的离散候选 factor 与容量校验。",
+      "contract": "合法边界候选应进入容量验证，留下可执行计划。",
+      "wrong_action": "旧 Host 先递减 factor 再验证容量，从而跳过唯一可行 factor=1。",
+      "independence": "遗漏的是构建计划时的搜索候选。C2 要求目标结果缺少实际逻辑项。",
+      "near_neighbor": "契约明确排除 factor=1，或另一枚举路径已验证同一候选时，跳过可以合法。",
+      "evidence": [
+        {
+          "case": "EX-42",
+          "source": "https://gitcode.com/cann/ops-nn/merge_requests/1537",
+          "kind": "fixed_old_hunk",
+          "anchor": "历史 45 EX 映射 EX-42"
+        }
+      ],
+      "trigger": "构造容量只允许最后一个候选的输入，并固定选择路径。",
+      "detector": "逐步重放枚举值和每次验证的输入，追是否实际交付计划。",
+      "simulation": "移动递减到可行性验证之前，比较合法计划能否生成。",
+      "missing_for_promotion": "另找独立规划器与有合法剪枝说明的反向对照。"
+    },
+    {
+      "id": "ADDR-01",
+      "priority": "P1",
+      "title": "一般对象内偏移的几何项遗漏",
+      "status": "research",
+      "object_role": "合并逻辑轴中的行几何、块编号、UB 当前行到阈值偏移。",
+      "contract": "行与阈值的相对索引应保留合法分组和余数信息。",
+      "wrong_action": "融合行除以分组长度后丢失余数，无法确定当前行对应的逻辑范围。",
+      "independence": "布局可连续且单位一致，C3 重数及 L1/L2 前提可不成立。",
+      "near_neighbor": "分组合同保证余数总是零时，同样的商是有效映射。",
+      "evidence": [
+        {
+          "case": "EX-14",
+          "source": "https://gitcode.com/cann/ops-transformer/merge_requests/1878",
+          "kind": "known_parent_relation",
+          "anchor": "历史 45 EX 映射 EX-14"
+        }
+      ],
+      "trigger": "选择融合行数与实际分组存在非零余数。",
+      "detector": "对照几何重建、实际偏移及清零或其他消费者。",
+      "simulation": "在有余数的路径只保留商，记录偏移与消费者目标。",
+      "missing_for_promotion": "代表清零范围仍需按 S1G 几何闭合。与一般基址遗漏及地址表示溢出分判。"
+    },
+    {
+      "id": "REP-01",
+      "priority": "P1",
+      "title": "生产消费表示不一致",
+      "status": "candidate",
+      "object_role": "生产出 FP32 的标量及以 BF16 解释这部分存储的消费者。",
+      "contract": "在明确的生产消费边界采用约定宽度及解码，或执行真正的数值转换。",
+      "wrong_action": "消费者以 BF16 指针解释 FP32 标量的两字节。",
+      "independence": "地址可已正确定位；首错发生在位内容解释而非 L2 单位换算。",
+      "near_neighbor": "显式 Cast 并按转换后的实际存储读取，或约定只消费位打包字段。",
+      "evidence": [
+        {
+          "case": "EX-21",
+          "source": "https://gitcode.com/cann/ops-nn/merge_requests/6974",
+          "kind": "fixed_old_hunk",
+          "anchor": "历史 45 EX 映射 EX-21"
+        }
+      ],
+      "trigger": "固定旧 producer dtype，选择能区分重解释和正常转换的非零值。",
+      "detector": "记录写宽、元素地址、实际读宽、解码及其被消费的位置。",
+      "simulation": "保持指针地址正确，仅改读端类型，比较实际读取的数值。",
+      "missing_for_promotion": "独立同机理家族、真实位布局以及合法重解释反向对照。"
+    },
+    {
+      "id": "SYNC-01",
+      "priority": "P1",
+      "title": "完成标记缺少执行代际",
+      "status": "research",
+      "object_role": "生产者完成标记与下一轮消费者等待条件。",
+      "contract": "下一轮只消费可证明属于同轮生产者和目标的完成通知。",
+      "wrong_action": "固定完成 flag 不含可区分的 magicVal，旧通知可满足新一轮等待。",
+      "independence": "首错是同步协议身份。任何项漏算、越域参与或重复归约仍需具体消费证据。",
+      "near_neighbor": "协议在每轮完成后可靠清零且旧写不可再达，固定 flag 可以安全复用。",
+      "evidence": [
+        {
+          "case": "EX-40",
+          "source": "https://gitcode.com/cann/ops-transformer/merge_requests/764",
+          "kind": "fixed_old_hunk",
+          "anchor": "历史 45 EX 映射 EX-40"
+        }
+      ],
+      "trigger": "保持跨轮旧通知可见并控制两轮顺序。",
+      "detector": "绑定参与者、地址、代际、实际 wait 满足条件和目标消费。",
+      "simulation": "保留上一代完成通知，观察后续 wait 是否提前返回。",
+      "missing_for_promotion": "现场实际顺序、精度结果消费及合法回收对照尚需验证。"
+    }
+  ]
+}

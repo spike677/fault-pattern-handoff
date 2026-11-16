@@ -1,0 +1,851 @@
+{
+  "title": "MECH-v0.3 七条与历史 FM/N、V16 EX 对照",
+  "catalog": {
+    "version": "0.3",
+    "source": "baseline.catalog",
+    "commit": "21a6af4224b7c62681c241236c6850cac3e72109",
+    "sha256": "119a52ac3a8830e030161d1f4f5a2b6ffdfcb9ad6abd1230fdd9b103c1c9dac5"
+  },
+  "scope_note": "历史关系方向以历史条款相对于现行叶级为准。有据固定 EX、静态条件、条款交集和补证分别登记。历史目录扩展建议均未批准。",
+  "counts": {
+    "historical_records": 53,
+    "v16_fixed_ex": 45,
+    "historical_relations": {
+      "不同机制": 27,
+      "待核": 10,
+      "部分重叠": 13,
+      "历史下位": 2,
+      "历史上位": 1,
+      "等价": 0
+    },
+    "v16_adjudications": {
+      "BOUNDARY": 16,
+      "HISTORY": 6,
+      "EVIDENCE": 3,
+      "EXIST": 15,
+      "SCOPE": 4,
+      "NEW": 1
+    },
+    "ex_current_review": {
+      "证据不足": 4,
+      "目录外已证动作": 19,
+      "静态条件支持": 7,
+      "静态支持": 3,
+      "边界待核": 4,
+      "上位支持": 3,
+      "可靠性": 5
+    },
+    "formally_approved_new_mechanisms": 0
+  },
+  "mode_links": {
+    "P1": {
+      "title": "参数来源误读",
+      "definition": "适用路径从语义不等价的槽位、字段或参数取得值。",
+      "catalog_parent": "parameter",
+      "historical": [
+        {
+          "historical_id": "FM-15",
+          "relation": "部分重叠",
+          "mode": "P1",
+          "status": "静态支持",
+          "required_intersection": "资源参数在目标设备和宿主设备之间采用不等价来源。",
+          "representative_support_and_limits": "固定 IsFinite 旧 helper 从宿主 runtime 取 core/UB，预期为请求指定目标。"
+        },
+        {
+          "historical_id": "N07",
+          "relation": "部分重叠",
+          "mode": "P1",
+          "status": "静态支持",
+          "required_intersection": "宽条款内的实际读取来源与预期槽或字段语义不等价。",
+          "representative_support_and_limits": "EX-29 的 V2 图属性槽。冻结 epsilon 的普通转换不适用。"
+        }
+      ],
+      "v16_ex_fixed": [
+        {
+          "id": "EX-29",
+          "status": "静态支持",
+          "scope": "V2 构图签名预期 (shape,offset,dtype,seed,seed2)，旧实参交换成 (shape,offset,seed,seed2,dtype)。可转同类型未使它们角色等价，实际读取的槽位来源与预期不同。"
+        }
+      ],
+      "v16_ex_supplements": []
+    },
+    "P2": {
+      "title": "特殊参数状态误解释",
+      "definition": "正确取得特殊状态后，套用不适用的有效值处理，改变状态语义。",
+      "catalog_parent": "parameter",
+      "historical": [
+        {
+          "historical_id": "N07",
+          "relation": "部分重叠",
+          "mode": "P2",
+          "status": "条款交集待核",
+          "required_intersection": "宽条款内已正确取得且有特定版本语义的哨兵、默认或可选状态，在旧路径被错误按普通值解释。",
+          "representative_support_and_limits": "当前 N07 冻结代表为普通 epsilon 转换。EX-19 尚缺合法负值及未设合同。"
+        },
+        {
+          "historical_id": "N24",
+          "relation": "历史下位",
+          "mode": "P2",
+          "status": "静态支持",
+          "required_intersection": "正确读到有明确语义的 padding 禁用状态，却按普通负下标解释。",
+          "representative_support_and_limits": "EmbeddingBag a6b0013 旧版本。关联 4bdd6c4 头版本错读布尔槽，单列 P1 近邻。"
+        }
+      ],
+      "v16_ex_fixed": [],
+      "v16_ex_supplements": []
+    },
+    "L1": {
+      "title": "错误采用连续布局寻址",
+      "definition": "路径应按原视图寻址且地址被消费前没有正确连续化，实际地址映射的至少一个必要项错误采用连续布局假设，导致映射偏离原视图。",
+      "catalog_parent": "address",
+      "historical": [
+        {
+          "historical_id": "FM-04",
+          "relation": "部分重叠",
+          "mode": "L1",
+          "status": "条款交集待核",
+          "required_intersection": "同时证明错误偏移造成越界，以及受支持原视图被密排公式实际寻址。",
+          "representative_support_and_limits": "AllGatherMatmulV2 旧归档为 workspace 槽偏移，未见密排行起点假设。"
+        },
+        {
+          "historical_id": "FM-06",
+          "relation": "部分重叠",
+          "mode": "L1",
+          "status": "条款交集待核",
+          "required_intersection": "受支持的非连续缓存视图被错误按连续布局寻址。",
+          "representative_support_and_limits": "旧缓存代表为块表和批偏移失配，原 stride 及生效地址式待核。"
+        },
+        {
+          "historical_id": "FM-20",
+          "relation": "部分重叠",
+          "mode": "L1",
+          "status": "条款交集待核",
+          "required_intersection": "受支持原视图具有非密排步长，生效消费者的具体地址项错误使用密排。",
+          "representative_support_and_limits": "固定 QBMM 已证 ND view 被写 NZ 元数据，密排寻址交集仍待核。"
+        },
+        {
+          "historical_id": "N20",
+          "relation": "历史上位",
+          "mode": "L1",
+          "status": "静态支持",
+          "required_intersection": "正确对象内真实地址将已支持非连续原视图按密排读取或写回。",
+          "representative_support_and_limits": "固定 Concat 的块内行起点。一般组基址遗漏仍仅寻址上位。"
+        }
+      ],
+      "v16_ex_fixed": [],
+      "v16_ex_supplements": []
+    },
+    "L2": {
+      "title": "寻址单位换算错误",
+      "definition": "地址运算在 element、bit 与 byte 间的转换遗漏、重复或落在错误位置。",
+      "catalog_parent": "address",
+      "historical": [
+        {
+          "historical_id": "FM-04",
+          "relation": "部分重叠",
+          "mode": "L2",
+          "status": "条款交集待核",
+          "required_intersection": "同一责任偏移的单位换算错误并导致越界。",
+          "representative_support_and_limits": "旧 workspace 代表的实际单位未变。"
+        },
+        {
+          "historical_id": "N10",
+          "relation": "部分重叠",
+          "mode": "L2",
+          "status": "静态支持",
+          "required_intersection": "掩码地址在位、字节和元素间实际采用错误换算。",
+          "representative_support_and_limits": "固定 ForeachLerpList 的元素偏移用作位打包掩码字节索引。"
+        },
+        {
+          "historical_id": "N20",
+          "relation": "历史上位",
+          "mode": "L2",
+          "status": "静态支持",
+          "required_intersection": "正确对象内偏移的 element、byte、bit 或存储宽度换算违约。",
+          "representative_support_and_limits": "ForeachLerpList 固定代表曾挂 N10，该实例历史并列 N20。"
+        }
+      ],
+      "v16_ex_fixed": [],
+      "v16_ex_supplements": []
+    },
+    "C1": {
+      "title": "无效计算项纳入",
+      "definition": "按当前计算约定无资格参与的逻辑计算项，实际进入目标计算，且未按该运算语义中性化或排除。",
+      "catalog_parent": "item_participation",
+      "historical": [
+        {
+          "historical_id": "FM-11",
+          "relation": "部分重叠",
+          "mode": "C1",
+          "status": "条件待证",
+          "required_intersection": "错误规划将无资格基础块交给真实梯度消费者。",
+          "representative_support_and_limits": "EX-13 已有首小块代理谓词证据，梯度消费未闭合。"
+        },
+        {
+          "historical_id": "N08",
+          "relation": "部分重叠",
+          "mode": "C1",
+          "status": "条款交集待核",
+          "required_intersection": "失效布尔谓词门控使无资格项在目标中实际贡献。",
+          "representative_support_and_limits": "Signbit 输出布尔值不具此消费者。EX-05 需要补真实 bias 消费。"
+        },
+        {
+          "historical_id": "N10",
+          "relation": "部分重叠",
+          "mode": "C1",
+          "status": "静态条件支持",
+          "required_intersection": "错误掩码使无资格 lane 真实参与目标归约。",
+          "representative_support_and_limits": "EX-12 限超 handleSize 的 lane 被结构掩码放行且由实际归约消费。"
+        },
+        {
+          "historical_id": "N23",
+          "relation": "部分重叠",
+          "mode": "C1",
+          "status": "条款交集待核",
+          "required_intersection": "空间有效域错使无资格项在目标中实际贡献。",
+          "representative_support_and_limits": "几何错误、范围越出或已中性化读取只能作线索。"
+        },
+        {
+          "historical_id": "N25",
+          "relation": "部分重叠",
+          "mode": "C1",
+          "status": "静态支持",
+          "required_intersection": "错误的非中性填充值在约定之外作为目标的实际计算项。",
+          "representative_support_and_limits": "EX-15 全负合法窗中对齐零赢得 max。"
+        }
+      ],
+      "v16_ex_fixed": [
+        {
+          "id": "EX-12",
+          "status": "静态条件支持",
+          "scope": "长度掩码被 LoadAlign 结构掩码覆盖；在结构掩码允许但落于当前 handleSize 外的 lane 存在且被实际 CalcSoftmax/CalcColNorm/CalcRowNorm 归约时，该无资格 lane 未屏蔽而入算。"
+        },
+        {
+          "id": "EX-15",
+          "status": "静态支持",
+          "scope": "max 的对齐零位超出有效输入区；旧归约明确扫描该 lane，在全负合法窗时零成为最大值。这是未中性化的无资格项实际入算。"
+        },
+        {
+          "id": "EX-30",
+          "status": "静态条件支持",
+          "scope": "ReduceNansum 按约定应把 NaN 在归约前中性化。若末次框架 CopyIn 覆盖已处理 UB，且之后直接由该槽做 nansum 归约，原不合格 NaN 进入目标可支持 C1；已证覆盖先错保持 N22。"
+        }
+      ],
+      "v16_ex_supplements": []
+    },
+    "C2": {
+      "title": "必需计算项遗漏",
+      "definition": "在给定计算语义下，至少一次必须保留的逻辑计算项未到达目标结果，且该次贡献未由等价路径保留。",
+      "catalog_parent": "item_multiplicity",
+      "historical": [
+        {
+          "historical_id": "FM-11",
+          "relation": "部分重叠",
+          "mode": "C2",
+          "status": "静态条件支持",
+          "required_intersection": "合法任务中具体必需计算项失去实际到达路径。",
+          "representative_support_and_limits": "EX-34 限真实下 pad>255 造成了有效 M 短缺及卷积漏贡献。EX-13 另一方向仍待梯度消费。"
+        },
+        {
+          "historical_id": "N01",
+          "relation": "部分重叠",
+          "mode": "C2",
+          "status": "补证后静态支持",
+          "required_intersection": "已消耗的前任务状态使当前必需 lane 没有实际贡献。",
+          "representative_support_and_limits": "EX-01 固定原包缺写回。实际父提交的两个 DataCopy 补证成立。SFA 冻结初值例不提供 C2 代表。"
+        },
+        {
+          "historical_id": "N04",
+          "relation": "历史下位",
+          "mode": "C2",
+          "status": "静态支持",
+          "required_intersection": "已产且必需的分片被后一次赋值覆盖，缺替代累计。",
+          "representative_support_and_limits": "固定 CASE-0533-M1 的 dsink 循环覆盖。"
+        },
+        {
+          "historical_id": "N05",
+          "relation": "部分重叠",
+          "mode": "C2",
+          "status": "静态支持",
+          "required_intersection": "已选实现漏整个必需阶段，缺失的具体贡献无替代路径。",
+          "representative_support_and_limits": "补充代表 EX-04 的 NZ sink 梯度。原固定 FusedMatmul 首错属于 FM-12。"
+        },
+        {
+          "historical_id": "N08",
+          "relation": "部分重叠",
+          "mode": "C2",
+          "status": "条款交集待核",
+          "required_intersection": "失效布尔谓词门控排除必需计算项，并缺替代贡献。",
+          "representative_support_and_limits": "EX-05 的目标和真实 bias 消费未闭合。EX-06 的例已在 N16 的非有限路径保留静态条件。"
+        },
+        {
+          "historical_id": "N10",
+          "relation": "部分重叠",
+          "mode": "C2",
+          "status": "静态条件支持",
+          "required_intersection": "错误掩码消耗或读取屏蔽必需 lane，没有后续补偿。",
+          "representative_support_and_limits": "EX-09 限后续真实消费剩余计数及缺失 lane。EX-01 C2 另有父版本补证。"
+        },
+        {
+          "historical_id": "N17",
+          "relation": "部分重叠",
+          "mode": "C2",
+          "status": "静态条件支持",
+          "required_intersection": "既定循环或排空遗漏的任务确含应到达目标的必要贡献。",
+          "representative_support_and_limits": "EX-36 限已经预载且没有替代 drain 的执行路径。"
+        },
+        {
+          "historical_id": "N23",
+          "relation": "部分重叠",
+          "mode": "C2",
+          "status": "静态条件支持",
+          "required_intersection": "边界判断截断了应该非空的几何贡献区间，必要梯度项未达目标。",
+          "representative_support_and_limits": "固定 PadV3Grad edge 老 IsCut 早退，外部 pads 到内部失败坐标仍缺完整绑定。"
+        },
+        {
+          "historical_id": "N25",
+          "relation": "部分重叠",
+          "mode": "C2",
+          "status": "条款交集待核",
+          "required_intersection": "精确公式漏掉的是具有身份和义务的逻辑计算项。",
+          "representative_support_and_limits": "固定 GroupNormSwishGrad 漏系数为目录外精确公式动作。"
+        }
+      ],
+      "v16_ex_fixed": [
+        {
+          "id": "EX-03",
+          "status": "静态条件支持",
+          "scope": "SoftmaxGrad 要全量 sum(dy*y)；当两级折叠后仍超 SmallR 支持长度时，旧 SmallR 直接返回，完整归约项未到达该 xSum。C2 是这个条件路径的局部关系；归约长度与临时空间是各自需验证的动作。"
+        },
+        {
+          "id": "EX-04",
+          "status": "静态支持",
+          "scope": "选定的 NZ 后处理承诺逐 head 汇总 sink 工作区并产生 dsink；旧分支缺整段搬入、累加、写出。按需返回真实 dsink 的路径，目标结果的 sink 梯度贡献缺失。"
+        },
+        {
+          "id": "EX-06",
+          "status": "静态条件支持",
+          "scope": "NaN 下 GT 和 LE 都假。若同版本 ThresholdGrad 合同要求 NaN self 透传 grad，旧 GT?grad:0 使本应入目标的 grad 被常数零替代，支持 C2。P2 要求特殊参数；这里是 self 数据及比较谓词。"
+        },
+        {
+          "id": "EX-09",
+          "status": "静态条件支持",
+          "scope": "UpdateMask 已按引用扣减 remaining，随后再次减 64。后续确实使用该计数且应处理后半段时，必要归约 lane 漏计可支持 C2。重复扣减的是计数器，不是同源计算项重复进入目标。"
+        },
+        {
+          "id": "EX-34",
+          "status": "静态条件支持",
+          "scope": "load3d 的 255 是指令编码限制，旧代码把它作真实下 pad 参与有效 M 规划。仅当真实下 pad>255 造成缩短任务范围并漏掉应累加的卷积贡献时记录 C2；根动作是规划。"
+        },
+        {
+          "id": "EX-36",
+          "status": "静态条件支持",
+          "scope": "空末批并非无任务：上一批 MM2/Vec2 已预载，旧 s1LoopTimes=0 跳过排空使有效批缺完成路径。只在可见在途贡献应到达目标且没有其他 drain 的作用域支持 C2。"
+        }
+      ],
+      "v16_ex_supplements": [
+        {
+          "id": "EX-01",
+          "fixed_fault_commit": "55b1f9f97bba2e1a479469ae7e1961896a3123ab",
+          "version_binding": "PR 实际父版本 4 个旧侧 hunk 逐行一致，由历史开发复核记录。原包没有覆盖写回。",
+          "current_modes": [
+            "C2"
+          ],
+          "independent_actions": [
+            "QuantizeForSumVf 的 DataCopy 消费被耗尽的量化掩码",
+            "InverseQuantizeVf 的 DataCopy 消费被耗尽的反量化掩码"
+          ],
+          "action_count": 2,
+          "scope": "补证后的静态局部关系，仅对能够证明实际消费的两处动作。"
+        }
+      ]
+    },
+    "C3": {
+      "title": "同源计算项重复计入",
+      "definition": "相对于同一目标结果，同一逻辑来源及语义角色的计算项实际计入次数超过该操作的约定。",
+      "catalog_parent": "item_multiplicity",
+      "historical": [],
+      "v16_ex_fixed": [],
+      "v16_ex_supplements": [],
+      "scope_note": "53 条定义与 45 个固定 EX 的交叉复核没有登记 C3。EX-37 是成员可保持一致的舍入链近邻。"
+    }
+  },
+  "historical_to_current": {
+    "FM-01": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "空任务调度与终止",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-02": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "形状推导",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-03": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    },
+    "FM-04": {
+      "leaf_modes": [
+        "L1",
+        "L2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "部分重叠",
+      "recommendation": "归并为历史别名或子型"
+    },
+    "FM-05": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "同步协议",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-06": {
+      "leaf_modes": [
+        "L1"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "部分重叠",
+      "recommendation": "归并为历史别名或子型"
+    },
+    "FM-07": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    },
+    "FM-08": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "数据表示与精度策略",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-09": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "有限精度求值及近似",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-10": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "浮点累加次序",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-11": {
+      "leaf_modes": [
+        "C1",
+        "C2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "部分重叠",
+      "recommendation": "细分或成对验证"
+    },
+    "FM-12": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "执行策略或模板准入",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-13": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    },
+    "FM-14": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "后端能力准入",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-15": {
+      "leaf_modes": [
+        "P1"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "限定复用",
+      "recommendation": "复用有据局部关系"
+    },
+    "FM-16": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "整数表示位宽",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-17": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "浮点范围",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-18": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    },
+    "FM-19": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "物理访存足迹",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-20": {
+      "leaf_modes": [
+        "L1"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "部分重叠",
+      "recommendation": "细分或成对验证"
+    },
+    "FM-21": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    },
+    "FM-22": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    },
+    "FM-23": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "量化计算阶段",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "FM-24": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "输入转换时机",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "归并为历史别名或子型"
+    },
+    "FM-25": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    },
+    "FM-26": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    },
+    "FM-27": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    },
+    "FM-28": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "累加器范围",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "归并为历史别名或子型"
+    },
+    "FM-29": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "整数地址的浮点中转精度",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "归并为历史别名或子型"
+    },
+    "N01": {
+      "leaf_modes": [
+        "C2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "部分重叠",
+      "recommendation": "细分或成对验证"
+    },
+    "N02": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "输出物化",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "N03": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "核内同步",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "保留目录外方向"
+    },
+    "N04": {
+      "leaf_modes": [
+        "C2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "历史下位",
+      "handling_relation": "上位／下位关系",
+      "recommendation": "复用有据局部关系"
+    },
+    "N05": {
+      "leaf_modes": [
+        "C2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "限定复用",
+      "recommendation": "恢复审核身份"
+    },
+    "N06": {
+      "leaf_modes": [],
+      "parent": "address",
+      "gap_direction": "寻址上位",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "归并为历史别名或子型"
+    },
+    "N07": {
+      "leaf_modes": [
+        "P1",
+        "P2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "部分重叠",
+      "recommendation": "细分或成对验证"
+    },
+    "N08": {
+      "leaf_modes": [
+        "C1",
+        "C2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "部分重叠",
+      "recommendation": "细分或成对验证"
+    },
+    "N09": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "输出索引编码",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "N10": {
+      "leaf_modes": [
+        "L2",
+        "C1",
+        "C2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "限定复用",
+      "recommendation": "复用有据局部关系"
+    },
+    "N11": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "缓冲需求或容量",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "N12": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "生产消费存储宽度",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "恢复审核身份"
+    },
+    "N13": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "同宽位型解释",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "N15": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "数值舍入与饱和",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "N16": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "非有限输入及内部标记协议",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "恢复审核身份"
+    },
+    "N17": {
+      "leaf_modes": [
+        "C2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "部分重叠",
+      "recommendation": "细分或成对验证"
+    },
+    "N20": {
+      "leaf_modes": [
+        "L1",
+        "L2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "历史上位",
+      "handling_relation": "上位／下位关系",
+      "recommendation": "复用有据局部关系"
+    },
+    "N21": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "输入合法域校验",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "N22": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "活跃存储生命周期",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "N23": {
+      "leaf_modes": [
+        "C1",
+        "C2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "限定复用",
+      "recommendation": "复用有据局部关系"
+    },
+    "N24": {
+      "leaf_modes": [
+        "P2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "历史下位",
+      "handling_relation": "上位／下位关系",
+      "recommendation": "复用有据局部关系"
+    },
+    "N25": {
+      "leaf_modes": [
+        "C1",
+        "C2"
+      ],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "部分重叠",
+      "handling_relation": "部分重叠",
+      "recommendation": "细分或成对验证"
+    },
+    "N26": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": "操作控制参数未落实",
+      "historical_comparison_relation": "不同机制",
+      "handling_relation": "独立新增候选",
+      "recommendation": "保留目录外方向"
+    },
+    "N27": {
+      "leaf_modes": [],
+      "parent": null,
+      "gap_direction": null,
+      "historical_comparison_relation": "待核",
+      "handling_relation": "待核／不纳入机理目录",
+      "recommendation": "待核"
+    }
+  },
+  "fixed_ex_parent_only": {
+    "EX-14": "address",
+    "EX-22": "parameter",
+    "EX-23": "parameter"
+  },
+  "independent_v16_proposal": {
+    "ex_id": "EX-32",
+    "approved": false,
+    "support": "单实现旧侧已证源缓冲选错。完整父提交及屏障变动的独立运行影响待核。",
+    "evidence": "source_lineage.json#/ex_by_id/EX-32"
+  }
+}
