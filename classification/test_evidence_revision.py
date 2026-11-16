@@ -91,6 +91,19 @@ class EvidenceRevision(unittest.TestCase):
         self.assertIn(hypothesis, output["facts"])
         self.assertIn(changed, output["facts"])
 
+    def test_parameter_parent_preserves_unresolved_implementation_action(self):
+        evidence = [self.fact("applicable_contract"), self.fact("parameter_violation"),
+                    self.fact("causal_role")]
+        output = self.result(*evidence)
+        self.assertEqual((output["status"], output["parent_id"]), ("parent", "parameter"))
+        self.assertEqual((output["action_resolution"], output["role"]), ("unresolved", "unknown"))
+        self.assertFalse(output["count_as_independent"])
+        self.assertIn("implementation_action", output["missing"])
+
+        resolved = self.result(*evidence, self.fact("implementation_action"))
+        self.assertEqual((resolved["action_resolution"], resolved["role"]), ("supported", "primary"))
+        self.assertTrue(resolved["count_as_independent"])
+
     def test_new_diff_line_and_unfounded_derivation_do_not_prove_old_behavior(self):
         for anchors in ([self.anchor("patch", "behavior", 1)],
                         [self.anchor("contract", "requirement"), self.anchor("patch", "behavior", 2)]):

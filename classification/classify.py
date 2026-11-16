@@ -521,7 +521,10 @@ def verdict(action, sources, catalog, revised=False):
             ancestor for card in modes.values() if card["definition_level"] == "mechanism_relation"
             for ancestor in parent_lineage(card["parent"], hierarchy)
         }
-        if positive_verdict and nearest_parent in relation_parents:
+        requires_action_evidence = nearest_parent in relation_parents or (
+            revised and result["status"] == "parent"
+        )
+        if positive_verdict and requires_action_evidence:
             action_key = "implementation_action"
             action_supported = action_key in true and explained_scoped_fact(action_key, facts, sources, scope)
             if not action_supported:
