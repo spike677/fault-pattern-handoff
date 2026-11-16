@@ -1,0 +1,40 @@
+{
+  "release_name": "MECH-v0.4",
+  "source_commits": [
+    "e491687a392160f977c7414c3f2bd9bfb10352a6",
+    "2785fbfc5e052903a6cd0225fe2ab1d55e8b067b"
+  ],
+  "source_relationship": "first_is_direct_parent_of_second",
+  "controlled_engineering_commit": "ef9e6b70e50a380d0994c8f032c5ccfe0363e230",
+  "release_commit": "d2fc712b32fa13ceef661068bdc7b58732462667",
+  "parent_release": "7234428d7915e2c094ff70d178f933d8fed7e8d6",
+  "public_history": "sanitized_fast_forward_from_previous_pilot_release",
+  "branch_ref": "refs/heads/codex/mechanism-classification-pilot",
+  "tag_ref": "refs/tags/MECH-v0.4",
+  "tag_object_sha": "39f5b067694840c9f86bd378ccc43a3487767fcb",
+  "catalog_version": "MECH-v0.4",
+  "decision_version": "0.4.1",
+  "reader_version": "v0.4.2 with MECH-v0.4 evidence-scope revision",
+  "reader_prompt_sha256": {
+    "mech_v04/PROMPT.md": "74f40926ef4fe3a43f94eb7a13a99f41e753e5566b798c4c53b64373011c2927",
+    "proposals/numeric_validation_v042/PROMPT.md": "46e22c26f035b296df1a98c412b27c4e63f8189082f42f05c2df9efaef6f2f60",
+    "proposals/numeric_validation_v042/SCOPE_BINDING.md": "f68b03da8c865e37dbaf5795802d7caeba576b813444c4fdaf69f0bfbdf5be0b"
+  },
+  "response_schema_sha256": "d0b2da469ec9f967dfe8cee015eba42ec3a50ed3b4c349c0974d0157594a0aa2",
+  "fact_packet_version": "classification_facts/0.3.1",
+  "evaluator_version": "classification_only/0.3.1",
+  "catalog_sha256": "2f10349dd63d996b8870666849c1742923168bc04f706a2685c32c74fb5ef288",
+  "freeze_sha256": "8586bb97f6eaef0fdeb316ba35292cbb0434e76697e62896dea0a3c58b936112",
+  "classifier_sha256": "521acf58dd10937f336ab7b9b770695e0dcf6490f32a6ead5c2b422f524f876f",
+  "evaluator_sha256": "97fb58c0420fd72af94f6fc98fb63cc19da3ba6ddd3cedda862443de6aaf61bc",
+  "file_inventory_hash": "f29d19c2b64aad8aee450e65e643dbe319b0f2986fb5e9b1c9ac67eacd06a83e",
+  "test_report_hash": "ee7273c21c2d2128f85e650f4d33a007e2f768f0bef1fde5ed0b091d5dcd06c9",
+  "bundle_sha256": "311669c534c9381a68a8f4cae5a60faa2385587226da47f400b2a0351f661ee0",
+  "tar_gz_sha256": "0cf4203a14d6b61d514a8e838f9a7f0c92d8e04f4148ec58e0ca239214d48a8a",
+  "bundle_file": "MECH-v0.4-release.bundle",
+  "source_archive_file": "MECH-v0.4-release.tar.gz",
+  "controlled_replay_archive_sha256": "6bdc9e0abe6584fc42b1a11e1aa7692b3f457305bd3225445c1cfc3ebd9c23c7",
+  "formal_f": "BLOCKED",
+  "attestation": "The next commit on the pilot branch records hashes of the immutable, tagged content commit and its archives.",
+  "public_replay": "python -B -X utf8 classification/release/verify.py"
+}
