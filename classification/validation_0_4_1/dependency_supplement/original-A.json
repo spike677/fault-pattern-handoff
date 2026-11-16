@@ -1,0 +1,135 @@
+{
+  "cases": [
+    {
+      "case_id": "V404",
+      "sources": [
+        {
+          "id": "s1",
+          "kind": "contract",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "cmake/deps.txt",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/cmake/deps.txt#L35-L38",
+          "original_start_line": 35,
+          "text": "mimalloc;https://github.com/microsoft/mimalloc/archive/refs/tags/v2.1.1.zip;d5ee7d34223d0567892db5179849939c8769dc41\nmp11;https://github.com/boostorg/mp11/archive/refs/tags/boost-1.82.0.zip;9bc9e01dffb64d9e0773b2e44d2f22c51aace063\nonnx;https://github.com/onnx/onnx/archive/refs/tags/v1.19.1.zip;c5215b5697dcdfd71799f001b8c4054a6bba6b09\n# Use the latest commit of 10.9-GA"
+        },
+        {
+          "id": "s2",
+          "kind": "contract",
+          "version": "b751946c3d59a3c8358abcc0569b59e6ddb08cdd",
+          "path": "onnx/defs/reduction/utils.cc",
+          "origin": "https://github.com/onnx/onnx/blob/b751946c3d59a3c8358abcc0569b59e6ddb08cdd/onnx/defs/reduction/utils.cc#L60-L82",
+          "original_start_line": 60,
+          "text": "    schema.Input(0, \"data\", \"An input tensor.\", \"T\", OpSchema::Single, true, 1, OpSchema::Differentiable);\n    if (axes_input) {\n      schema.Attr(\n          \"noop_with_empty_axes\",\n          \"Defines behavior when axes is not provided or is empty. \"\n          \"If false (default), reduction happens over all axes. \"\n          \"If true, no reduction is applied, but other operations will be performed. For example, ReduceSumSquare acts as a vanilla Square.\",\n          AttributeProto::INT,\n          static_cast<int64_t>(0));\n      schema.Input(\n          1,\n          \"axes\",\n          \"Optional input list of integers, along which to reduce. \"\n          \"The default is to reduce over empty axes. \"\n          \"When axes is empty (either not provided or explicitly empty), behavior depends on 'noop_with_empty_axes': \"\n          \"reduction over all axes if 'noop_with_empty_axes' is false, \"\n          \"or no reduction is applied if 'noop_with_empty_axes' is true (but other operations will be performed). \"\n          \"Accepted range is [-r, r-1] where r = rank(data).\",\n          \"tensor(int64)\",\n          OpSchema::Optional,\n          true,\n          1,\n          OpSchema::NonDifferentiable);"
+        },
+        {
+          "id": "s3",
+          "kind": "contract",
+          "version": "b751946c3d59a3c8358abcc0569b59e6ddb08cdd",
+          "path": "onnx/defs/reduction/defs.cc",
+          "origin": "https://github.com/onnx/onnx/blob/b751946c3d59a3c8358abcc0569b59e6ddb08cdd/onnx/defs/reduction/defs.cc#L26-L37",
+          "original_start_line": 26,
+          "text": "\nstatic const char* reduce_sum_square_func_body = R\"ONNX(\n  {\n    data_square = Mul(data, data)\n    reduced = ReduceSum<keepdims: int = @keepdims, noop_with_empty_axes: int = @noop_with_empty_axes>(data_square, axes)\n  }\n  )ONNX\";\n\nONNX_OPERATOR_SET_SCHEMA(\n    ReduceSumSquare,\n    18,\n    OpSchema().FillUsing(ReduceFunctionOp(\"sum square\", EMPTY_ZERO, reduce_sum_square_func_body)));"
+        },
+        {
+          "id": "s4",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_kernel_base.h",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_kernel_base.h#L11-L36",
+          "original_start_line": 11,
+          "text": "template <bool allow_multi_axes>\nclass ReduceKernelBase {\n protected:\n  ReduceKernelBase(const OpKernelInfo& info, optional<int64_t> keepdims_override = {}) {\n    if (allow_multi_axes) {\n      axes_ = ToShapeVector(info.GetAttrsOrDefault<int64_t>(\"axes\"));\n    } else {\n      auto v = info.GetAttrOrDefault<int64_t>(\"axis\", 0);\n      axes_.push_back(v);\n    }\n    int64_t keepdims = 1;\n    if (keepdims_override.has_value()) {\n      keepdims = *keepdims_override;\n    } else {\n      ORT_ENFORCE(info.GetAttr(\"keepdims\", &keepdims).IsOK());\n    }\n    keepdims_ = (keepdims == 1);\n    int64_t noop_with_empty_axes = info.GetAttrOrDefault<int64_t>(\"noop_with_empty_axes\", 0);\n    noop_with_empty_axes_ = (noop_with_empty_axes == 1);\n    int64_t select_last_index = info.GetAttrOrDefault<int64_t>(\"select_last_index\", 0);\n    select_last_index_ = (select_last_index != 0);\n  }\n\n  TensorShapeVector axes_;\n  bool keepdims_;\n  bool noop_with_empty_axes_;"
+        },
+        {
+          "id": "s5",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_ops.cc",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_ops.cc#L17-L23",
+          "original_start_line": 17,
+          "text": "#define REGISTER_UNARY_ELEMENTWISE_KERNEL(x, sinceVersion)                            \\\n  ONNX_CPU_OPERATOR_TYPED_KERNEL(                                                     \\\n      x,                                                                              \\\n      sinceVersion,                                                                   \\\n      float,                                                                          \\\n      KernelDefBuilder().TypeConstraint(\"T\", DataTypeImpl::GetTensorType<float>()),   \\\n      x<float>);                                                                      \\"
+        },
+        {
+          "id": "s6",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_ops.cc",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_ops.cc#L282-L288",
+          "original_start_line": 282,
+          "text": "REGISTER_UNARY_ELEMENTWISE_VERSIONED_KERNEL_INT64_ONLY(ReduceSumSquare, 11, 12);\nREGISTER_UNARY_ELEMENTWISE_VERSIONED_KERNEL(ReduceSumSquare, 13, 17);\nREGISTER_UNARY_ELEMENTWISE_VERSIONED_KERNEL_DOUBLE_ONLY(ReduceSumSquare, 13, 17);\nREGISTER_UNARY_ELEMENTWISE_VERSIONED_KERNEL_INT64_ONLY(ReduceSumSquare, 13, 17);\nREGISTER_UNARY_ELEMENTWISE_KERNEL(ReduceSumSquare, 18);\nREGISTER_UNARY_ELEMENTWISE_KERNEL_DOUBLE_ONLY(ReduceSumSquare, 18);\nREGISTER_UNARY_ELEMENTWISE_KERNEL_INT64_ONLY(ReduceSumSquare, 18);"
+        },
+        {
+          "id": "s7",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_ops.cc",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_ops.cc#L1125-L1129",
+          "original_start_line": 1125,
+          "text": "template <typename T>\nStatus ReduceSumSquare<T>::Compute(OpKernelContext* ctx) const {\n  CommonReduce1Loop<ReduceAggregatorSumSquare<T>>(ctx, axes_, keepdims_, noop_with_empty_axes_);\n  return Status::OK();\n}"
+        },
+        {
+          "id": "s8",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_ops.cc",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_ops.cc#L880-L887",
+          "original_start_line": 880,
+          "text": "template <typename AGG>\nbool check_and_reduce_empty_set_input(OpKernelContext* ctx, const gsl::span<const int64_t> axes, bool keepdims) {\n  const Tensor* input = ctx->Input<Tensor>(0);\n  const TensorShape& input_shape = input->Shape();\n  if (input_shape.Size() != 0) {\n    return false;\n  }\n"
+        },
+        {
+          "id": "s9",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_ops.cc",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_ops.cc#L923-L938",
+          "original_start_line": 923,
+          "text": "template <typename AGG>\nvoid CommonReduce1Loop(OpKernelContext* ctx,\n                       const gsl::span<const int64_t>& axes_, int64_t keepdims_,\n                       bool noop_with_empty_axes) {\n  if (check_and_reduce_empty_set_input<AGG>(ctx, axes_, keepdims_ != 0)) {\n    return;\n  }\n\n  FastReduceKind fast_kind;\n  TensorShapeVector fast_shape;\n  TensorShapeVector output_shape;\n  TensorShapeVector fast_axes;\n  if (CommonFastReduce<AGG>(ctx, axes_, keepdims_, noop_with_empty_axes,\n                            fast_kind, fast_shape, output_shape, fast_axes)) {\n    return;\n  }"
+        },
+        {
+          "id": "s10",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_ops.cc",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_ops.cc#L854-L867",
+          "original_start_line": 854,
+          "text": "template <typename AGG>\nbool CommonFastReduce(OpKernelContext* ctx,\n                      const gsl::span<const int64_t>& axes_,\n                      int64_t keepdims_,\n                      bool noop_with_empty_axes,\n                      FastReduceKind& fast_kind,\n                      TensorShapeVector& fast_shape,\n                      TensorShapeVector& output_shape,\n                      TensorShapeVector& fast_axes) {\n  return CommonFastReduceSwitch(ctx, axes_, keepdims_, noop_with_empty_axes,\n                                fast_kind, fast_shape, output_shape, fast_axes,\n                                AGG::WhichFastReduce(), &AGG::FastReduceKR, &AGG::FastReduceRK,\n                                &AGG::FastReduceKRK, &AGG::FastReduceRKR);\n}"
+        },
+        {
+          "id": "s11",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_ops.cc",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_ops.cc#L748-L802",
+          "original_start_line": 748,
+          "text": "bool CommonFastReduceCopy(OpKernelContext* ctx, TensorShapeVector& input_axes, bool noop_with_empty_axes) {\n  if (ctx->InputCount() == 2) {\n    // second input holds the axes.\n    // the argument is optional\n    const Tensor* axes_tensor = ctx->Input<Tensor>(1);\n\n    if (axes_tensor != nullptr) {\n      ORT_ENFORCE(axes_tensor->Shape().NumDimensions() == 1,\n                  \"An axes tensor must be a vector tensor.\");\n\n      const auto data_span = axes_tensor->DataAsSpan<int64_t>();\n      input_axes.assign(data_span.begin(), data_span.end());\n    } else {\n      input_axes.clear();\n    }\n\n    if (input_axes.empty() && noop_with_empty_axes) {\n      const Tensor* input = ctx->Input<Tensor>(0);\n      auto* output = ctx->Output(0, input->Shape());\n      memcpy(output->MutableDataRaw(),\n             input->DataRaw(),\n             input->SizeInBytes());\n      return true;\n    }\n  }\n  return false;\n}\n\ntypedef void fast_reduce_fct(const Tensor& input, const gsl::span<const int64_t>& fast_shape,\n                             Tensor& output, concurrency::ThreadPool* tp);\n\nbool CommonFastReduceSwitch(OpKernelContext* ctx,\n                            const gsl::span<const int64_t>& axes_,\n                            int64_t keepdims_,\n                            bool noop_with_empty_axes,\n                            FastReduceKind& fast_kind,\n                            TensorShapeVector& fast_shape,\n                            TensorShapeVector& output_shape,\n                            TensorShapeVector& fast_axes,\n                            FastReduceKind which_fast_reduce,\n                            fast_reduce_fct* case_kr,\n                            fast_reduce_fct* case_rk,\n                            fast_reduce_fct* case_krk,\n                            fast_reduce_fct* case_rkr) {\n  const Tensor* input = ctx->Input<Tensor>(0);\n  auto reduced_dims = input->Shape().GetDims();\n  TensorShapeVector input_axes;\n\n  if (CommonFastReduceCopy(ctx, input_axes, noop_with_empty_axes)) {\n    return true;\n  }\n\n  fast_kind = OptimizeShapeForFastReduce(\n      reduced_dims, input_axes.empty() ? axes_ : input_axes,\n      fast_shape, output_shape, fast_axes, keepdims_ != 0, noop_with_empty_axes);"
+        },
+        {
+          "id": "s12",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_ops.h",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_ops.h#L292-L303",
+          "original_start_line": 292,
+          "text": "template <typename T, typename TVAL = T>\nclass ReduceAggregatorSumSquare : public ReduceAggregator<T, TVAL> {\n public:\n  inline ReduceAggregatorSumSquare(int64_t N, const T&) : ReduceAggregator<T, TVAL>(N, 0) {}\n  inline TVAL aggall(const T* from_data) {\n    return Eigen::Map<const Eigen::Matrix<T, Eigen::Dynamic, 1>>(from_data, onnxruntime::narrow<size_t>(this->N_)).squaredNorm();\n  }\n  inline void update(const T& v) { this->accumulator_ += v * v; }\n  static void fill_for_empty_set(Tensor& output) {\n    EigenMap<T>(output).array() = static_cast<T>(0);\n  }\n};"
+        },
+        {
+          "id": "s13",
+          "kind": "code",
+          "version": "ecf164a945dab23db1edf2bceb50dd362c93ec30",
+          "path": "onnxruntime/core/providers/cpu/reduction/reduction_ops.h",
+          "origin": "https://github.com/microsoft/onnxruntime/blob/ecf164a945dab23db1edf2bceb50dd362c93ec30/onnxruntime/core/providers/cpu/reduction/reduction_ops.h#L906-L913",
+          "original_start_line": 906,
+          "text": "template <typename T>\nclass ReduceSumSquare final : public ReduceKernel<true> {\n public:\n  ReduceSumSquare(const OpKernelInfo& info) : ReduceKernel<true>(info) {\n  }\n\n  Status Compute(OpKernelContext* context) const override;\n};"
+        },
+        {
+          "id": "s14",
+          "kind": "report",
+          "version": "refs/tags/v1.19.1",
+          "path": "git/ref/tags/v1.19.1",
+          "origin": "https://api.github.com/repos/onnx/onnx/git/ref/tags/v1.19.1",
+          "original_start_line": 1,
+          "text": "{\"ref\":\"refs/tags/v1.19.1\",\"node_id\":\"MDM6UmVmMTAyNjkyODYzOnJlZnMvdGFncy92MS4xOS4x\",\"url\":\"https://api.github.com/repos/onnx/onnx/git/refs/tags/v1.19.1\",\"object\":{\"sha\":\"b751946c3d59a3c8358abcc0569b59e6ddb08cdd\",\"type\":\"commit\",\"url\":\"https://api.github.com/repos/onnx/onnx/git/commits/b751946c3d59a3c8358abcc0569b59e6ddb08cdd\"}}"
+        }
+      ]
+    }
+  ]
+}

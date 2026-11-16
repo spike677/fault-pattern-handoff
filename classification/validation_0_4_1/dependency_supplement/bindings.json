@@ -1,0 +1,18 @@
+{
+  "protocol": "pinned_dependency_contracts/0.4.1",
+  "bindings": [
+    {
+      "case_id": "V404",
+      "scope_source": "s11",
+      "declaration": {
+        "source_id": "s1",
+        "line": 3
+      },
+      "tag_ref_source": "s14",
+      "contracts": [
+        "s2",
+        "s3"
+      ]
+    }
+  ]
+}

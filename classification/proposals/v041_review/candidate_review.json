@@ -1,0 +1,476 @@
+{
+  "version": "0.4.1",
+  "catalog_baseline": "MECH-v0.3",
+  "baseline_commit": "dfca7e1dcc1cc11a060b302244dc388841a6fc94",
+  "status": "PROPOSED",
+  "decision_scope": "审核七张既有候选卡。REUSE 指复用历史子机制条款进入候选审查，正式模式资格由准入决定。条件静态推导、源级报告、锁定双轮和合成回归各自记录。",
+  "mechanism_cluster_index": "../../mechanism_discovery/historical_mechanism_clusters.json",
+  "mechanism_cluster_links": {
+    "NUM-01": {
+      "ids": [
+        "conversion",
+        "overflow"
+      ],
+      "relation": "比较状态存储宽度与首次超范围，输入一次窄化和逐元素平方均只作近邻。"
+    },
+    "NUM-02": {
+      "ids": [
+        "evaluation"
+      ],
+      "relation": "有限精度求值上位下区分原始矩差、小量吸收和近似预算。"
+    },
+    "CTRL-01": {
+      "ids": [
+        "representation-handoff",
+        "dependency-lifetime"
+      ],
+      "relation": "EX-32 语义选源独立扩展。表示不符、可见性和活跃区覆盖用作近邻。"
+    },
+    "CTRL-02": {
+      "ids": [
+        "dispatch"
+      ],
+      "relation": "规划候选枚举、现有分支准入与计划消费的边界。"
+    },
+    "ADDR-01": {
+      "ids": [
+        "address-geometry",
+        "integer-representation"
+      ],
+      "relation": "使用 EX-14 的合轴交集，排除整数表示先失真。"
+    },
+    "REP-01": {
+      "ids": [
+        "representation-handoff"
+      ],
+      "relation": "EX-21 的窄 decoder 子型，保留 N12/N13 的角色差异。"
+    },
+    "SYNC-01": {
+      "ids": [
+        "dependency-lifetime"
+      ],
+      "relation": "FM-05 的通知代际子机制，与同址活跃区覆盖分开。"
+    }
+  },
+  "root_cause_pair_index": "../../history_mapping_v2/overlap_decisions.json",
+  "root_cause_pair_links": {
+    "NUM-02": [
+      "N25__C2"
+    ],
+    "CTRL-01": [
+      "FM-15__P1",
+      "N07__P1"
+    ],
+    "CTRL-02": [
+      "FM-11__C1",
+      "FM-11__C2",
+      "N17__C2"
+    ],
+    "ADDR-01": [
+      "FM-04__L1",
+      "FM-04__L2",
+      "FM-06__L1",
+      "FM-20__L1",
+      "N23__C1",
+      "N23__C2"
+    ],
+    "REP-01": [
+      "N10__L2",
+      "N07__P1"
+    ]
+  },
+  "reviews": [
+    {
+      "id": "NUM-01",
+      "decision": "REFINE",
+      "proposed_title": "运行累加状态过窄",
+      "object": "同一个归约输出在循环迭代之间传递的累加器。",
+      "contract": "对绑定的版本、模式和有效输入，状态在连续更新间须保有适用的精度或数值范围。输入和末次输出的合法 dtype 仍可较窄。",
+      "wrong_action": "E06 的单块 CPU Flash Attention 在处理每个合法 KV 的加权 V 时把当前 V 累加态留在 FP16 VKQ16，在线重缩放也写入该态，全部迭代结束后才转到 VKQ32。",
+      "first_wrong_state": "较窄存储首次舍入掉仍需保留的累加信息，或者结果首次超过该累加态的范围。末次转宽只读取已经失真的状态。",
+      "effect": "V 分子的精度偏差或非有限值会进入归一化输出。具体输入和后端的原报告属于报告范围。",
+      "scope": "E06 选择 one-chunk CPU 路径、F16 V、受原作者确认的 F32 累加合同约束、合法且被取用的 KV 项。",
+      "necessary_anchors": [
+        "累加合同及适用派发",
+        "循环承载状态的实际 dtype 和更新／重缩放的写入位置",
+        "首个丢失或超范围的中间状态、后续读取及最终转换",
+        "相同逻辑项身份、重数、权重和更新顺序"
+      ],
+      "exclusions": [
+        "V406 在归约前的逐元素平方结果处首次溢出",
+        "G05 保持 FP32 但相近的大矩相减",
+        "EX-37 约定逐 rank 在 y_type 舍入，方向是过晚降精",
+        "按契约仅最终写回降精",
+        "真正的项遗漏、重复或合法中性化"
+      ],
+      "relations": {
+        "FM-08": "较窄累加态是精度策略大类下的一个明确子机制。其 DropOutV3 代表是入参一次窄化。",
+        "FM-17": "V406 代表的临时值首次超出范围为近邻。E06 也可表现溢出，要定位在循环状态。",
+        "FM-24": "核入参一旦被窄化就丢失信息的首错，与跨迭代状态区分。",
+        "NUM-02": "以相同状态宽度比较数学等价表达式求值，原始矩差归消减候选。",
+        "C2": "确认原子贡献执行并更新后，舍入掉低位为状态损失。",
+        "C3": "展开原始贡献多重集，保持相同权重与次数。"
+      },
+      "history": [
+        "FM-08 的精度策略条款",
+        "EX-37 的逐步舍入合约对照",
+        "FM-08 CASE-0041-M1 的入参窄化近邻"
+      ],
+      "diagnosis": "保留派发、KV 成员及权重序列，分别记录每次旧状态的 dtype 和数值。用同序较宽状态对照，定位首次舍入和首次超范围。",
+      "injection": "在同值同序的迭代间把累加器强制转成源于半精度存储的窄态，再将状态传回下一步。记录第一处状态差异和输出影响。",
+      "generalization": "有实际 CPU attention 代表。FSDP 和 DropOutV3 能区分邻因。仍只有一个已核循环状态家族。",
+      "regression": {
+        "status": "BOUNDARY_CHECK_EXECUTED",
+        "positive": "E06 保持越过迭代的 FP16 状态时命中候选必要事实",
+        "negative": "V406 先在平方输出溢出，与 E06 的累加状态分别定位",
+        "check": "half_running_sum"
+      },
+      "admission": {
+        "real_representative": "SUPPORTED",
+        "real_closest_negative": "SUPPORTED",
+        "necessary_and_exclusion": "DEFINED",
+        "adjacency": "DEFINED",
+        "classifier_regression": "PENDING",
+        "open": [
+          "候选分类接入及作用域回归",
+          "第二个独立的循环累加态实例可验证泛化"
+        ]
+      }
+    },
+    {
+      "id": "NUM-02",
+      "decision": "REFINE",
+      "proposed_title": "原始矩差求方差的有限精度消减",
+      "object": "高偏置、小波动输入的方差中间量及归一化消费者。",
+      "contract": "在适用目标上归一化的方差为中心二阶矩，固定语义、相同数据及可用的数值表示。",
+      "wrong_action": "G05 旧普通小核用 FP32 的 E[x²]−E[x]² 求小方差。原始矩的舍入误差吞掉两大项相减后的小量，再将失真的值送入 rsqrtf 和向量输出。",
+      "first_wrong_state": "决定性信息在有限精度的原始矩差中不足以恢复中心方差。记录原始矩、差值及 rsqrtf 实参。",
+      "effect": "归一化尺度偏离中心方差参考。作者给出了高偏置输入的 NaN 报告，具体宽度 4 是否派发到这段旧小核须另证。",
+      "scope": "固定普通 SkipLayerNormalization 小核且数据可表示、合法行元素确实进入两矩。RMS-only 与实际 CUDA 派发不作外推。",
+      "necessary_anchors": [
+        "绑定原始矩差及实际使用消费者",
+        "方差合同和相同数据的中心二阶矩参考",
+        "原始矩大小、表示及首个不可恢复差异",
+        "用相同工作精度区分表示丢失、求值式和贡献集合变化"
+      ],
+      "exclusions": [
+        "只改变状态 dtype 已解释偏差",
+        "V406 先于 SUM 的平方结果超范围",
+        "截断项数与系数拟合的 EX-25",
+        "数学上就不同的表达式",
+        "同版明确允许且满足误差约定的近似"
+      ],
+      "relations": {
+        "FM-09": "复用数学等价有限精度求值的上位知识。LogAddExp 先算 1+t 的小量吸收与此处原始矩差分别登记。",
+        "FM-08": "原始矩差可在合约允许的 FP32 中失稳。先改变累加态宽度导致的首错归另一根机制。",
+        "NUM-01": "E06 局部只改状态保存宽度可恢复，G05 可在同宽度下改用中心化求值恢复。",
+        "C1/C2/C3": "每个合法行元素按约定各一次进入两矩，矩的不同语义角色分别确认。"
+      },
+      "history": [
+        "FM-09 CASE-0061-M1 LogAddExp",
+        "EX-25 旧九项指数缩放与分段拟合",
+        "EX-08 数学表达式不同的边界"
+      ],
+      "diagnosis": "用同一已转换输入、偏置、epsilon 和派发对照原始矩、中心方差、rsqrtf 实参及最后一次消费。记录舍入和融合运算，明确局部数值例与实际核运行的范围。",
+      "injection": "保持输入、合约和工作 dtype，将中心二阶矩改成原始二阶矩减均值平方。选高均值低方差值，对照中间误差与输出。",
+      "generalization": "已核普通 SkipLayerNorm 一家族。FM-09 的 LogAddExp 和 EX-25 为实案边界。二者均不增加方差消减正例分母。",
+      "regression": {
+        "status": "BOUNDARY_CHECK_EXECUTED",
+        "positive": "同宽 FP32 下原始矩差丢掉中心低方差，归一化依赖可定位",
+        "negative": "按同一算式只缩小写回状态时分归 NUM-01，逐项运算溢出另记",
+        "check": "raw_moment_cancellation"
+      },
+      "admission": {
+        "real_representative": "SUPPORTED_UNDER_STATED_PATH",
+        "real_closest_negative": "SUPPORTED",
+        "necessary_and_exclusion": "DEFINED",
+        "adjacency": "DEFINED",
+        "classifier_regression": "PENDING",
+        "open": [
+          "针对候选的分类回归",
+          "同机理第二算子及测试派发证据可提高泛化强度"
+        ]
+      }
+    },
+    {
+      "id": "CTRL-01",
+      "decision": "NEW_CANDIDATE",
+      "proposed_title": "阶段间中间缓冲选错",
+      "object": "算子内已生成的分数 S、排序前容器 D 和接收该分数的复制阶段。",
+      "contract": "无 bias 时 D 必须取得当前一轮 softmax 分数 S，或者依照合同与已经保存 S 的有效缓冲合法别名。",
+      "wrong_action": "EX-32 无 bias 分支仅向旧 GenerateIndexAndCopy 传入 D。helper 从 D 取分数并回写 D，随后按 D 做 padding。在 S 与 D 分离的条件下，此动作未交付 S。",
+      "first_wrong_state": "首次错误是复制源的语义对象。错读的是目标 D 对应那份数据，D 中具体内容和最终排序的运行值需按证据决定。",
+      "effect": "D 无法由该复制步骤取得本轮正确分数。对可见排序前交付成立，最终每个错误专家或项的变化需核实际消费。",
+      "scope": "限旧无 bias 分支、同一路径旧 helper 的读写及 PadWithMinFp32。别名、生产者完整活跃区和同补丁内内存屏障移动需要各自说明。",
+      "necessary_anchors": [
+        "上游生产者生成 S 的实际位置及后继交付合同",
+        "S 与 D 的身份及别名关系",
+        "旧代码选的是 D 对象且地址公式可保持正确",
+        "复制后同一阶段的实际消费者和修复选择位置"
+      ],
+      "exclusions": [
+        "V402 的算子接口参数键读取错误",
+        "N20 正确对象内坐标错",
+        "N22 同一个对象被过早覆盖",
+        "FM-05 读正确对象但尚未发布可见",
+        "有效的原地复用"
+      ],
+      "relations": {
+        "P1": "接口或构图输入槽的语义绑定。V402 从错误的属性键读上限。EX-32 是同一算子内的中间数据源。",
+        "L1/L2": "在正确对象内才核布局和地址单位。",
+        "C1/C2/C3": "只有实际送进所评最终聚合的项身份、资格或重数变化有独立证据时才附记，独立根仍在选源。",
+        "N22": "EX-30 在正确缓冲上覆写活跃数据，EX-32 要核读了不同语义源。",
+        "FM-05": "先固定地址身份并独立控制 VEC_STORE 屏障，区分看错对象与可见性问题。"
+      },
+      "history": [
+        "EX-32 V16 独立新增线索",
+        "N22 EX-30 覆盖近邻",
+        "EX-29 的 P1 图构造签名"
+      ],
+      "diagnosis": "标识 S、D 生命周期和该轮内容，记录原 helper 的实际读写地址及当前排序前读。对源选择和屏障分别单变量对照，找第一处错数据。",
+      "injection": "保持同步、时序、形状及地址单位，将读取 S 替换成读取确定未持有 S 的合法在世 D，选择两缓冲内容会给不同 TopK 的输入。",
+      "generalization": "一个固定旧侧家族有局部动作证据。缺第二实现、经合同确认的原地复用，以及单独分离屏障影响的完整旧执行链。",
+      "regression": {
+        "status": "BOUNDARY_CHECK_EXECUTED",
+        "positive": "EX-32 的 S 与 D 分离、旧 helper 读写 D",
+        "negative": "V402 的 P1/C1 角色边和合法 alias 对照",
+        "check": "buffer_source_identity"
+      },
+      "admission": {
+        "real_representative": "LOCAL_ACTION_SUPPORTED",
+        "real_closest_negative": "SUPPORTED",
+        "necessary_and_exclusion": "DEFINED",
+        "adjacency": "DEFINED",
+        "classifier_regression": "PENDING",
+        "open": [
+          "绑定精确父版本 S/D 活跃区及实际排序消费",
+          "将屏障改动与源变动分开",
+          "启用候选分类回归"
+        ]
+      }
+    },
+    {
+      "id": "CTRL-02",
+      "decision": "REUSE",
+      "proposed_title": "规划搜索的可行候选未受验证",
+      "object": "Host 计划搜索中的候选因子及这个候选的容量通过条件。",
+      "contract": "进入该枚举路径且初始估计确有可行解时，搜索逻辑应验证它或有等价路径。合法剪枝须有容量或语义依据。",
+      "wrong_action": "EX-42 的旧 Host 根据容量估计初始化 ubIndexFactor_，以 restSize=-1 进入 while 却先 --ubIndexFactor_。当初始值为 1 且能留有合法余量，首个实际验证的是 0。",
+      "first_wrong_state": "原候选 1 在进行可行性检查前被变成 0，搜索的实际候选集合缺去该合法项。",
+      "effect": "可输出零因子或丧失合法计划。对应原报告的 AIC 异常单列，计算吊死或无输出本身没有 C2 含义。",
+      "scope": "条件静态限实际的 after-sort 旧搜索顺序。pre-sort 的关联 hunk 截止 while 入口，单独记录。",
+      "necessary_anchors": [
+        "实际合法候选集合及边界容量",
+        "初值、循环首次进入及检查顺序",
+        "确有某个未访问而合法的候选",
+        "生成计划的消费者和不存在等价验证路径"
+      ],
+      "exclusions": [
+        "EX-26 成本公式少计并存缓冲",
+        "正确选出计划后执行阶段丢真实结果项",
+        "按合同屏蔽不可行候选或另一分支已有验证"
+      ],
+      "relations": {
+        "FM-11": "复用其规划搜索子机制。FM-11 的任务切分、资源总计和执行分支保留自己边界。",
+        "N11": "预算计算少计一个缓冲的尺寸与枚举漏访问是不同首错。",
+        "N17/C2": "实际已有合法工作区后出现的 kernel 尾部项漏算由真实消费者证明。EX-03 提供条件级对照。",
+        "P1/P2": "计划使用的外部参数来源或哨兵解释可各自正确，首错仍在内部枚举。"
+      },
+      "history": [
+        "FM-11 的规划子机制",
+        "EX-42 的 InplaceIndexAdd",
+        "EX-26 的容量模型",
+        "EX-03 的真实归约尾项"
+      ],
+      "diagnosis": "对同路径列计划候选、预计资源、实际验证调用和交付计划。分别记录实际枚举轨迹和可行性检查的结果。",
+      "injection": "只移动因子递减到第一次验证之前，保持预算函数不变。将预算限制到仅 1 可行，对比交付计划。",
+      "generalization": "已核一个真实规划器的 after-sort。关联 pre-sort 同一家族。需另一独立搜索与有据合法剪枝对照。",
+      "regression": {
+        "status": "BOUNDARY_CHECK_EXECUTED",
+        "positive": "EX-42 的 factor=1 未进入支撑判断",
+        "negative": "EX-26 容量表达式违约且有枚举事实时各自判断，EX-03 的 C2 保留",
+        "check": "plan_candidate_order"
+      },
+      "admission": {
+        "real_representative": "SUPPORTED_UNDER_STATED_PATH",
+        "real_closest_negative": "SUPPORTED",
+        "necessary_and_exclusion": "DEFINED",
+        "adjacency": "DEFINED",
+        "classifier_regression": "PENDING",
+        "open": [
+          "单独的规划器作用域分类回归",
+          "另一真实枚举与合法剪枝样本可验证泛化"
+        ]
+      }
+    },
+    {
+      "id": "ADDR-01",
+      "decision": "REFINE",
+      "proposed_title": "合轴边界几何映射错误",
+      "object": "正确 UB 对象上的融合行区间、分组和应清零的无效行交集。",
+      "contract": "先求当前 S1G 融合行块与无效范围的精确交集，按交集相对块首的位置和长度清零。布局可以连续，地址单位可以一致。",
+      "wrong_action": "EX-14 旧例用 dealRowCount/gSize 的截断商估计块覆盖的 S1 界，以严格大于决定是否推进。进入处理分支时按组长推进 i。截断近似代替融合行的边界交集。",
+      "first_wrong_state": "足以触及无效下界的尾部块被排除。对 g=5、s1=1011、块长64、bottom=1023、actS1=1024 且 gIdx=0，旧 1011+12>1023 不成立，精确应清 4 行。",
+      "effect": "旧 Duplicate 没有处理这个非空范围。原 Issue 的实际块参数和最终该数值所在的消费路径未由固定 hunk 单独确认。",
+      "scope": "静态合组边界算式，旧体系可保留 address 上位关系。基址丢失、索引表示溢出和位宽换算各自检查。",
+      "necessary_anchors": [
+        "逻辑块与输出对象正确",
+        "融合坐标还原、组长和有效域合同",
+        "旧目标 offsets 及写入执行分支",
+        "给出一个实际可构造且交集不同的融合块"
+      ],
+      "exclusions": [
+        "L1 用密排式替代非连续真实 stride",
+        "L2 字节／元素单位换算错",
+        "N06 基址遗漏",
+        "分块对齐且两种方法的交集实际相同",
+        "只见无效行异常却没有旧写入证据"
+      ],
+      "relations": {
+        "N20": "复用正确对象内索引映射上位知识，窄化为维度融合的边界交集。",
+        "N23": "空间有效域交集与融合 addressing 可相交。是否真的贡献到聚合另审。",
+        "L1": "两者均可地址偏移错误，G07 的情形需要实际非连续布局。",
+        "L2": "V403 的组跨度字节值被用于 16-bit 元素指针，EX-14 融合位置单位一致。",
+        "C1/C2": "应清零行未清可进一步改变有效贡献，需要同作用域实际消费关系。EX-15 的 max 已可证非中性越域项作为对照。"
+      },
+      "history": [
+        "N20、FM-04、FM-06 的历史寻址谓词",
+        "N23 的空间几何近邻",
+        "EX-14 的固定旧 hunk",
+        "EX-15 的 C1 负对照"
+      ],
+      "diagnosis": "用组长和 gS1Idx 在融合行空间构造半开区间，求交后逐行映射到旧 Duplicate 的起点和次数。比较对齐／非对齐块及实际写入者。",
+      "injection": "条件可控时把交集选择换成按截断商近似边界，保留原地址单位和张量布局，观察具体受影响行。",
+      "generalization": "已有一个旧坑的条件反例。暂缺相异算子中同机制、路径派发及最终消费者同版证据。",
+      "regression": {
+        "status": "BOUNDARY_CHECK_EXECUTED",
+        "positive": "EX-14 的指定融合块应清4行但旧门槛返回假",
+        "negative": "G07 按真实视图处理、V403 按实际单位处理",
+        "check": "fused_row_intersection"
+      },
+      "admission": {
+        "real_representative": "LOCAL_CONDITIONAL_RELATION",
+        "real_closest_negative": "SUPPORTED",
+        "necessary_and_exclusion": "DEFINED",
+        "adjacency": "DEFINED",
+        "classifier_regression": "PENDING",
+        "open": [
+          "绑定原案实际融合块、中间清零输出与消费",
+          "区分一般组基址与界限几何",
+          "分类回归"
+        ]
+      }
+    },
+    {
+      "id": "REP-01",
+      "decision": "REFINE",
+      "proposed_title": "同址已写标量被按错误宽度解码",
+      "object": "固定位置的 GM scalar，生产者写入的字节表示及读端的数值解释。",
+      "contract": "正确读取 scalar 对象的 FP32 表示并用于 x1+s*(x2/x3)。它和三个 BF16 数据输入的元素类型分别约定。",
+      "wrong_action": "EX-21 的旧代码把正确的 scalar 基址转成 T* 后解引用 [0]。若生产者在 BF16 元素路径按明示合同写 FP32，T=BF16 的读取只取两个字节再转 float。",
+      "first_wrong_state": "取出的 scalarVal 已用不同表示解释。基址和被消费的语义参数可以正确。实际低位并非对所有 FP32 值都为 0。",
+      "effect": "受错误标量消费的乘加有误。示例小端存储 1.0f 的低两字节为 0，旧 BF16 解码得到 0，真实失败值、性能和 scalar_list 另证。",
+      "scope": "固定 PR6728 所证 SIMT 旧标量消费者，FP32 写端沿作者说明。PR6974 保留为关联。其他列表分支无同等证据。",
+      "necessary_anchors": [
+        "同一版选中的 scalar producer 及真实写入 dtype",
+        "旧读类型、位置和值与后续实际消费者",
+        "用至少一组字节区分数值转换与 reinterpret",
+        "固定输入槽、对象、地址及布局没有先发生其他根因"
+      ],
+      "exclusions": [
+        "V403 的非零索引地址错误，差异来自步长单位",
+        "P1 参数槽错绑",
+        "合法的同宽保位搬运或显式数值 Cast",
+        "NUM-01 按较窄运算策略正确解码后才丢失数值"
+      ],
+      "relations": {
+        "N12": "读写存储契约的明确子机制。EX-21 的窄范围不关闭 N12 原 ReduceAll 物理写回证据缺口。",
+        "N13": "核抽象位搬运合同。合法同宽重解释用于保位拷贝。错误算术和实际读宽分别证明。",
+        "P1": "EX-21 的 scalar 输入对象正确。",
+        "L2": "V403 的地址基址加错倍率。EX-21 在索引 0 已产生错值，可不涉及地址步长。",
+        "C2": "若错误尺度将某项变为零，仍需独立证明该下游关系。独立根动作落在错误解码。"
+      },
+      "history": [
+        "N12 的存储契约窄例",
+        "N13 的保位操作边界",
+        "EX-21 的 scalar 与 scalar_list 来源分离",
+        "EX-22 接口数量参数近邻"
+      ],
+      "diagnosis": "从 binding 和输入生产者到 kernel 参数，记录 scalar 的真实源、元素和 byte 地址、实际位宽、读取值、转型及算术消费。",
+      "injection": "保持标量地址和输出 dtype，仅把 reader 的读类型换成 BF16。对例如 little-endian 1.0f 的低两字节进行原始 byte 断言与明确 Cast 区分。",
+      "generalization": "一个明确标量消费家族。缺精确旧版 producer 到 arithmetic 的源码链、独立同机理事件及合法重解释例。",
+      "regression": {
+        "status": "BOUNDARY_CHECK_EXECUTED",
+        "positive": "EX-21 条件下用同地址读错表示",
+        "negative": "V403 的指针步长争议由 L2 处理",
+        "check": "scalar_representation"
+      },
+      "admission": {
+        "real_representative": "LOCAL_ACTION_SUPPORTED",
+        "real_closest_negative": "SUPPORTED",
+        "necessary_and_exclusion": "DEFINED",
+        "adjacency": "DEFINED",
+        "classifier_regression": "PENDING",
+        "open": [
+          "同版实际生产者和旧末端算术消费锚点",
+          "实际源码派发与分类回归"
+        ]
+      }
+    },
+    {
+      "id": "SYNC-01",
+      "decision": "REUSE",
+      "proposed_title": "同步通知代际身份缺失",
+      "object": "跨执行轮次复用的完成标记、发布者、等待条件及受保护的本轮 token。",
+      "contract": "允许旧标记存活时，当前轮的等待只能接受属于当前执行代际的发布，或者由可靠的清零和顺序不变量隔离它。",
+      "wrong_action": "EX-40 的发布和两处等待均使用相同固定 SHOULD_SEND_FLAG_VALUE。若旧标记仍可见，旧标记也能令新轮分支进入 DataCopy。",
+      "first_wrong_state": "等待成功状态没有绑定代际。实际旧轮与新轮 payload 的异同、观察到的时序和输出须单独验证。",
+      "effect": "条件上可复制并消费错误轮次 token。精度结果上的错接、漏收或重收结论均需相应实际路径。",
+      "scope": "固定 Dispatch PR757 的发布和读取。Combine PR764 保留为关联的另一对象。只在同一位置允许残留标记的时序下作静态推导。",
+      "necessary_anchors": [
+        "可复用状态、旧标记残留可达及合法时序",
+        "旧发布者和等待条件中的两轮标识",
+        "受保护的数据和等待成功后的实际复制／消费",
+        "可排除已覆盖整个生命周期的清零或握手"
+      ],
+      "exclusions": [
+        "EX-41 未参与 SyncAll 所致的死锁",
+        "仅有坏精度输出不见同步状态证据",
+        "同轮且生命周期隔离保证旧写不再可达",
+        "即使同步正确也会选错缓冲"
+      ],
+      "relations": {
+        "FM-05": "复用其事件身份与代际子机制。屏障参与者不足和搬运顺序属于各自的同步子型。",
+        "N03": "历史本体身份及碰撞继续保留。V→MTE3 交接证据不等于当前代际谓词。",
+        "N22": "正确的代际握手本身无法修复活跃缓冲覆盖。",
+        "CTRL-01": "正确同步仍错选对象与正确对象尚未发布的区别。",
+        "C1/C2/C3": "等待身份失效是上游。真实聚合证据充分时可附记项关系，超时或死锁不当作结果项遗漏。"
+      },
+      "history": [
+        "FM-05 的事件身份子机制",
+        "EX-40 的 Dispatch 发布/等待",
+        "EX-41 的 SyncAll 参与者近邻"
+      ],
+      "diagnosis": "同时标记 producer、地址、任务、执行代际与通知状态。构造当前轮尚未发布、旧轮标记仍可见的顺序，记录 wait 与下游读。",
+      "injection": "只撤去通知代际标签并保持上一轮标记。固定缓冲和发布顺序，捕获是否提前解除等待及实际 token 来源。",
+      "generalization": "旧 Dispatch 同一事件的两个判断只计一个家族。EX-41 为另一同步子型。缺新的真实代际实例、已验证输出链和安全复用对照。",
+      "regression": {
+        "status": "BOUNDARY_CHECK_EXECUTED",
+        "positive": "上一轮固定 flag 可以与新一轮同值比较成功",
+        "negative": "代际绑定或等价隔离下旧 flag 不能解除等待，EX-41 不按代际归类",
+        "check": "notification_generation"
+      },
+      "admission": {
+        "real_representative": "LOCAL_CONDITIONAL_RELATION",
+        "real_closest_negative": "SUPPORTED",
+        "necessary_and_exclusion": "DEFINED",
+        "adjacency": "DEFINED",
+        "classifier_regression": "PENDING",
+        "open": [
+          "证明目标版本实际允许的跨轮交叉顺序和异常 token 对精度输出的消费",
+          "可追溯安全复用和分类回归"
+        ]
+      }
+    }
+  ]
+}

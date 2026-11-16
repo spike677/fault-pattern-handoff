@@ -1,0 +1,110 @@
+{
+  "schema": "history-boundary-review/0.4.1",
+  "input_commit": "dfca7e1dcc1cc11a060b302244dc388841a6fc94",
+  "current_namespace": "MECH-v0.3",
+  "historical_scope": "0.4 历史对照中标为部分重叠的十三个历史 ID，按当时已经登记的每一叶级关联展开。",
+  "distinct_historical_ids": 13,
+  "distinct_pairs": 21,
+  "distinct_fixed_ex_referenced": 26,
+  "pair_decision_counts": {
+    "SAME_MECHANISM": 0,
+    "PARENT_CHILD": 1,
+    "PARTIAL_OVERLAP": 14,
+    "DIFFERENT_MECHANISM": 1,
+    "UNRESOLVED": 5
+  },
+  "source_layers": {
+    "EXACT_FIRST_PARENT": "核对修复 Git 对象的直接父版本及文件。旧 hunk 与实际父代码逐行吻合。",
+    "PATCH_OLD_SIDE": "固定修复版本、原 PR files 与 V16 归档的旧删除行和上下文。附加反向校验时，旧消费者按固定 blob 和完整 patch 验证，父 SHA 仍空。",
+    "PINNED_SOURCE_VIEW": "现行冻结 A 或已开封开发原件。记录固定文件摘要和精确局部引文哈希。",
+    "ARCHIVAL_REPORT_ONLY": "仅有归档陈述，不能用于确认源码根动作或叶级关系。"
+  },
+  "whole_historical_card_equivalences": [],
+  "scoped_action_equivalences": [
+    {
+      "pair_id": "FM-15__P1",
+      "relation": "PARENT_CHILD",
+      "historic_child_scope": "V16 冻结 IsFinite 的离线编译资源错源",
+      "current_parent": "MECH-v0.3:P1",
+      "same_action_in_case": "离线 context 与宿主全局是不同资源来源，旧 helper 实际取后者，直接形成错误参数来源。",
+      "evidence_ids": [
+        "FM15-resource-source",
+        "FM15-context-contract",
+        "EX29-v2-slots"
+      ]
+    },
+    {
+      "pair_id": "N07__P1",
+      "relation": "PARTIAL_OVERLAP",
+      "scope": "宽历史 N07 的属性槽位支系在 EX-29 处映到 P1，V16 冻结 epsilon 的同源数值转换缺失单独保留。",
+      "evidence_ids": [
+        "N07-epsilon",
+        "EX29-v2-slots"
+      ]
+    },
+    {
+      "pair_id": "N10__L2",
+      "relation": "PARTIAL_OVERLAP",
+      "scope": "历史 ForeachLerpList 的实际 Select 使用错误字节偏移是 L2。宽历史 N10 其余 mask 生成、逻辑和生命周期不合并。",
+      "evidence_ids": [
+        "N10-packed-diff",
+        "v03-L2-actual",
+        "EX12-mask-overwrite"
+      ]
+    }
+  ],
+  "shared_effect_with_distinct_actions": [
+    {
+      "affected_pairs": [
+        "FM-11__C1",
+        "FM-11__C2",
+        "N05__C2",
+        "N17__C2"
+      ],
+      "finding": "计划发错、选定阶段缺失、正确任务尾端未完成是各自首错。实际项遗漏可共同归为 C2 关系，错误规划只有经过真实消费者才能建立 C1/C2。",
+      "evidence_ids": [
+        "FM11-planner",
+        "EX04-nz-dsink",
+        "EX36-pipeline-drain",
+        "EX13-first-block"
+      ]
+    },
+    {
+      "affected_pairs": [
+        "N01__C2",
+        "N10__C2",
+        "N17__C2"
+      ],
+      "finding": "EX-01 同一两处掩码生命周期根可落多条检索关系。每个消费者链各一个独立动作。首包无写回缺证。",
+      "evidence_ids": [
+        "EX01-unconsumed",
+        "EX01-exact-consumers"
+      ]
+    },
+    {
+      "affected_pairs": [
+        "N08__C1",
+        "N10__C1",
+        "N25__C1"
+      ],
+      "finding": "EX-12 双 mask 合取缺失与 EX-15 不中性填充值可共得 C1，是两个独立的上游实现根。两个检索入口不得重复统计同一 EX-12 实例。",
+      "evidence_ids": [
+        "EX12-mask-overwrite",
+        "EX15-zero-pad",
+        "EX15-max-consumption"
+      ]
+    },
+    {
+      "affected_pairs": [
+        "N25__C2",
+        "N05__C2"
+      ],
+      "finding": "漏加数与漏整段都是 C2 的可能实现，Swish 漏乘已有项的系数改变求值，需另保留精确计算的独立候选。",
+      "evidence_ids": [
+        "N25-scale",
+        "EX04-nz-dsink",
+        "v03-C2-addend"
+      ]
+    }
+  ]
+}

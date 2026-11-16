@@ -1,0 +1,464 @@
+{
+  "schema": "history-boundary-review/0.4.1",
+  "input_commit": "dfca7e1dcc1cc11a060b302244dc388841a6fc94",
+  "current_namespace": "MECH-v0.3",
+  "historical_scope": "0.4 历史对照中标为部分重叠的十三个历史 ID，按当时已经登记的每一叶级关联展开。",
+  "distinct_historical_ids": 13,
+  "distinct_pairs": 21,
+  "distinct_fixed_ex_referenced": 26,
+  "pair_decision_counts": {
+    "SAME_MECHANISM": 0,
+    "PARENT_CHILD": 1,
+    "PARTIAL_OVERLAP": 14,
+    "DIFFERENT_MECHANISM": 1,
+    "UNRESOLVED": 5
+  },
+  "source_layers": {
+    "EXACT_FIRST_PARENT": "核对修复 Git 对象的直接父版本及文件。旧 hunk 与实际父代码逐行吻合。",
+    "PATCH_OLD_SIDE": "固定修复版本、原 PR files 与 V16 归档的旧删除行和上下文。附加反向校验时，旧消费者按固定 blob 和完整 patch 验证，父 SHA 仍空。",
+    "PINNED_SOURCE_VIEW": "现行冻结 A 或已开封开发原件。记录固定文件摘要和精确局部引文哈希。",
+    "ARCHIVAL_REPORT_ONLY": "仅有归档陈述，不能用于确认源码根动作或叶级关系。"
+  },
+  "scope_policy": "结论范围逐对指定，覆盖历史宽条款、冻结窄子型或固定代表时以 decision_scope 和 frozen_clause_evaluation 为准。",
+  "historical_ids_by_current_mode": {
+    "FM-04": {
+      "L1": "UNRESOLVED",
+      "L2": "PARTIAL_OVERLAP"
+    },
+    "FM-06": {
+      "L1": "UNRESOLVED"
+    },
+    "FM-11": {
+      "C1": "UNRESOLVED",
+      "C2": "PARTIAL_OVERLAP"
+    },
+    "FM-15": {
+      "P1": "PARENT_CHILD"
+    },
+    "FM-20": {
+      "L1": "DIFFERENT_MECHANISM"
+    },
+    "N01": {
+      "C2": "PARTIAL_OVERLAP"
+    },
+    "N05": {
+      "C2": "PARTIAL_OVERLAP"
+    },
+    "N07": {
+      "P1": "PARTIAL_OVERLAP",
+      "P2": "UNRESOLVED"
+    },
+    "N08": {
+      "C1": "PARTIAL_OVERLAP",
+      "C2": "PARTIAL_OVERLAP"
+    },
+    "N10": {
+      "L2": "PARTIAL_OVERLAP",
+      "C1": "PARTIAL_OVERLAP",
+      "C2": "PARTIAL_OVERLAP"
+    },
+    "N17": {
+      "C2": "PARTIAL_OVERLAP"
+    },
+    "N23": {
+      "C1": "UNRESOLVED",
+      "C2": "PARTIAL_OVERLAP"
+    },
+    "N25": {
+      "C1": "PARTIAL_OVERLAP",
+      "C2": "PARTIAL_OVERLAP"
+    }
+  },
+  "pairs": [
+    {
+      "pair_id": "FM-04__L1",
+      "history_id": "FM-04",
+      "current_id": "L1",
+      "relation": "UNRESOLVED",
+      "action": "HOLD_FOR_EVIDENCE",
+      "scope": "历史交集待核。现有 EX 是实证近邻。",
+      "frozen_clause_evaluation": "历史说明同时需要对象外足迹，固定的旧侧只闭合环槽碰撞。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "原报告执行二进制及实际对象越界待核。固定父没有证明密排视图假设。",
+      "ruling_basis": "L1 必须证明旧数据仍为受支持的原非连续布局，并实际用密排式替代其步长。FM-04 原条款另有超出对象边界条件，地址在合法对象内重合即可覆盖。",
+      "evidence_ids": [
+        "FM04-actual-parent",
+        "EX14-folded-rows",
+        "EX39-slice-plan",
+        "v03-L1-actual"
+      ]
+    },
+    {
+      "pair_id": "FM-04__L2",
+      "history_id": "FM-04",
+      "current_id": "L2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "V403 实证窄交叉，历史代表未迁移。",
+      "frozen_clause_evaluation": "FM-04 历史宽定义存在条件性交集。固定 AllGather 非量化代表仍只证轮槽相撞。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "AllGatherMatmul 原现场越界待核。V403 交叉只用 PackB 写端，不用发生未定义行为后读端是否运行作证。",
+      "ruling_basis": "L2 要核 element、byte 或 bit 的实际解释与转换。FM-04 历史约束还需出界足迹。EX-14 合轴截断与原版 AllGather 的环槽碰撞不支持单位误换。",
+      "evidence_ids": [
+        "FM04-actual-parent",
+        "EX14-folded-rows",
+        "EX20-cursor",
+        "v03-L2-actual",
+        "v03-L2-grouped-conv"
+      ]
+    },
+    {
+      "pair_id": "FM-06__L1",
+      "history_id": "FM-06",
+      "current_id": "L1",
+      "relation": "UNRESOLVED",
+      "action": "HOLD_FOR_EVIDENCE",
+      "scope": "历史缓存代表未证，冻结 EX 仅用作近邻。",
+      "frozen_clause_evaluation": "原档支持对象与症状。无条件式直接故障判决。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "需可版本固定的缓存代表，同一 token/batch 真实槽、视图和旧读写公式。",
+      "ruling_basis": "错选块表下标与正确槽内用密排公式寻址属于不同检查。仅见缓存名或普通连续 stride 无法闭合 L1。",
+      "evidence_ids": [
+        "FM06-historical-report",
+        "EX20-cursor",
+        "EX39-slice-plan",
+        "v03-L1-actual"
+      ]
+    },
+    {
+      "pair_id": "FM-11__C1",
+      "history_id": "FM-11",
+      "current_id": "C1",
+      "relation": "UNRESOLVED",
+      "action": "HOLD_FOR_EVIDENCE",
+      "scope": "规划缺陷已证，C1 结合待核。",
+      "frozen_clause_evaluation": "冻结代表证明计划量错，未证明逻辑项进入目标或重复计数。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "补 EX-13 或 ForeachAddListV2 的受评实际消费者及一项无资格非中性贡献。",
+      "ruling_basis": "额外任务描述符或 mask 粒度错误本身无法证明 C1 所需的非中性参与。EX-13 未闭合当前目标的旧消费者。",
+      "evidence_ids": [
+        "FM11-planner",
+        "EX13-first-block",
+        "EX39-slice-plan",
+        "EX12-mask-overwrite"
+      ]
+    },
+    {
+      "pair_id": "FM-11__C2",
+      "history_id": "FM-11",
+      "current_id": "C2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "历史宽条款的条件性交叉。",
+      "frozen_clause_evaluation": "ForeachAddListV2 固定代表支持规划根。EX-34 能说明漏项条件，未证明 N11 容量或所有规划错误并为 C2。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "保留 M 收紧、实际路径和漏项同时成立的条件。原 shape、实际设备触发和其他 pad 方向未核。",
+      "ruling_basis": "FM-11 根在计划形状或任务分配，C2 需要实际漏项。容量计费、错误 gather 切分与足够容量下的纯内核归约早退有各自首错。",
+      "evidence_ids": [
+        "FM11-planner",
+        "EX34-pad-bound",
+        "EX03-kernel-consumer",
+        "EX39-slice-plan"
+      ]
+    },
+    {
+      "pair_id": "FM-15__P1",
+      "history_id": "FM-15",
+      "current_id": "P1",
+      "relation": "PARENT_CHILD",
+      "action": "REUSE_SCOPED",
+      "scope": "固定 FM-15 子型是子，MECH-v0.3:P1 是父。",
+      "frozen_clause_evaluation": "仅 V16 冻结 context 错源子型挂 P1，原宽定义不作整条兼容迁移。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "旧离线运行的目标与宿主配置值、具体误差现场未给。宽条款中的其他入参处理另需核证。",
+      "ruling_basis": "P1 也覆盖属性槽和输入改接。FM-15 历史宽文字还提及目标选路和传递，只有固定错源条款是 P1 的窄子型。",
+      "evidence_ids": [
+        "FM15-resource-source",
+        "EX29-v2-slots",
+        "v03-P1-and-C1-actual",
+        "FM15-context-contract",
+        "EX22-length"
+      ]
+    },
+    {
+      "pair_id": "FM-20__L1",
+      "history_id": "FM-20",
+      "current_id": "L1",
+      "relation": "DIFFERENT_MECHANISM",
+      "action": "KEEP_SEPARATE",
+      "scope": "裁定目前有固定源码的代表。",
+      "frozen_clause_evaluation": "冻结 QBMM 条款为描述字段错写。宽私有视图条款保留潜在 L1 边界。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "旧 V18 的私有 as_strided 抱怨缺实际读写。低 rank 抛错或越界行为未核。",
+      "ruling_basis": "旧侧首错为为 ND 生产不相容的 metadata。真实旧读写是否忽略 strides 或用了密排公式仍是单独命题。",
+      "evidence_ids": [
+        "FM20-actual-parent",
+        "EX39-slice-plan",
+        "EX14-folded-rows",
+        "v03-L1-actual"
+      ]
+    },
+    {
+      "pair_id": "N01__C2",
+      "history_id": "N01",
+      "current_id": "C2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "历史宽条款的状态复位有证交集。",
+      "frozen_clause_evaluation": "V16 冻结 N01 的返回缓冲初值不是 EX-01 已证根的同一子型。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "设备现场与早期历史关联未外推。补证独立保留，本地静态两根。",
+      "ruling_basis": "状态陈旧与逻辑成员遗漏分别取证。SFA 丢预定义零输出义务不自动证明有必要计算项被跳过。",
+      "evidence_ids": [
+        "N01-zero-init",
+        "EX01-unconsumed",
+        "EX01-exact-consumers",
+        "EX09-extra-decrement",
+        "EX15-zero-pad"
+      ]
+    },
+    {
+      "pair_id": "N05__C2",
+      "history_id": "N05",
+      "current_id": "C2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "固定 EX-04 证明完整阶段与 C2 部分交集。",
+      "frozen_clause_evaluation": "历史代表 FusedMatmul 的模板准入先归 FM-12。采用 EX-04 支持 N05 本义，不改变原代表记录。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "限已启用 sink 的 NZ 路径，运行 shape 和各并行子路径未确证。",
+      "ruling_basis": "N05 约束缺一完整阶段，C2 可以只漏一路加数。历史 FusedMatmul 的 IsCapable 是允许了无融合模板的主根，缺算后果按消费证据另列。",
+      "evidence_ids": [
+        "N05-template-guard",
+        "EX04-nz-dsink",
+        "EX03-kernel-consumer"
+      ]
+    },
+    {
+      "pair_id": "N07__P1",
+      "history_id": "N07",
+      "current_id": "P1",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "宽定义部分交集，冻结代表机制分离。",
+      "frozen_clause_evaluation": "V16 冻结 N07 只证同源转型，宽条款中的绑定子型才映到 P1。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "EX-29 结果限固定构图调用。没有种子序列和输出运行。多槽错接由同一处调用引起。",
+      "ruling_basis": "P1 的必要条件是非等价来源，epsilon 的来源与角色正确。EX-22 正确长度参数传 sizeof 值不构成错源。",
+      "evidence_ids": [
+        "N07-epsilon",
+        "EX29-v2-slots",
+        "v03-P1-and-C1-actual",
+        "EX22-length",
+        "EX23-scale-propagation",
+        "EX45-attr-type"
+      ]
+    },
+    {
+      "pair_id": "N07__P2",
+      "history_id": "N07",
+      "current_id": "P2",
+      "relation": "UNRESOLVED",
+      "action": "HOLD_FOR_EVIDENCE",
+      "scope": "旧宽缺省子条款待跨例复核。",
+      "frozen_clause_evaluation": "冻结类型转换无特殊状态必要事实。EX-19 未晋升为 P2。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "补同版 0/负 override 的接口合同和旧入参传递。即使补齐，也应独立按冻结 P2 的方向性条件审查。",
+      "ruling_basis": "P2 冻结谓词要证明正确读到的特殊值被当作不适用的有效数据消费。EX-19 描述的是普通负值可能被误当缺省，方向相反。现有固定片段缺对应版本完整状态合同。",
+      "evidence_ids": [
+        "N07-epsilon",
+        "EX19-divisor-guard",
+        "v03-P2-actual",
+        "EX22-length"
+      ]
+    },
+    {
+      "pair_id": "N08__C1",
+      "history_id": "N08",
+      "current_id": "C1",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "固定 EX-12 的有条件交集。",
+      "frozen_clause_evaluation": "冻结 Signbit 与 C1 分离。宽布尔取交集有据时保留 C1。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "EX-12 限实际同时满足两 mask 不一致且存在非中性值的旧路径。未报告残值、调度或现场输出的精确数值。",
+      "ruling_basis": "冻结 Signbit 的 x<0 直接产布尔结果，负零的布尔值错无额外计算项。在 EX-13 或 EX-05 先查目标消费者。",
+      "evidence_ids": [
+        "N08-signbit",
+        "EX12-mask-overwrite",
+        "EX13-first-block",
+        "EX05-bias-guard"
+      ]
+    },
+    {
+      "pair_id": "N08__C2",
+      "history_id": "N08",
+      "current_id": "C2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "历史宽条款可解释门控错误和必要产出遗漏的局部交叉。",
+      "frozen_clause_evaluation": "冻结 Signbit 条款与 C2 分离。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "仅按固定非有限输入和该 DAG 的输出角色。原 shape、threshold 及 host 修复与本 DAG 的版本关系分开。",
+      "ruling_basis": "通常有限值上的等价谓词不足以对特殊值外推。Signbit(-0) 只证布尔位错误。EX-08 的同项普通权重偏小也不能一概称为漏项。",
+      "evidence_ids": [
+        "N08-signbit",
+        "EX06-threshold-mask",
+        "EX08-inf-expression",
+        "EX05-bias-guard"
+      ]
+    },
+    {
+      "pair_id": "N10__L2",
+      "history_id": "N10",
+      "current_id": "L2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "历史宽的部分交集。代表执行动作相同。",
+      "frozen_clause_evaluation": "历史归 N20 的检索关联仍保留。具体动作可直接复用 L2。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "原现场完整 tensor 列表未知。宽 N10 整条不改为 L2。",
+      "ruling_basis": "N10 还描述 mask 逻辑覆盖、状态耗尽、类型错误。EX-12 无单位转换，EX-01 新行使用耗尽计数，必须分别审。",
+      "evidence_ids": [
+        "N10-packed-diff",
+        "v03-L2-actual",
+        "EX12-mask-overwrite",
+        "EX01-unconsumed",
+        "EX10-mask-width"
+      ]
+    },
+    {
+      "pair_id": "N10__C1",
+      "history_id": "N10",
+      "current_id": "C1",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "历史宽条款局部交集。",
+      "frozen_clause_evaluation": "ForeachLerpList 旧真实 EX 根仅够判 L2，扩展到 C1 还需确定贡献和目标。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "静态条件范围限排除项的非中性实际消费。不依据 mask 名称或复制次数给其他 C1。",
+      "ruling_basis": "正确地址和单位也能出错。EX-13 的首块代理目前缺实际各受评输出的消费者核对。EX-15 没有 mask 合取问题，作用来自非中性 padding。",
+      "evidence_ids": [
+        "N10-packed-diff",
+        "EX12-mask-overwrite",
+        "EX13-first-block",
+        "EX15-zero-pad",
+        "EX15-max-consumption"
+      ]
+    },
+    {
+      "pair_id": "N10__C2",
+      "history_id": "N10",
+      "current_id": "C2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "历史宽条款中有明确消费证据的交集。",
+      "frozen_clause_evaluation": "旧 ForeachLerpList 是具体错地址。计数和成员遗漏不能由该例单独推出。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "EX-09 只对存在实际后半段和消费的路径复用 C2。EX-01 精确父补证单列。",
+      "ruling_basis": "旧计数耗尽、读取或错 mask 地址不能替代证明漏项的要求。EX-01 无消费段的原封存包保持缺证。",
+      "evidence_ids": [
+        "EX01-unconsumed",
+        "EX01-exact-consumers",
+        "EX09-extra-decrement",
+        "EX12-mask-overwrite",
+        "N10-packed-diff"
+      ]
+    },
+    {
+      "pair_id": "N17__C2",
+      "history_id": "N17",
+      "current_id": "C2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "旧宽执行义务与 C2 的局部交集。",
+      "frozen_clause_evaluation": "V16 冻结尾长代表和 EX-36 的流水排空属于不同实现子型。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "EX-36 限前序 taskId 已建立具体待完成贡献且受评实际进入分支。保留硬件和输出现场缺口。",
+      "ruling_basis": "C2 可在正常非尾轮次漏掉必需加数。游标推进错也可能只改源，必须验证实际所失贡献。",
+      "evidence_ids": [
+        "N17-tail",
+        "EX36-pipeline-drain",
+        "EX20-cursor",
+        "EX09-extra-decrement"
+      ]
+    },
+    {
+      "pair_id": "N23__C1",
+      "history_id": "N23",
+      "current_id": "C1",
+      "relation": "UNRESOLVED",
+      "action": "HOLD_FOR_EVIDENCE",
+      "scope": "宽几何条款的 C1 交叉缺少决定证据。",
+      "frozen_clause_evaluation": "负 padding 冻结代表是少算梯度，不支持 C1。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "补固定目标的合格源域、旧实际消费及无资格项的非中性贡献。EX-44 快路径和现场 NaN/Inf 不外推。",
+      "ruling_basis": "N23 需要几何合同。C1 需要逻辑成员身份、资格和实际参与。邻点坐标或权重变换不能单独证明参与的资格。",
+      "evidence_ids": [
+        "N23-edge",
+        "EX33-equal-overlap",
+        "EX44-interpolation-weight",
+        "EX15-zero-pad",
+        "EX15-max-consumption"
+      ]
+    },
+    {
+      "pair_id": "N23__C2",
+      "history_id": "N23",
+      "current_id": "C2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "历史宽有据交集。",
+      "frozen_clause_evaluation": "V16 冻结负 padding 代表确立 C2 的一个条件型几何子型。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "PadV3Grad 证据限给定非空 edge 区和所读旧体，不声称有实际设备 Dump。",
+      "ruling_basis": "几何系数出错可能保留所有项。C2 的其他漏项不要求空间坐标。EX-44 正是相同坐标族中的系数近邻。",
+      "evidence_ids": [
+        "N23-edge",
+        "v03-C2-actual",
+        "EX34-pad-bound",
+        "EX33-equal-overlap",
+        "EX44-interpolation-weight"
+      ]
+    },
+    {
+      "pair_id": "N25__C1",
+      "history_id": "N25",
+      "current_id": "C1",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "已证历史宽条款的中性元交叉。",
+      "frozen_clause_evaluation": "冻结乘性系数根与 C1 分离。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "仅限有实体 padding 的有限全负输入。NaN、并列 argmax 与实际现场值未核。",
+      "ruling_basis": "N25 冻结 Swish 梯度遗漏乘性系数，正常成员身份未被改变。EX-16 零分母逻辑也要单独验证。",
+      "evidence_ids": [
+        "N25-scale",
+        "EX15-zero-pad",
+        "EX15-max-consumption",
+        "EX08-inf-expression",
+        "EX16-zero-divisor"
+      ]
+    },
+    {
+      "pair_id": "N25__C2",
+      "history_id": "N25",
+      "current_id": "C2",
+      "relation": "PARTIAL_OVERLAP",
+      "action": "MAP_WITH_SCOPE",
+      "scope": "宽定义的部分交集，冻结代表为不同机制。",
+      "frozen_clause_evaluation": "冻结 GroupNormSwishGrad 只证梯度乘性系数。不能并成 C2。",
+      "adjust_current_mode": false,
+      "remaining_evidence": "现有 EX 用于判 EX 公式/乘除近邻，漏加数交叉由 Quadric 已开封补证证明。无新独立盲测。",
+      "ruling_basis": "单一乘性系数遗漏、用乘替除或保持同一项但有限精度近似均不能推出缺独立逻辑项。",
+      "evidence_ids": [
+        "N25-scale",
+        "EX17-scale-direction",
+        "EX08-inf-expression",
+        "EX25-approximation",
+        "v03-C2-addend"
+      ]
+    }
+  ],
+  "formal_acceptance_proposals": []
+}

@@ -1,0 +1,49 @@
+cluster_id,compared_case,neighbor,kind,decision,scope
+conversion,FM-08,N15,HISTORICAL_COMPARISON,二者都在转换后失真。一个是求补前的过早窄化，另一个是在正确末端采用定向取整。,STATIC_ROOT / STATIC_ROOT
+overflow,FM-17,FM-08,HISTORICAL_COMPARISON,"前者首个数学中间量超格式范围，后者在有限 [0,1] 内输入舍入到错误端点。",STATIC_ROOT / STATIC_ROOT
+evaluation,FM-09,FM-10,HISTORICAL_COMPARISON,稳定求值表达式与同类型的浮点加法树保持独立子型。,STATIC_ROOT / STATIC_CONDITIONAL
+integer-representation,FM-16,N06,HISTORICAL_COMPARISON,均影响地址。FM-16 算法可正确但序列落入 32 位回绕，N06 的表达式本身缺组基址。,STATIC_CONDITIONAL / STATIC_ROOT
+formula-domain,FM-23,N06,HISTORICAL_COMPARISON,偏置被错误乘上正确尺度与公式正确但取错尺度组分别判。,STATIC_CONDITIONAL / STATIC_ROOT
+special-data,N16,FM-17,HISTORICAL_COMPARISON,有既存 NaN 的传播违约和有限输入经算术产生 Inf 属不同首错。,UNRESOLVED_CAUSAL_CHAIN / STATIC_ROOT
+dispatch,FM-12,FM-14,HISTORICAL_COMPARISON,前者已有可满足合同的执行策略却错选，后者后端未支持的请求未被拒绝。,STATIC_CONDITIONAL / RELIABILITY_BOUNDARY
+validation,N21,FM-02,HISTORICAL_COMPARISON,入口错误拒绝逻辑视图与出口写出错误形状描述分开。,STATIC_CONDITIONAL / STATIC_ROOT
+empty-path,FM-01,N02,HISTORICAL_COMPARISON,零工作错启调度与空 index 有非空输出但错早退为相反义务。,RELIABILITY_BOUNDARY / STATIC_CONDITIONAL
+result-metadata,FM-02,N09,HISTORICAL_COMPARISON,写错误输出 shape 与返回值内部的坐标编码分别判，均需定位真实消费者。,STATIC_ROOT / STATIC_CONDITIONAL
+buffer-extent,N11,FM-19,HISTORICAL_COMPARISON,分配容量估算和物理访问跨度是两个状态。现有容量过小不能直接推出已访问越界。,STATIC_CONDITIONAL / STATIC_CONDITIONAL
+address-geometry,N06,FM-16,HISTORICAL_COMPARISON,组基址从算式中缺失与正确几何值因存储位宽不足回绕区分。,STATIC_ROOT / STATIC_CONDITIONAL
+representation-handoff,N12,N13,HISTORICAL_COMPARISON,同地址的字节宽度解码与同宽位串被真正算术改写为两种故障。,UNRESOLVED_CAUSAL_CHAIN / STATIC_CONDITIONAL
+dependency-lifetime,FM-05,N22,HISTORICAL_COMPARISON,前者等待或事件身份失配。后者顺序正确也可直接覆盖仍活跃的数据。,STATIC_CONDITIONAL / STATIC_ROOT
+conversion,FM-08、NUM-01,E06,ADDITIONAL_ROOT,逐次窄更新与一次输入窄化是不同子型。,同一独立事件，只支持指定 CPU one-chunk 路径，未作为本轮新运行。
+conversion,E06、FM-10,EX-37,NEAR_NEIGHBOR,两案的指定舍入方向不同。EX-37 与改加法树也分开。,具体原失败 dtype/shape 与旧实际 rank 树未恢复，按约定与可区分示例使用。
+conversion,N15、FM-17,EX-35,SUPPORT_SUBTYPE,转换处必须按合同饱和，与此前的活跃算术已经溢出为不同首错。,是关联多路径材料。原 dtype/shape、原控制状态和现场比例仍限制精确溯因。
+overflow,FM-17、FM-28、NUM-01,V406,ADDITIONAL_ROOT,溢出发生在平方而非累加中，不能当作 FM-28 正例。,旧范围和具体数值经静态重算。V405 不同事件的完整副本重复是 C3，分开使用。
+overflow,FM-17,EX-24,NEAR_NEIGHBOR,输入已非有限的传播错误不属于有限输入制造 Inf。,原 Cdist 的适用动作限此固定 NaN 路径。
+evaluation,FM-09、NUM-02,G05,ADDITIONAL_ROOT,同为在有限精度上求等价数学量，原始两矩相减消减与 log1p 小量吸收仍是不同子型。,作者另报特定宽度 NaN，未证明该次调用确实派发此小核。
+evaluation,FM-09,EX-25,NEAR_NEIGHBOR,受误差预算约束的近似幅度与等价式因舍入失稳需要独立判据。,固定近似算法的调整有据。原失败域与近似预算尚需另证，不将任意省略级数项判 C2。
+evaluation,FM-09,EX-08,NEAR_NEIGHBOR,同一实数规则下已不等价，区别有限精度吸收、消减和加法树。,实际资格和漏项需逐目标梯度单独证明。
+evaluation,FM-10,EX-37,NEAR_NEIGHBOR,变更每步/末端的精度与更换同类型的配对顺序为独立动作。,未固定小算子完整 rank 拓扑。
+integer-representation,FM-29,EX-38,NEAR_NEIGHBOR,从 FP32 RNG 中转触发序列分块变化不证明整数先经 FP32 再恢复为地址。,不能以补丁的切分强化推出旧 32768 元素阈值。
+integer-representation,FM-16,EX-09,NEAR_NEIGHBOR,remaining 被额外递减是更新动作，值域容量可充足。与 32 位表示不足区分。,只有实际必要后半 lane 无其他路径时判 C2。
+formula-domain,FM-23,EX-08,NEAR_NEIGHBOR,精确离散谓词被连续式替换不同于迁移偏置到错误数值域。,不从权重近似自动推断缺项。
+special-data,N16,EX-24,SUPPORT_SUBTYPE,固定 Cdist 可以支持已有特殊数据传播子型，不替代未闭环 GridSampler。,原证据限同版本 fminf 原语和已定位的 Cdist 路径。
+special-data,N16、P2,EX-43,SUPPORT_SUBTYPE,内部阶段标记送入 max/sub 与 NaN 传播及接口参数 P2 各不同。,全无效分片的规定输出及被消费的无资格贡献还需独立核对。
+special-data,N16、C2,EX-06,CONDITIONAL_PROJECTION,只有同版合同要求透传该 grad，且旧选择零实际交给输出时才支持 C2。,不按特殊接口参数 P2。NaN 透传合同仍是适用条件。
+dispatch,FM-12,EX-11,SUPPORT_SUBTYPE,另一个真实算子的模板资格错误。其守卫并非与 FusedMatmul 完全等价。,后续超范围需证明实际批号和地址。正确 mask 数据来源可不变。
+dispatch,FM-12、N26、CTRL-02,EX-42,CANDIDATE_REPRESENTATIVE,错误出现在生成计划前，无已存在的坏执行路径。反对把搜索候选当 C2 数据项。,只有存在唯一可行边界候选的预算才成立，需再找另一规划器与合法淘汰对照。
+dispatch,N26、P2,EX-19,UNRESOLVED_NEIGHBOR,旧 guard 改动有据，但不能从修复 diff 判断普通负 override 的契约。,原版本合法负 override、0 的约定和实际消费者未齐。
+validation,N21、N12,EX-27,NEAR_NEIGHBOR,已注册错误输出 dtype 后被编译拒绝，没有物理读写宽度违约证据。,本案不是设备精度支持，界定在接口编译作用域。
+empty-path,FM-01、N02、C2,EX-36,NEAR_NEIGHBOR,最后一批的局部空工作不等价于整个操作没有有效在途任务。,旧消费者无替代 drain 且特定 contribution 实际未到达才计 C2。
+empty-path,FM-01、FM-05,EX-41,RELIABILITY_NEIGHBOR,无计算任务的执行者仍可能负有同步参与义务。,影响屏障进展。没有具体缺少精度贡献的结果链。
+result-metadata,FM-02、N09,EX-27,NEAR_NEIGHBOR,输出类型签名、输出 shape 与返回索引值的编码分别在不同生产阶段。,属于编译作用域。
+buffer-extent,N11、FM-19,EX-26,NEAR_NEIGHBOR,并存缓冲总量的预算少计，区别单实体容量和已发出实际越宽的数据搬运。,未定位实机破坏地址。
+buffer-extent,N11、C2,EX-03,CONDITIONAL_PROJECTION,中间容量风险与 SmallR 提前返回是两个需要各自证明的动作。,原实际 ubFactor/shape 未复跑。只有实际缺失项可计 C2，不从固定 512 B 推内存破坏。
+buffer-extent,N11,EX-39,NEAR_NEIGHBOR,对齐在可用容量内也可能切错语义工作单元，与容量本身低估分开。,限固定 gather 切分条件。
+address-geometry,N06、L1、L2、ADDR-01,EX-14,CANDIDATE_REPRESENTATIVE,同属对象内地址几何缺项，遗漏组基址与丢合轴余数分别定义。,寻址上位已有据。每个具体清零/计算成员真实的范围仍待核。
+representation-handoff,N12、N13、REP-01,EX-21,PARTIAL_SUPPORT,若 T=BF16 的旧受评路径已生成 FP32 scalar，读取会错解同一对象。需要确定写与读的实际宽度，各自对应原调用。,旧生产者、实际乘加及首个错误输出待核。ReduceAll A3 与 list 路径另有取证范围。
+representation-handoff,N12,EX-27,NEAR_NEIGHBOR,输出签名失配在编译期已拒绝，不能为实际物理表示冲突作正例。,无设备写宽或消费者。
+representation-handoff,N12、N22、FM-05、P1、L2、CTRL-01,EX-32,INDEPENDENT_PROPOSAL,旧首错可定位为读待写 D 而非选中的中间结果 S。与正确对象内类型、存储生存期及接口参数来源分别判。,未取得完整父提交与隔离同步变化的实机证据。单一事件可登记候选，当前不满足独立反向对照。
+dependency-lifetime,FM-05、N03、SYNC-01,EX-40,CANDIDATE_REPRESENTATIVE,完成代际与缺少核内生产等待独立，前者需当前轮次通知受证。,未有真实跨轮 wait 与下一缓冲内容的运行追踪。
+dependency-lifetime,N22、C1,EX-30,CONDITIONAL_PROJECTION,已中性化 UB 被后来搬入覆盖是根动作，归约纳入不合格 NaN 是有条件的 C1 下游。,要有实际二次搬入和随后归约，未知原故障 tile。
+dependency-lifetime,FM-05、N22、C3,EX-28,RELIABILITY_NEIGHBOR,句柄释放配对错误与逻辑计算重数分属对象。,只见资源归还配对，不能推精度影响。
+dependency-lifetime,N22,EX-31,RELIABILITY_NEIGHBOR,语言级借用对象失效与写操作覆盖独立。,旧材料支持可接受域异常线索，无精度传播。
+dependency-lifetime,N22、FM-05,EX-02,NEAR_NEIGHBOR,保留同一缓存地址但错将前相位的内容作为仍有效，需查语义缓存失效而非可见性。,新增检查是否保守重载不能推出只在当前 phase 的通用行为。

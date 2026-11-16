@@ -1,0 +1,530 @@
+{
+  "review_version": "0.4.1",
+  "frozen_review_commit": "dfca7e1dcc1cc11a060b302244dc388841a6fc94",
+  "method": "历史身份逐条入研究簇。簇内不同错误动作保留子型。固定代表、近邻、补充家族和可靠性分别登记。",
+  "scope": "实际源码、固定 diff 旧侧与有明确限制的补充归档。当前未新增设备运行。",
+  "counts": {
+    "historical_identities": 27,
+    "clusters": 14,
+    "historical_evidence_states": {
+      "RELIABILITY_BOUNDARY": 2,
+      "STATIC_ROOT": 8,
+      "STATIC_CONDITIONAL": 11,
+      "UNRESOLVED_OLD_PATH": 3,
+      "UNRESOLVED_CAUSAL_CHAIN": 3
+    },
+    "support_or_neighbor_rows": 34,
+    "comparison_rows": 48,
+    "formal_modes_admitted": 0
+  },
+  "clusters": [
+    {
+      "id": "conversion",
+      "title": "数值转换时机与模式",
+      "priority": "P0",
+      "contract": "在同版约定指定的运算和存储边界使用相应类型和转换规则，保留下一运算仍需要的精度。",
+      "wrong_action": "在精度仍被需要时降低表示精度，或在指定转换点采用违约的舍入或饱和模式。",
+      "failure_mechanism": "数学式及数据项可以相同，首差发生在转换时点、状态类型或转换模式。后续升精无法恢复已丢信息。",
+      "v03_boundary": "同一输入对象上的转换与 P1 错源分开。小项舍为零仍可被执行，C2/C3 需核逻辑账本。L2 需位置换算。",
+      "recommendation": "SPLIT_SUBTYPES",
+      "gaps": "为窄累加补同一精度约定下的第二独立算子与合法输出降精对照。FM-24 的 Logspace 旧路径及消费者待补。",
+      "proposal_links": [
+        "NUM-01"
+      ],
+      "subtypes": [
+        {
+          "name": "输入过早窄化",
+          "historical_ids": [
+            "FM-08",
+            "FM-24"
+          ],
+          "scope": "DropOutV3 的补数在旧 FP32 下变零。Logspace 仅为待核检索子型。"
+        },
+        {
+          "name": "转换舍入或饱和配置错误",
+          "historical_ids": [
+            "N15"
+          ],
+          "scope": "Sqrt 的末端 CEIL/RINT 可分。EX-35 还须分别定位局部策略与全局控制。"
+        },
+        {
+          "name": "逐次归约状态类型或舍入位置不符",
+          "historical_ids": [],
+          "scope": "E06 在每次更新过窄。EX-37 不落实合同要求的逐 rank 舍入。"
+        }
+      ],
+      "historical_ids": [
+        "FM-08",
+        "FM-24",
+        "N15"
+      ],
+      "representative_ex": [
+        "EX-35"
+      ]
+    },
+    {
+      "id": "overflow",
+      "title": "有限输入的中间浮点溢出",
+      "priority": "P0",
+      "contract": "适用有限输入存在可接受且可表示的目标结果，活跃路径的中间表示和运算顺序应允许该结果到达消费者。",
+      "wrong_action": "先做可避免的放大，或选用范围不足的中间格式，再消费生成的 Inf 或错误值。",
+      "failure_mechanism": "首个活跃中间值越过实际格式有限范围，后续乘零、归约或回写无法恢复约定值。",
+      "v03_boundary": "DropOutV3 仍取零掩码，有限值先溢出。FSDP 两个互斥分片各贡献一次，需分别排除 C1 和 C3。",
+      "recommendation": "KEEP_CANDIDATE",
+      "gaps": "按子型绑定首溢出格式、运算和消费者。FM-28 要确证累加器更新步骤超界。V406 是 SUM 之前的平方。",
+      "proposal_links": [
+        "NUM-01"
+      ],
+      "subtypes": [
+        {
+          "name": "先放大再中性化",
+          "historical_ids": [
+            "FM-17"
+          ],
+          "scope": "有限 x 且 mask=0 时先算 x*scale，结果可能由 0 变 NaN。"
+        },
+        {
+          "name": "实际累加器范围不足",
+          "historical_ids": [
+            "FM-28"
+          ],
+          "scope": "FM-17 的检索子型，尚无固定历史正例。"
+        },
+        {
+          "name": "中间值窄化后在合并前溢出",
+          "historical_ids": [],
+          "scope": "V406 是局部 FP16 平方首次超范围。"
+        }
+      ],
+      "historical_ids": [
+        "FM-17",
+        "FM-28"
+      ],
+      "representative_ex": []
+    },
+    {
+      "id": "evaluation",
+      "title": "有限精度表达式与累加次序",
+      "priority": "P0",
+      "contract": "固定有效项、数学目标、类型及适用误差或一致性要求，旧求值实现应满足该约定。",
+      "wrong_action": "使用发生吸收或抵消的等价表达式，或改变受合同约束的浮点累加配对。",
+      "failure_mechanism": "逻辑项可完整到达。舍入误差来自表达式或加法树，近似实现的误差预算另核。",
+      "v03_boundary": "C2/C3 的逻辑成员与次数可保持。EX-08 实数域已不等价，归精确公式近邻。",
+      "recommendation": "SPLIT_SUBTYPES",
+      "gaps": "G05 固定小核和作者报告范围分开。再补独立方差消减、实际模板派发，及明确近似误差预算。",
+      "proposal_links": [
+        "NUM-02"
+      ],
+      "subtypes": [
+        {
+          "name": "先舍掉小量再求非线性函数",
+          "historical_ids": [
+            "FM-09"
+          ],
+          "scope": "LogAddExp 的 1+t 在旧加法后吸收小量。EX-25 是近似预算邻例。"
+        },
+        {
+          "name": "相近大数相减消减",
+          "historical_ids": [],
+          "scope": "G05 的 FP32 原始矩差经 rsqrt 影响输出。"
+        },
+        {
+          "name": "相同项的累加配对次序",
+          "historical_ids": [
+            "FM-10"
+          ],
+          "scope": "同一 FlashAttentionScore 事件中 Base16 与 Base256/512 的加法树不同。"
+        }
+      ],
+      "historical_ids": [
+        "FM-09",
+        "FM-10"
+      ],
+      "representative_ex": []
+    },
+    {
+      "id": "integer-representation",
+      "title": "精确整数位置的表示失真",
+      "priority": "P1",
+      "contract": "供地址或计数消费者使用的整数，在同一单位及合法尺寸下应按合同精确保留。",
+      "wrong_action": "用位宽或精度不足的中间类型保存位置，造成回绕、截断或失去低位。",
+      "failure_mechanism": "实际位置的数值先失真，随后错误整数被用于地址或计数。需核各运算操作数和返回变量。",
+      "v03_boundary": "正确换算比例仍可能错表示。L2 需证明比例错误，L1 需原视图的密排替代。",
+      "recommendation": "KEEP_CANDIDATE",
+      "gaps": "TopKV2 扩大域时还要核乘法操作数位宽。FM-29 要旧整数到浮点、还原到实际地址并被消费的链。",
+      "proposal_links": [
+        "ADDR-01"
+      ],
+      "subtypes": [
+        {
+          "name": "整数回绕",
+          "historical_ids": [
+            "FM-16"
+          ],
+          "scope": "TopKV2 将 workspace 字节位置累加到 uint32_t。"
+        },
+        {
+          "name": "整数经浮点中转丢低位",
+          "historical_ids": [
+            "FM-29"
+          ],
+          "scope": "历史候选保留。EX-38 是 RNG dtype 与分块耦合。"
+        }
+      ],
+      "historical_ids": [
+        "FM-16",
+        "FM-29"
+      ],
+      "representative_ex": []
+    },
+    {
+      "id": "formula-domain",
+      "title": "计算项被放入错误数值域",
+      "priority": "P0",
+      "contract": "保持各项的数学作用和变换域。实值 bias 应在指定乘积反量化之后相加。",
+      "wrong_action": "将应在实数域消费的贡献提前放入待缩放累加器，令反量化同时作用于它。",
+      "failure_mechanism": "固定输入、类型和项次数后，dequant(acc+bias) 与 dequant(acc)+bias 仍可能不等价。",
+      "v03_boundary": "C2/C3 的项账本可保持各一次。N06 是读另一组尺度，即使公式正确也会发生。",
+      "recommendation": "KEEP_CANDIDATE",
+      "gaps": "核另一个融合算子和反向对照，如尺度为 1 或合同将 bias 定义在量化域。当前限固定低浮点、FP32 scale 与 bias 路径。",
+      "proposal_links": [],
+      "subtypes": [
+        {
+          "name": "反量化与实域偏置顺序",
+          "historical_ids": [
+            "FM-23"
+          ],
+          "scope": "QBMM 旧混合路径只为 int8 激活实值 bias epilogue。"
+        }
+      ],
+      "historical_ids": [
+        "FM-23"
+      ],
+      "representative_ex": []
+    },
+    {
+      "id": "special-data",
+      "title": "数据特殊值及内部协议解释",
+      "priority": "P1",
+      "contract": "同版定义的非有限数据或内部状态应按适用规则传播、选分支或解码。",
+      "wrong_action": "把应传播的非有限数据替换成有限值，或把无贡献内部标记交给普通数值运算。",
+      "failure_mechanism": "给定值或内部标记已存在且被正确读取。首差来自本阶段解释而影响下游结果。",
+      "v03_boundary": "P2 的对象是特殊接口参数。C1/C2 的下游关系仍以实际算术消费及逻辑资格成立为准。",
+      "recommendation": "SPLIT_SUBTYPES",
+      "gaps": "GridSampler 原 Inf 反射合同待核。EX-43 全无效分片合同不明。EX-06 需同版本 NaN 梯度规则闭合。",
+      "proposal_links": [],
+      "subtypes": [
+        {
+          "name": "已存在非有限数据的传播",
+          "historical_ids": [
+            "N16"
+          ],
+          "scope": "EX-24 固定另有证，GridSampler 保留原案范围。"
+        },
+        {
+          "name": "内部无贡献标记的解释",
+          "historical_ids": [],
+          "scope": "EX-43 的 POS_INF LSE 进入 max/sub，应核生产与消费的标记合同。"
+        }
+      ],
+      "historical_ids": [
+        "N16"
+      ],
+      "representative_ex": [
+        "EX-24",
+        "EX-43"
+      ]
+    },
+    {
+      "id": "dispatch",
+      "title": "控制语义、模板和计划选择",
+      "priority": "P0",
+      "contract": "实际执行路径须实现调用要求，合法规划候选应在淘汰前按合同检查。",
+      "wrong_action": "用不完整的能力条件选择模板，或已取得普通设置却启用恒等路径。规划器也可能在验证前淘汰候选。",
+      "failure_mechanism": "首错在 Host 资格、派发或枚举，输出项是否缺失仍取决于真正的执行和消费者。",
+      "v03_boundary": "P1 要对象错源，P2 要特殊参数状态按普通值处理。计算项遗漏须有 C2 的目标消费链。",
+      "recommendation": "SPLIT_SUBTYPES",
+      "gaps": "计划候选排除、选择不适用实现、普通参数未落实分别有正反例。EX-42 尚缺第二规划器和合法剪枝对照。",
+      "proposal_links": [
+        "CTRL-02"
+      ],
+      "subtypes": [
+        {
+          "name": "能力条件不全导致模板错选",
+          "historical_ids": [
+            "FM-12"
+          ],
+          "scope": "FusedMatmul StreamK/DP 与 FlashAttention EX-11 比较各自的实际资格。"
+        },
+        {
+          "name": "普通操作参数未落实",
+          "historical_ids": [
+            "N26"
+          ],
+          "scope": "Round 的负 decimals 被 dtype 恒等捷径忽略。"
+        },
+        {
+          "name": "先淘汰再验证可行候选",
+          "historical_ids": [],
+          "scope": "EX-42 的 factor=1 未进入容量比较。"
+        }
+      ],
+      "historical_ids": [
+        "FM-12",
+        "N26"
+      ],
+      "representative_ex": [
+        "EX-11",
+        "EX-42"
+      ]
+    },
+    {
+      "id": "validation",
+      "title": "入口合法性校验",
+      "priority": "P1",
+      "contract": "依同一版本、接口和目标后端的合法域判定可运行性，分别校验逻辑输入和物理后端限制。",
+      "wrong_action": "放行后端不支持的配置，或用物理存储形状误拒合法的逻辑视图。",
+      "failure_mechanism": "实际接受域偏离规定。误拒、漏拒及其错误校验关系须分别定位。",
+      "v03_boundary": "N21 在入口取形状判维，未发生 L1 式实际写入。FM-14 的非法配置放行区别于选错已有策略。",
+      "recommendation": "REVIEW_SCOPE",
+      "gaps": "Conv2DV2 的原报告平台与 DAV_5102 能力绑定待核。ThnnFusedLstmCellGrad 缺具体误拒输入。运行失败另作可靠性范围。",
+      "proposal_links": [],
+      "subtypes": [
+        {
+          "name": "硬件不支持请求漏拦截",
+          "historical_ids": [
+            "FM-14"
+          ],
+          "scope": "目标 DMA 配置的缺少条件需同版平台限制确认。"
+        },
+        {
+          "name": "合法输入被误拒",
+          "historical_ids": [
+            "N21"
+          ],
+          "scope": "用 StorageShape 而非合法 ViewShape 作输入维数校验。"
+        }
+      ],
+      "historical_ids": [
+        "FM-14",
+        "N21"
+      ],
+      "representative_ex": []
+    },
+    {
+      "id": "empty-path",
+      "title": "空路径终止与输出义务",
+      "priority": "P1",
+      "contract": "在选择调度、排空或提前返回前，核是否存在有效工作、在途任务或非空输出义务。",
+      "wrong_action": "零有效工作仍启动不支持零任务的调度器，或有输出义务却提前交回空执行器。",
+      "failure_mechanism": "路径的进展和结果物化义务各有证据。零工作仍推进与应产物却返回是相反的首错。",
+      "v03_boundary": "N02 的错误在接口结果物化。EX-36 有明确在途计算项，输出确实缺失时是 C2。",
+      "recommendation": "SPLIT_SUBTYPES",
+      "gaps": "Softsign 只作调度与挂起边界。IndexFill 补合法别名和零元素返回对照。历史 Embedding NaN 仍待核。",
+      "proposal_links": [],
+      "subtypes": [
+        {
+          "name": "零工作被调度",
+          "historical_ids": [
+            "FM-01"
+          ],
+          "scope": "Softsign 的 blockNum 为 0 仍进入 ElementwiseSch。"
+        },
+        {
+          "name": "非空恒等输出未物化",
+          "historical_ids": [
+            "N02"
+          ],
+          "scope": "IndexFill 空 index 仍需给调用方非原位 out 的逻辑内容。"
+        }
+      ],
+      "historical_ids": [
+        "FM-01",
+        "N02"
+      ],
+      "representative_ex": []
+    },
+    {
+      "id": "result-metadata",
+      "title": "输出形状与返回索引编码",
+      "priority": "P1",
+      "contract": "输出描述符合规定的轴变换，返回索引沿实际选择轴编码并指向同一结果。",
+      "wrong_action": "归约形状只调整部分轴，或输出索引物化时误用尾轴规则。",
+      "failure_mechanism": "结果描述或返回坐标的含义偏离合同。形状推导和输出索引编码是不同首错。",
+      "v03_boundary": "L1 要实际物理访问。FM-02 在 Host 描述，N09 在返回的 index 值，正确 values 也能伴随错误 indices。",
+      "recommendation": "SPLIT_SUBTYPES",
+      "gaps": "分别补多轴描述的消费者和非尾轴索引的同版反向对照。EX-27 输出签名冲突仅作配置/编译近邻。",
+      "proposal_links": [],
+      "subtypes": [
+        {
+          "name": "归约形状只更新部分轴",
+          "historical_ids": [
+            "FM-02"
+          ],
+          "scope": "AddLayerNorm 的 mean/rstd 被赋错误 shape。"
+        },
+        {
+          "name": "返回索引误按尾轴编码",
+          "historical_ids": [
+            "N09"
+          ],
+          "scope": "TopKCopy 没将实际 dim 传入生成路径。"
+        }
+      ],
+      "historical_ids": [
+        "FM-02",
+        "N09"
+      ],
+      "representative_ex": []
+    },
+    {
+      "id": "buffer-extent",
+      "title": "中间容量与实际访存宽度",
+      "priority": "P1",
+      "contract": "同一对象的活跃需求在容量内，物理搬运的真实跨度在合法对象范围内。",
+      "wrong_action": "低估中间实体的必要容量，或在起点可以正确时发出比合法范围更宽的实际访问。",
+      "failure_mechanism": "第一种先出现不足的分配上界，另一种先出现非法访问足迹。可相继发生，需分别核首错与消费者。",
+      "v03_boundary": "按正确单位发出 32B 仍会超出小于 32B 的真实对象。L2 需地址比例错误。C2 需实际遗漏项。",
+      "recommendation": "SPLIT_SUBTYPES",
+      "gaps": "FM-19 限两个量化 Matmul 的明确短输出清零分支，同一事件只计一次。N11 补实际枚举上界及访问。总驻留预算 EX-26 单独比较。",
+      "proposal_links": [],
+      "subtypes": [
+        {
+          "name": "固定搬运宽度超对象",
+          "historical_ids": [
+            "FM-19"
+          ],
+          "scope": "历史算子名 Inc，固定锚点在量化 Matmul 输出清零代码。"
+        },
+        {
+          "name": "单实体必要容量低估",
+          "historical_ids": [
+            "N11"
+          ],
+          "scope": "UpsampleBicubic2DAaGrad 的采样列表容量需真实边界。"
+        }
+      ],
+      "historical_ids": [
+        "FM-19",
+        "N11"
+      ],
+      "representative_ex": []
+    },
+    {
+      "id": "address-geometry",
+      "title": "对象内寻址缺少几何项",
+      "priority": "P1",
+      "contract": "在正确对象中按逻辑组、轴内余数和实际局部坐标计算偏移。",
+      "wrong_action": "遗漏非首组的基址项，或整除只保留商而丢失合轴的实际余数。",
+      "failure_mechanism": "对象和单位可正确，地址函数仍因漏几何项而选错区间，后续消费错误地址。",
+      "v03_boundary": "可停在寻址上位。L1 要密排代用，L2 要单位换算，P1 要错源。组基址与合轴除法保留各自公式。",
+      "recommendation": "REFINE_EXISTING_PARENT",
+      "gaps": "补不同算子的几何子型，以及同版本组 0 或不丢余数的真实反向对照。EX-14 的实际局部清零集合仍需闭合。",
+      "proposal_links": [
+        "ADDR-01"
+      ],
+      "subtypes": [
+        {
+          "name": "分组基址被省略",
+          "historical_ids": [
+            "N06"
+          ],
+          "scope": "ExtendConvTranspose 的非首组 VECTOR_QUANT scale 被定位到首组。"
+        },
+        {
+          "name": "合轴路线上整除丢余数",
+          "historical_ids": [],
+          "scope": "EX-14 支持寻址上位，仍需具体必须清零而未清的坐标。"
+        }
+      ],
+      "historical_ids": [
+        "N06"
+      ],
+      "representative_ex": [
+        "EX-14"
+      ]
+    },
+    {
+      "id": "representation-handoff",
+      "title": "生产消费表示与保位操作",
+      "priority": "P1",
+      "contract": "同一物理对象按约定宽度和位型交付。只重排格式的阶段须保存规定的位载荷。",
+      "wrong_action": "按不同宽度或 dtype 读取存储，或把只需重排的数据重新解释后执行改变值的实际算术。",
+      "failure_mechanism": "同一个物理位置的位模式被错解码或被错误算术改写。真正数值转换与指针重解释分别核实。",
+      "v03_boundary": "L2 的对象是地址比例，P1 是参数源。EX-21 地址对象可正确，EX-32 选择的内部缓冲对象已经错误。",
+      "recommendation": "SPLIT_SUBTYPES",
+      "gaps": "原 ReduceAll 缺内核签名及物理写宽。EX-21 固定旧解码，需补旧 FP32 scalar 生产和实际乘加路径。MatMulV3 保位失败需具体载荷与指令对照。",
+      "proposal_links": [
+        "REP-01",
+        "CTRL-01"
+      ],
+      "subtypes": [
+        {
+          "name": "生产的宽度与消费者解码不符",
+          "historical_ids": [
+            "N12"
+          ],
+          "scope": "Foreach EX-21 的旧读法固定，生产宽度来自作者说明。ReduceAll 为未闭环原代表。"
+        },
+        {
+          "name": "保位重排按错误编码执行算术",
+          "historical_ids": [
+            "N13"
+          ],
+          "scope": "MatMulV3 的 BF16 数据以 half 运算。"
+        }
+      ],
+      "historical_ids": [
+        "N12",
+        "N13"
+      ],
+      "representative_ex": []
+    },
+    {
+      "id": "dependency-lifetime",
+      "title": "同步身份和活跃存储生存期",
+      "priority": "P1",
+      "contract": "消费只能观察同期已完成的生产结果，对象存储须保持至最后合法消费。",
+      "wrong_action": "漏等待、让上一轮通知满足本轮、改变应参与的屏障集合，或在仍有消费者时覆盖活跃存储。",
+      "failure_mechanism": "依赖身份或可见性被破坏，或值的有效期提前结束。串行确定性覆盖与并行竞态可各自成立。",
+      "v03_boundary": "EX-30 条件 C1 是覆盖后的实际参与关系。EX-28 重复释放句柄属于可靠性，C3 只检查计算贡献超次。",
+      "recommendation": "SPLIT_SUBTYPES",
+      "gaps": "补 EX-40 的真实轮次、wait 及消费证据，核 N03 生成事件与标量链。EX-32 读错内部对象属于独立比较，屏障影响另核。",
+      "proposal_links": [
+        "SYNC-01",
+        "CTRL-01"
+      ],
+      "subtypes": [
+        {
+          "name": "必要完成、代际或参与协议被破坏",
+          "historical_ids": [
+            "FM-05"
+          ],
+          "scope": "DropOutDoMask 缺同步与 EX-40/41 的代际、参与问题分别核。"
+        },
+        {
+          "name": "核内流水同步待核",
+          "historical_ids": [
+            "N03"
+          ],
+          "scope": "InplaceApplyMomentum 保留原身份，与同号 Moe 转录冲突不得合并。"
+        },
+        {
+          "name": "活跃值被另一个动作覆盖",
+          "historical_ids": [
+            "N22"
+          ],
+          "scope": "GeGLUGradV2 的梯度中间数据被覆盖，EX-30 另为框架重复搬入。"
+        }
+      ],
+      "historical_ids": [
+        "FM-05",
+        "N03",
+        "N22"
+      ],
+      "representative_ex": [
+        "EX-40"
+      ]
+    }
+  ]
+}

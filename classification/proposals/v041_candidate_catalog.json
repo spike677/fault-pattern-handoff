@@ -1,0 +1,48 @@
+{
+  "namespace": "MECH-v0.4-candidate",
+  "review_version": "0.4.1",
+  "status": "PROPOSED",
+  "scoring_namespace": "MECH-v0.3",
+  "inherits": {
+    "mode_ids": ["P1", "P2", "L1", "L2", "C1", "C2", "C3"],
+    "catalog": "../catalog.json",
+    "sha256": "119a52ac3a8830e030161d1f4f5a2b6ffdfcb9ad6abd1230fdd9b103c1c9dac5"
+  },
+  "root_cause_relationships": "../history_mapping_v2/overlap_decisions.json",
+  "historical_clusters": "../mechanism_discovery/historical_mechanism_clusters.json",
+  "candidate_reviews": "v041_review/candidate_review.json",
+  "unresolved_history": ["FM-18", "FM-22", "FM-25", "FM-26", "FM-27", "N27"],
+  "review_queue": [
+    {
+      "id": "NUM-01",
+      "status": "PROPOSED",
+      "scope": "实际参与项的运行累加状态在连续迭代之间被过早保存在窄类型，精度或范围违背同路径约定。",
+      "required_fact": "在固定派发的同一累加中，旧循环的状态保存精度与适用约定不同。定位首次失真及其消费，并比较未变的计算项与顺序。",
+      "closest_negative": "V406 的失真首先发生在归约前的单次 FP16 平方。",
+      "positive_evidence": ["E06"],
+      "next_evidence": "候选级分类回归和另一独立循环状态家族。"
+    },
+    {
+      "id": "NUM-02",
+      "status": "PROPOSED",
+      "scope": "原始二阶矩与均值平方相减，有限精度使小方差丢失并影响归一化。",
+      "required_fact": "同一数据成员、类型与路径下，旧方差实际取自相近原始矩差，并被归一化消费。对照中心矩可复算。",
+      "closest_negative": "E06 的首错发生在迭代累加状态的实际类型。",
+      "positive_evidence": ["G05 固定小核静态路径"],
+      "next_evidence": "候选级分类回归、另一家族及原复现的实际小核派发。"
+    }
+  ],
+  "remaining_reviews": [
+    {"id": "CTRL-01", "decision": "NEW_CANDIDATE", "open_evidence": "固定旧 S/D 传递、排序消费与屏障改动的独立对照"},
+    {"id": "CTRL-02", "decision": "REUSE", "open_evidence": "FM-11 的已证规划子机制及其真实选优消费者"},
+    {"id": "ADDR-01", "decision": "REFINE", "open_evidence": "合轴交集错算的实际设备块参数及最终消费"},
+    {"id": "REP-01", "decision": "REFINE", "open_evidence": "同版 FP32 标量生产者与旧窄解码结果的实际乘加"},
+    {"id": "SYNC-01", "decision": "REUSE", "open_evidence": "FM-05 的通知代际子机制及同址跨轮消费顺序"}
+  ],
+  "formal_admissions": [],
+  "independent_expanded_catalog_validation": {
+    "status": "CONDITIONAL",
+    "requires": ["有据候选分类回归", "正式版本冻结"],
+    "scoped_views": ["新模式正例", "旧模式正例", "新旧近邻", "合规", "缺证", "目录外已证"]
+  }
+}
