@@ -65,6 +65,32 @@ def run(*nodes, edges=()):
 
 
 class ReliabilityGraph(unittest.TestCase):
+    def test_parameter_parent_survives_a_generic_restatement_with_the_same_proof(self):
+        guard = node("guard", "root_action", 12, (*PROOF, "parameter_violation", "established_other_defect"))
+        result = run(guard)
+        judgment = result["nodes"][0]["verdict"]
+        self.assertEqual((judgment["status"], judgment["parent_id"], result["independent_count"]),
+                         ("parent", "parameter", 1))
+        self.assertNotIn("outside_reason", judgment)
+        self.assertEqual(judgment["restated_other_defect"][0]["key"], "established_other_defect")
+
+    def test_separately_supported_parameter_and_other_claims_stay_unresolved(self):
+        guard = node("guard", "root_action", 12, (*PROOF, "parameter_violation", "established_other_defect"))
+        guard["facts"][-1]["anchors"] = [anchor(13)]
+        result = run(guard)
+        judgment = result["nodes"][0]["verdict"]
+        self.assertEqual(judgment["status"], "insufficient")
+        self.assertIn("competing_parameter_claims", judgment["conflict_details"]["core"])
+        self.assertEqual(result["independent_count"], 1)
+
+    def test_address_defect_can_keep_its_explicit_outside_result(self):
+        address = node("integer-offset", "root_action", 13, (*PROOF, "address_violation",
+                       "address_units_consistent", "established_other_defect"))
+        result = run(address)
+        judgment = result["nodes"][0]["verdict"]
+        self.assertEqual((judgment["status"], judgment["outside_reason"], result["independent_count"]),
+                         ("outside", "outside_catalog", 1))
+
     def test_root_and_downstream_modes_do_not_double_count_a_consumer(self):
         root = node("sentinel", "root_action", 2, (*PROOF, "correct_source", "special_state", "wrong_state_treatment"))
         effect = node("term", "downstream_effect", 3, ("applicable_contract", "ineligible_member", "actual_contribution"))

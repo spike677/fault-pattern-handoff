@@ -13,7 +13,7 @@ from evaluate import read_json
 
 
 NAMESPACE = "MECH-v0.4"
-DECISION_VERSION = "0.4.2"
+DECISION_VERSION = "0.4.3"
 CATALOG = HERE / "catalog.json"
 PILOT_CATALOG = HERE.parent / "catalog.json"
 NUMERIC_MODES = ("NUM-01", "NUM-02")
@@ -76,6 +76,45 @@ def record_role(result, action, supported, causal):
         result["proposed_role"] = action["role"]
         if "upstream_id" in action:
             result["proposed_upstream_id"] = action["upstream_id"]
+
+
+def proof_signature(fact):
+    anchors = frozenset(
+        (anchor["source_id"], anchor["start_line"], anchor["end_line"], anchor["use"])
+        for anchor in fact["anchors"] if anchor["use"] != "context"
+    )
+    return fact["claim_state"], anchors, pilot.digest(fact.get("calculation"))
+
+
+def parameter_boundary(result, action, sources, previous):
+    """Prefer the proven parameter parent for a generic restatement of one action."""
+    if (result.get("outside_reason"), result.get("parent_id")) != ("outside_catalog", "parameter"):
+        return result
+    parameter = previous["parent_facts"]["parameter"]
+    outside = "established_other_defect"
+    required = {"applicable_contract", "implementation_action", parameter, outside}
+    scope = action["scope"]
+    facts, positive, _, scoped, _, _ = pilot.collect_facts(action, sources, scope, required)
+    if not required <= positive & scoped:
+        return result
+    decisive = [fact for fact in facts if fact["value"] and fact["key"] in {parameter, outside}
+                and all(not pilot.check_anchor(anchor, sources, scope) for anchor in fact["anchors"])
+                and pilot.evidence_basis(fact, sources, scope, decisive=True)[0]]
+    parameter_proofs = {proof_signature(fact) for fact in decisive if fact["key"] == parameter}
+    other = [fact for fact in decisive if fact["key"] == outside]
+    if other and all(proof_signature(fact) in parameter_proofs for fact in other):
+        specific = {**action, "facts": [fact for fact in action["facts"] if fact["key"] != outside]}
+        judgment = pilot.verdict(specific, sources, previous, revised=True)
+        judgment["restated_other_defect"] = other
+        return judgment
+
+    conflict = "competing_parameter_claims"
+    judgment = {key: value for key, value in result.items() if key not in RESULT_FIELDS}
+    details = judgment.get("conflict_details", {"core": [], "leaf": [], "unrelated": []})
+    judgment.update(status="insufficient", conflicts=sorted(set(result["conflicts"]) | {conflict}),
+                    conflict_details={**details, "core": sorted(set(details["core"]) | {conflict})})
+    record_role(judgment, action, supported=False, causal=False)
+    return judgment
 
 
 def numeric_verdict(pilot_result, action, sources, catalog):
@@ -237,13 +276,17 @@ def classify_package(material, packets, catalog=None):
         if context:
             result = pilot.classify(cases[case_id], projected, previous)
         actions = pilot.by_id(projected["actions"], "actions")
+        judged = []
+        for row in result["actions"]:
+            action = actions[row["id"]]
+            boundary = parameter_boundary(row, action, sources, previous)
+            verdict = numeric_verdict(boundary, action, sources, catalog)
+            if row["id"] in context:
+                verdict["cross_version_context"] = context[row["id"]]
+            judged.append(verdict)
         result.update(catalog_version=catalog["version"], mechanism_namespace=NAMESPACE,
                       decision_version=DECISION_VERSION, facts_sha256=pilot.digest(packet),
-                      actions=[numeric_verdict(row, actions[row["id"]], sources, catalog)
-                               for row in result["actions"]])
-        for row in result["actions"]:
-            if row["id"] in context:
-                row["cross_version_context"] = context[row["id"]]
+                      actions=judged)
         reviewed.append(result)
     return reviewed
 
