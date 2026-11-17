@@ -1,0 +1,127 @@
+{
+  "schema": "MECH-v0.4.4/public-validation@1",
+  "date": "2026-11-17",
+  "baseline_sha": "5d4f21872af5776ebabbb331ec6696892f1f0f74",
+  "scope": "knowledge_review_and_development_revalidation_not_independent_generalization",
+  "official_modes": 9,
+  "formal_admissions": 0,
+  "classifier_changed": false,
+  "reader_prompt_changed": false,
+  "audit_final_manifest_sha256": "ade9d2a20a45c6687c491a49d0a03dd707b408b3058fcd731ddc0c2137f59d38",
+  "source_scripts_sha256": {
+    "verify_integer_v044.py": "e2ec4605a0934b1b14f962d062710bd58249a57b7b340144186a1ab48d63df5b",
+    "verify_migraphx_v044.py": "44a50bce88b79edff205ab471708b4c6ce9a65ec0d903bac8e37db15d3d110ff"
+  },
+  "task_statuses": {
+    "integer_address": "DECIDED / NEW_CANDIDATE",
+    "MIGraphX": "CLOSED / NUM02_NOT_VERIFIED",
+    "history": "FROZEN",
+    "F": "BLOCKED"
+  },
+  "public_checkout_revalidation": {
+    "arithmetic": {
+      "integer_cases": 18,
+      "variance_cases": 5,
+      "variance_assertions": 7,
+      "passed": true,
+      "matches_previous_local_control_outputs": true,
+      "classifier_invocations": 0,
+      "GPU_executions": 0
+    },
+    "classification_regressions": [
+      {
+        "suite": "test_reliability*.py",
+        "passed": 33,
+        "total": 33
+      },
+      {
+        "suite": "test_reviewed_static.py",
+        "passed": 4,
+        "total": 4
+      }
+    ],
+    "checkout_issue": {
+      "initial_reliability_errors": 1,
+      "cause": "Windows core.autocrlf changed frozen file bytes",
+      "affected_frozen_files": 4,
+      "resolution": "Restore original Git blob bytes in isolated publication checkout; use LF checkout",
+      "frozen_content_changed": false,
+      "final_reliability_passed": true
+    }
+  },
+  "local_audit_results_not_fully_reproducible_from_public_files": {
+    "integer_static_assertions": 18,
+    "MIGraphX_checks": 63,
+    "MIGraphX_source_files": 14,
+    "MIGraphX_source_anchors": 23,
+    "history_replay_commands": 18,
+    "history_regression_tests_within_commands": 30,
+    "history_score_rows": 36,
+    "history_batches": 9,
+    "root_reconciliation_rows": 235,
+    "protected_historical_inputs": 294,
+    "historical_inputs_changed": false,
+    "historical_strict_scores": {
+      "original_13": [
+        "2/13",
+        "2/13"
+      ],
+      "dea1d10": [
+        "9/13",
+        "9/13"
+      ],
+      "cdf0488": [
+        "9/13",
+        "8/13"
+      ],
+      "benchmark_01": [
+        "8/10",
+        "7/10"
+      ],
+      "benchmark_02_directed": [
+        "6/6",
+        "6/6"
+      ]
+    }
+  },
+  "F_preparation_aggregate_only": {
+    "pool_records": 24,
+    "screened_candidates": 20,
+    "source_views": 241,
+    "development_exclusion_keys": 441,
+    "finalized_reference_answers": 0,
+    "formal_seals": 0,
+    "container_shell_preflight_rounds_passed": 2,
+    "actual_model_tool_channel_isolated": false,
+    "independent_witness": false,
+    "new_model_reads": 0,
+    "predictions": 0,
+    "formal_F_evaluated": false
+  },
+  "public_payload_files": [
+    "classification/candidate_reviews/integer_address_range/MODE_CARD_CANDIDATE.md",
+    "classification/candidate_reviews/integer_address_range/REVIEW_PUBLIC_SUMMARY.md",
+    "classification/candidate_reviews/migraphx_num02/REVIEW_PUBLIC_SUMMARY.md",
+    "classification/reliability_v044/PUBLIC_CONTROL_RESULTS.json",
+    "classification/reliability_v044/PUBLIC_VALIDATION.json",
+    "classification/reliability_v044/V044_PUBLIC_SUMMARY.md",
+    "classification/reliability_v044/public_controls.py"
+  ],
+  "payload_sha256_excluding_this_record": {
+    "classification/candidate_reviews/integer_address_range/MODE_CARD_CANDIDATE.md": "a02875a42fa6c32109b92c792220d837def0aa6f2fa3470909f298c5c2b22fea",
+    "classification/candidate_reviews/integer_address_range/REVIEW_PUBLIC_SUMMARY.md": "b48ad4c12a45f722b1e4556c947f4adf6b7fcc481268806d673fc48251e0459d",
+    "classification/candidate_reviews/migraphx_num02/REVIEW_PUBLIC_SUMMARY.md": "b225f10f141dce86b7e260004476fc2c699cb25800d842d234af1e5d8b2fe6a2",
+    "classification/reliability_v044/PUBLIC_CONTROL_RESULTS.json": "d760e160d297a4b5818d755f4ea3281addb053b86046b74bff9a86261c8fc1c4",
+    "classification/reliability_v044/V044_PUBLIC_SUMMARY.md": "b2fd80813a822cc5111cbfb40f2781dfd05fd344c50d5095d67ee0e38869fe9a",
+    "classification/reliability_v044/public_controls.py": "0632316b9b04c6ea796fa5fb731d9f7af1b4ce2d10388b55780b53c9d6c78287"
+  },
+  "excluded_from_publication": [
+    "raw_source_archives",
+    "answers",
+    "per_case_facts_and_predictions",
+    "root_reconciliation_rows",
+    "F_candidate_identities_and_lineage",
+    "F_preselection_and_custody",
+    "private_execution_logs"
+  ]
+}

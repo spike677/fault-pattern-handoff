@@ -1,0 +1,607 @@
+{
+  "schema": "MECH-v0.4.4/public-arithmetic-controls@1",
+  "scope": "arithmetic_and_semantic_boundary_controls_only",
+  "integer": {
+    "schema": "integer-address-v044/controls@1",
+    "scope": "executable_arithmetic_and_semantic_controls",
+    "original_device_operator_runs": 0,
+    "total": 18,
+    "passed": 18,
+    "language_note": "Modulo arithmetic is a model of reported representation loss. Signed C++ overflow is not defined to wrap; device-runtime claims retain their original reported scope.",
+    "cases": [
+      {
+        "id": "I01",
+        "scenario": "合法位宽和最大正偏移",
+        "operations": [
+          {
+            "name": "offset",
+            "operator": "add",
+            "operands": [
+              32766,
+              1
+            ],
+            "signed_bits": 16,
+            "exact_integer": 32767,
+            "represented_integer": 32767,
+            "representation_loss": false
+          }
+        ],
+        "expected_disposition": "COMPLIANT",
+        "consumer": "read offset 32767 within extent 32768",
+        "assertion_passed": true,
+        "interpretation": "窄类型本身不构成缺陷。"
+      },
+      {
+        "id": "I02",
+        "scenario": "中间乘法超有符号范围",
+        "operations": [
+          {
+            "name": "row_times_stride",
+            "operator": "mul",
+            "operands": [
+              128,
+              257
+            ],
+            "signed_bits": 16,
+            "exact_integer": 32896,
+            "represented_integer": -32640,
+            "representation_loss": true
+          }
+        ],
+        "expected_disposition": "INTEGER_ADDRESS_CANDIDATE",
+        "consumer": "gather consumes represented offset",
+        "assertion_passed": true,
+        "interpretation": "首个丢失在乘法结果，后加正确基址不能恢复。"
+      },
+      {
+        "id": "I03",
+        "scenario": "GridSampler 合法分量相加超范围",
+        "operations": [
+          {
+            "name": "y_stride",
+            "operator": "mul",
+            "operands": [
+              7,
+              4168
+            ],
+            "signed_bits": 16,
+            "exact_integer": 29176,
+            "represented_integer": 29176,
+            "representation_loss": false
+          },
+          {
+            "name": "x_stride",
+            "operator": "mul",
+            "operands": [
+              7,
+              521
+            ],
+            "signed_bits": 16,
+            "exact_integer": 3647,
+            "represented_integer": 3647,
+            "representation_loss": false
+          },
+          {
+            "name": "spatial_add",
+            "operator": "add",
+            "operands": [
+              29176,
+              3647
+            ],
+            "signed_bits": 16,
+            "exact_integer": 32823,
+            "represented_integer": -32713,
+            "representation_loss": true
+          }
+        ],
+        "expected_disposition": "INTEGER_ADDRESS_CANDIDATE",
+        "consumer": "forward gather",
+        "assertion_passed": true,
+        "interpretation": "C=521 的两个乘积均可表示，首错是加法。不能统一称为乘法溢出。"
+      },
+      {
+        "id": "I04",
+        "scenario": "GridSampler 报告正确对照 C=520",
+        "operations": [
+          {
+            "name": "spatial_add",
+            "operator": "add",
+            "operands": [
+              29120,
+              3640
+            ],
+            "signed_bits": 16,
+            "exact_integer": 32760,
+            "represented_integer": 32760,
+            "representation_loss": false
+          }
+        ],
+        "expected_disposition": "COMPLIANT",
+        "consumer": "forward gather",
+        "assertion_passed": true,
+        "interpretation": "对应报告中的正确输出边界，模型只复算地址整数。"
+      },
+      {
+        "id": "I05",
+        "scenario": "执行前使用足够位宽",
+        "operations": [
+          {
+            "name": "wide_spatial_add",
+            "operator": "add",
+            "operands": [
+              29176,
+              3647
+            ],
+            "signed_bits": 32,
+            "exact_integer": 32823,
+            "represented_integer": 32823,
+            "representation_loss": false
+          }
+        ],
+        "expected_disposition": "COMPLIANT",
+        "consumer": "consumer receives offset 32823",
+        "assertion_passed": true,
+        "interpretation": "宽化发生在导致首错的运算之前。"
+      },
+      {
+        "id": "I06",
+        "scenario": "溢出之后再宽化",
+        "operations": [
+          {
+            "name": "row_times_stride",
+            "operator": "mul",
+            "operands": [
+              128,
+              257
+            ],
+            "signed_bits": 16,
+            "exact_integer": 32896,
+            "represented_integer": -32640,
+            "representation_loss": true
+          },
+          {
+            "cast_to_signed_bits": 32,
+            "value": -32640
+          }
+        ],
+        "expected_disposition": "INTEGER_ADDRESS_CANDIDATE",
+        "consumer": "gather consumes the already damaged value",
+        "assertion_passed": true,
+        "interpretation": "更宽结果变量不证明中间表达式按宽类型执行。"
+      },
+      {
+        "id": "I07",
+        "scenario": "最终目标超过对象范围但整数未回绕",
+        "operations": [
+          {
+            "name": "logical_index",
+            "operator": "add",
+            "operands": [
+              99,
+              1
+            ],
+            "signed_bits": 32,
+            "exact_integer": 100,
+            "represented_integer": 100,
+            "representation_loss": false
+          }
+        ],
+        "expected_disposition": "LOGICAL_OR_ALLOCATION_BOUNDS",
+        "consumer": "read offset 100 from an extent-100 object",
+        "assertion_passed": true,
+        "interpretation": "需另审合法索引/分配约定；不得因最终越界推断表示不足。"
+      },
+      {
+        "id": "I08",
+        "scenario": "中间偏移可表示但最终整数加法超范围",
+        "operations": [
+          {
+            "name": "final_integer_address_add",
+            "operator": "add",
+            "operands": [
+              2147483600,
+              100
+            ],
+            "signed_bits": 32,
+            "exact_integer": 2147483700,
+            "represented_integer": -2147483596,
+            "representation_loss": true
+          }
+        ],
+        "expected_disposition": "INTEGER_ADDRESS_CANDIDATE_IF_CONSUMED",
+        "consumer": "hypothetical signed integer address later converted to a pointer",
+        "assertion_passed": true,
+        "interpretation": "若实际实现真在窄整数中完成基址加法，首错位于最终加法。不能用这个模型断言任意机器指针相加会如此执行。"
+      },
+      {
+        "id": "I09",
+        "scenario": "元素与字节单位混用",
+        "operations": [
+          {
+            "element_offset": 3,
+            "item_bytes": 4,
+            "required_byte_offset": 12,
+            "actual_byte_offset": 3
+          }
+        ],
+        "expected_disposition": "L2",
+        "consumer": "byte-addressed consumer",
+        "assertion_passed": true,
+        "interpretation": "整数表示完全保留，失配由单位关系造成。"
+      },
+      {
+        "id": "I10",
+        "scenario": "漏掉基址项",
+        "operations": [
+          {
+            "required_base": 4096,
+            "byte_offset": 12,
+            "required_address": 4108,
+            "actual_address": 12
+          }
+        ],
+        "expected_disposition": "OTHER_ADDRESS_MAPPING",
+        "consumer": "address consumer",
+        "assertion_passed": true,
+        "interpretation": "遗漏基址且无连续布局假设，不满足 L1，也不满足整数表示范围候选。"
+      },
+      {
+        "id": "I11",
+        "scenario": "整数错误量没有到达消费者",
+        "operations": [
+          {
+            "name": "row_times_stride",
+            "operator": "mul",
+            "operands": [
+              128,
+              257
+            ],
+            "signed_bits": 16,
+            "exact_integer": 32896,
+            "represented_integer": -32640,
+            "representation_loss": true
+          },
+          {
+            "replacement_offset": 32896
+          }
+        ],
+        "expected_disposition": "NO_CONFIRMED_ADDRESS_FAULT",
+        "consumer": "consumer uses a separately recomputed wide value",
+        "assertion_passed": true,
+        "interpretation": "不确认实际寻址故障。对 C++ signed overflow 还须另审语言级未定义行为，不能由未消费断言整个程序安全。"
+      },
+      {
+        "id": "I12",
+        "scenario": "NLLLoss2d backward 边界",
+        "operations": [
+          {
+            "name": "sample_times_map",
+            "operator": "mul",
+            "operands": [
+              65535,
+              1
+            ],
+            "signed_bits": 32,
+            "exact_integer": 65535,
+            "represented_integer": 65535,
+            "representation_loss": false
+          },
+          {
+            "name": "sample_map_times_classes",
+            "operator": "mul",
+            "operands": [
+              65535,
+              32768
+            ],
+            "signed_bits": 32,
+            "exact_integer": 2147450880,
+            "represented_integer": 2147450880,
+            "representation_loss": false
+          }
+        ],
+        "expected_disposition": "COMPLIANT",
+        "consumer": "grad_input + ioffset then gradient write",
+        "assertion_passed": true,
+        "interpretation": "target=0 且所有逻辑索引合法，首错为 ioffset 中的第二次乘法。"
+      },
+      {
+        "id": "I13",
+        "scenario": "NLLLoss2d backward 边界",
+        "operations": [
+          {
+            "name": "sample_times_map",
+            "operator": "mul",
+            "operands": [
+              65536,
+              1
+            ],
+            "signed_bits": 32,
+            "exact_integer": 65536,
+            "represented_integer": 65536,
+            "representation_loss": false
+          },
+          {
+            "name": "sample_map_times_classes",
+            "operator": "mul",
+            "operands": [
+              65536,
+              32768
+            ],
+            "signed_bits": 32,
+            "exact_integer": 2147483648,
+            "represented_integer": -2147483648,
+            "representation_loss": true
+          }
+        ],
+        "expected_disposition": "INTEGER_ADDRESS_CANDIDATE",
+        "consumer": "grad_input + ioffset then gradient write",
+        "assertion_passed": true,
+        "interpretation": "target=0 且所有逻辑索引合法，首错为 ioffset 中的第二次乘法。"
+      },
+      {
+        "id": "I14",
+        "scenario": "FlexAttention 页块偏移边界",
+        "operations": [
+          {
+            "name": "block_times_block_size",
+            "operator": "mul",
+            "operands": [
+              65535,
+              16
+            ],
+            "signed_bits": 32,
+            "exact_integer": 1048560,
+            "represented_integer": 1048560,
+            "representation_loss": false
+          },
+          {
+            "name": "token_times_stride",
+            "operator": "mul",
+            "operands": [
+              1048560,
+              2048
+            ],
+            "signed_bits": 32,
+            "exact_integer": 2147450880,
+            "represented_integer": 2147450880,
+            "representation_loss": false
+          }
+        ],
+        "expected_disposition": "COMPLIANT",
+        "consumer": "K/V tile load consumes the element offset",
+        "assertion_passed": true,
+        "interpretation": "此为报告独立复现脚本的逐 token 交错 K/V stride。最大安全块数 65536 与首个不安全块号 65536 相差一个计数位置。"
+      },
+      {
+        "id": "I15",
+        "scenario": "FlexAttention 页块偏移边界",
+        "operations": [
+          {
+            "name": "block_times_block_size",
+            "operator": "mul",
+            "operands": [
+              65536,
+              16
+            ],
+            "signed_bits": 32,
+            "exact_integer": 1048576,
+            "represented_integer": 1048576,
+            "representation_loss": false
+          },
+          {
+            "name": "token_times_stride",
+            "operator": "mul",
+            "operands": [
+              1048576,
+              2048
+            ],
+            "signed_bits": 32,
+            "exact_integer": 2147483648,
+            "represented_integer": -2147483648,
+            "representation_loss": true
+          }
+        ],
+        "expected_disposition": "INTEGER_ADDRESS_CANDIDATE",
+        "consumer": "K/V tile load consumes the element offset",
+        "assertion_passed": true,
+        "interpretation": "此为报告独立复现脚本的逐 token 交错 K/V stride。最大安全块数 65536 与首个不安全块号 65536 相差一个计数位置。"
+      },
+      {
+        "id": "I16",
+        "scenario": "前向错误而反向偏移正确",
+        "operations": [
+          {
+            "forward_offset": -32713,
+            "backward_offset": 63
+          }
+        ],
+        "expected_disposition": "TWO_ACTIONS_MUST_NOT_BE_MERGED",
+        "consumer": "forward gather and backward grad_input scatter are distinct",
+        "assertion_passed": true,
+        "interpretation": "8x8 大 stride 触发前向，grad_input 的 H*W 索引仍安全，支持两处代码职责独立。"
+      },
+      {
+        "id": "I17",
+        "scenario": "反向错误而前向地址项正确的静态对照",
+        "operations": [
+          {
+            "shape": [
+              257,
+              257
+            ],
+            "input_spatial_strides": [
+              0,
+              0
+            ],
+            "forward_offset": 0,
+            "backward_exact": 66048,
+            "backward_int16": 512
+          }
+        ],
+        "expected_disposition": "TWO_ACTIONS_MUST_NOT_BE_MERGED",
+        "consumer": "forward reads an expanded scalar; backward addresses contiguous grad_input",
+        "assertion_passed": true,
+        "interpretation": "只证明两条地址公式的独立性，未执行此展开输入的算子。实际合法调用仍受原接口条件约束。"
+      },
+      {
+        "id": "I18",
+        "scenario": "NUM-01 浮点运行状态近邻",
+        "operations": [
+          {
+            "repeated_half_state": 2048.0,
+            "wide_state_then_half": 2050.0
+          }
+        ],
+        "expected_disposition": "NUM01_NEIGHBOR",
+        "consumer": "floating accumulation consumes the previous rounded state",
+        "assertion_passed": true,
+        "interpretation": "状态语义为数值累加，未生成地址，不能归整数地址候选。此对照不代替实际合同举证。"
+      }
+    ]
+  },
+  "variance": {
+    "GPU_execution": "NOT_TESTED",
+    "controls": [
+      {
+        "id": "ordinary_scale",
+        "n": 4,
+        "input_values": [
+          1.0,
+          2.0,
+          3.0,
+          4.0
+        ],
+        "schedule": "sequential",
+        "mean_float32": 2.5,
+        "mean_square_float32": 7.5,
+        "raw_moment_float32": 1.25,
+        "centered_float32": 1.25,
+        "clamped_raw_float32": 1.25,
+        "exact_variance_of_stored_inputs": "5/4",
+        "reference_variance": 1.25,
+        "centered_binary64_reference": 1.25,
+        "epsilon_float32": 9.999999960041972e-13,
+        "rsqrt_arg_float32": 1.25,
+        "rsqrt_status": "finite",
+        "evidence_scope": "CPU rounded arithmetic control; neither GPU trace nor performance result"
+      },
+      {
+        "id": "nonzero_variance_lost",
+        "n": 2,
+        "input_values": [
+          999999.9375,
+          1000000.0625
+        ],
+        "schedule": "sequential",
+        "mean_float32": 1000000.0,
+        "mean_square_float32": 999999995904.0,
+        "raw_moment_float32": 0.0,
+        "centered_float32": 0.00390625,
+        "clamped_raw_float32": 0.0,
+        "exact_variance_of_stored_inputs": "1/256",
+        "reference_variance": 0.00390625,
+        "centered_binary64_reference": 0.00390625,
+        "epsilon_float32": 9.999999960041972e-13,
+        "rsqrt_arg_float32": 9.999999960041972e-13,
+        "rsqrt_status": "finite",
+        "evidence_scope": "CPU rounded arithmetic control; neither GPU trace nor performance result"
+      },
+      {
+        "id": "negative_raw_variance",
+        "n": 2,
+        "input_values": [
+          1000000.0,
+          1000000.1875
+        ],
+        "schedule": "sequential",
+        "mean_float32": 1000000.125,
+        "mean_square_float32": 1000000192512.0,
+        "raw_moment_float32": -65536.0,
+        "centered_float32": 0.009765625,
+        "clamped_raw_float32": 0.0,
+        "exact_variance_of_stored_inputs": "9/1024",
+        "reference_variance": 0.0087890625,
+        "centered_binary64_reference": 0.0087890625,
+        "epsilon_float32": 9.999999960041972e-13,
+        "rsqrt_arg_float32": -65536.0,
+        "rsqrt_status": "NaN-domain",
+        "evidence_scope": "CPU rounded arithmetic control; neither GPU trace nor performance result"
+      },
+      {
+        "id": "constant_448_sequential",
+        "n": 448,
+        "input_values": {
+          "constant": 1000000.0
+        },
+        "schedule": "sequential",
+        "mean_float32": 999997.5625,
+        "mean_square_float32": 1000004059136.0,
+        "raw_moment_float32": 8912896.0,
+        "centered_float32": 5.941429615020752,
+        "clamped_raw_float32": 8912896.0,
+        "exact_variance_of_stored_inputs": "0",
+        "reference_variance": 0.0,
+        "centered_binary64_reference": 0.0,
+        "epsilon_float32": 9.999999960041972e-13,
+        "rsqrt_arg_float32": 8912896.0,
+        "rsqrt_status": "finite",
+        "evidence_scope": "CPU rounded arithmetic control; neither GPU trace nor performance result"
+      },
+      {
+        "id": "constant_448_pairwise",
+        "n": 448,
+        "input_values": {
+          "constant": 1000000.0
+        },
+        "schedule": "pairwise",
+        "mean_float32": 1000000.125,
+        "mean_square_float32": 999999995904.0,
+        "raw_moment_float32": -262144.0,
+        "centered_float32": 0.015625,
+        "clamped_raw_float32": 0.0,
+        "exact_variance_of_stored_inputs": "0",
+        "reference_variance": 0.0,
+        "centered_binary64_reference": 0.0,
+        "epsilon_float32": 9.999999960041972e-13,
+        "rsqrt_arg_float32": -262144.0,
+        "rsqrt_status": "NaN-domain",
+        "evidence_scope": "CPU rounded arithmetic control; neither GPU trace nor performance result"
+      }
+    ],
+    "checks": [
+      {
+        "id": "control_ordinary_scale",
+        "passed": true
+      },
+      {
+        "id": "control_same_precision_positive_loss",
+        "passed": true
+      },
+      {
+        "id": "control_clamp_does_not_recover",
+        "passed": true
+      },
+      {
+        "id": "control_negative_raw_consumed",
+        "passed": true
+      },
+      {
+        "id": "control_same_precision_centered_finite",
+        "passed": true
+      },
+      {
+        "id": "control_schedule_affects_result",
+        "passed": true
+      },
+      {
+        "id": "control_exact_and_binary64_reference",
+        "passed": true
+      }
+    ],
+    "case_count": 5,
+    "assertions_passed": 7
+  },
+  "classifier_invocations": 0,
+  "model_reads": 0,
+  "GPU_executions": 0
+}
