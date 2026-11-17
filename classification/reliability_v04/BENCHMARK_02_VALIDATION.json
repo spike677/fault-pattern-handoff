@@ -1,0 +1,189 @@
+{
+  "schema": "mech-v043/public-aggregate-validation@1",
+  "date": "2026-11-17",
+  "scope": "development_exercise",
+  "base_sha": "0ed595a01567bc9661cdc0b4844cc584f9dcb607",
+  "code_sha": "da90992b90f3eb56a252d21cb5cb9ccf7b9a96f2",
+  "benchmark01_summary_sha": "88030e36e2fffb17639f7f297c619bd66c263865",
+  "integration_sha": "094cdfcfe19ca43cde2ea353af6ae49d02ccb00a",
+  "public_payload_files": [
+    "classification/mech_v04/classifier.py",
+    "classification/reliability_v04/BENCHMARK_01_SUMMARY.md",
+    "classification/reliability_v04/BENCHMARK_02_SUMMARY.md",
+    "classification/reliability_v04/BENCHMARK_02_VALIDATION.json",
+    "classification/reliability_v04/reviewed_static.py",
+    "classification/test_reliability_v04.py",
+    "classification/test_reviewed_static.py"
+  ],
+  "payload_sha256": {
+    "classification/mech_v04/classifier.py": "463a77da1188c8908bc0837c348b10bfd1b5e4b324ab9f386b4fae45126f7ecb",
+    "classification/reliability_v04/BENCHMARK_01_SUMMARY.md": "266204720931a4630671a3725bebb43d57e22060af9184c82dad36134a005a31",
+    "classification/reliability_v04/BENCHMARK_02_SUMMARY.md": "6e1e07dc3a34c23ad4b6b4e64df27be5ff2fd67e1cb6b3857a08328fa246c80e",
+    "classification/reliability_v04/reviewed_static.py": "8b00596ea05e828ed6a9f05f1624618f814eac3170eee4a051cbfb8905ecbe97",
+    "classification/test_reliability_v04.py": "639403eb3a12fca257423b1c709d83ddec64a74edb995b0a248ee13edd8db734",
+    "classification/test_reviewed_static.py": "691490d9233951c9af015da92e0dc465e2acbc876eb38e98139b84b2d9d44ec6"
+  },
+  "public_checkout_tests": [
+    {
+      "suite": "reliability",
+      "tests": 33,
+      "passed": true,
+      "command": [
+        "python",
+        "-B",
+        "-X",
+        "utf8",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "classification",
+        "-p",
+        "test_reliability*.py"
+      ],
+      "local_log_sha256": "c3f4199a9e6cc191d9cc78dd7d3077c1491cf02efe677a889897dbfb49ec5a17"
+    },
+    {
+      "suite": "reviewed_static",
+      "tests": 4,
+      "passed": true,
+      "command": [
+        "python",
+        "-B",
+        "-X",
+        "utf8",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "classification",
+        "-p",
+        "test_reviewed_static.py"
+      ],
+      "local_log_sha256": "638d287c0b0a39696192d173099f90dfd19c0b1b2df974802576f431e7c9eb0b"
+    },
+    {
+      "suite": "cross_version",
+      "tests": 5,
+      "passed": true,
+      "command": [
+        "python",
+        "-B",
+        "-X",
+        "utf8",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "classification",
+        "-p",
+        "test_mech_v04_cross_version.py"
+      ],
+      "local_log_sha256": "fa51cb72365868738637ccdcd51945b7bb05958aedcaa21f3084c1e3aee30ed1"
+    },
+    {
+      "suite": "legacy_diagnosis",
+      "tests": 17,
+      "passed": true,
+      "command": [
+        "python",
+        "-B",
+        "-X",
+        "utf8",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "diagnosis_mvp",
+        "-p",
+        "test_*.py"
+      ],
+      "local_log_sha256": "70d8c7f09a0f39bb3902398abdae72673a041540fd02341f497e0cc9f0bf1042"
+    }
+  ],
+  "prior_controlled_tests": {
+    "classification_passed": 162,
+    "legacy_diagnosis_passed": 17,
+    "added_tests_included_in_classification": 7,
+    "tested_code_hashes_match": true,
+    "private_fixture_files": 9
+  },
+  "directed_replay": {
+    "units": 6,
+    "families": 4,
+    "same_family_controls": 2,
+    "rounds": [
+      {
+        "round": 1,
+        "matching_units": [
+          6,
+          6
+        ],
+        "root_count": 5
+      },
+      {
+        "round": 2,
+        "matching_units": [
+          6,
+          6
+        ],
+        "root_count": 5
+      }
+    ],
+    "new_independent_reads": 0,
+    "new_independent_judgments": 0,
+    "generalization_accuracy_established": false
+  },
+  "unchanged_historical_fact_replay": {
+    "exact_cases_by_round": [
+      10,
+      9
+    ],
+    "cases_per_round": 10,
+    "only_intended_change": "RotaryEmbedding round two parameter restatement"
+  },
+  "benchmark01_closeout": {
+    "locked_artifacts_verified": 31,
+    "comparison_families": 10,
+    "comparison_views": 29,
+    "full_families": 13,
+    "full_views": 37,
+    "exposed_families": 13,
+    "original_supported_mode": [
+      [
+        9,
+        11
+      ],
+      [
+        8,
+        11
+      ]
+    ],
+    "original_strict_case": [
+      [
+        8,
+        10
+      ],
+      [
+        7,
+        10
+      ]
+    ]
+  },
+  "catalog_modes": 9,
+  "new_formal_admissions": 0,
+  "formal_F": "BLOCKED",
+  "remaining": [
+    "MIGraphX actual GPU working precision NOT_VERIFIED",
+    "Independent new reading, judging and generalization NOT_TESTED"
+  ],
+  "local_record_sha256": {
+    "delivery-manifest.json": "c5d77d2327ef1ef6ce0b0f447860935e4a3f633dac8e00d94c77c4d4081b1860",
+    "BENCHMARK_01_CLOSEOUT.json": "afb92969799511d5c9f79c14b6f6a0cf9ceba13e98ee66d96b93fdc1771a83a6",
+    "freeze.json": "e3aabff85d32230cea430b1f65453912c2184545abdc35dfdbe3e12232f431b4",
+    "results.json": "ff1ae9273720a541ed1b153b51ac4b82d300ce5c85bfaffb3f89083bff9f6bb8",
+    "test-logs/manifest.json": "5c9c4fc2c81a95f09c000a0c46251d6aa42da87a494654cff16385e74e4ed02f",
+    "external_knowledge_adoption.csv": "255958c49597a1c928a91a047a07d7517a398dbc8e7b3179d14bcdb7f5995d5d"
+  },
+  "publication_boundary": "Aggregate attestation only. Original materials, answers, raw extractions and predictions, local run logs, and F screening remain local."
+}
