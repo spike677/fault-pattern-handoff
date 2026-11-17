@@ -36,7 +36,8 @@ def review_schema():
 
 def predicted_actions(case):
     return by_id([node for node in case["nodes"]
-                  if node["node_type"] != "supporting_operation" and not node.get("attributed_to")], "action_id")
+                  if node["node_type"] != "supporting_operation"
+                  and not (node.get("attributed_to") or node.get("duplicate_of"))], "action_id")
 
 
 def mechanism(verdict, allowed):

@@ -91,6 +91,28 @@ def proof_at(location, anchor, sources):
             and anchor["end_line"] + offset >= location["original_start_line"])
 
 
+def site_key(location):
+    return tuple(location[key] for key in ("version", "path", "original_start_line", "original_end_line"))
+
+
+def overlapping_sites(first, second):
+    return first[:2] == second[:2] and first[2] <= second[3] and second[2] <= first[3]
+
+
+def implementation_sites(node, sources):
+    """Identify the old positions that independently support this operation."""
+    uses = {"confirmed_report": "confirmation", "verified_runtime": "runtime", "derived": "behavior"}
+    return frozenset(
+        site_key(position)
+        for fact in node["verdict"]["facts"]
+        if fact["key"] == "implementation_action" and fact["value"] and fact["claim_state"] in uses
+        and anchored_basis(fact["claim_state"], fact.get("explanation"), fact["anchors"], sources, node["scope"])
+        for anchor in fact["anchors"]
+        if anchor["use"] == uses[fact["claim_state"]]
+        and (position := action_position(anchor, node["scope"], sources)) is not None
+    )
+
+
 def report_position(action, verdict, sources, cards):
     """Locate a self-sufficient confirmation even when the model points to older code."""
     if action["scope"]["claim"] != "reported":
@@ -129,17 +151,30 @@ def relation_supported(edge, nodes, sources):
     right = nodes[edge["to"]]
     if kind == "independent_of":
         locations = [node["source_location"] for node in (left, right)]
-        if None in locations or all(locations[0][key] == locations[1][key] for key in (
-            "version", "path", "original_start_line", "original_end_line",
-        )):
+        if None in locations or state in {"observation", "hypothesis"} or not all(
+                node["action_proven"] and node["causal_proof"] for node in (left, right)):
             return False
         expected_claim = {"verified_runtime": "runtime", "confirmed_report": "reported"}.get(state)
         if expected_claim and any(node["scope"]["claim"] != expected_claim for node in (left, right)):
             return False
-        return all(node["action_proven"] and node["causal_proof"] and any(
-            anchor["use"] != "context" and proof_at(node["source_location"], anchor, sources)
+        if overlapping_sites(*(site_key(location) for location in locations)):
+            left_sites, right_sites = (implementation_sites(node, sources) for node in (left, right))
+            left_distinct = {site for site in left_sites if not any(
+                overlapping_sites(site, other) for other in right_sites)}
+            right_distinct = {site for site in right_sites if not any(
+                overlapping_sites(site, other) for other in left_sites)}
+            return all(any(
+                anchor["use"] != "context"
+                and (position := action_position(anchor, node["scope"], sources)) is not None
+                and site_key(position) in unique_sites
+                for anchor in anchors
+            ) for node, unique_sites in ((left, left_distinct), (right, right_distinct)))
+        return all(any(
+            anchor["use"] != "context" and proof_at(location, anchor, sources)
+            and not proof_at(other_location, anchor, sources)
             and not pilot.check_anchor(anchor, sources, node["scope"]) for anchor in anchors)
-                   for node in (left, right)) and state not in {"observation", "hypothesis"}
+                   for node, location, other_location in (
+                       (left, locations[0], locations[1]), (right, locations[1], locations[0])))
     if kind in {"consumes", "supports"} and state == "observation":
         return left["source_location"] is not None and any(
             anchor["use"] != "context" and proof_at(left["source_location"], anchor, sources)
@@ -245,24 +280,31 @@ def classify_node(node, action, position, verdict, sources, cards):
     }
 
 
-def count_roots(nodes, edges):
+def count_roots(nodes, edges, sources):
     roots = {}
     locations = {}
+    independent = {frozenset((edge["from"], edge["to"])) for edge in edges
+                   if edge["supported"] and edge["kind"] == "independent_of"}
     for node in nodes.values():
         if not (node["node_type"] in ROOTS and node["action_proven"] and node["causal_proof"]):
             continue
-        location = node["source_location"]
-        identity = (location["version"], location["path"], location["original_start_line"],
-                    location["original_end_line"], " ".join(node["observed_behavior"].split()))
-        if identity in locations:
+        action_id = node["action_id"]
+        location = site_key(node["source_location"])
+        sites = implementation_sites(node, sources)
+        duplicates = [
+            prior for prior, (prior_location, prior_sites) in locations.items()
+            if frozenset((action_id, prior)) not in independent
+            and overlapping_sites(location, prior_location)
+            and any(overlapping_sites(site, prior_site) for site in sites for prior_site in prior_sites)
+        ]
+        if len(duplicates) == 1:
             node["issues"].append("duplicate_implementation_action")
-            node["duplicate_of"] = locations[identity]
+            node["duplicate_of"], = duplicates
         else:
-            action_id = node["action_id"]
-            locations[identity] = action_id
+            locations[action_id] = (location, sites)
             roots[action_id] = node
-    independent = {frozenset((edge["from"], edge["to"])) for edge in edges
-                   if edge["supported"] and edge["kind"] == "independent_of"}
+    independent = {frozenset(nodes[action_id].get("duplicate_of", action_id) for action_id in pair)
+                   for pair in independent}
     unresolved = {action for pair in combinations(roots, 2) if frozenset(pair) not in independent for action in pair}
     for action_id, node in roots.items():
         if action_id in unresolved:
@@ -276,7 +318,8 @@ def assign_effects(nodes, edges):
     incoming = defaultdict(set)
     for edge in edges:
         if edge["supported"] and edge["kind"] in CAUSAL:
-            incoming[edge["to"]].add(edge["from"])
+            upstream = nodes[edge["from"]]
+            incoming[edge["to"]].add(upstream.get("duplicate_of", edge["from"]))
     for action_id, producers in incoming.items():
         nodes[action_id]["causal_role"] = "downstream"
         nodes[action_id]["upstream_ids"] = sorted(producers)
@@ -344,7 +387,7 @@ def classify_case(case, extracted, catalog):
              for key, (action, position) in prepared.items()}
     edges = resolve_relations(extracted["relations"], nodes, sources)
     attribute_supported_effects(nodes, edges, catalog["modes"])
-    count_roots(nodes, edges)
+    count_roots(nodes, edges, sources)
     assign_effects(nodes, edges)
     return {"case_id": case["case_id"], "operator": extracted["operator"], "source_sha256": pilot.digest(case),
             "facts_sha256": pilot.digest(extracted), "nodes": list(nodes.values()), "relations": edges,

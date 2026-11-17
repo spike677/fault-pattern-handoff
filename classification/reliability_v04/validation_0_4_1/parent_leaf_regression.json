@@ -1,0 +1,391 @@
+{
+  "scope": "合成证据回归，不含 F 样本。每项同时验收决策层级与独立根数。",
+  "fixtures": [
+    {
+      "id": "running_state_leaf",
+      "proof_text": [
+        "The fixed dot product must accumulate each eligible term once in float32.",
+        "The kernel stores every updated partial sum into the same float16 slot and reloads it for the next step.",
+        "With [2048,1,-2048] and equal weights, the next step and final output consume 0 from the narrow state versus 1 from the same float32 updates."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "numeric_evaluation_violation",
+        "contribution_set_preserved",
+        "distorted_value_consumed",
+        "loop_carried_narrow_state",
+        "wider_state_preserves_same_updates"
+      ],
+      "expected": {
+        "status": "leaf",
+        "pattern_id": "NUM-01",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "running_state_parent",
+      "proof_text": [
+        "The fixed result must sum each selected term once, in the same order, without losing the documented output increment.",
+        "The author traced the first wrong finite-precision value to the existing reduction operation, while confirming the same members and weights.",
+        "The output stage reads that distorted value. Neither the state width on consecutive updates nor a same-update wider comparison is given."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "numeric_evaluation_violation",
+        "contribution_set_preserved",
+        "distorted_value_consumed"
+      ],
+      "expected": {
+        "status": "parent",
+        "parent_id": "numerical_evaluation",
+        "root_count": 1
+      },
+      "baseline_gap": {
+        "status": "insufficient",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "variance_leaf",
+      "proof_text": [
+        "Layer normalization must use the centered variance over the same eligible row elements.",
+        "In the actual default path the original-moment subtraction rounds to zero for the same row whose centered variance remains nonzero. Both paths work in binary32.",
+        "The existing rsqrt consumes this distorted variance. Neither multiplication overflows."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "numeric_evaluation_violation",
+        "contribution_set_preserved",
+        "distorted_value_consumed",
+        "variance_from_raw_moment_difference",
+        "variance_consumed_by_normalization",
+        "centered_variance_survives_at_same_precision"
+      ],
+      "expected": {
+        "status": "leaf",
+        "pattern_id": "NUM-02",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "variance_parent",
+      "proof_text": [
+        "The same input group and weights must give the mathematical centered variance used for normalization.",
+        "The default GPU graph replaces it with the original-moment difference, which cancels to an incorrect value.",
+        "The defective subtraction is consumed by the old rsqrt. The actual working types on both comparison paths are not specified."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "numeric_evaluation_violation",
+        "contribution_set_preserved",
+        "distorted_value_consumed",
+        "variance_from_raw_moment_difference",
+        "variance_consumed_by_normalization"
+      ],
+      "expected": {
+        "status": "parent",
+        "parent_id": "numerical_evaluation",
+        "root_count": 1
+      },
+      "baseline_gap": {
+        "status": "insufficient",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "variance_parent_without_role",
+      "proof_text": [
+        "The variance semantic contract and exact members for this normalization are recorded.",
+        "The reported old formula evaluation loses information by cancellation with the same data and weights.",
+        "The rsqrt reads that value. This record does not determine the action's independent role in the full event."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "numeric_evaluation_violation",
+        "contribution_set_preserved",
+        "distorted_value_consumed",
+        "variance_from_raw_moment_difference",
+        "variance_consumed_by_normalization"
+      ],
+      "expected": {
+        "status": "parent",
+        "parent_id": "numerical_evaluation",
+        "root_count": 0
+      },
+      "baseline_gap": {
+        "status": "insufficient",
+        "root_count": 0
+      }
+    },
+    {
+      "id": "variance_missing_consumer",
+      "proof_text": [
+        "The normalization contract is known.",
+        "The old transformation builds the same eligible set and an unstable expression.",
+        "The report never shows that the old target actually executes or consumes this expression."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "numeric_evaluation_violation",
+        "contribution_set_preserved",
+        "variance_from_raw_moment_difference"
+      ],
+      "expected": {
+        "status": "insufficient",
+        "root_count": 0
+      }
+    },
+    {
+      "id": "numeric_output_only",
+      "proof_text": [
+        "A GPU run reports NaN.",
+        "Its expression, version, and actual consumer are unknown."
+      ],
+      "facts": [
+        "implementation_action",
+        "numeric_evaluation_violation"
+      ],
+      "expected": {
+        "status": "insufficient",
+        "root_count": 0
+      },
+      "state": "observation",
+      "node_type": "unknown_action"
+    },
+    {
+      "id": "numeric_cross_revision",
+      "proof_text": [
+        "A newer report discusses one reduction, but this source only describes the earlier build.",
+        "No old numeric mechanism is confirmed."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "numeric_evaluation_violation",
+        "contribution_set_preserved",
+        "distorted_value_consumed"
+      ],
+      "expected": {
+        "status": "insufficient",
+        "root_count": 0
+      },
+      "other_source": true
+    },
+    {
+      "id": "allowed_terminal_cast",
+      "proof_text": [
+        "The contract explicitly permits one rounding to half after full precision accumulation.",
+        "The tested path keeps float32 until the output conversion, which is exactly the allowed round."
+      ],
+      "facts": [
+        "applicable_contract",
+        "compliant"
+      ],
+      "expected": {
+        "status": "outside",
+        "outside_reason": "compliant",
+        "root_count": 0
+      },
+      "node_type": "unknown_action"
+    },
+    {
+      "id": "presquare_overflow",
+      "proof_text": [
+        "For the supported input 512, the variance path must calculate a finite square.",
+        "The old path first computes 512 squared in float16, overflowing before any reduction or moment subtraction.",
+        "The downstream reduction consumes the already-infinite square. This first defect is known outside the two formal numeric leaves."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "pre_reduction_square_overflow",
+        "established_other_defect",
+        "variance_from_raw_moment_difference"
+      ],
+      "expected": {
+        "status": "outside",
+        "outside_reason": "outside_catalog",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "parameter_gate_parent",
+      "proof_text": [
+        "Rank-four input encodes its heads and may omit the matching attribute.",
+        "The old entry guard rejects that omitted attribute before invoking the kernel.",
+        "The input never reaches any ordinary head-count calculation."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "parameter_violation",
+        "correct_source",
+        "special_state"
+      ],
+      "expected": {
+        "status": "parent",
+        "parent_id": "parameter",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "parameter_sentinel_leaf",
+      "proof_text": [
+        "The correct offset attribute treats -1 as automatic selection.",
+        "The old kernel reads that attribute from the correct source and wrongly interprets -1 as a literal offset.",
+        "The bound element lookup actually consumes that invalid literal."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "correct_source",
+        "special_state",
+        "wrong_state_treatment"
+      ],
+      "expected": {
+        "status": "leaf",
+        "pattern_id": "P2",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "wrong_parameter_source_leaf",
+      "proof_text": [
+        "The runtime limit must come from the kernel's declared capacity.",
+        "The old dispatcher reads the unrelated generation limit instead.",
+        "A bound capacity check rejects the valid request, proving the two sources are not equivalent."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "expected_source",
+        "actual_source",
+        "non_equivalent_source"
+      ],
+      "expected": {
+        "status": "leaf",
+        "pattern_id": "P1",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "address_parent",
+      "proof_text": [
+        "The copy interface must preserve the marked logical element-to-address mapping.",
+        "The old path compares the same input and reads an address for the wrong element.",
+        "The wrong-address read is observed on this path; the record leaves the actual compact-view formula and byte scale unresolved."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "address_violation"
+      ],
+      "expected": {
+        "status": "parent",
+        "parent_id": "address",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "layout_formula_leaf",
+      "proof_text": [
+        "The operation accepts a legal transpose view without an explicit copying requirement.",
+        "The old formula substitutes a contiguous row size for the view's actual stride.",
+        "The bound load uses that formula, and the verified path performs no correct contiguous conversion."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "supported_view",
+        "no_correct_contiguous_conversion",
+        "contiguous_formula"
+      ],
+      "expected": {
+        "status": "leaf",
+        "pattern_id": "L1",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "element_byte_scaling_leaf",
+      "proof_text": [
+        "A byte-pointer offset for an index in elements must multiply by the element width.",
+        "The old float32 path adds the element index directly to the byte pointer.",
+        "The width is four and the observed load uses the resulting wrong byte address."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "expected_units",
+        "storage_width",
+        "wrong_conversion"
+      ],
+      "expected": {
+        "status": "leaf",
+        "pattern_id": "L2",
+        "root_count": 1
+      }
+    },
+    {
+      "id": "unsupported_view",
+      "proof_text": [
+        "This interface only accepts contiguous inputs and documents the unsupported transpose-view path.",
+        "The requested strided input falls outside that documented contract."
+      ],
+      "facts": [
+        "contract_inapplicable",
+        "view_unsupported"
+      ],
+      "expected": {
+        "status": "outside",
+        "outside_reason": "inapplicable",
+        "root_count": 0
+      },
+      "node_type": "unknown_action"
+    },
+    {
+      "id": "conflicting_numeric_and_legality",
+      "proof_text": [
+        "One scope claims the old reduction loses a required increment, preserving its members and having a real consumer.",
+        "An equally decisive report of the identical path says this execution explicitly allows that rounding.",
+        "The local record has an unresolved contradiction in the same finite-precision contract."
+      ],
+      "facts": [
+        "applicable_contract",
+        "implementation_action",
+        "causal_role",
+        "numeric_evaluation_violation",
+        "contribution_set_preserved",
+        "distorted_value_consumed",
+        "compliant"
+      ],
+      "expected": {
+        "status": "insufficient",
+        "root_count": 0
+      },
+      "baseline_gap": {
+        "status": "outside",
+        "outside_reason": "compliant",
+        "root_count": 0
+      }
+    }
+  ]
+}

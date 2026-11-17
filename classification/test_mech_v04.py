@@ -27,6 +27,13 @@ class AdmissionTest(unittest.TestCase):
     def classify(self, case_index=0):
         return classifier.classify_package(self.material, self.packets)[case_index]["actions"][0]
 
+    def add_numeric_parent_fact(self, case_index):
+        packet = self.packets[case_index]
+        fact = deepcopy(action(packet, "implementation_action"))
+        fact["key"] = "numeric_evaluation_violation"
+        packet["actions"][0]["facts"].append(fact)
+        return fact
+
     def test_admitted_cards_and_single_square_neighbor(self):
         results = classifier.classify_package(self.material, self.packets)
         self.assertEqual([row["decision_version"] for row in results], [classifier.DECISION_VERSION] * 3)
@@ -46,6 +53,80 @@ class AdmissionTest(unittest.TestCase):
         self.assertEqual((verdict["status"], verdict["role"], verdict["count_as_independent"]),
                          ("insufficient", "unknown", False))
         self.assertIn("centered_variance_survives_at_same_precision", verdict["missing"])
+
+    def test_numerical_parent_does_not_erase_numeric_leaf_distinctions(self):
+        for index, mode, distinction in (
+            (0, "NUM-01", "wider_state_preserves_same_updates"),
+            (1, "NUM-02", "centered_variance_survives_at_same_precision"),
+        ):
+            with self.subTest(mode=mode):
+                self.add_numeric_parent_fact(index)
+                self.assertEqual(self.classify(index)["pattern_id"], mode)
+                action(self.packets[index], distinction)["claim_state"] = "observation"
+                result = self.classify(index)
+                self.assertEqual((result["status"], result["parent_id"]), ("parent", "numerical_evaluation"))
+                self.assertIn(distinction, result["missing"])
+                self.assertIn(distinction, result["numeric_neighbors"][mode]["missing"])
+                self.assertTrue(result["count_as_independent"])
+
+    def test_numerical_parent_can_close_without_a_named_leaf_operation(self):
+        self.add_numeric_parent_fact(1)
+        row = self.packets[1]["actions"][0]
+        row["facts"] = [fact for fact in row["facts"] if fact["key"] not in {
+            "variance_from_raw_moment_difference", "centered_variance_survives_at_same_precision",
+            "variance_consumed_by_normalization", "established_other_defect",
+        }]
+        self.assertEqual(self.classify(1).get("parent_id"), "numerical_evaluation")
+
+    def test_numerical_parent_needs_same_scope_proof_of_all_five_facts(self):
+        for missing in ("applicable_contract", "implementation_action", "numeric_evaluation_violation",
+                        "contribution_set_preserved", "distorted_value_consumed"):
+            with self.subTest(missing=missing):
+                self.setUp()
+                self.add_numeric_parent_fact(1)
+                action(self.packets[1], "centered_variance_survives_at_same_precision")["claim_state"] = "observation"
+                action(self.packets[1], missing)["claim_state"] = "observation"
+                self.assertEqual(self.classify(1)["status"], "insufficient")
+
+    def test_foreign_version_alone_cannot_prove_the_numerical_parent(self):
+        fact = self.add_numeric_parent_fact(1)
+        source = deepcopy(self.material["cases"][1]["sources"][0])
+        source.update(id="foreign-snapshot", version="not-the-old-implementation")
+        self.material["cases"][1]["sources"].append(source)
+        anchor = fact["anchors"][0]
+        anchor.update(source_id=source["id"], start_line=1, end_line=1, quote=source["text"].splitlines()[0])
+        fact["anchors"] = [anchor]
+        action(self.packets[1], "centered_variance_survives_at_same_precision")["claim_state"] = "observation"
+        result = self.classify(1)
+        self.assertEqual(result["status"], "insufficient")
+        self.assertIn({"fact": fact["key"], "code": "source_version_mismatch"}, result["issues"])
+
+    def test_numerical_parent_cannot_bypass_competing_outcomes(self):
+        for contrary in ("compliant", "loop_carried_narrow_state", "pre_reduction_square_overflow"):
+            with self.subTest(contrary=contrary):
+                self.setUp()
+                packet = self.packets[1]
+                fact = deepcopy(self.add_numeric_parent_fact(1))
+                fact["key"] = contrary
+                packet["actions"][0]["facts"].append(fact)
+                action(packet, "centered_variance_survives_at_same_precision")["claim_state"] = "observation"
+                result = self.classify(1)
+                self.assertEqual(result["status"], "insufficient")
+                self.assertTrue(result.get("conflict_details", {}).get("core"))
+
+    def test_conflicting_parent_basis_is_not_numerical_evidence(self):
+        packet = self.packets[1]
+        fact = self.add_numeric_parent_fact(1)
+        packet["actions"][0]["facts"].append({**deepcopy(fact), "value": False})
+        action(packet, "centered_variance_survives_at_same_precision")["claim_state"] = "observation"
+        result = self.classify(1)
+        self.assertEqual(result["status"], "insufficient")
+        self.assertIn(fact["key"], result.get("conflict_details", {}).get("core", []))
+
+    def test_parent_assertion_does_not_absorb_the_proven_square_overflow_neighbor(self):
+        self.add_numeric_parent_fact(2)
+        result = self.classify(2)
+        self.assertEqual((result["status"], result["outside_reason"]), ("outside", "outside_catalog"))
 
     def test_causal_dispute_keeps_an_established_mechanism(self):
         row = self.packets[0]["actions"][0]

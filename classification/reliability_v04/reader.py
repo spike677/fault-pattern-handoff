@@ -26,6 +26,11 @@ SPAN = object_schema({"source_id": TEXT, "start_line": {"type": "integer"}, "end
 def schema():
     standard = formal.schema()
     definitions = standard["$defs"]
+    fact_keys = definitions["fact"]["properties"]["key"]["enum"]
+    catalog = classifier.read_json(classifier.CATALOG)
+    numeric_parent_fact = catalog["parent_facts"][classifier.NUMERIC_PARENT]
+    if numeric_parent_fact not in fact_keys:
+        fact_keys.append(numeric_parent_fact)
     existing = definitions.pop("action")["properties"]
     definitions.pop("supporting_operation")
     definitions["node"] = object_schema({

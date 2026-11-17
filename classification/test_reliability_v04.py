@@ -14,7 +14,16 @@ CASE = {"case_id": "fixture", "sources": [
              "The parser treats the explicit -1 as omitted, admitting the padding row.\n"
              "The reduction really sums the ineligible term after the parser changed its membership.\n"
              "Separately, a different branch corrupts a saved index independently of padding.\n"
-             "The consumer reads the saved mask in the listed reduction.", "original_start_line": 20},
+             "The consumer reads the saved mask in the listed reduction.\n"
+             "That parser choice also drops the mandatory valid addend from its destination.\n"
+             "The emitted padding index is duplicated and actually contributes twice to the second accumulator.\n"
+             "The writer uses a packed stride on the accepted, never-contiguous view.\n"
+             "That address sends the required addend to a different target, leaving its accumulation empty.\n"
+             "The parser both admits padding and drops the distinct required member in this replacement.\n"
+             "One line performs an attribute check and a separate write to a saved index.\n"
+             "The attribute check rejects legal omission even with an already-correct saved index.\n"
+             "The saved index uses the wrong byte offset even with an explicit, accepted attribute.",
+     "original_start_line": 20},
     {"id": "patch", "path": "repair.diff", "version": "fixed-v2", "kind": "diff",
      "text": "+ if required: sum(term)"},
     {"id": "old", "path": "parser.py", "version": "frozen-v0", "kind": "code",
@@ -79,6 +88,28 @@ class ReliabilityGraph(unittest.TestCase):
         self.assertEqual([item["causal_role"] for item in result["nodes"]], ["independent", "independent"])
         self.assertTrue(all(item["verdict"]["outside_reason"] == "outside_catalog" for item in result["nodes"]))
 
+    def test_two_roots_require_evidence_for_both_actual_violations(self):
+        first = node("capacity", "root_action", 2, (*PROOF, "established_other_defect"))
+        second = node("workspace-step", "independent_action", 4, ("applicable_contract", "causal_role"))
+        result = run(first, second, edges=(edge("independent_of", "capacity", "workspace-step", 2, 4),))
+        self.assertFalse(result["relations"][0]["supported"])
+        self.assertEqual([item["independent_count"] for item in result["nodes"]], [1, 0])
+
+    def test_shared_report_location_with_separate_proof_can_identify_two_roots(self):
+        gate = node("gate", "root_action", 11, (*PROOF, "parameter_violation"))
+        address = node("address", "independent_action", 11, (*PROOF, "address_violation"))
+        for action, line in ((gate, 12), (address, 13)):
+            for fact in action["facts"]:
+                fact["anchors"] = [anchor(line)]
+        independent = edge("independent_of", "gate", "address", 12, 13)
+        result = run(gate, address, edges=(independent,))
+        self.assertTrue(result["relations"][0]["supported"])
+        self.assertEqual([item["causal_role"] for item in result["nodes"]], ["independent", "independent"])
+        self.assertEqual(result["independent_count"], 2)
+        partial = run(gate, address, edges=({**independent, "evidence_refs": [anchor(12)]},))
+        self.assertFalse(partial["relations"][0]["supported"])
+        self.assertEqual(partial["independent_count"], 0)
+
     def test_independence_hypothesis_cannot_remove_the_uncertainty(self):
         first = node("first", "root_action", 2, (*PROOF, "established_other_defect"))
         second = node("second", "independent_action", 4, (*PROOF, "established_other_defect"))
@@ -93,6 +124,101 @@ class ReliabilityGraph(unittest.TestCase):
         self.assertEqual(result["independent_count"], 1)
         self.assertEqual(result["nodes"][1]["duplicate_of"], "first")
         self.assertFalse(result["relations"][0]["supported"])
+
+    def test_overlapping_windows_do_not_make_the_same_action_independent(self):
+        first = node("first", "root_action", 2, (*PROOF, "established_other_defect"))
+        repeated = {**deepcopy(first), "id": "duplicate", "node_type": "independent_action"}
+        first["facts"][1]["anchors"] = [{**anchor(1), "end_line": 2}]
+        repeated["facts"][1]["anchors"] = [{**anchor(2), "end_line": 3}]
+        claimed = edge("independent_of", "first", "duplicate")
+        claimed["evidence_refs"] = first["facts"][1]["anchors"] + repeated["facts"][1]["anchors"]
+        for end_line in (2, 3):
+            with self.subTest(end_line=end_line):
+                repeated["source_location"]["end_line"] = end_line
+                result = run(first, repeated, edges=(claimed,))
+                self.assertEqual((result["independent_count"], result["relations"][0]["supported"]), (1, False))
+                self.assertEqual(result["nodes"][1]["duplicate_of"], "first")
+
+    def test_independence_at_a_repeated_root_applies_to_its_canonical_action(self):
+        first = node("first", "root_action", 2, (*PROOF, "established_other_defect"))
+        repeated = {**deepcopy(first), "id": "duplicate", "node_type": "independent_action"}
+        separate = node("separate", "independent_action", 4, (*PROOF, "established_other_defect"))
+        result = run(first, repeated, separate, edges=(edge("independent_of", "duplicate", "separate", 2, 4),))
+        self.assertEqual(result["independent_count"], 2)
+        self.assertEqual(result["nodes"][1]["duplicate_of"], "first")
+        self.assertTrue(result["relations"][0]["supported"])
+
+    def test_paraphrased_root_retains_three_effects_under_one_implementation(self):
+        source = node("sentinel", "root_action", 2, (*PROOF, "correct_source", "special_state", "wrong_state_treatment"))
+        alias = {
+            **deepcopy(source), "id": "other-description", "description": "Explicit sentinel is parsed as unset.",
+            "observed_behavior": "Dropped the supplied -1 instead of using its padding meaning.",
+        }
+        invalid = node("ineligible", "downstream_effect", 3, ("applicable_contract", "ineligible_member", "actual_contribution"))
+        missing = node("omitted", "downstream_effect", 6, ("applicable_contract", "required_member", "omitted_contribution"))
+        repeated = node("repeated", "downstream_effect", 7, (
+            "applicable_contract", "original_contribution_identity", "expected_multiplicity", "excess_multiplicity",
+        ))
+        result = run(source, alias, invalid, missing, repeated, edges=(
+            edge("causes", "sentinel", "ineligible", 2, 3),
+            edge("causes", "other-description", "omitted", 2, 6),
+            edge("propagates_to", "ineligible", "repeated", 3, 7),
+        ))
+        root, duplicate, *effects = result["nodes"]
+        self.assertEqual(result["independent_count"], 1)
+        self.assertEqual((root["mode_ids"], root["effect_mode_ids"]), (["P2"], ["C1", "C2", "C3"]))
+        self.assertEqual(duplicate.get("duplicate_of"), "sentinel")
+        self.assertEqual([item["independent_count"] for item in effects], [0, 0, 0])
+        self.assertEqual(effects[1]["upstream_ids"], ["sentinel"])
+        self.assertNotIn("other-description", scoring.predicted_actions(result))
+
+    def test_one_replacement_preserves_two_compatible_direct_modes(self):
+        action = node("replace", "root_action", 10, (
+            *PROOF, "ineligible_member", "actual_contribution", "required_member", "omitted_contribution",
+            "distinct_members_for_replacement",
+        ))
+        result = run(action)
+        detail, = result["nodes"]
+        self.assertEqual((detail["verdict"]["parent_id"], detail["mode_ids"], detail["effect_mode_ids"]),
+                         ("calculation_item", ["C1", "C2"], []))
+        self.assertEqual(result["independent_count"], 1)
+
+    def test_unproved_downstream_does_not_gain_a_root_or_an_attribution(self):
+        parent = node("sentinel", "root_action", 2, (*PROOF, "correct_source", "special_state", "wrong_state_treatment"))
+        effect = node("maybe-omission", "downstream_effect", 6, ("applicable_contract", "required_member", "omitted_contribution"))
+        effect["facts"][-1]["claim_state"] = "hypothesis"
+        result = run(parent, effect, edges=(edge("causes", "sentinel", "maybe-omission", 2, 6),))
+        self.assertFalse(result["relations"][0]["supported"])
+        self.assertEqual(result["nodes"][0]["effect_mode_ids"], [])
+        self.assertEqual(result["nodes"][1]["causal_role"], "unknown")
+        self.assertEqual(result["independent_count"], 1)
+
+    def test_address_root_and_actual_omission_keep_separate_local_mechanisms(self):
+        writer = node("map", "root_action", 8, (*PROOF, "address_violation", "supported_view",
+                                               "no_correct_contiguous_conversion", "contiguous_formula"))
+        effect = node("empty-target", "downstream_effect", 9, (
+            "applicable_contract", "required_member", "omitted_contribution",
+        ))
+        for proved_view, direct in ((True, ("leaf", "L1")), (False, ("parent", "address"))):
+            with self.subTest(proved_view=proved_view):
+                writer["facts"][-3]["claim_state"] = "confirmed_report" if proved_view else "hypothesis"
+                result = run(writer, effect, edges=(edge("causes", "map", "empty-target", 8, 9),))
+                root, downstream = result["nodes"]
+                verdict = root["verdict"]
+                self.assertEqual((verdict["status"], verdict.get("pattern_id", verdict.get("parent_id"))), direct)
+                self.assertEqual(root["effect_mode_ids"], ["C2"])
+                self.assertEqual((downstream["causal_role"], downstream["independent_count"]), ("downstream", 0))
+                self.assertEqual(result["independent_count"], 1)
+
+    def test_missing_special_state_consumption_retains_parameter_parent(self):
+        action = node("sentinel", "root_action", 2, (
+            *PROOF, "parameter_violation", "correct_source", "special_state", "wrong_state_treatment",
+        ))
+        self.assertEqual(run(action)["nodes"][0]["mode_ids"], ["P2"])
+        action["facts"][-1]["claim_state"] = "hypothesis"
+        result = run(action)
+        self.assertEqual(result["nodes"][0]["verdict"]["parent_id"], "parameter")
+        self.assertEqual(result["independent_count"], 1)
 
     def test_known_action_survives_an_unresolved_leaf(self):
         result = run(node("first", "root_action", 2, PROOF))

@@ -13,11 +13,15 @@ from evaluate import read_json
 
 
 NAMESPACE = "MECH-v0.4"
-DECISION_VERSION = "0.4.1"
+DECISION_VERSION = "0.4.2"
 CATALOG = HERE / "catalog.json"
 PILOT_CATALOG = HERE.parent / "catalog.json"
 NUMERIC_MODES = ("NUM-01", "NUM-02")
 NUMERIC_PARENT = "numerical_evaluation"
+NUMERIC_PARENT_BASIS = {
+    "applicable_contract", "implementation_action", "contribution_set_preserved", "distorted_value_consumed",
+}
+NUMERIC_BOUNDARIES = {"pre_reduction_square_overflow", "compliant", "contract_inapplicable"}
 RESULT_FIELDS = (
     "pattern_id", "pattern_ref", "parent_id", "parent_ref", "parent_name",
     "definition_level", "mode_name", "group_id", "group_ref", "group_name",
@@ -78,26 +82,35 @@ def numeric_verdict(pilot_result, action, sources, catalog):
     result = current_refs(pilot_result)
     cards = {mode: catalog["modes"][mode] for mode in NUMERIC_MODES}
     operations = {mode: card["operation_fact"] for mode, card in cards.items()}
+    parent_fact = catalog["parent_facts"][NUMERIC_PARENT]
     asserted = {fact.get("key") for fact in action.get("facts", []) if fact.get("value") is True}
     requested = {mode for mode, operation in operations.items() if operation in asserted}
-    if not requested:
+    if not requested and parent_fact not in asserted:
         return result
 
+    parent_basis = NUMERIC_PARENT_BASIS | {parent_fact}
     required = {mode: set(cards[mode]["necessary"]) for mode in requested}
     excluded = {mode: set(cards[mode]["excluded_by"]) for mode in requested}
-    decisive = set.union(*required.values(), *excluded.values(), {"causal_role"})
-    _, positive, _, scoped, issues, disputed = pilot.collect_facts(action, sources, action["scope"], decisive)
+    decisive = parent_basis.union(NUMERIC_BOUNDARIES, {"causal_role"}, *required.values(), *excluded.values())
+    _, positive, negative, scoped, issues, disputed = pilot.collect_facts(action, sources, action["scope"], decisive)
     proof = positive & scoped
+    conflicts = (set(disputed) & decisive) - {"causal_role"}
     complete = {mode for mode, keys in required.items() if keys <= proof}
     blocked = {mode for mode, keys in excluded.items() if keys & proof}
-    conflicts = (set(disputed) & decisive) - {"causal_role"}
+    parent_supported = parent_basis <= proof
+    parent_contender = parent_basis <= proof | conflicts
+    square_first = "pre_reduction_square_overflow" in proof
+    first_errors = proof & (set(operations.values()) | {"pre_reduction_square_overflow"})
     scope_errors = pilot.validate_scope(action["scope"])
     prior_conflicts = pilot_result.get("conflict_details", {}).get("core", [])
     prior_alternative = (pilot_result["status"] in {"leaf", "parent"}
                          or pilot_result.get("outside_reason") in {"compliant", "inapplicable"})
 
-    if not complete and (prior_alternative or
-                         (blocked == requested and pilot_result["status"] == "outside")):
+    if (square_first and pilot_result.get("outside_reason") == "outside_catalog" and not complete
+            and not (parent_contender and len(first_errors) > 1)):
+        return result
+    if not (complete or parent_contender) and (prior_alternative or
+                (requested and blocked == requested and pilot_result["status"] == "outside")):
         return result
 
     for field in RESULT_FIELDS:
@@ -105,31 +118,49 @@ def numeric_verdict(pilot_result, action, sources, catalog):
     result["issues"] = result["issues"] + [
         issue for issue in issues if issue.get("fact") in decisive and issue not in result["issues"]
     ]
-    if (len(complete) == 1 and not blocked.intersection(complete) and not conflicts
-            and not prior_alternative and not prior_conflicts and not scope_errors):
+    if (complete or parent_contender) and (
+            prior_alternative or complete & blocked or len(first_errors) > 1
+            or proof & {"compliant", "contract_inapplicable"}):
+        conflicts.add("competing_mechanisms_for_one_action")
+    if complete and parent_fact in negative:
+        conflicts.add(parent_fact)
+
+    clear = not (conflicts or prior_conflicts or scope_errors)
+    causal = "causal_role" in proof
+    if len(complete) == 1 and clear:
         mode, = complete
         card = cards[mode]
         result.update(status="leaf", pattern_id=mode, pattern_ref=f"{NAMESPACE}:{mode}",
                       definition_level=card["definition_level"], mode_name=card["title"],
                       group_id=NUMERIC_PARENT, group_ref=f"{NAMESPACE}:{NUMERIC_PARENT}",
                       group_name=catalog["parents"][NUMERIC_PARENT])
-        result["missing"] = [] if "causal_role" in proof or action["role"] == "unknown" else ["causal_role"]
-        record_role(result, action, supported=True, causal="causal_role" in proof)
+        result["missing"] = [] if causal or action["role"] == "unknown" else ["causal_role"]
+        record_role(result, action, supported=True, causal=causal)
         return result
 
-    if complete and (len(complete) > 1 or blocked.intersection(complete) or prior_alternative):
-        conflicts.add("competing_mechanisms_for_one_action")
     result["status"] = "insufficient"
     result["numeric_neighbors"] = {
         mode: {"missing": sorted(required[mode] - proof), "contrary": sorted(excluded[mode] & proof)}
         for mode in sorted(requested)
     }
-    result["missing"] = sorted(set(scope_errors).union(*(keys - proof for keys in required.values())))
+    missing = set(scope_errors).union(*(keys - proof for keys in required.values()))
+    if parent_fact in asserted:
+        missing.update(parent_basis - proof)
+    if parent_supported and clear and not square_first:
+        result.update(status="parent", parent_id=NUMERIC_PARENT, parent_ref=f"{NAMESPACE}:{NUMERIC_PARENT}",
+                      parent_name=catalog["parents"][NUMERIC_PARENT])
+        if not causal and action["role"] != "unknown":
+            missing.add("causal_role")
+    result["missing"] = sorted(missing)
     if conflicts:
         result["conflicts"] = sorted(set(result["conflicts"]) | conflicts)
         details = result.get("conflict_details", {"core": [], "leaf": [], "unrelated": []})
-        result["conflict_details"] = {**details, "core": sorted(set(details["core"]) | conflicts)}
-    record_role(result, action, supported=False, causal=False)
+        result["conflict_details"] = {
+            "core": sorted(set(details["core"]) | conflicts),
+            "leaf": sorted(set(details["leaf"]) - conflicts),
+            "unrelated": sorted(set(details["unrelated"]) - conflicts),
+        }
+    record_role(result, action, supported=result["status"] == "parent", causal=causal)
     return result
 
 

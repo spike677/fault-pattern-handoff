@@ -24,3 +24,5 @@ python -B -X utf8 -m reliability_v04.scoring matrix SCORE MATRIX
 程序回归从仓库根目录运行 `python -B -X utf8 -m unittest discover -s classification -p test_reliability_v04.py`。正式 F 在本轮开发回归结束后单独评估，使用新家族、实际访问隔离和可核验保全。
 
 2026-11-17 的原 A 稳定性复验记录了因果修订基线、三个候选的双轮成绩、证据差异和当前 F 状态。[稳定性复验](STABILITY_REPORT.md) · [冻结与成绩摘要](STABILITY_RUNS.json)
+
+MECH-v0.4.1 的开发复验记录了数值上位、独立根修订、双轮冻结成绩和公开测试入口。[开发复验报告](V041_REVALIDATION_REPORT.md)

@@ -12,7 +12,7 @@ from . import graph, reader
 
 
 HERE = Path(__file__).resolve().parent
-PROTOCOL = "mech_v04_reliability_exercise/0.2"
+PROTOCOL = "mech_v04_reliability_exercise/0.3"
 ROUNDS = (1, 2)
 common = formal.common
 
@@ -22,15 +22,15 @@ def inputs(directory):
 
 
 def implementation():
-    formal_freeze = formal.frozen(formal.HERE / "F_FREEZE.json")
+    standard = formal.implementation()
     artifacts = (HERE / name for name in ("graph.py", "reader.py", "PROMPT.md", "workflow.py",
                                          "scoring.py", "JUDGE.md", "scoring_rubric_v2.md"))
     return {
         "protocol": PROTOCOL, "graph_protocol": graph.PROTOCOL, "scope": "exercise_only",
-        "catalog_version": formal_freeze["catalog_version"], "decision_version": formal_freeze["decision_version"],
-        "formal_freeze_sha256": common.digest(formal.HERE / "F_FREEZE.json"),
+        "catalog_version": standard["catalog_version"], "decision_version": standard["decision_version"],
+        "classification_artifacts": standard["artifacts"],
         "artifacts": {path.name: common.digest(path) for path in artifacts},
-        "execution": {**formal_freeze["execution"],
+        "execution": {**standard["execution"],
                       "batch_kind": "13-family source-only reliability exercise",
                       "prompt": "MECH-v0.4 source-to-root action graph",
                       "prompt_artifacts": {"reliability_v04/PROMPT.md": common.digest(reader.PROMPT)}},
