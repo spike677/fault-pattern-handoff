@@ -1,0 +1,403 @@
+{
+  "date": "2026-11-17",
+  "scope": "exercise_only",
+  "event_families": 13,
+  "source_views": 37,
+  "original_a_sha256": "7aed99fe0abcdf2277b864a08a5c76d0ff322a4709c7aef1c17a0d21ec6e60cb",
+  "original_b_sha256": "aeda9b090388b2f1bb5eca7d18432d5879c5d50fd80c659b3a170f51befc7416",
+  "runs": [
+    {
+      "candidate": "e4e8fa92c4068faef2d53fb34d86c64e84acc172",
+      "freeze_sha256": "1cc94f07279e3c6adeda3e2d814bce10efda5758a1316aac8f171814f7e0bcdb",
+      "lock_sha256": "956f1bef9e649459bae5e13ddac47bb26628cfce8866cf4ccb7eb98d87ae6dd6",
+      "original_score_sha256": "0dc13d0ac238017bd07a0088beb346ab7fd2cc053fefc8372b781b770594ff4c",
+      "rounds": [
+        {
+          "round": 1,
+          "log_sha256": "b5e2133dc449d15251234f3668a4c3919b9f7b52e38d3cc0839cd3a27b841d31",
+          "facts_sha256": "74772dc7e4ceafae8cafd96fbbecfb42de938b62ed312420384d9b5e292eec56",
+          "graph_sha256": "084b493764e8cacb8c34787238c9f949ecaec42d9a8bca06de705ece7467b302",
+          "metrics": {
+            "supported_mode": {
+              "correct": 10,
+              "eligible": 14
+            },
+            "supported_leaf": {
+              "correct": 3,
+              "eligible": 6
+            },
+            "concrete_action": {
+              "correct": 11,
+              "eligible": 11
+            },
+            "facts_and_version": {
+              "correct": 14,
+              "eligible": 14
+            },
+            "causal_relation": {
+              "correct": 11,
+              "eligible": 14
+            },
+            "independent_roots": {
+              "claimed": 8,
+              "correct": 8,
+              "eligible": 11,
+              "false_negative": 3,
+              "false_positive": 0
+            },
+            "strict_cases": {
+              "correct": 9,
+              "eligible": 13
+            }
+          }
+        },
+        {
+          "round": 2,
+          "log_sha256": "87b0a74ed013da0a95f2717eb8d88534ae2fc2741a63b3e51bcadc81cd2f1a58",
+          "facts_sha256": "25916d1ab96c6f794c163568c66d99aae5c97c54488ae6eeea3b2d360bd1f6b0",
+          "graph_sha256": "86a3e274b2ed4b1dec1b9bb0eed4f7058389e9d392798e29d271de9358899b94",
+          "metrics": {
+            "supported_mode": {
+              "correct": 8,
+              "eligible": 14
+            },
+            "supported_leaf": {
+              "correct": 2,
+              "eligible": 6
+            },
+            "concrete_action": {
+              "correct": 11,
+              "eligible": 11
+            },
+            "facts_and_version": {
+              "correct": 14,
+              "eligible": 14
+            },
+            "causal_relation": {
+              "correct": 10,
+              "eligible": 14
+            },
+            "independent_roots": {
+              "claimed": 7,
+              "correct": 7,
+              "eligible": 11,
+              "false_negative": 4,
+              "false_positive": 0
+            },
+            "strict_cases": {
+              "correct": 7,
+              "eligible": 13
+            }
+          }
+        }
+      ]
+    },
+    {
+      "candidate": "8694ee93ece8340678435ff84a9ce5b4908f306e",
+      "freeze_sha256": "25e35fc74de32a6cf239d6c1d4cd8764bace9559e628ed9b93a5bb32d063eb10",
+      "lock_sha256": "966b3a674f30f8e0d75785d0702d39eb8fa4a3b2d54f0e31774a311b65103ce3",
+      "original_score_sha256": "831e8821f04676630436e02b77c032eb4e4b0d860687c20913a76fb380acc60d",
+      "rounds": [
+        {
+          "round": 1,
+          "log_sha256": "b21745e80b678f7b0ace004c59df8bca116741d9b59692f05314119b5fcb3376",
+          "facts_sha256": "813ea6248eeb9d7ee9a08a1fac266e800e3a854a06774bfc0fd01700a8c60154",
+          "graph_sha256": "60729e604c18c4b5a594e74b9b33fe7ee45922bff2e334cbd21d6ab23bfd607c",
+          "metrics": {
+            "supported_mode": {
+              "correct": 10,
+              "eligible": 14
+            },
+            "supported_leaf": {
+              "correct": 3,
+              "eligible": 6
+            },
+            "concrete_action": {
+              "correct": 11,
+              "eligible": 11
+            },
+            "facts_and_version": {
+              "correct": 14,
+              "eligible": 14
+            },
+            "causal_relation": {
+              "correct": 12,
+              "eligible": 14
+            },
+            "independent_roots": {
+              "claimed": 9,
+              "correct": 8,
+              "eligible": 11,
+              "false_negative": 3,
+              "false_positive": 1
+            },
+            "strict_cases": {
+              "correct": 9,
+              "eligible": 13
+            }
+          }
+        },
+        {
+          "round": 2,
+          "log_sha256": "852f3d186d664a6138f6af2b0bed01a5bdbe6a00bbcaab6e150b1671f8856318",
+          "facts_sha256": "060c28c4f4e5dcd7bfe28651720a93670bb0079cf5cf6ceaf29eb94795147eb6",
+          "graph_sha256": "90bfdc30440a5544446a74aef782937458fce37a8bdce81e108a53c7cd61569e",
+          "metrics": {
+            "supported_mode": {
+              "correct": 9,
+              "eligible": 14
+            },
+            "supported_leaf": {
+              "correct": 2,
+              "eligible": 6
+            },
+            "concrete_action": {
+              "correct": 11,
+              "eligible": 11
+            },
+            "facts_and_version": {
+              "correct": 14,
+              "eligible": 14
+            },
+            "causal_relation": {
+              "correct": 13,
+              "eligible": 14
+            },
+            "independent_roots": {
+              "claimed": 10,
+              "correct": 9,
+              "eligible": 11,
+              "false_negative": 2,
+              "false_positive": 1
+            },
+            "strict_cases": {
+              "correct": 8,
+              "eligible": 13
+            }
+          }
+        }
+      ]
+    },
+    {
+      "candidate": "80c8752415cb7e48a66a81a8d98f373aa940711b",
+      "freeze_sha256": "fdc0aa0d6f4003ffac662033f5e7b5f43d05aa4cc3a357ad2110806460580636",
+      "lock_sha256": "dbc2d790f551d13eab9388149552623ed8c80f7d3df38f82e9dbc1c8d8de6bfc",
+      "original_score_sha256": "1b1f87fd67c5b07a127414bc9edea9fe9b763a0be7d514509391f8398b76a94c",
+      "rounds": [
+        {
+          "round": 1,
+          "log_sha256": "2b42991cdba9a5cb253bec3593272b10edde45e6b3f82f020cdc9687c72bb54f",
+          "facts_sha256": "b85c94b5dd89c10b73b90c7bc27514a5b533925f397e7d2f4c2c6a49acf7eb7c",
+          "graph_sha256": "d2c775e30aefbf89283cfdf3bd61314111ef121d68281af7341d781be7bf4973",
+          "metrics": {
+            "supported_mode": {
+              "correct": 9,
+              "eligible": 14
+            },
+            "supported_leaf": {
+              "correct": 3,
+              "eligible": 6
+            },
+            "concrete_action": {
+              "correct": 11,
+              "eligible": 11
+            },
+            "facts_and_version": {
+              "correct": 14,
+              "eligible": 14
+            },
+            "causal_relation": {
+              "correct": 13,
+              "eligible": 14
+            },
+            "independent_roots": {
+              "claimed": 10,
+              "correct": 9,
+              "eligible": 11,
+              "false_negative": 2,
+              "false_positive": 1
+            },
+            "strict_cases": {
+              "correct": 8,
+              "eligible": 13
+            }
+          }
+        },
+        {
+          "round": 2,
+          "log_sha256": "a6710f67807380a9a70dc938aa107400151d0a522ade24f81182b8d638c4c664",
+          "facts_sha256": "e4d3cb4787a80f3eea80dd19e0bf734443814645352481d9748d8e431a775913",
+          "graph_sha256": "6838688f68c9ccd2693d47953998e75e8bd4ed0cb2e310bd4d064d35e1d16ff2",
+          "metrics": {
+            "supported_mode": {
+              "correct": 10,
+              "eligible": 14
+            },
+            "supported_leaf": {
+              "correct": 3,
+              "eligible": 6
+            },
+            "concrete_action": {
+              "correct": 11,
+              "eligible": 11
+            },
+            "facts_and_version": {
+              "correct": 14,
+              "eligible": 14
+            },
+            "causal_relation": {
+              "correct": 13,
+              "eligible": 14
+            },
+            "independent_roots": {
+              "claimed": 10,
+              "correct": 9,
+              "eligible": 11,
+              "false_negative": 2,
+              "false_positive": 1
+            },
+            "strict_cases": {
+              "correct": 9,
+              "eligible": 13
+            }
+          }
+        }
+      ]
+    },
+    {
+      "candidate": "dea1d10ccfe8a23f71cba6d420d4a8bf26f6ad54",
+      "freeze_sha256": "562ca3015cccca3e087227752703eb581100fd3f42f470f0541c6d40b8e92a85",
+      "lock_sha256": "ccecb70b924636afb8ae568293ed0f48f0f78d18742acf3149b1cb8f5a0d2362",
+      "original_score_sha256": "782317870b258955381d2540970fbca3265ddd26413f4e8bf6d9a6cc5267fb60",
+      "rounds": [
+        {
+          "round": 1,
+          "log_sha256": "9ed0d8c1aabe2ffe650b7e707582e5c632ed952c342bf90c8def1ed706868928",
+          "facts_sha256": "f8e953037e85a41010407597775487e3f8f754af98fe7943ab3f05d410c2d077",
+          "graph_sha256": "ad7114231b9d030e5287e70f12bebfa1b46479b4f13f565b0c04dbfb0f1fe402",
+          "metrics": {
+            "supported_mode": {
+              "correct": 10,
+              "eligible": 14
+            },
+            "supported_leaf": {
+              "correct": 3,
+              "eligible": 6
+            },
+            "concrete_action": {
+              "correct": 11,
+              "eligible": 11
+            },
+            "facts_and_version": {
+              "correct": 14,
+              "eligible": 14
+            },
+            "causal_relation": {
+              "correct": 13,
+              "eligible": 14
+            },
+            "independent_roots": {
+              "claimed": 10,
+              "correct": 9,
+              "eligible": 11,
+              "false_negative": 2,
+              "false_positive": 1
+            },
+            "strict_cases": {
+              "correct": 9,
+              "eligible": 13
+            }
+          }
+        },
+        {
+          "round": 2,
+          "log_sha256": "470305a9ba16a36d7114588553b1e92409128e3b684f7795982c2b348b7f9ca5",
+          "facts_sha256": "59c7879885763825d509d6b901480f946f3b215dcb8099664ca3f5a21585a4aa",
+          "graph_sha256": "d847e006ac5c326a377ac4480a7933ddb9fc519c0ad227b906132bc2bf8bd3d3",
+          "metrics": {
+            "supported_mode": {
+              "correct": 10,
+              "eligible": 14
+            },
+            "supported_leaf": {
+              "correct": 3,
+              "eligible": 6
+            },
+            "concrete_action": {
+              "correct": 11,
+              "eligible": 11
+            },
+            "facts_and_version": {
+              "correct": 14,
+              "eligible": 14
+            },
+            "causal_relation": {
+              "correct": 13,
+              "eligible": 14
+            },
+            "independent_roots": {
+              "claimed": 10,
+              "correct": 9,
+              "eligible": 11,
+              "false_negative": 2,
+              "false_positive": 1
+            },
+            "strict_cases": {
+              "correct": 9,
+              "eligible": 13
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "latest_same_a_scope_audit": {
+    "score_sha256": "5ba3f4b67e8aac1bffd12617b7ee6cb73b23d118997c4d3a9eca49530d4e22be",
+    "independent_roots": [
+      {
+        "claimed": 10,
+        "correct": 10,
+        "eligible": 11,
+        "false_negative": 1,
+        "false_positive": 0
+      },
+      {
+        "claimed": 10,
+        "correct": 10,
+        "eligible": 11,
+        "false_negative": 1,
+        "false_positive": 0
+      }
+    ]
+  },
+  "verification": {
+    "classification_and_scoring_tests_passed": 139,
+    "historical_compatibility_tests_passed": 17,
+    "evidence_control_groups": [
+      {
+        "passes": 14,
+        "result_sha256": "31197ed729db55856e03aa6bab9b50172eaae58e11fa35349bb08461e1d11931"
+      },
+      {
+        "passes": 9,
+        "result_sha256": "2391066322ae2700f25912b7b6ca85bbf6ab6626ec2496b1f08e28625b113f24"
+      },
+      {
+        "passes": 8,
+        "result_sha256": "3c2729b0300cf13641bfe241d34f4c2161ab2267ad5ef7473d9205e71b375bfb"
+      }
+    ],
+    "work_scores_replayed_byte_for_byte": 6
+  },
+  "formal_f": {
+    "status": "BLOCKED",
+    "started": false,
+    "externally_witnessed": false,
+    "host_preflight_sha256": "737c51484c6ab1549dc416641716c0ebe9f1a5a27745738d6a9c05b7ab9652c3",
+    "windows_host_probes": {
+      "answer_custody": "readable",
+      "historical_answer": "readable",
+      "prior_prediction": "readable"
+    }
+  }
+}
