@@ -1,0 +1,37 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-11",
+  "title": "tiling切分策略的逻辑异常",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "BUF-CAP-01",
+      "title": "中间缓冲容量预算不足",
+      "definition": "活跃中间对象的最大并存需求已明确，但旧容量计算低估需求并被实际分配/访问采用。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "live_buffer_demand_bound",
+        "buffer_capacity_underestimated",
+        "undersized_buffer_used"
+      ],
+      "enabled": true
+    },
+    {
+      "id": "PLAN-SPLIT-01",
+      "title": "有效任务域规划失配",
+      "definition": "任务划分或重规划未保持所需逻辑任务域或任务原子性，并把失配计划交付执行。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "required_task_domain_bound",
+        "planned_task_domain_wrong",
+        "wrong_plan_executed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

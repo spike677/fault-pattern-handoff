@@ -1,0 +1,26 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-16",
+  "title": "整数计数、索引或偏移的位宽不足",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "ADR-INT-01",
+      "title": "整数地址表示范围不足",
+      "definition": "合法逻辑位置所需的精确整数地址量，在实际整数运算或转换中超出表示范围而失真，并被同一路径的地址消费者使用。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "exact_integer_address_required",
+        "actual_integer_type_bound",
+        "integer_range_loss",
+        "distorted_address_consumed",
+        "same_mapping_preserved_by_widening"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

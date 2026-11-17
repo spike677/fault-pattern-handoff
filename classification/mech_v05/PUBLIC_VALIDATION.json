@@ -1,0 +1,473 @@
+{
+  "schema": "MECH-v0.5/public-release-validation@1",
+  "source_audit_commit": "5740b3513cc898e002ccba1283e1533234341596",
+  "parent_public_commit": "1cb47b7331458fe837cde25f02aad6dfe0af3f76",
+  "publication_date": "2026-11-17",
+  "publication_profile": "code_definitions_synthetic_tests_aggregate_summary",
+  "new_private_materials_published": false,
+  "omissions": [
+    "raw sources",
+    "reference answers",
+    "raw model readbacks",
+    "per-case scores",
+    "real-case to label bindings",
+    "F prescreening materials",
+    "full local Git audit history"
+  ],
+  "validation": {
+    "source_audit_commit": "5740b3513cc898e002ccba1283e1533234341596",
+    "public_runs": [
+      {
+        "name": "public-classification",
+        "command": [
+          "python",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "unittest",
+          "test_mech_v05",
+          "test_reliability_v04",
+          "test_reliability_scoring",
+          "test_reviewed_static"
+        ],
+        "exit_code": 0,
+        "tests": 55,
+        "log_sha256": "77835a31e6f458ceb980d9b62afa6230811f59610ef3d249bf3614907cce2f8f"
+      },
+      {
+        "name": "public-legacy",
+        "command": [
+          "python",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "diagnosis_mvp",
+          "-p",
+          "test_*.py"
+        ],
+        "exit_code": 0,
+        "tests": 17,
+        "log_sha256": "4daab40b5c31aee0924067166c7d6b2cc07596caa8d23a9055cd15c5bb3c6bb9"
+      },
+      {
+        "name": "public-arithmetic",
+        "command": [
+          "python",
+          "-B",
+          "-X",
+          "utf8",
+          "classification/reliability_v044/public_controls.py",
+          "--verify"
+        ],
+        "exit_code": 0,
+        "tests": null,
+        "log_sha256": "e9d9b6fac111f99002cb965f654c10da4faa2d45b325d264df7a4461a2b21f32"
+      }
+    ],
+    "local_private_fixture_runs": [
+      {
+        "name": "private-overlay-classification",
+        "command": [
+          "python",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "classification",
+          "-p",
+          "test_*.py"
+        ],
+        "exit_code": 0,
+        "tests": 180,
+        "log_sha256": "3c47a9f8f369a63292fb17c6b06f504eeb1630780b30e863108060f3f53dbbc3"
+      },
+      {
+        "name": "private-overlay-legacy",
+        "command": [
+          "python",
+          "-B",
+          "-X",
+          "utf8",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "diagnosis_mvp",
+          "-p",
+          "test_*.py"
+        ],
+        "exit_code": 0,
+        "tests": 17,
+        "log_sha256": "42e0f8db8968a646d85a7742f25969a30a439788af0b1b66c4cf035b2123532b"
+      }
+    ],
+    "private_fixtures_not_published": 9,
+    "decision_equivalence": {
+      "rounds": 4,
+      "cases": 48,
+      "all_equal_except_catalog_metadata_hash": true,
+      "scope": "Same existing readbacks, no new model inference; retrieval rankings may differ after redaction"
+    },
+    "core_mode_rule_equality": 45,
+    "inherited_cards_exact": 9,
+    "searchable_documents": 185,
+    "original_audit_verified": {
+      "name": "original-local-delivery",
+      "command": [
+        "python",
+        "-B",
+        "-X",
+        "utf8",
+        "verify_delivery.py"
+      ],
+      "exit_code": 0,
+      "tests": null,
+      "log_sha256": "eaecbafa0a3b1c88185a31a902c487cc9470045ec3185afb197cf2e05ce85a89"
+    },
+    "new_private_sources_or_answers_in_publication_payload": false
+  },
+  "classification_scores": {
+    "scope": "Local full-evidence development exercise; public corpus was redacted afterward",
+    "independent_event_families": 12,
+    "source_views": 157,
+    "fresh_context_readbacks_across_four_rounds": 48,
+    "original": {
+      "mechanism": [
+        "8/12",
+        "9/12"
+      ],
+      "complete_case": [
+        "6/12",
+        "7/12"
+      ]
+    },
+    "same_readbacks_after_code_fix": {
+      "mechanism": [
+        "9/12",
+        "10/12"
+      ],
+      "complete_case": [
+        "6/12",
+        "8/12"
+      ]
+    },
+    "fresh_postfix": {
+      "mechanism": [
+        "9/12",
+        "10/12"
+      ],
+      "complete_case": [
+        "7/12",
+        "8/12"
+      ],
+      "coordinate_errors": [
+        0,
+        0
+      ],
+      "decision_signature_agreement": "8/12",
+      "first_round_status": "EXERCISE_REFERENCE_SUMMARY_EXPOSED",
+      "strict_independent_blind_validation": false
+    },
+    "limitations": [
+      "No new inference on the redacted public retrieval corpus",
+      "Confirmed-node count has no whole-case completeness flag",
+      "All-mode cross-operator coverage incomplete",
+      "Strict F and GPU execution not performed"
+    ]
+  },
+  "files": {
+    "classification/mech_v05/MODES.md": {
+      "treatment": "rendered_public_definition_only",
+      "sha256": "b5b9dfb47c46d6a48437cf360cc99b6edfcac77a1379e3de76bfb28aa9823aa1"
+    },
+    "classification/mech_v05/README.md": {
+      "sha256": "eed34e865986aad2c26169938c638be86cf297aa27850f94f6247fb77425a9f5",
+      "treatment": "publication_specific_documentation_or_verifier"
+    },
+    "classification/mech_v05/V05_PUBLIC_SUMMARY.md": {
+      "sha256": "b64827b84fccf0336b9132ae3c51a5e118a3b27008841b6e04488f531ae3b776",
+      "treatment": "publication_specific_documentation_or_verifier"
+    },
+    "classification/mech_v05/__init__.py": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "2b612d23c66f0db450b1f1e1a48571cad34c3c2d71e2105f7fed2c7520ac52cb"
+    },
+    "classification/mech_v05/catalog.json": {
+      "treatment": "allowlisted_new_mode_definition_fields; original_nine_exact",
+      "sha256": "444f5ae33ebcae8e6661330afa6650a2aa6f0e5808efda2adf952e2909c1715b"
+    },
+    "classification/mech_v05/cli.py": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "eb7bd1448fa4376ca7892ce60be607e8261396f1cc3dd9ae8a8f5a7b87ca2a4f"
+    },
+    "classification/mech_v05/engine.py": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "c1cc8f939a0b1b0c1cc05afd95d1bc7503e009515af8e84d3481185361d935c6"
+    },
+    "classification/mech_v05/external/knowledge_items.json": {
+      "treatment": "knowledge_fields_and_public_card_links; no_original_text_or_case_answers",
+      "sha256": "f1c029337d7c9a6c323ca02ca9e0c437d56505d95e99411e539b735230d06fca"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-01.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "1b51773a7ff5e2f479613b33afc1c473ee5d26ab394743dd2e3366d51ab6dbf7"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-02.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "387b69523d7eb34221eb1ef41b633a16cb4035cf9e162304711c35f4e0e25027"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-03.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "e94dd912bda081854dda5c5863b092a2e2d88fe593f926310bed96900526a070"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-04.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "97ab39e49b5c632baa184f3a64067cfe06e9b307de04da9dc64f37f06a270e36"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-05.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "199b8f347e93f771f4d703cb9fad9bfb4d488f2c8d4656ed1a9acf50bda5d58b"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-06.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "1e027f5a38708dba0984a7b7dbd210b79433b18fccabdb4770ff3d30d6ca2deb"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-07.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "a0215b6ec6c1796ff8fcbb2311832cb9893902522aa6a0666da370389c89bb52"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-08.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "d9e616caaa4023725404d8db0365998e794dfba4ae4282bd40020dd893e36701"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-09.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "a64d35a5ef7df726acc24e4a992a08f3aa614088c3926ee1eb0479438063cccf"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-10.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "c0ae923b34e67ef017b6a64f791447e07012913d24f12ec64fb70135fda1c3a2"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-11.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "57ce2c7adc2f871231988c5d7e1da913f40942398e47e8b292e7faaa897de9a7"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-12.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "cb7ae7e1a61527180886d225e13d972d25c4369ef83ffe189352a0bdc3c47f37"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-13.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "5592d3e4ccbcf1715d85efb8280a20d48863a8454bf942c25df7bfe142243cbc"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-14.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "2f7d7735013ae0fd1aec2752efc1f297936ff063639bf757226d1a421389cb28"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-15.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "acbae61fcbf2965f39b770259ec2eae2d74e93e6720ed588daf77cced42a71e9"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-16.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "ed56837e94955c768fd2866e1898d9c9071b43ed063129917e4a7153fab5b5ac"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-17.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "dc8a64255c033afb366d501a02ed33c389e5f16646654a93ac82ae8de8420644"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-18.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "ac073da16935367c40e89507a86293560681060d1c461c2d1fe5bac5b8ca76a5"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-19.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "57ef879eb1a50be0e46b71b1e82566af762f4a1bda68305bf67f29645e91b231"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-20.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "805e827647f343ebc69aef6812656c97af6f90c068ca62abf015bfb8392c46dc"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-21.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "551d97e8c1c31b3c2e44bc1f526b26ac97d2474e24ca3e227e12a8371cf6ed5c"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-22.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "ca1253d66c976edf6644e254c488eb77462ef85bbfaa73d73a20180ae01d2a0e"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-23.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "67c2c13aed698c022e0689ffe393d6022aa590dc4dfc630f7642376a292b094c"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-24.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "a29e6d85bfdbd4b758cb933651b0008504495bfd8baec005ecf1b71ee9cd78e3"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-25.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "d519f7a3fcf4990afba1c61afedfb09eb54dd883753539df0cdb41bfcc72da72"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-26.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "8058c59620425237f6f1c222fa9181e73e9532fc231745dce4c39812e7e87556"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-27.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "6b5ec135d0ffae78f48f3ea702e33469465bfbd7c62f35bd1e627cf25b3befa3"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-28.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "784976224caf842ca18e94f73b4d24e0aa370bdcb052f80dc46ed9aa7cad58e7"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/FM-29.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "a2c32dd32b1358217294615aeb92b8f305e1e2e12a2e65bbbb7db45ea54bab27"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N01.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "20099d474bb1aa41e0bc21651f28a412ccbaac9a9eedfe83dac7f51e15ea05a1"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N02.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "922bada3ea97631b127b8b313f3b0c913a6a59c3db6265f98e9322c4d73b8407"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N03.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "d24451dcdb8a39f204793043079fbc166486a55e9f82cb49b4e07ea9d1dd8aea"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N04.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "9cb593e717ee81f6cbdaa1e6d080a63b3316e5193db40aa6956e480c6a95e50d"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N05.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "6574a7ef998ccc10d2328eb62de3a5861e685b534ed30d07d97bbdb9626ed2b0"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N06.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "7bf77ae2d1bcba5ba1c301208b967a2cbda30c025fed559af07630a26ce67010"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N07.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "0a23b56ea9bed25ef1fc4af906a2d0cd926e80b3da2dfefcc9f8beb4c93684af"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N08.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "a4427f7e473f7eea8733f866ca09246a1af83716c3db8bc404b916bd906a5cdb"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N09.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "965e25876f5c73af564959386b5f4215db111097a429d70f6b57ef3f5901cf54"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N10.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "d65acc128b7b5c77226bebb7449c8007a8ad405f083c0c9b24dd3bb6454e2cc7"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N11.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "0d4a76d0077b92b7433b756e8412d736299cd9c46d25f1d2cde221b5f12899e5"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N12.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "751d6105d014f077142a12128d4515291bdc4f9783a03c12dca34df54ef9377c"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N13.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "39eee28a7c6e9c4b4fd04187a3db83bb95b82b439b76ecf2740116f1373661ed"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N15.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "73ef64fdb986ddd04b8635be1b78097c26d321698d8db31502653090662a4e5c"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N16.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "2402a63fa1564043b996fe5e8121a7860e88e36ab573b21a984c6ee06de627f7"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N17.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "7071ae94658547a21dbfc9f0e838affc8327d4702af903c0bfbce407a3f76082"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N20.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "d04f5ee4d83bb68a921e36c6c4dbe337ddc221410f921102c6bc13ff9775dd7e"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N21.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "df5e4a4bb766f249d99820fb60966e764b22e52b384b611b4ca3ccd3508d169f"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N22.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "04353f09bf0e20fd91da58b1609c9fe03472acf45b51226b8a51a347bae5db3a"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N23.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "d8449c89fbf1e32a6d383cb73a3f10b82e88fcd90fd6c0d477ca7f01acc5f41b"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N24.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "7a965f2b85c7d409f5c6baedde1f423dea76a84a9b82aa83829220070bf17d89"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N25.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "bd65b2a476fd846710c4bd5ffa761d1467955920613084374fcb2e734180deda"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N26.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "ac551d4f20c499ecaac8aba5a1734b70901083cdb4486cff7cb57b85c3452439"
+    },
+    "classification/mech_v05/history/normalized_mode_cards/N27.json": {
+      "treatment": "identity_and_public_definition_projection; not_full_private_history_card",
+      "sha256": "457efd7f68ed82e9d53defca1ec556d339a4d07055c9f68c0d90526a960af74c"
+    },
+    "classification/mech_v05/mode-schema.json": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "1b63c06b878020e69903622b1ba050fce5a8b6a7f556c817a44dfd3f7dd6c8ac"
+    },
+    "classification/mech_v05/mode_id_migration.csv": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "8a6ba536773980d88087199ed1eff130c0b288598c15fcc58151518c6785a4df"
+    },
+    "classification/mech_v05/mode_specs.py": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "96adabfee6a02b9fbc2a48c3b5ae381f581a37782dba66788bb11acdbcd7c3ae"
+    },
+    "classification/mech_v05/overlap_exclusion_matrix.csv": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "58a0b65498fe71fd6e9f2770ac10b1c8b75cb529d5a1c46c636803e742cc7228"
+    },
+    "classification/mech_v05/parent_hierarchy.json": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "0b8f08811d05c076a5540ed84bc2d89388ea5dea8acb73dbdccffd2c9555dcf9"
+    },
+    "classification/mech_v05/reader.py": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "f6d9b783182a898df90827a33ee4884e075761772bda21439f47e559db31adbc"
+    },
+    "classification/mech_v05/retrieval.py": {
+      "treatment": "exact_from_audit_commit",
+      "sha256": "94b2e3346f6d83ed747274c718885ea0727bfba6703a164d9b0ddb10caf89585"
+    },
+    "classification/mech_v05/reviews/integer_address_range/MODE_CARD.json": {
+      "treatment": "definition_and_boundaries_only",
+      "sha256": "6c3b8635d50a67912bb18214decad43dc0994069be9ba29185f6c19744ca4eb5"
+    },
+    "classification/mech_v05/verify_public.py": {
+      "sha256": "c47001589021d7d197a9c27fe22d5810f003a48a2e76cce16682969b6d99bb25",
+      "treatment": "publication_specific_documentation_or_verifier"
+    },
+    "classification/test_mech_v05.py": {
+      "treatment": "exact_synthetic_regressions_from_audit_commit",
+      "sha256": "f14c305a15257221a3f79d9baf06bea6d7c5298c6c22ddff34dd15b27388ba6e"
+    }
+  },
+  "manifest_self_hash": "Not embedded; use the Git blob of this manifest to avoid a self-reference"
+}

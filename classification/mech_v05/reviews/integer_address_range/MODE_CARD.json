@@ -1,0 +1,136 @@
+{
+  "schema": "mech-v0.5/mode-review@1",
+  "id": "ADR-INT-01",
+  "title": "整数地址表示范围不足",
+  "parent": "address",
+  "status": "ADMITTED_TO_DEVELOPMENT_CATALOG",
+  "definition": "合法逻辑位置所需的精确整数地址量，在实际整数运算或转换中超出表示范围而失真，并被同一路径的地址消费者使用。",
+  "wrong_action": "选用不足范围的整数操作数/结果或窄化位置，使正确应有的整数位置在访存前第一次失真。",
+  "correct_contract": "接口许可的逻辑位置应在地址生成全链条保留精确整数关系；单位、对象和几何关系独立核定。",
+  "failed_relation": "合法逻辑坐标到实际内存位置的精确映射，在整数表示阶段被破坏。",
+  "necessary": [
+    "applicable_contract",
+    "implementation_action",
+    "exact_integer_address_required",
+    "actual_integer_type_bound",
+    "integer_range_loss",
+    "distorted_address_consumed",
+    "same_mapping_preserved_by_widening"
+  ],
+  "decisive_facts": {
+    "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+    "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+    "exact_integer_address_required": "该中间量语义是需精确保留的整数位置或偏移，明确数学整数关系及其地址用途。",
+    "actual_integer_type_bound": "绑定每个参与操作数、提升、运算结果、窄写的实际整数宽度/符号；不能只看最终变量。",
+    "integer_range_loss": "同一合法路径的精确整数在该整数表示范围内不可保持，定位首个乘法/加法/转换失真。浮点中介舍入不充当此事实。",
+    "distorted_address_consumed": "同一路径的指针形成、gather/scatter/load/store实际消费失真量；死值或被正确回退替换不满足。",
+    "same_mapping_preserved_by_widening": "在首损失之前保证足够整数范围或采用等价合法回退可保留同一逻辑映射；对照保持单位、几何、对象和作用域。允许静态证明。"
+  },
+  "necessary_conditions": [
+    {
+      "key": "applicable_contract",
+      "meaning": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。"
+    },
+    {
+      "key": "implementation_action",
+      "meaning": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。"
+    },
+    {
+      "key": "exact_integer_address_required",
+      "meaning": "该中间量语义是需精确保留的整数位置或偏移，明确数学整数关系及其地址用途。"
+    },
+    {
+      "key": "actual_integer_type_bound",
+      "meaning": "绑定每个参与操作数、提升、运算结果、窄写的实际整数宽度/符号；不能只看最终变量。"
+    },
+    {
+      "key": "integer_range_loss",
+      "meaning": "同一合法路径的精确整数在该整数表示范围内不可保持，定位首个乘法/加法/转换失真。浮点中介舍入不充当此事实。"
+    },
+    {
+      "key": "distorted_address_consumed",
+      "meaning": "同一路径的指针形成、gather/scatter/load/store实际消费失真量；死值或被正确回退替换不满足。"
+    },
+    {
+      "key": "same_mapping_preserved_by_widening",
+      "meaning": "在首损失之前保证足够整数范围或采用等价合法回退可保留同一逻辑映射；对照保持单位、几何、对象和作用域。允许静态证明。"
+    }
+  ],
+  "excluded_by": [
+    "address_contract_inapplicable",
+    "integer_representation_exact",
+    "float_mediated_address_rounding",
+    "damaged_address_not_consumed",
+    "mapping_error_survives_unbounded_integer_arithmetic",
+    "state_role_is_nonaddress_numeric_accumulation"
+  ],
+  "exclusions": [
+    {
+      "key": "address_contract_inapplicable",
+      "meaning": "合同外索引或该路径明确不支持并正确拒绝。",
+      "neighbor_route": "inapplicable",
+      "scope": "same_responsible_action"
+    },
+    {
+      "key": "integer_representation_exact",
+      "meaning": "被评动作的所有整数中间值完整可表示；只有最终对象越界。",
+      "neighbor_route": "address_or_allocation_neighbor",
+      "scope": "same_responsible_action"
+    },
+    {
+      "key": "float_mediated_address_rounding",
+      "meaning": "精确整数经浮点中转丢位，整数范围本身足够。",
+      "neighbor_route": "FM-29_research",
+      "scope": "same_responsible_action"
+    },
+    {
+      "key": "damaged_address_not_consumed",
+      "meaning": "错误量未交付目标访问，或消费前已正确重新计算/回退。",
+      "neighbor_route": "insufficient_for_address_fault",
+      "scope": "same_responsible_action"
+    },
+    {
+      "key": "mapping_error_survives_unbounded_integer_arithmetic",
+      "meaning": "同一责任错误由单位、几何、基址或对象绑定造成，加宽仍保持错误。",
+      "neighbor_route": "L2_L1_or_other_address",
+      "scope": "same_responsible_action"
+    },
+    {
+      "key": "state_role_is_nonaddress_numeric_accumulation",
+      "meaning": "目标是受精度约定约束的运行数值累加，尚无精确地址消费。",
+      "neighbor_route": "NUM-01_or_numeric_neighbor",
+      "scope": "same_responsible_action"
+    }
+  ],
+  "accepted_evidence": [
+    "fixed_source_with_applicable_contract",
+    "scoped_author_confirmed_report",
+    "bound_runtime_trace"
+  ],
+  "consumer_roles": [
+    "pointer_formation",
+    "gather",
+    "scatter",
+    "load",
+    "store"
+  ],
+  "historical_relation": {
+    "FM-16": "address-consumer specialization; not a wholly new historical mechanism",
+    "N20": "shares broad address organization; original N20 excludes integer range loss",
+    "FM-29": "distinct sibling research direction, not admitted by this review",
+    "N27": "unresolved control-count subtype, not an address alias"
+  },
+  "v04_relation": {
+    "L2": "sibling; units may be correct when integer range fails",
+    "L1": "sibling; no contiguous-layout assumption required",
+    "NUM-01": "compare semantic role and first loss; type name alone is not decisive"
+  },
+  "language_semantics": "Do not claim all C++ signed overflow wraps. Generic integer promotions then narrowing, intrinsic lane arithmetic, and reported hardware execution remain separate scopes.",
+  "root_counting": "One evidenced integer-loss operation is one root. Downstream normal consumers do not add roots; distinct faulty operations require independent evidence.",
+  "limits": [
+    "Development admission only",
+    "No device execution in this publication",
+    "No real-case answers or source excerpts included",
+    "A mode definition does not prove its own facts in a new case"
+  ]
+}

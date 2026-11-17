@@ -1,0 +1,25 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-17",
+  "title": "浮点数值范围溢出",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "NUM-RANGE-01",
+      "title": "活跃浮点中间值超出表示范围",
+      "definition": "有限合法输入的约定结果可表示，旧活跃中间运算先超出实际浮点格式范围，失真随后被消费。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "finite_input_target_representable",
+        "actual_working_format_bound",
+        "intermediate_nonfinite_created",
+        "overflow_result_consumed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

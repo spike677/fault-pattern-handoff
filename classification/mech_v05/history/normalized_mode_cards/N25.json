@@ -1,0 +1,36 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "N25",
+  "title": "梯度公式系数遗漏",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "C1",
+      "title": "无效计算项纳入",
+      "definition": "按当前计算约定无资格参与的逻辑计算项，实际进入目标计算，且未按该运算语义中性化或排除。",
+      "necessary": [
+        "applicable_contract",
+        "ineligible_member",
+        "actual_contribution"
+      ],
+      "enabled": true
+    },
+    {
+      "id": "FORM-COEF-01",
+      "title": "数学公式的必需系数或变换遗漏",
+      "definition": "旧公式遗漏合同所要求的非中性系数或必要变换，在精确算术下也与目标函数不等价。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "exact_formula_contract",
+        "required_formula_term_missing",
+        "formula_inequivalent_on_valid_input",
+        "wrong_formula_consumed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

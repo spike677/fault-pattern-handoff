@@ -1,0 +1,24 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-20",
+  "title": "私有数据格式视图操作不兼容",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "REP-META-01",
+      "title": "布局描述与实际数据表示错配",
+      "definition": "向消费者交付与实际payload格式不一致的布局、块轴或格式描述，使其按错误表示解释数据。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "actual_payload_layout_bound",
+        "layout_descriptor_mismatch",
+        "mismatched_descriptor_consumed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

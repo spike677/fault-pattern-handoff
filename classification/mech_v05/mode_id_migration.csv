@@ -1,0 +1,74 @@
+source_namespace,source_id,target_id,relation,scope,classification_enabled
+MECH-v0.4,P1,P1,UNCHANGED_ID_AND_DEFINITION,exact existing card,True
+MECH-v0.4,P2,P2,UNCHANGED_ID_AND_DEFINITION,exact existing card,True
+MECH-v0.4,L1,L1,UNCHANGED_ID_AND_DEFINITION,exact existing card,True
+MECH-v0.4,L2,L2,UNCHANGED_ID_AND_DEFINITION,exact existing card,True
+MECH-v0.4,C1,C1,UNCHANGED_ID_AND_DEFINITION,exact existing card,True
+MECH-v0.4,C2,C2,UNCHANGED_ID_AND_DEFINITION,exact existing card,True
+MECH-v0.4,C3,C3,UNCHANGED_ID_AND_DEFINITION,exact existing card,True
+MECH-v0.4,NUM-01,NUM-01,UNCHANGED_ID_AND_DEFINITION,exact existing card,True
+MECH-v0.4,NUM-02,NUM-02,UNCHANGED_ID_AND_DEFINITION,exact existing card,True
+historical,FM-01,CTL-EMPTY-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-02,META-SHAPE-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-03,PLAN-SPLIT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-04,ADR-GEOM-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-04,L1,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-04,L2,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-05,SYNC-DEP-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-06,ADR-OWNER-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,False
+historical,FM-07,REP-TRANS-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,False
+historical,FM-08,NUM-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-08,NUM-NARROW-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-09,NUM-ABSORB-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-10,NUM-ORDER-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-11,BUF-CAP-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-11,PLAN-SPLIT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-12,CTL-DISPATCH-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-13,SYNC-DET-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,False
+historical,FM-14,VALID-SUPPORT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-15,P1,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-16,ADR-INT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-17,NUM-RANGE-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-18,,UNRESOLVED_OR_UNMAPPED_RESEARCH,UNRESOLVED,False
+historical,FM-19,BUF-EXTENT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-20,REP-META-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-21,NUM-RANGE-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-22,,UNRESOLVED_OR_UNMAPPED_RESEARCH,PARTIALLY_RECOVERED,False
+historical,FM-23,NUM-DOMAIN-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-24,NUM-NARROW-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-25,,UNRESOLVED_OR_UNMAPPED_RESEARCH,UNRESOLVED,False
+historical,FM-26,,UNRESOLVED_OR_UNMAPPED_RESEARCH,UNRESOLVED,False
+historical,FM-27,,UNRESOLVED_OR_UNMAPPED_RESEARCH,UNRESOLVED,False
+historical,FM-28,NUM-RANGE-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,FM-29,ADR-FLOAT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,False
+historical,N01,BUF-INIT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N02,CTL-EMPTY-OUT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N03,SYNC-DEP-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N04,C2,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N05,C2,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N06,ADR-GEOM-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N07,REP-CONVERT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N08,DATA-SIGN-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N09,META-INDEX-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N10,C1,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N10,L2,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N11,BUF-CAP-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N12,REP-WIDTH-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N13,REP-REINTERPRET-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N15,NUM-ROUND-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N16,DATA-NONFINITE-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N17,C2,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N17,CTL-TAIL-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N17,SYNC-DRAIN-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N20,ADR-GEOM-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N20,L1,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N20,L2,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N21,VALID-DOMAIN-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N22,BUF-LIFE-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N23,C2,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N24,P1,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N24,P2,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N25,C1,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N25,FORM-COEF-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N26,CTL-ELIDE-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,True
+historical,N27,CTL-COUNT-01,CONDITIONAL_SUBTYPE_PROJECTION,Requires target leaf predicates; historical title/case link alone is insufficient,False

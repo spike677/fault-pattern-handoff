@@ -1,0 +1,24 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-14",
+  "title": "后端不支持场景未拦截",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "VALID-SUPPORT-01",
+      "title": "必需的不支持场景拦截缺失",
+      "definition": "合同要求在执行前拒绝的后端配置未被守卫排除，进入不支持该配置的实际路径。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "rejection_required_for_configuration",
+        "required_guard_missing",
+        "unsupported_configuration_executed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-25",
+  "title": "tiling切分策略不同分支处理精度不一致",
+  "status": "UNRESOLVED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

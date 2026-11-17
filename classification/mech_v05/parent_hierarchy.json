@@ -1,0 +1,44 @@
+{
+  "parents": {
+    "parameter": "参数语义",
+    "address": "寻址映射",
+    "calculation_item": "计算项问题",
+    "item_participation": "计算项的参与范围问题",
+    "item_multiplicity": "计算项重复／遗漏问题",
+    "numerical_evaluation": "有限精度数值求值",
+    "numeric_calculation": "数值表示与计算",
+    "control": "控制与分支",
+    "buffer": "缓冲区与数据传递",
+    "synchronization": "同步与生命周期",
+    "other_confirmed": "其他已确认机制",
+    "plan": "任务规划",
+    "validation": "合法性与支持域校验",
+    "representation": "生产消费表示契约",
+    "lifetime": "活跃值生命周期",
+    "metadata": "逻辑结果元数据",
+    "formula": "精确数学公式",
+    "data_semantics": "特殊数值语义"
+  },
+  "parent_hierarchy": {
+    "item_participation": "calculation_item",
+    "item_multiplicity": "calculation_item",
+    "numerical_evaluation": "numeric_calculation",
+    "plan": "control",
+    "validation": "control",
+    "representation": "buffer",
+    "lifetime": "synchronization",
+    "metadata": "other_confirmed",
+    "formula": "other_confirmed",
+    "data_semantics": "other_confirmed"
+  },
+  "roots": [
+    "parameter",
+    "address",
+    "calculation_item",
+    "numeric_calculation",
+    "control",
+    "buffer",
+    "synchronization",
+    "other_confirmed"
+  ]
+}

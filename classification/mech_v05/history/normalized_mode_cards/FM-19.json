@@ -1,0 +1,25 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-19",
+  "title": "越界读写：访存范围错误",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "BUF-EXTENT-01",
+      "title": "正确起址上的访存长度或足迹违约",
+      "definition": "起始对象和地址正确，但实际搬运/向量访问足迹超出该对象的合法有效区间。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "memory_object_extent_bound",
+        "memory_start_correct",
+        "transfer_extent_exceeds_object",
+        "out_of_extent_access_executed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

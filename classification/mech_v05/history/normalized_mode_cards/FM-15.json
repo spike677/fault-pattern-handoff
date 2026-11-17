@@ -1,0 +1,23 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-15",
+  "title": "NPU适配参数处理异常",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "P1",
+      "title": "参数来源误读",
+      "definition": "适用路径从语义不等价的槽位、字段或参数取得值。",
+      "necessary": [
+        "applicable_contract",
+        "expected_source",
+        "actual_source",
+        "non_equivalent_source"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

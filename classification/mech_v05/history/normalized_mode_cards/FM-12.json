@@ -1,0 +1,24 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-12",
+  "title": "执行策略或模板选路判断错误",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "CTL-DISPATCH-01",
+      "title": "选择不满足所需语义的执行分支",
+      "definition": "条件选择或快捷路径忽略必要语义/能力条件，使合法请求进入不实现其所需计算的分支。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "required_execution_semantics",
+        "selected_branch_incompatible",
+        "incompatible_branch_taken"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

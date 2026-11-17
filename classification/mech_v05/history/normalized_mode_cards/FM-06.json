@@ -1,0 +1,24 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-06",
+  "title": "缓存索引映射错误",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "ADR-OWNER-01",
+      "title": "缓存逻辑对象与物理归属错配",
+      "definition": "缓存访问使用与当前逻辑批次或对象身份不一致的物理槽、block table归属。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "cache_ownership_contract",
+        "wrong_cache_owner",
+        "wrong_owner_storage_consumed"
+      ],
+      "enabled": false
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

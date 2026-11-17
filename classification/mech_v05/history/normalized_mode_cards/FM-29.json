@@ -1,0 +1,24 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-29",
+  "title": "地址表示精度丢失",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "ADR-FLOAT-01",
+      "title": "精确整数地址经浮点中转丢位",
+      "definition": "要求精确保留的整数地址经不足有效位的浮点格式中转后再还原，丢位地址被消费。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "exact_integer_address_required",
+        "integer_float_roundtrip_loses_bits",
+        "distorted_address_consumed"
+      ],
+      "enabled": false
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

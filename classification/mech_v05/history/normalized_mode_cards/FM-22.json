@@ -1,0 +1,10 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-22",
+  "title": "边界值异常",
+  "status": "PARTIALLY_RECOVERED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-02",
+  "title": "形状推导错误",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "META-SHAPE-01",
+      "title": "结果形状元数据推导违约",
+      "definition": "旧实现把不符合算子形状约定的输出 shape/rank/动态维交给分配或下游消费者。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "expected_output_shape_bound",
+        "wrong_output_shape",
+        "wrong_shape_consumed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

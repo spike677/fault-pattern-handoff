@@ -1,0 +1,25 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-10",
+  "title": "浮点数累加序不当",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "NUM-ORDER-01",
+      "title": "受合同约束的浮点累加次序违约",
+      "definition": "逻辑项及次数相同，但实际加法配对或逐步舍入违反明确的一致性、顺序或误差要求。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "same_contribution_ledger",
+        "required_accumulation_order_or_budget",
+        "accumulation_order_violates_contract",
+        "order_difference_consumed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

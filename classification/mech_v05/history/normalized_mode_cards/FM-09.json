@@ -1,0 +1,25 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-09",
+  "title": "数学等价但计算结果不等价",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "NUM-ABSORB-01",
+      "title": "非线性求值前的小量吸收",
+      "definition": "有限精度加法先吸收随后非线性结果所需的小量，等价稳定表达式可在相同精度下保留它。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "same_terms_and_precision",
+        "small_term_absorbed_before_nonlinearity",
+        "stable_expression_preserves_small_result",
+        "distorted_value_consumed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

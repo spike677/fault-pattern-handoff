@@ -1,0 +1,24 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "N26",
+  "title": "舍入操作分支实现错误（条件批准／需核验）",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "CTL-ELIDE-01",
+      "title": "快捷条件错误消去必需运算",
+      "definition": "输入属性满足部分identity条件但不满足全部语义前提时，旧快捷分支省略仍需执行的运算。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "operation_still_required_under_control",
+        "partial_identity_guard_elides_operation",
+        "elision_changes_target_result"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

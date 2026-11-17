@@ -1,0 +1,24 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-13",
+  "title": "确定性计算未实现",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "SYNC-DET-01",
+      "title": "规定确定性未被执行策略保持",
+      "definition": "在明确的确定性合同下，旧执行策略允许导致结果不一致的调度/原子配对自由度。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "determinism_required",
+        "nondeterministic_execution_source_bound",
+        "nondeterminism_violates_required_level"
+      ],
+      "enabled": false
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

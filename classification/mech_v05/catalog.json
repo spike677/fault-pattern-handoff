@@ -1,0 +1,3066 @@
+{
+  "version": "0.5",
+  "status": "development_knowledge",
+  "parents": {
+    "parameter": "参数语义",
+    "address": "寻址映射",
+    "calculation_item": "计算项问题",
+    "item_participation": "计算项的参与范围问题",
+    "item_multiplicity": "计算项重复／遗漏问题",
+    "numerical_evaluation": "有限精度数值求值",
+    "numeric_calculation": "数值表示与计算",
+    "control": "控制与分支",
+    "buffer": "缓冲区与数据传递",
+    "synchronization": "同步与生命周期",
+    "other_confirmed": "其他已确认机制",
+    "plan": "任务规划",
+    "validation": "合法性与支持域校验",
+    "representation": "生产消费表示契约",
+    "lifetime": "活跃值生命周期",
+    "metadata": "逻辑结果元数据",
+    "formula": "精确数学公式",
+    "data_semantics": "特殊数值语义"
+  },
+  "parent_hierarchy": {
+    "item_participation": "calculation_item",
+    "item_multiplicity": "calculation_item",
+    "numerical_evaluation": "numeric_calculation",
+    "plan": "control",
+    "validation": "control",
+    "representation": "buffer",
+    "lifetime": "synchronization",
+    "metadata": "other_confirmed",
+    "formula": "other_confirmed",
+    "data_semantics": "other_confirmed"
+  },
+  "parent_facts": {
+    "parameter": "parameter_violation",
+    "address": "address_violation",
+    "calculation_item": "contribution_violation",
+    "item_participation": "participation_violation",
+    "item_multiplicity": "multiplicity_violation",
+    "numerical_evaluation": "numeric_evaluation_violation",
+    "control": "control_semantics_violation",
+    "plan": "task_plan_violation",
+    "buffer": "buffer_contract_violation",
+    "representation": "representation_contract_violation",
+    "synchronization": "ordering_protocol_violation",
+    "lifetime": "lifetime_contract_violation",
+    "metadata": "result_metadata_violation",
+    "formula": "exact_formula_violation",
+    "validation": "input_validation_violation",
+    "data_semantics": "data_value_semantics_violation"
+  },
+  "parent_definitions": {
+    "parameter": "有依据地确认参数的来源、值或状态解释违反同版本、同路径的参数约定。",
+    "address": "有依据地确认有效逻辑位置与实现读写的实际存储地址违反适用映射约定。",
+    "calculation_item": "有依据地确认适用计算约定下，某个目标结果的逻辑计算项出现资格或计入次数失配。当前证据无法进一步区分时可保留本上位类。",
+    "item_participation": "检查逻辑计算项按当前操作和目标结果的语义是否有资格被纳入。已证无资格的项实际参与计算，支持本组。",
+    "item_multiplicity": "检查有资格且按约定应参与的逻辑计算项是否达到规定的计入次数。未达规定次数或超出规定次数，支持本组。",
+    "numerical_evaluation": "在原有逻辑计算项与语义保持的前提下，依照适用精度约定定位已经造成输出差异的数值实现动作。",
+    "control": "已用目标版本合同与实际动作证明控制与分支关系违约，非由检索标签推定",
+    "plan": "已用目标版本合同与实际动作证明任务规划关系违约，非由检索标签推定",
+    "buffer": "已用目标版本合同与实际动作证明缓冲区与数据传递关系违约，非由检索标签推定",
+    "representation": "已用目标版本合同与实际动作证明生产消费表示契约关系违约，非由检索标签推定",
+    "synchronization": "已用目标版本合同与实际动作证明同步与生命周期关系违约，非由检索标签推定",
+    "lifetime": "已用目标版本合同与实际动作证明活跃值生命周期关系违约，非由检索标签推定",
+    "metadata": "已用目标版本合同与实际动作证明逻辑结果元数据关系违约，非由检索标签推定",
+    "formula": "已用目标版本合同与实际动作证明精确数学公式关系违约，非由检索标签推定",
+    "validation": "已用目标版本合同与实际动作证明合法性与支持域校验关系违约，非由检索标签推定",
+    "data_semantics": "已用目标版本合同与实际动作证明特殊数值语义关系违约，非由检索标签推定"
+  },
+  "classification_unit": "在明确版本和作用域内可举证的实现错误或局部失效关系。逻辑计算项是相对于目标结果按来源和语义角色区分的一项逻辑输入。局部失效关系与具体实现动作、因果角色分别记录。独立缺陷按有独立证据的错误动作计数。",
+  "evidence_policy": {
+    "reported": "保留原作者对行为、错误动作及其作用范围的明确陈述。分类限于报告描述。",
+    "static": "绑定固定源码、同版本语义与可复算路径。结论限于源码中的动作及适用条件。",
+    "observed": "声称某次运行执行了该动作时，证据须绑定该次运行的构建、调用、路径及观察。",
+    "anchors": "原件引用记录文件、版本与行范围。引用存在只能验证出处，引用对事实的支持须按语义复核。",
+    "conflicts": "同动作和作用域内关键证据冲突时保留冲突和未决点，不能按来源数投票。"
+  },
+  "result_policy": {
+    "leaf": "满足该模式的必要事实，近邻已由决定性事实区分，关键反证已解决。",
+    "parent": "有正证支持某上位关系，当前事实不足以区分其具体子型。",
+    "insufficient": "连上位关系或声称的违约也无法判定，明确所缺事实。",
+    "out_of_scope": [
+      "符合所评约定",
+      "所选合同不适用",
+      "已证缺陷超出试点叶级目录"
+    ],
+    "causality": "P／L 叶级描述实现错误。C 叶级描述局部失效关系，由同作用域的语义和行为证据支持。记录已证实的具体动作、上游原因和责任阶段，缺证处标明未知。同一替换动作可以造成两个有证据的局部关系，并按一个独立动作计数。只有另一个缺陷动作有独立证据时才增加独立缺陷计数。",
+    "numeric": "逐个锚定必要事实和真实消费者。目录外证明沿用统一协议。当已有数值机理线索但缺少区分证据时，保留缺证。数值父组用于目录关系及部分命中的评分，两个数值叶的证据条件单独核验。"
+  },
+  "combinations": [
+    {
+      "modes": [
+        "C1",
+        "C2"
+      ],
+      "parent": "calculation_item",
+      "required_fact": "distinct_members_for_replacement"
+    }
+  ],
+  "modes": {
+    "P1": {
+      "version": "0.3",
+      "parent": "parameter",
+      "title": "参数来源误读",
+      "definition_level": "implementation_error",
+      "definition": "适用路径从语义不等价的槽位、字段或参数取得值。",
+      "object_roles": [
+        "请求的参数",
+        "实际参数来源"
+      ],
+      "applicability": "预期和实际来源能绑定同版本、同动作及同一参数角色。",
+      "operation_fact": "actual_source",
+      "necessary": [
+        "applicable_contract",
+        "expected_source",
+        "actual_source",
+        "non_equivalent_source"
+      ],
+      "decisive_facts": {
+        "applicable_contract": "同版本定义与目标路径确认应读来源。",
+        "expected_source": "找到预期槽位、字段或参数。",
+        "actual_source": "找到实现实际读取的位置。",
+        "non_equivalent_source": "两个来源承担不同语义，排除有效别名或等价投影。"
+      },
+      "accepted_evidence": [
+        "来源明确陈述的缺陷",
+        "固定源码和同版本约定支持的静态推导",
+        "与所声称调用绑定的运行证据"
+      ],
+      "excluded_by": [
+        "correct_source",
+        "equivalent_source"
+      ],
+      "exclude": [
+        "正确读取后的类型或单位转换、归一化及默认处理。",
+        "来源为接口允许的等价字段。"
+      ],
+      "near_neighbors": {
+        "P2": "P2 已正确读取参数，且错误发生在特殊状态转换。",
+        "outside": "只发现普通值类型转换错误时单记试点目录外。"
+      },
+      "retrieval_clues": [
+        "最终参数值异常",
+        "修订标题写属性修复"
+      ],
+      "optional_runtime_evidence": "实参标记值、实际调用的属性读取记录。",
+      "examples": {
+        "positive": {
+          "case": "N24 修订版",
+          "scope": "源码缺陷",
+          "why": "padding_idx 预期为第 4 槽，实际取语义不同的 include_last_offset 第 3 槽。"
+        },
+        "negative": {
+          "case": "N07",
+          "scope": "源码缺陷",
+          "why": "读取同一 epsilon；AICore 传递缺数值转换，属于试点目录外。"
+        },
+        "missing": {
+          "case": "N24 事实遮蔽对照",
+          "why": "只提供 padding_idx 实际值异常，缺实际读取键。"
+        }
+      },
+      "changes": [
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 采用新展示名，保留实际来源及来源语义等价性边界。"
+      ]
+    },
+    "P2": {
+      "version": "0.3",
+      "parent": "parameter",
+      "title": "特殊参数状态误解释",
+      "definition_level": "implementation_error",
+      "definition": "正确取得特殊状态后，套用不适用的有效值处理，改变状态语义。",
+      "object_roles": [
+        "可选状态",
+        "哨兵",
+        "合法数据值"
+      ],
+      "applicability": "正确来源、历史状态定义和处理分支可绑定到目标版本及路径。",
+      "operation_fact": "wrong_state_treatment",
+      "necessary": [
+        "applicable_contract",
+        "correct_source",
+        "special_state",
+        "wrong_state_treatment"
+      ],
+      "decisive_facts": {
+        "applicable_contract": "确定该特殊状态的版本语义与适用路径。",
+        "correct_source": "实际读取的是表示该状态的正确来源。",
+        "special_state": "原始参数的确表示未指定、哨兵或另一个有明确定义的特殊状态。",
+        "wrong_state_treatment": "处理将特殊状态解释为普通有效数据，与约定不符。"
+      },
+      "accepted_evidence": [
+        "来源明确陈述的缺陷",
+        "固定源码和同版本约定支持的静态推导",
+        "与所声称调用绑定的运行证据"
+      ],
+      "excluded_by": [
+        "non_equivalent_source",
+        "state_treatment_allowed"
+      ],
+      "exclude": [
+        "来源错读。",
+        "允许的默认值替换。",
+        "普通数值类型转换。"
+      ],
+      "near_neighbors": {
+        "P1": "P1 在取值来源已经偏离，尚无需证明特殊状态处理。",
+        "outside": "普通类型转换错误单记试点目录外。"
+      },
+      "retrieval_clues": [
+        "负值",
+        "默认值",
+        "索引末端被排除"
+      ],
+      "optional_runtime_evidence": "同一输入路径的显式值与未指定状态对照。",
+      "examples": {
+        "positive": {
+          "case": "N24 旧版",
+          "scope": "源码缺陷",
+          "why": "从正确 padding_idx 读取 None 表示的 -1，却按负索引转成 numEmbeddings-1。"
+        },
+        "negative": {
+          "case": "N24 修订版",
+          "scope": "源码缺陷",
+          "why": "实现从另一个属性读值，未证明正确读取并误解释特殊状态。"
+        },
+        "missing": {
+          "case": "N24 事实遮蔽对照",
+          "why": "保留负值加 emb 数，隐藏该负值在故障版本中的特殊状态约定。"
+        }
+      },
+      "changes": [
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 采用新展示名，保留正确来源和不当状态处理的必要条件。"
+      ]
+    },
+    "L1": {
+      "version": "0.3",
+      "parent": "address",
+      "title": "错误采用连续布局寻址",
+      "definition_level": "implementation_error",
+      "definition": "路径应按原视图寻址且地址被消费前没有正确连续化，实际地址映射的至少一个必要项错误采用连续布局假设，导致映射偏离原视图。",
+      "object_roles": [
+        "张量视图",
+        "逻辑坐标",
+        "基址",
+        "实际步长"
+      ],
+      "applicability": "绑定固定版本的受支持视图、实际读写路径、被消费的寻址项及连续化情况。",
+      "operation_fact": "contiguous_formula",
+      "necessary": [
+        "applicable_contract",
+        "supported_view",
+        "no_correct_contiguous_conversion",
+        "contiguous_formula"
+      ],
+      "decisive_facts": {
+        "applicable_contract": "版本、视图约定及实际读写路径明确。",
+        "supported_view": "目标路径须接纳该 stride、基址或偏移的原视图。",
+        "no_correct_contiguous_conversion": "消费者实际使用的地址仍需遵守原视图映射。",
+        "contiguous_formula": "定位至少一个被消费者用于寻址的必要项，证明密排假设代替了原视图映射。其余地址项可用正确 stride。"
+      },
+      "accepted_evidence": [
+        "来源明确陈述的缺陷",
+        "固定源码和同版本约定支持的静态推导",
+        "与所声称调用绑定的运行证据"
+      ],
+      "excluded_by": [
+        "correct_contiguous_conversion",
+        "view_unsupported",
+        "view_formula_correct"
+      ],
+      "exclude": [
+        "路径按约定不接纳原视图，或正确拒绝、转换该输入。",
+        "正确连续化后使用密排公式。",
+        "与连续布局假设无关的地址坐标或基址项遗漏。"
+      ],
+      "near_neighbors": {
+        "L2": "L2 区分式是单位或存储宽度转换，公式可以保留正确 stride。",
+        "outside": "独立的分组基址缺项或偏移整数溢出不归 L1。"
+      },
+      "retrieval_clues": [
+        "非连续输入超差",
+        "转 contiguous 后通过",
+        "地址失配"
+      ],
+      "optional_runtime_evidence": "同次输入视图信息、实际地址或连续与非连续对照。",
+      "examples": {
+        "positive": {
+          "case": "N20 Concat",
+          "scope": "源码缺陷",
+          "why": "固定旧版用逻辑列数 sameShapeTensorDim1 计算分块内源行起点，实际块基址和行间拷贝设置虽分别取 dim0stride，该必要寻址项仍偏离受支持的原视图。"
+        },
+        "negative": {
+          "case": "N06",
+          "scope": "源码缺陷",
+          "why": "组基址项遗漏，并无密排视图假设，属于试点目录外。"
+        },
+        "missing": {
+          "case": "RMSNorm 写回",
+          "why": "公开故障期文档与物理落点足以指导候选，缺实际写入者及同构建写回公式的独立证据。"
+        }
+      },
+      "changes": [
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 将判定范围明确到被消费的必要寻址项，纳入 N20 混合正确 stride 的同公式正例。"
+      ]
+    },
+    "L2": {
+      "version": "0.3",
+      "parent": "address",
+      "title": "寻址单位换算错误",
+      "definition_level": "implementation_error",
+      "definition": "地址运算在 element、bit 与 byte 间的转换遗漏、重复或落在错误位置。",
+      "object_roles": [
+        "逻辑偏移",
+        "实际存储宽度",
+        "寻址单位"
+      ],
+      "applicability": "同一偏移、长度或位打包边界可追溯来源与消费者的单位。",
+      "operation_fact": "wrong_conversion",
+      "necessary": [
+        "applicable_contract",
+        "expected_units",
+        "storage_width",
+        "wrong_conversion"
+      ],
+      "decisive_facts": {
+        "applicable_contract": "确认实际地址边界及相关存储类型。",
+        "expected_units": "确定输入量与被寻址量各用哪个单位。",
+        "storage_width": "确认单位映射使用的元素、位或字节宽度。",
+        "wrong_conversion": "复核实际表达式转换遗漏、重做或发生于错误位置。"
+      },
+      "accepted_evidence": [
+        "来源明确陈述的缺陷",
+        "固定源码和同版本约定支持的静态推导",
+        "与所声称调用绑定的运行证据"
+      ],
+      "excluded_by": [
+        "address_units_consistent"
+      ],
+      "exclude": [
+        "纯 stride 或地址基址错误。",
+        "位序、端序、符号扩展、解码格式、整数溢出及分配范围问题。"
+      ],
+      "near_neighbors": {
+        "L1": "L1 以密排布局公式代替真实视图映射，单位可以一致。",
+        "outside": "位打包路径只有位序或格式错误时属于试点目录外。"
+      },
+      "retrieval_clues": [
+        "位掩码",
+        "字节偏移",
+        "非对齐"
+      ],
+      "optional_runtime_evidence": "选择已知非零偏移以及正确单位换算的观察对照。",
+      "examples": {
+        "positive": {
+          "case": "N10 foreach_lerp_list",
+          "scope": "源码缺陷",
+          "why": "mask 按每元素一位存储，旧实现把元素 offset 直接作为 uint8_t 字节索引。"
+        },
+        "negative": {
+          "case": "N20 Concat",
+          "scope": "源码缺陷",
+          "why": "旧地址算式的地址单位不变，错误来自连续行宽假设。"
+        },
+        "missing": {
+          "case": "N10 事实遮蔽对照",
+          "why": "只有 maskLocal[offset]，缺 offset 单位与 mask 存储宽度。"
+        }
+      },
+      "changes": [
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 采用新展示名，保留地址单位转换和布局公式的边界。"
+      ]
+    },
+    "C1": {
+      "version": "0.3",
+      "parent": "item_participation",
+      "title": "无效计算项纳入",
+      "definition_level": "mechanism_relation",
+      "definition": "按当前计算约定无资格参与的逻辑计算项，实际进入目标计算，且未按该运算语义中性化或排除。",
+      "object_roles": [
+        "目标结果",
+        "运算有效域",
+        "逻辑计算项",
+        "排除或中性化处理"
+      ],
+      "applicability": "同一计算边界的目标结果、运算语义、资格条件和计算项来源明确。",
+      "operation_fact": "actual_contribution",
+      "necessary": [
+        "applicable_contract",
+        "ineligible_member",
+        "actual_contribution"
+      ],
+      "decisive_facts": {
+        "applicable_contract": "确定运算边界及有效域约定。",
+        "ineligible_member": "该逻辑计算项按同一边界的语义必须排除。",
+        "actual_contribution": "有证据显示无资格项实际参与运算，且对该语义没有被有效中性化。只见 padding、读取或写入不足以证明参与。"
+      },
+      "accepted_evidence": [
+        "来源明确陈述的缺陷",
+        "固定源码和同版本约定支持的静态推导",
+        "与所声称调用绑定的运行证据"
+      ],
+      "excluded_by": [
+        "member_eligible",
+        "contribution_neutralized"
+      ],
+      "exclude": [
+        "读取域外数据后，执行了正确的屏蔽或采用了对本运算有效的中性填充。",
+        "计算约定允许该逻辑计算项参与。"
+      ],
+      "near_neighbors": {
+        "C2": "C2 确认另一个本应计入的项被遗漏。若同一替换动作同时满足两项独立判据，按一个动作保留 C1、C2。",
+        "C3": "C3 核对本来有效的同源计算项是否超过计入次数。"
+      },
+      "retrieval_clues": [
+        "padding 读取",
+        "尾块异常",
+        "mask 参数"
+      ],
+      "optional_runtime_evidence": "有标记的边界成员、实际输入贡献或归约单位元对照。",
+      "examples": {
+        "positive": {
+          "case": "PyPTO row_max 教程 Case 3",
+          "scope": "作者报告的局部失效关系",
+          "why": "教程记录 valid_shape 之外的零进入全负部分块的 max 并主导结果，修订为 max 的中性填充后恢复。报告支持无效项已参与的局部关系，故障内核构建及全链路责任位置仍待核。"
+        },
+        "negative": {
+          "case": "PyPTO 中性填充对照",
+          "scope": "来源报告",
+          "why": "同类无效填充值被中性化后符合所评约定。"
+        },
+        "missing": {
+          "case": "PyPTO 事实遮蔽对照",
+          "why": "只有缓冲区零填充，未知 mask 或归约是否隔离零值。"
+        }
+      },
+      "changes": [
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 按参与资格归组，明确作者报告可支持的局部关系和未验证构建的范围。"
+      ]
+    },
+    "C2": {
+      "version": "0.3",
+      "parent": "item_multiplicity",
+      "title": "必需计算项遗漏",
+      "definition_level": "mechanism_relation",
+      "definition": "在给定计算语义下，至少一次必须保留的逻辑计算项未到达目标结果，且该次贡献未由等价路径保留。",
+      "object_roles": [
+        "必需逻辑计算项",
+        "贡献区间",
+        "目标结果"
+      ],
+      "applicability": "绑定同一版本及计算边界的适用条件，核对必需计算项与其在实际路径上的去向。",
+      "operation_fact": "omitted_contribution",
+      "necessary": [
+        "applicable_contract",
+        "required_member",
+        "omitted_contribution"
+      ],
+      "decisive_facts": {
+        "applicable_contract": "确定运算语义与受评计算边界。",
+        "required_member": "指出目标结果所要求的逻辑计算项、区域或分片及其至少一次必需的计入。",
+        "omitted_contribution": "限定于适用路径，证明语义要求的计入实际缺失，且无等价路径补足。已有具体动作时另记其实现位置与条件，例如提前写零绕过累加。"
+      },
+      "accepted_evidence": [
+        "来源明确陈述的缺陷",
+        "固定源码和同版本约定支持的静态推导",
+        "与所声称调用绑定的运行证据"
+      ],
+      "excluded_by": [
+        "contribution_preserved",
+        "omission_permitted"
+      ],
+      "exclude": [
+        "运算允许的 mask、稀疏过滤或分片职责。",
+        "另一路完成相同语义贡献的优化。"
+      ],
+      "near_neighbors": {
+        "C1": "C1 需要证明额外的无效成员贡献。",
+        "C3": "C3 需要证明原始贡献超重数。"
+      },
+      "retrieval_clues": [
+        "结果变小",
+        "线程未执行",
+        "地址未读",
+        "空边界"
+      ],
+      "optional_runtime_evidence": "定位输入标记贡献及收集边界的实际去向。",
+      "examples": {
+        "positive": {
+          "case": "N23 PadV3Grad edge",
+          "scope": "固定源码的条件性分析",
+          "why": "当适用的 edge 路径中中心坐标越界且边界复制梯度区间仍非空，旧 IsCut 分支直接写零并跳过 CalScope 与累加。必需梯度项遗漏是共性关系，提前写零是本案具体动作。结论限于满足这些静态条件的路径。"
+        },
+        "negative": {
+          "case": "N23 真正裁剪的内部坐标对照",
+          "scope": "语义对照",
+          "why": "正确约定下贡献区间本来为空，合法结果为零。"
+        },
+        "missing": {
+          "case": "N23 事实遮蔽对照",
+          "why": "仅已知提前写零，缺对应边界复制区间非空的语义依据。"
+        }
+      },
+      "changes": [
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 按有效项计入次数归组。分开描述必需项遗漏关系、具体动作和路径适用条件。"
+      ]
+    },
+    "C3": {
+      "version": "0.3",
+      "parent": "item_multiplicity",
+      "title": "同源计算项重复计入",
+      "definition_level": "mechanism_relation",
+      "definition": "相对于同一目标结果，同一逻辑来源及语义角色的计算项实际计入次数超过该操作的约定。",
+      "object_roles": [
+        "逻辑计算项的来源",
+        "独立部分结果",
+        "完整结果副本",
+        "目标规约结果"
+      ],
+      "applicability": "绑定目标结果及受评计算边界，有证据区分同源逻辑项、独立部分结果和完整副本。",
+      "operation_fact": "excess_multiplicity",
+      "necessary": [
+        "applicable_contract",
+        "original_contribution_identity",
+        "expected_multiplicity",
+        "excess_multiplicity"
+      ],
+      "decisive_facts": {
+        "applicable_contract": "确定目标结果、逻辑来源和各输入对该结果承担的语义角色。",
+        "original_contribution_identity": "证明这些计算项映射到同一逻辑来源及角色。相同值、地址、读取次数或 rank 数都不足以建立同源。",
+        "expected_multiplicity": "确定该计算项在相应目标结果中依语义允许计入的次数。",
+        "excess_multiplicity": "按已证同源关系，证明实际计入超过约定。实际计算关系与引入重复的最早实现动作分别举证。"
+      },
+      "accepted_evidence": [
+        "来源明确陈述的缺陷",
+        "固定源码和同版本约定支持的静态推导",
+        "与所声称调用绑定的运行证据"
+      ],
+      "excluded_by": [
+        "expected_multiplicity_met",
+        "repeat_semantics_permitted"
+      ],
+      "exclude": [
+        "重复物理读取但未重复计入目标结果。",
+        "各自独立的部分结果按约定作分层归约。",
+        "语义允许的重复索引、同一输入承担多个合法角色或参与不同结果。",
+        "完整结果副本仅被广播或分发，且未再次合并为同一结果。"
+      ],
+      "near_neighbors": {
+        "C1": "C1 成员本身不应出现在该边界。",
+        "C2": "C2 实际贡献低于约定且有遗漏证据。"
+      },
+      "retrieval_clues": [
+        "输出倍增",
+        "跨 rank 复制",
+        "第二次归约"
+      ],
+      "optional_runtime_evidence": "来源可辨的贡献或逐 rank 中间结果，按该运行验证。",
+      "examples": {
+        "positive": {
+          "case": "SGLang MoE #37187 / #37199",
+          "scope": "作者报告的局部失效关系",
+          "why": "报告描述同一 TP 组已完整规约的多个副本由后处理再次加和，据此支持同源项超额计入。最早错误动作、具体阶段职责和逐 rank 运行缓冲各自仍待核。"
+        },
+        "negative": {
+          "case": "合法分层归约对照",
+          "scope": "语义对照",
+          "why": "每个 partial 源集合互斥并只合并一次。"
+        },
+        "missing": {
+          "case": "SGLang 事实遮蔽对照",
+          "why": "只见约四倍，隐藏第一道 TP AllReduce 和后处理的来源关系。"
+        }
+      },
+      "changes": [
+        "0.2 建立候选边界。独立验证状态为待验证。",
+        "0.3 按有效项计入次数归组。来源报告可支持重复计入关系，职责未明时保留相应未决项。"
+      ]
+    },
+    "NUM-01": {
+      "version": "0.4",
+      "parent": "numerical_evaluation",
+      "definition_level": "implementation_error",
+      "title": "运行累加状态过窄",
+      "definition": "同一运行累加状态在连续更新之间被保存至不足以满足适用约定的窄类型，后续消费该失真状态。",
+      "object_roles": [
+        "适用精度约定",
+        "跨更新累加状态",
+        "后续消费"
+      ],
+      "applicability": "合法参与项的类型、成员、顺序和权重固定，能定位窄状态写回及后续读取。",
+      "operation_fact": "loop_carried_narrow_state",
+      "exclude": [
+        "合法末端转型",
+        "合同允许的逐次舍入",
+        "单项变换或平方先失真",
+        "实际缺项、重复或无资格项"
+      ],
+      "near_neighbors": {
+        "NUM-02": "首错由相近原始矩差造成，中心方差能在同工作精度下保留。",
+        "C2": "实际漏计必要计算项。每项执行后的窄态舍入应依其状态链判断。",
+        "outside": "可表示输入在单次平方中先溢出，归约只是消费该值。"
+      },
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "contribution_set_preserved",
+        "distorted_value_consumed",
+        "loop_carried_narrow_state",
+        "wider_state_preserves_same_updates"
+      ],
+      "decisive_facts": {
+        "applicable_contract": "同版本同路径约定确实约束适用的累加精度或方差语义，绑定动作文件中的旧行为。",
+        "implementation_action": "明确首个有据失真的实现动作及同版本行为，区分观察和推导。",
+        "contribution_set_preserved": "宽状态或中心方差对照保持逻辑成员、重数、权重及作用范围。",
+        "distorted_value_consumed": "已失真的值被实际下一次更新、归约、归一化或输出消费。",
+        "loop_carried_narrow_state": "至少两个连续更新间读取、更新并保存同一个过窄状态。定位首次舍入或状态超范围。",
+        "wider_state_preserves_same_updates": "以较宽状态保存同样的连续更新，能保留丢失的精度或范围。"
+      },
+      "excluded_by": [
+        "pre_reduction_square_overflow",
+        "variance_from_raw_moment_difference",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "accepted_evidence": [
+        "固定源码和适用约定支持的静态推导",
+        "作用域明确的作者确认",
+        "绑定构建、调用和路径的运行证据"
+      ]
+    },
+    "NUM-02": {
+      "version": "0.4",
+      "parent": "numerical_evaluation",
+      "definition_level": "implementation_error",
+      "title": "原始矩差求方差的有限精度消减",
+      "definition": "在保持输入和工作精度时，用原始二阶矩减均值平方形成失真的方差，该方差被归一化实际消费。",
+      "object_roles": [
+        "行内有效数据",
+        "原始二阶矩及均值平方",
+        "方差的归一化消费者"
+      ],
+      "applicability": "能复算相同原生数据及语义的中心二阶矩。误差需使实际归一化偏离适用约定。",
+      "operation_fact": "variance_from_raw_moment_difference",
+      "exclude": [
+        "可接受误差范围内的近似",
+        "不等价数学表达式",
+        "第一步独立平方溢出",
+        "窄状态先丢失必需信息"
+      ],
+      "near_neighbors": {
+        "NUM-01": "同一数学操作的运行累加状态在相邻更新间过早窄化。",
+        "C1": "无资格数据实际进入有效贡献，方差偏差需要按参与关系核对。",
+        "outside": "RMS-only、其他形式的消减、非等价表达式按其各自证据裁决。"
+      },
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "contribution_set_preserved",
+        "distorted_value_consumed",
+        "variance_from_raw_moment_difference",
+        "centered_variance_survives_at_same_precision",
+        "variance_consumed_by_normalization"
+      ],
+      "decisive_facts": {
+        "applicable_contract": "同版本同路径约定确实约束适用的累加精度或方差语义，绑定动作文件中的旧行为。",
+        "implementation_action": "明确首个有据失真的实现动作及同版本行为，区分观察和推导。",
+        "contribution_set_preserved": "宽状态或中心方差对照保持逻辑成员、重数、权重及作用范围。",
+        "distorted_value_consumed": "已失真的值被实际下一次更新、归约、归一化或输出消费。",
+        "variance_from_raw_moment_difference": "固定实现由相近的原始二阶矩减均值平方求方差，定位有限精度中首次不可恢复的差异。",
+        "centered_variance_survives_at_same_precision": "同一原生输入和工作精度的中心二阶矩能保留已经丢失的方差信息。",
+        "variance_consumed_by_normalization": "错误差值或其尺度实际进入所评归一化输出。"
+      },
+      "excluded_by": [
+        "pre_reduction_square_overflow",
+        "loop_carried_narrow_state",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "accepted_evidence": [
+        "固定源码和适用约定支持的静态推导",
+        "作用域明确的作者确认",
+        "绑定构建、调用和路径的运行证据"
+      ]
+    },
+    "CTL-EMPTY-01": {
+      "version": "0.5",
+      "parent": "control",
+      "title": "零任务进入不支持的调度入口",
+      "definition": "合法零工作调用未按约定短路，而进入要求至少一个有效任务的调度入口。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-01"
+      ],
+      "wrong_action": "合法零工作调用未按约定短路，而进入要求至少一个有效任务的调度入口。",
+      "correct_contract": "合法零工作调用应终止；仅当确有未完成任务时进入调度或排空。",
+      "failed_relation": "合法零工作调用未按约定短路，而进入要求至少一个有效任务的调度入口。",
+      "operation_fact": "zero_work_entry_unsupported",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "zero_work_legal",
+        "zero_work_entry_unsupported",
+        "zero_work_entry_taken"
+      ],
+      "excluded_by": [
+        "pending_work_needs_drain",
+        "empty_entry_supported",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "无新工作但仍有在途任务要排空，不是本模式；空输出物化义务单列。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-01.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "无新工作但仍有在途任务要排空，不是本模式；空输出物化义务单列。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "zero_work_legal": "本次零工作输入合法且确无有效任务",
+          "zero_work_entry_unsupported": "实际进入的调度入口不支持零工作",
+          "zero_work_entry_taken": "旧路径在零工作时确实启动该入口"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "META-SHAPE-01": {
+      "version": "0.5",
+      "parent": "metadata",
+      "title": "结果形状元数据推导违约",
+      "definition": "旧实现把不符合算子形状约定的输出 shape/rank/动态维交给分配或下游消费者。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-02"
+      ],
+      "wrong_action": "旧实现把不符合算子形状约定的输出 shape/rank/动态维交给分配或下游消费者。",
+      "correct_contract": "输出各轴、rank、动态维须满足同版本形状合同，并与后续分配和消费者一致。",
+      "failed_relation": "旧实现把不符合算子形状约定的输出 shape/rank/动态维交给分配或下游消费者。",
+      "operation_fact": "wrong_output_shape",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "expected_output_shape_bound",
+        "wrong_output_shape",
+        "wrong_shape_consumed"
+      ],
+      "excluded_by": [
+        "output_shape_correct",
+        "only_address_formula_wrong",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "shape正确而地址公式错用L类；合法输入被拒绝需审校验谓词。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-02.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "shape正确而地址公式错用L类；合法输入被拒绝需审校验谓词。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "expected_output_shape_bound": "从同版合同逐轴确定正确输出元数据",
+          "wrong_output_shape": "实际生成元数据与该合同不符",
+          "wrong_shape_consumed": "错误元数据确由分配或下游消费"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "PLAN-SPLIT-01": {
+      "version": "0.5",
+      "parent": "plan",
+      "title": "有效任务域规划失配",
+      "definition": "任务划分或重规划未保持所需逻辑任务域或任务原子性，并把失配计划交付执行。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-03",
+        "FM-11"
+      ],
+      "wrong_action": "任务划分或重规划未保持所需逻辑任务域或任务原子性，并把失配计划交付执行。",
+      "correct_contract": "切分输出应覆盖合法任务域；若声称越界，还要证明该计划导致实际访问超过对象。 | 计划给出的任务覆盖、处理原子粒度和驻留资源应满足执行者的合同。",
+      "failed_relation": "任务划分或重规划未保持所需逻辑任务域或任务原子性，并把失配计划交付执行。",
+      "operation_fact": "planned_task_domain_wrong",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "required_task_domain_bound",
+        "planned_task_domain_wrong",
+        "wrong_plan_executed"
+      ],
+      "excluded_by": [
+        "task_domain_preserved",
+        "only_buffer_capacity_wrong",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "容量预算错误单列BUF-CAP；遗漏或重复贡献是另需举证的局部关系，不能直接增加根数。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-03.json",
+        "history/normalized_mode_cards/FM-11.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "容量预算错误单列BUF-CAP；遗漏或重复贡献是另需举证的局部关系，不能直接增加根数。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "required_task_domain_bound": "合同所需任务域及不可拆单位明确",
+          "planned_task_domain_wrong": "旧任务数、切分边界或原子性与所需任务域不符",
+          "wrong_plan_executed": "错误计划实际决定工作执行"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "ADR-GEOM-01": {
+      "version": "0.5",
+      "parent": "address",
+      "title": "寻址几何项或对象内基址错误",
+      "definition": "在单位和整数表示均正确时，寻址公式遗漏或错置组基址、轴组合或窗口项，错误地址被消费。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-04",
+        "N06",
+        "N20"
+      ],
+      "wrong_action": "在单位和整数表示均正确时，寻址公式遗漏或错置组基址、轴组合或窗口项，错误地址被消费。",
+      "correct_contract": "正确语义对象内的逻辑位置应映到规定地址；越界只是本历史子条款的额外结果条件。 | 每个数据组应使用该组在正确参数对象中的 scale/offset/zeroPoint。 | 正确语义对象中的逻辑坐标应按受支持的布局、单位和局部基址映射到正确物理位置。",
+      "failed_relation": "在单位和整数表示均正确时，寻址公式遗漏或错置组基址、轴组合或窗口项，错误地址被消费。",
+      "operation_fact": "wrong_geometry_term",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "expected_geometry_bound",
+        "wrong_geometry_term",
+        "address_units_consistent",
+        "address_representation_exact",
+        "not_dense_layout_substitution",
+        "distorted_address_consumed"
+      ],
+      "excluded_by": [
+        "geometry_mapping_correct",
+        "contiguous_formula",
+        "wrong_conversion",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "L1密排替代、L2单位误换和ADR-INT表示失真分别比较；越界不是必要条件。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-04.json",
+        "history/normalized_mode_cards/N06.json",
+        "history/normalized_mode_cards/N20.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "L1密排替代、L2单位误换和ADR-INT表示失真分别比较；越界不是必要条件。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "expected_geometry_bound": "逻辑位置到当前对象地址的必要几何项明确",
+          "wrong_geometry_term": "实际公式遗漏或错置这些项",
+          "address_units_consistent": "元素、bit、byte单位换算本身正确",
+          "address_representation_exact": "相关整数结果仍精确保留",
+          "not_dense_layout_substitution": "首错不是密排公式替代原视图步长",
+          "distorted_address_consumed": "同一路径的指针形成、gather/scatter/load/store实际消费失真量；死值或被正确回退替换不满足。"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "ADR-OWNER-01": {
+      "version": "0.5",
+      "parent": "address",
+      "title": "缓存逻辑对象与物理归属错配",
+      "definition": "缓存访问使用与当前逻辑批次或对象身份不一致的物理槽、block table归属。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "research_definition",
+      "classification_enabled": false,
+      "source_ids": [
+        "FM-06"
+      ],
+      "wrong_action": "缓存访问使用与当前逻辑批次或对象身份不一致的物理槽、block table归属。",
+      "correct_contract": "同一 token、batch、逻辑块须落到对应缓存槽，不得改变数据归属。",
+      "failed_relation": "缓存访问使用与当前逻辑批次或对象身份不一致的物理槽、block table归属。",
+      "operation_fact": "wrong_cache_owner",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "cache_ownership_contract",
+        "wrong_cache_owner",
+        "wrong_owner_storage_consumed"
+      ],
+      "excluded_by": [
+        "cache_owner_correct",
+        "only_geometry_term_wrong",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "正确对象内的地址项错误用ADR-GEOM；接口参数读错槽位用P1，需按责任动作拆分。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-06.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "正确对象内的地址项错误用ADR-GEOM；接口参数读错槽位用P1，需按责任动作拆分。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "cache_ownership_contract": "当前逻辑对象的缓存物理归属明确",
+          "wrong_cache_owner": "实际选择其他对象的缓存映射或物理槽",
+          "wrong_owner_storage_consumed": "实际缓存访问使用错误归属"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "SYNC-DEP-01": {
+      "version": "0.5",
+      "parent": "synchronization",
+      "title": "必要同步依赖或参与协议违约",
+      "definition": "活跃生产消费路径违反已要求的完成、代际匹配或屏障参与协议。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-05",
+        "N03"
+      ],
+      "wrong_action": "活跃生产消费路径违反已要求的完成、代际匹配或屏障参与协议。",
+      "correct_contract": "生产完成、发布、等待、消费及复用须按同代依赖和集合参与协议发生。 | 原 N03 只讨论核内真实生产消费依赖；同号后期缓冲错源条款必须另立身份。",
+      "failed_relation": "活跃生产消费路径违反已要求的完成、代际匹配或屏障参与协议。",
+      "operation_fact": "ordering_protocol_violated",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "required_ordering_protocol",
+        "ordering_protocol_violated",
+        "unsynchronized_consumer_reachable"
+      ],
+      "excluded_by": [
+        "ordering_protocol_satisfied",
+        "only_barrier_patch_success",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "加屏障后通过不能单独证明；尚有在途任务被早退丢弃用SYNC-DRAIN比较。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-05.json",
+        "history/normalized_mode_cards/N03.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "加屏障后通过不能单独证明；尚有在途任务被早退丢弃用SYNC-DRAIN比较。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "required_ordering_protocol": "同版流水/事件/屏障合同明确要求先后、代际或参与关系",
+          "ordering_protocol_violated": "旧生效路径未等待、误配代际或缺少必需参与者",
+          "unsynchronized_consumer_reachable": "违约状态可到达真实消费者或阻止规定完成"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "NUM-NARROW-01": {
+      "version": "0.5",
+      "parent": "numerical_evaluation",
+      "title": "非循环状态在必要运算前过早窄化",
+      "definition": "在后续必要运算仍需原信息时先窄化输入或一次性中间值，使信息不可恢复地丢失并被消费。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-08",
+        "FM-24"
+      ],
+      "wrong_action": "在后续必要运算仍需原信息时先窄化输入或一次性中间值，使信息不可恢复地丢失并被消费。",
+      "correct_contract": "计算仍需要的信息必须保留到合同允许的舍入/转换点，实际原语精度必须满足约定。 | 较高精度输入在计算需要其低位之前不能仅依输出 dtype 提前窄化。",
+      "failed_relation": "在后续必要运算仍需原信息时先窄化输入或一次性中间值，使信息不可恢复地丢失并被消费。",
+      "operation_fact": "premature_narrowing",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "needed_precision_before_operation",
+        "premature_narrowing",
+        "not_loop_carried_narrow_state",
+        "narrowing_loss_consumed",
+        "deferred_narrowing_preserves_contract"
+      ],
+      "excluded_by": [
+        "narrowing_allowed_at_this_boundary",
+        "loop_carried_narrow_state",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "合法最终输出转换不命中；NUM-01专门表示循环携带累加状态。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-08.json",
+        "history/normalized_mode_cards/FM-24.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "合法最终输出转换不命中；NUM-01专门表示循环携带累加状态。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "needed_precision_before_operation": "后续必要运算及适用精度合同仍需要转换前信息",
+          "premature_narrowing": "旧路径在该运算前先窄化",
+          "not_loop_carried_narrow_state": "所审首错不是连续更新之间保存运行累加状态",
+          "narrowing_loss_consumed": "转换损失确影响后续必要运算",
+          "deferred_narrowing_preserves_contract": "固定输入/操作的推迟窄化对照保留约定结果"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "NUM-ABSORB-01": {
+      "version": "0.5",
+      "parent": "numerical_evaluation",
+      "title": "非线性求值前的小量吸收",
+      "definition": "有限精度加法先吸收随后非线性结果所需的小量，等价稳定表达式可在相同精度下保留它。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-09"
+      ],
+      "wrong_action": "有限精度加法先吸收随后非线性结果所需的小量，等价稳定表达式可在相同精度下保留它。",
+      "correct_contract": "固定数学目标和误差约定后，有限精度表达式或近似路径须达到所需精度。",
+      "failed_relation": "有限精度加法先吸收随后非线性结果所需的小量，等价稳定表达式可在相同精度下保留它。",
+      "operation_fact": "small_term_absorbed_before_nonlinearity",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "same_terms_and_precision",
+        "small_term_absorbed_before_nonlinearity",
+        "stable_expression_preserves_small_result",
+        "distorted_value_consumed"
+      ],
+      "excluded_by": [
+        "variance_from_raw_moment_difference",
+        "expression_meets_error_contract",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "NUM-02仅是原始矩差方差；实数域公式本就不等价不能称有限精度吸收。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-09.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "NUM-02仅是原始矩差方差；实数域公式本就不等价不能称有限精度吸收。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "same_terms_and_precision": "两条表达式保持输入数学项与工作精度",
+          "small_term_absorbed_before_nonlinearity": "旧加法先使小量信息消失，再执行对该信息敏感的非线性操作",
+          "stable_expression_preserves_small_result": "同精度稳定表达式保留合同所需结果",
+          "distorted_value_consumed": "失真值被目标计算实际消费"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "NUM-ORDER-01": {
+      "version": "0.5",
+      "parent": "numerical_evaluation",
+      "title": "受合同约束的浮点累加次序违约",
+      "definition": "逻辑项及次数相同，但实际加法配对或逐步舍入违反明确的一致性、顺序或误差要求。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-10"
+      ],
+      "wrong_action": "逻辑项及次数相同，但实际加法配对或逐步舍入违反明确的一致性、顺序或误差要求。",
+      "correct_contract": "在规定的项集合、次数、类型和一致性合同下，所用加法树应满足误差或重现要求。",
+      "failed_relation": "逻辑项及次数相同，但实际加法配对或逐步舍入违反明确的一致性、顺序或误差要求。",
+      "operation_fact": "required_accumulation_order_or_budget",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "same_contribution_ledger",
+        "required_accumulation_order_or_budget",
+        "accumulation_order_violates_contract",
+        "order_difference_consumed"
+      ],
+      "excluded_by": [
+        "order_difference_within_contract",
+        "loop_carried_narrow_state",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "合法的浮点不结合性不是缺陷；缺项、重复项和状态过窄分别审查。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-10.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "合法的浮点不结合性不是缺陷；缺项、重复项和状态过窄分别审查。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "same_contribution_ledger": "相同逻辑项均按约定次数参与",
+          "required_accumulation_order_or_budget": "合同明确要求特定累加/舍入次序或误差预算",
+          "accumulation_order_violates_contract": "旧加法树或逐步舍入实际违反该要求",
+          "order_difference_consumed": "顺序差异传到目标结果"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "CTL-DISPATCH-01": {
+      "version": "0.5",
+      "parent": "control",
+      "title": "选择不满足所需语义的执行分支",
+      "definition": "条件选择或快捷路径忽略必要语义/能力条件，使合法请求进入不实现其所需计算的分支。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-12"
+      ],
+      "wrong_action": "条件选择或快捷路径忽略必要语义/能力条件，使合法请求进入不实现其所需计算的分支。",
+      "correct_contract": "选中的已有实现必须具备本调用需要的融合、类型、布局和其他能力。",
+      "failed_relation": "条件选择或快捷路径忽略必要语义/能力条件，使合法请求进入不实现其所需计算的分支。",
+      "operation_fact": "selected_branch_incompatible",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "required_execution_semantics",
+        "selected_branch_incompatible",
+        "incompatible_branch_taken"
+      ],
+      "excluded_by": [
+        "selected_branch_satisfies_contract",
+        "input_outside_promised_support",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "仅不同分支结果不同不足以成立；不支持输入按合同拒绝是合规。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-12.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "仅不同分支结果不同不足以成立；不支持输入按合同拒绝是合规。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "required_execution_semantics": "当前合法输入要求的计算/融合语义明确",
+          "selected_branch_incompatible": "所选分支不具备该语义或能力",
+          "incompatible_branch_taken": "旧条件确将当前输入导向此分支"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "VALID-SUPPORT-01": {
+      "version": "0.5",
+      "parent": "validation",
+      "title": "必需的不支持场景拦截缺失",
+      "definition": "合同要求在执行前拒绝的后端配置未被守卫排除，进入不支持该配置的实际路径。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-14"
+      ],
+      "wrong_action": "合同要求在执行前拒绝的后端配置未被守卫排除，进入不支持该配置的实际路径。",
+      "correct_contract": "已声明不支持的设备配置应在相应执行路径前拒绝，不能把无效能力组合下发。",
+      "failed_relation": "合同要求在执行前拒绝的后端配置未被守卫排除，进入不支持该配置的实际路径。",
+      "operation_fact": "required_guard_missing",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "rejection_required_for_configuration",
+        "required_guard_missing",
+        "unsupported_configuration_executed"
+      ],
+      "excluded_by": [
+        "configuration_supported",
+        "unsupported_configuration_rejected",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "合法支持域内选错模板用CTL-DISPATCH；没有拒绝义务不能仅凭失败反推守卫缺陷。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-14.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "合法支持域内选错模板用CTL-DISPATCH；没有拒绝义务不能仅凭失败反推守卫缺陷。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "rejection_required_for_configuration": "同版合同明确要求拒绝此后端配置",
+          "required_guard_missing": "旧守卫未拦截该配置",
+          "unsupported_configuration_executed": "不受支持配置实际交付后端执行"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "NUM-RANGE-01": {
+      "version": "0.5",
+      "parent": "numerical_evaluation",
+      "title": "活跃浮点中间值超出表示范围",
+      "definition": "有限合法输入的约定结果可表示，旧活跃中间运算先超出实际浮点格式范围，失真随后被消费。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-17",
+        "FM-21",
+        "FM-28"
+      ],
+      "wrong_action": "有限合法输入的约定结果可表示，旧活跃中间运算先超出实际浮点格式范围，失真随后被消费。",
+      "correct_contract": "合法有限输入存在符合约定的结果时，实际中间路径不应因可避免的超范围破坏该结果。 | 设备实际数值格式的有限范围必须容纳该路径按合同需要的中间值。 | 实际累加器的每次更新都应在合同要求范围内，不能把范围外局部和交给后续消费。",
+      "failed_relation": "有限合法输入的约定结果可表示，旧活跃中间运算先超出实际浮点格式范围，失真随后被消费。",
+      "operation_fact": "actual_working_format_bound",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "finite_input_target_representable",
+        "actual_working_format_bound",
+        "intermediate_nonfinite_created",
+        "overflow_result_consumed"
+      ],
+      "excluded_by": [
+        "input_already_nonfinite",
+        "target_mathematically_out_of_range",
+        "overflow_path_not_consumed",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "整数地址回绕不同；仅出现NaN不证明首溢出位置；合法目标本就越界单列。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-17.json",
+        "history/normalized_mode_cards/FM-21.json",
+        "history/normalized_mode_cards/FM-28.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "整数地址回绕不同；仅出现NaN不证明首溢出位置；合法目标本就越界单列。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "finite_input_target_representable": "合法有限输入具有合同允许且可表示的目标结果",
+          "actual_working_format_bound": "首溢出运算的真实工作格式和有效路径已固定",
+          "intermediate_nonfinite_created": "该运算首先产生范围溢出的非有限或饱和值",
+          "overflow_result_consumed": "该失真中间值被目标路径实际消费"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "BUF-EXTENT-01": {
+      "version": "0.5",
+      "parent": "buffer",
+      "title": "正确起址上的访存长度或足迹违约",
+      "definition": "起始对象和地址正确，但实际搬运/向量访问足迹超出该对象的合法有效区间。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-19"
+      ],
+      "wrong_action": "起始对象和地址正确，但实际搬运/向量访问足迹超出该对象的合法有效区间。",
+      "correct_contract": "真实 load/store/DataCopy 的访问足迹必须落在合法对象范围，长度和硬件最小粒度均须计入。",
+      "failed_relation": "起始对象和地址正确，但实际搬运/向量访问足迹超出该对象的合法有效区间。",
+      "operation_fact": "memory_start_correct",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "memory_object_extent_bound",
+        "memory_start_correct",
+        "transfer_extent_exceeds_object",
+        "out_of_extent_access_executed"
+      ],
+      "excluded_by": [
+        "transfer_extent_within_object",
+        "only_address_start_wrong",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "错起址单列地址类；分配容量低估是上游独立关系，不能把后果再数一根。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-19.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "错起址单列地址类；分配容量低估是上游独立关系，不能把后果再数一根。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "memory_object_extent_bound": "目标对象的合法分配/有效访问区间明确",
+          "memory_start_correct": "旧起始对象和地址正确",
+          "transfer_extent_exceeds_object": "实际长度或向量足迹超出合法区间",
+          "out_of_extent_access_executed": "该越界足迹在所审路径执行"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "REP-META-01": {
+      "version": "0.5",
+      "parent": "representation",
+      "title": "布局描述与实际数据表示错配",
+      "definition": "向消费者交付与实际payload格式不一致的布局、块轴或格式描述，使其按错误表示解释数据。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-20"
+      ],
+      "wrong_action": "向消费者交付与实际payload格式不一致的布局、块轴或格式描述，使其按错误表示解释数据。",
+      "correct_contract": "view 描述的物理格式、storageShape 和寻址解释必须一致，合法正规化后才能套新布局规则。",
+      "failed_relation": "向消费者交付与实际payload格式不一致的布局、块轴或格式描述，使其按错误表示解释数据。",
+      "operation_fact": "layout_descriptor_mismatch",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "actual_payload_layout_bound",
+        "layout_descriptor_mismatch",
+        "mismatched_descriptor_consumed"
+      ],
+      "excluded_by": [
+        "descriptor_matches_payload",
+        "only_result_shape_derivation_wrong",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "显式重排把值写错位置另审；仅输出shape推导错用META-SHAPE。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-20.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "显式重排把值写错位置另审；仅输出shape推导错用META-SHAPE。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "actual_payload_layout_bound": "实际payload格式和逻辑view合同明确",
+          "layout_descriptor_mismatch": "交付的描述字段属于不同布局/格式",
+          "mismatched_descriptor_consumed": "下游确用该描述解释现有payload"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "NUM-DOMAIN-01": {
+      "version": "0.5",
+      "parent": "formula",
+      "title": "贡献项放入错误缩放或变换域",
+      "definition": "应在指定实值域消费的贡献被放到另一缩放/变换域，使其数学权重即使在精确算术中也错误。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-23"
+      ],
+      "wrong_action": "应在指定实值域消费的贡献被放到另一缩放/变换域，使其数学权重即使在精确算术中也错误。",
+      "correct_contract": "scale、bias、反量化和加法须在各自定义的数值域和相对阶段执行。",
+      "failed_relation": "应在指定实值域消费的贡献被放到另一缩放/变换域，使其数学权重即使在精确算术中也错误。",
+      "operation_fact": "contribution_inserted_in_wrong_domain",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "contribution_domain_contract",
+        "contribution_inserted_in_wrong_domain",
+        "domain_mismatch_changes_formula",
+        "wrong_domain_result_consumed"
+      ],
+      "excluded_by": [
+        "domain_order_contract_satisfied",
+        "only_scale_source_wrong",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "读错组scale是寻址/来源问题；同域有限精度损失与此不同。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-23.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "读错组scale是寻址/来源问题；同域有限精度损失与此不同。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "contribution_domain_contract": "各贡献应处的变换域及前后顺序明确",
+          "contribution_inserted_in_wrong_domain": "旧代码在错误变换域插入贡献",
+          "domain_mismatch_changes_formula": "固定相同项/次数后精确公式仍不等价",
+          "wrong_domain_result_consumed": "错误域结果实际用于目标输出"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "BUF-INIT-01": {
+      "version": "0.5",
+      "parent": "buffer",
+      "title": "消费前的状态初始化义务缺失",
+      "definition": "缓冲区或归约状态在首次消费前未取得当前调用所要求的初值，遗留/未初始化状态被消费。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N01"
+      ],
+      "wrong_action": "缓冲区或归约状态在首次消费前未取得当前调用所要求的初值，遗留/未初始化状态被消费。",
+      "correct_contract": "每个任务首次使用需要的初态必须建立，前一任务消耗过的状态不得未经复位跨域使用。",
+      "failed_relation": "缓冲区或归约状态在首次消费前未取得当前调用所要求的初值，遗留/未初始化状态被消费。",
+      "operation_fact": "required_initial_state_missing",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "initial_state_required",
+        "required_initial_state_missing",
+        "uninitialized_state_consumed"
+      ],
+      "excluded_by": [
+        "all_slots_written_before_read",
+        "previous_state_is_valid_initial_state",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "仅缺memset不证明；全覆盖前写后读可以合规。无效数值是否入算另核C1。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N01.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "仅缺memset不证明；全覆盖前写后读可以合规。无效数值是否入算另核C1。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "initial_state_required": "当前调用的状态初值合同明确",
+          "required_initial_state_missing": "旧路径未建立该初值或仅初始化部分相关状态",
+          "uninitialized_state_consumed": "消费发生在完整覆盖之前并使用遗留状态"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "CTL-EMPTY-OUT-01": {
+      "version": "0.5",
+      "parent": "control",
+      "title": "空更新分支未履行结果物化义务",
+      "definition": "合法空更新分支虽无更新项，仍须复制或物化规定结果；旧早退未建立该输出。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N02"
+      ],
+      "wrong_action": "合法空更新分支虽无更新项，仍须复制或物化规定结果；旧早退未建立该输出。",
+      "correct_contract": "合法返回路径必须使调用方获得约定输出；复制、store 或合法共享应至少有一种成立。",
+      "failed_relation": "合法空更新分支虽无更新项，仍须复制或物化规定结果；旧早退未建立该输出。",
+      "operation_fact": "empty_branch_skips_materialization",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "empty_update_requires_output",
+        "empty_branch_skips_materialization",
+        "missing_output_postcondition"
+      ],
+      "excluded_by": [
+        "empty_output_already_materialized",
+        "output_alias_permitted_and_satisfied",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "已满足别名/输出合同可早退；真正零任务调度入口问题另审。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N02.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "已满足别名/输出合同可早退；真正零任务调度入口问题另审。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "empty_update_requires_output": "空更新合同仍要求可读的规定输出",
+          "empty_branch_skips_materialization": "旧分支直接返回而缺复制/物化步骤",
+          "missing_output_postcondition": "返回状态未满足该输出后置条件"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "REP-CONVERT-01": {
+      "version": "0.5",
+      "parent": "representation",
+      "title": "数值类型边界的必需转换缺失",
+      "definition": "同一语义值进入要求不同数值类型的消费者前，未执行合同要求的数值转换。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N07"
+      ],
+      "wrong_action": "同一语义值进入要求不同数值类型的消费者前，未执行合同要求的数值转换。",
+      "correct_contract": "接口边界的参数角色、编码、转换、透传与数量各自必须与消费者合同一致。",
+      "failed_relation": "同一语义值进入要求不同数值类型的消费者前，未执行合同要求的数值转换。",
+      "operation_fact": "required_numeric_conversion_missing",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "producer_consumer_representation_contract",
+        "required_numeric_conversion_missing",
+        "unconverted_value_consumed"
+      ],
+      "excluded_by": [
+        "numeric_conversion_correct",
+        "different_logical_object_selected",
+        "conversion_not_required",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "宽N07的错槽/状态/数量不自动归此叶；读宽错误及显式保位误算分别比较。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N07.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "宽N07的错槽/状态/数量不自动归此叶；读宽错误及显式保位误算分别比较。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "producer_consumer_representation_contract": "实际生产类型与消费者所需数值类型明确",
+          "required_numeric_conversion_missing": "应有的数值转换边界在旧路径缺失",
+          "unconverted_value_consumed": "消费者实际取得未经规定转换的值"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "REP-WIDTH-01": {
+      "version": "0.5",
+      "parent": "representation",
+      "title": "消费者读宽与实际存储格式不符",
+      "definition": "同一语义对象按一种格式生产和存储，却被消费者用不一致的宽度和类型解释其内存。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N12"
+      ],
+      "wrong_action": "同一语义对象按一种格式生产和存储，却被消费者用不一致的宽度和类型解释其内存。",
+      "correct_contract": "同一存储对象的生产、分配与消费必须使用合同规定且相容的类型及物理宽度。",
+      "failed_relation": "同一语义对象按一种格式生产和存储，却被消费者用不一致的宽度和类型解释其内存。",
+      "operation_fact": "consumer_storage_width_wrong",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "producer_storage_format_bound",
+        "consumer_storage_width_wrong",
+        "wrong_width_value_consumed"
+      ],
+      "excluded_by": [
+        "producer_consumer_widths_match",
+        "producer_actual_write_width_unknown",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "只看到输出声明dtype不足；同宽BF16/FP16误解释可落REP-REINTERPRET，不据此假设写宽。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N12.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "只看到输出声明dtype不足；同宽BF16/FP16误解释可落REP-REINTERPRET，不据此假设写宽。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "producer_storage_format_bound": "生产者实际写入格式和存储宽度已固定",
+          "consumer_storage_width_wrong": "消费者实际读宽/解码类型与存储合同不符",
+          "wrong_width_value_consumed": "错读所得数值进入消费者计算"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "REP-REINTERPRET-01": {
+      "version": "0.5",
+      "parent": "representation",
+      "title": "保位解释被误作数值转换",
+      "definition": "需保持数值语义的边界对同一位型只作类型重解释，再以不同编码的数值参与运算。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N13"
+      ],
+      "wrong_action": "需保持数值语义的边界对同一位型只作类型重解释，再以不同编码的数值参与运算。",
+      "correct_contract": "只要求保位的搬排过程不得用另一数值编码对同宽载荷做改变位型的算术。",
+      "failed_relation": "需保持数值语义的边界对同一位型只作类型重解释，再以不同编码的数值参与运算。",
+      "operation_fact": "bit_reinterpretation_used_as_conversion",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "numeric_value_conversion_required",
+        "bit_reinterpretation_used_as_conversion",
+        "reinterpreted_numeric_value_consumed"
+      ],
+      "excluded_by": [
+        "bit_preserving_transport_required",
+        "numeric_conversion_correct",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "用于合法纯搬运的reinterpret可以合规；必须跟踪后续是否按重解释类型做算术。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N13.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "用于合法纯搬运的reinterpret可以合规；必须跟踪后续是否按重解释类型做算术。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "numeric_value_conversion_required": "该边界要求保持数值而非按位搬运",
+          "bit_reinterpretation_used_as_conversion": "旧操作仅改类型解释而未转换数值编码",
+          "reinterpreted_numeric_value_consumed": "不同编码解释所得值实际参与算术"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "DATA-SIGN-01": {
+      "version": "0.5",
+      "parent": "data_semantics",
+      "title": "符号位合同被数值比较替代",
+      "definition": "需要符号位语义的实现改用数值大小比较，无法保留负零或合同指定NaN符号的行为。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N08"
+      ],
+      "wrong_action": "需要符号位语义的实现改用数值大小比较，无法保留负零或合同指定NaN符号的行为。",
+      "correct_contract": "合法输入对应的布尔真值表或位语义必须按接口实现，而非用不等价比较代替。",
+      "failed_relation": "需要符号位语义的实现改用数值大小比较，无法保留负零或合同指定NaN符号的行为。",
+      "operation_fact": "numeric_comparison_replaces_signbit",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "sign_bit_semantics_required",
+        "numeric_comparison_replaces_signbit",
+        "distinguishing_signed_value_consumed"
+      ],
+      "excluded_by": [
+        "numeric_sign_comparison_is_contract",
+        "signbit_extraction_correct",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "普通正负判断不自动要求符号位；正确性依据来自算子合同。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N08.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "普通正负判断不自动要求符号位；正确性依据来自算子合同。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "sign_bit_semantics_required": "同版合同要求符号位而非数值负性",
+          "numeric_comparison_replaces_signbit": "旧实现以x<0等比较替代符号位提取",
+          "distinguishing_signed_value_consumed": "负零/相应NaN等区分值进入该路径并影响输出"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "META-INDEX-01": {
+      "version": "0.5",
+      "parent": "metadata",
+      "title": "输出索引的逻辑轴序映射错误",
+      "definition": "输出索引使用不符合被选轴和逻辑坐标的编号规则，即使数值结果本身可正确。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N09"
+      ],
+      "wrong_action": "输出索引使用不符合被选轴和逻辑坐标的编号规则，即使数值结果本身可正确。",
+      "correct_contract": "返回的 indices/argmax/route ID 应按指定轴与编码指向所报告值对应的项。",
+      "failed_relation": "输出索引使用不符合被选轴和逻辑坐标的编号规则，即使数值结果本身可正确。",
+      "operation_fact": "output_index_mapping_wrong",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "output_index_coordinate_contract",
+        "output_index_mapping_wrong",
+        "wrong_index_returned"
+      ],
+      "excluded_by": [
+        "output_index_mapping_correct",
+        "only_memory_address_wrong",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "输出索引语义与实际存储寻址分开，不将所有索引错误均归L类。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N09.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "输出索引语义与实际存储寻址分开，不将所有索引错误均归L类。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "output_index_coordinate_contract": "输出索引的轴、坐标系和编号合同明确",
+          "output_index_mapping_wrong": "旧路径用不同轴序/尾轴规则计算输出索引",
+          "wrong_index_returned": "错误逻辑索引写入规定结果"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "BUF-CAP-01": {
+      "version": "0.5",
+      "parent": "buffer",
+      "title": "中间缓冲容量预算不足",
+      "definition": "活跃中间对象的最大并存需求已明确，但旧容量计算低估需求并被实际分配/访问采用。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N11",
+        "FM-11"
+      ],
+      "wrong_action": "活跃中间对象的最大并存需求已明确，但旧容量计算低估需求并被实际分配/访问采用。",
+      "correct_contract": "分配的单个缓冲容量、槽数和单位必须覆盖其确定 live 集并满足可用预算。 | 计划给出的任务覆盖、处理原子粒度和驻留资源应满足执行者的合同。",
+      "failed_relation": "活跃中间对象的最大并存需求已明确，但旧容量计算低估需求并被实际分配/访问采用。",
+      "operation_fact": "buffer_capacity_underestimated",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "live_buffer_demand_bound",
+        "buffer_capacity_underestimated",
+        "undersized_buffer_used"
+      ],
+      "excluded_by": [
+        "buffer_capacity_sufficient",
+        "only_transfer_length_wrong",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "容量足够而搬运过长用BUF-EXTENT；只有冗余分配不能认定本精度故障。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N11.json",
+        "history/normalized_mode_cards/FM-11.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "容量足够而搬运过长用BUF-EXTENT；只有冗余分配不能认定本精度故障。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "live_buffer_demand_bound": "给定合同和路径的最大并存容量需求明确",
+          "buffer_capacity_underestimated": "旧预算截断/漏计需求造成容量不足",
+          "undersized_buffer_used": "不足容量的分配被所需操作实际使用"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "NUM-ROUND-01": {
+      "version": "0.5",
+      "parent": "numerical_evaluation",
+      "title": "转换舍入或饱和规则违约",
+      "definition": "在正确转换边界采用不满足当前合同的舍入或饱和规则，区分输入下产生不同结果。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N15"
+      ],
+      "wrong_action": "在正确转换边界采用不满足当前合同的舍入或饱和规则，区分输入下产生不同结果。",
+      "correct_contract": "合同规定的舍入方向、饱和规则及其生效位置必须由实际转换控制实现。",
+      "failed_relation": "在正确转换边界采用不满足当前合同的舍入或饱和规则，区分输入下产生不同结果。",
+      "operation_fact": "wrong_rounding_or_saturation_mode",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "rounding_saturation_contract",
+        "wrong_rounding_or_saturation_mode",
+        "rounding_distinguishing_input_consumed"
+      ],
+      "excluded_by": [
+        "rounding_mode_permitted",
+        "rounding_controls_equivalent_for_input",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "单纯两算法末位不同不证明；负decimals错误identity分支优先定位CTL-DISPATCH。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N15.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "单纯两算法末位不同不证明；负decimals错误identity分支优先定位CTL-DISPATCH。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "rounding_saturation_contract": "转换点的舍入和饱和约定明确",
+          "wrong_rounding_or_saturation_mode": "旧生效配置使用不同规则",
+          "rounding_distinguishing_input_consumed": "能区分规则的合法输入实际到达该转换"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "DATA-NONFINITE-01": {
+      "version": "0.5",
+      "parent": "data_semantics",
+      "title": "已有非有限数据传播规则违约",
+      "definition": "对已存在的NaN/Inf数据使用违反算子规定的传播、屏蔽或分支规则。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N16"
+      ],
+      "wrong_action": "对已存在的NaN/Inf数据使用违反算子规定的传播、屏蔽或分支规则。",
+      "correct_contract": "已经存在的 NaN/Inf 或内部协议标记应按同版允许的传播或状态语义处理。",
+      "failed_relation": "对已存在的NaN/Inf数据使用违反算子规定的传播、屏蔽或分支规则。",
+      "operation_fact": "existing_nonfinite_value",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "nonfinite_propagation_contract",
+        "existing_nonfinite_value",
+        "nonfinite_handling_violates_contract"
+      ],
+      "excluded_by": [
+        "nonfinite_handling_allowed",
+        "nonfinite_is_internal_marker",
+        "first_nonfinite_created_by_overflow",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "范围溢出首次生成Inf用NUM-RANGE；内部状态标记不能套用普通数据传播合同。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N16.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "范围溢出首次生成Inf用NUM-RANGE；内部状态标记不能套用普通数据传播合同。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "nonfinite_propagation_contract": "所审算子的NaN/Inf传播或屏蔽规则明确",
+          "existing_nonfinite_value": "非有限值在所审动作之前已经存在",
+          "nonfinite_handling_violates_contract": "旧本地处理违反其规则且被输出消费"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "SYNC-DRAIN-01": {
+      "version": "0.5",
+      "parent": "synchronization",
+      "title": "无新任务时遗漏在途工作排空",
+      "definition": "流水线没有新的输入任务时，旧退出条件跳过先前已生产、仍应完成的在途工作。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N17"
+      ],
+      "wrong_action": "流水线没有新的输入任务时，旧退出条件跳过先前已生产、仍应完成的在途工作。",
+      "correct_contract": "既定任务应按规定次数、有效长度和完成义务执行，流水末尾应排空已有任务。",
+      "failed_relation": "流水线没有新的输入任务时，旧退出条件跳过先前已生产、仍应完成的在途工作。",
+      "operation_fact": "empty_iteration_skips_drain",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "pending_work_needs_drain",
+        "empty_iteration_skips_drain",
+        "pending_result_not_completed"
+      ],
+      "excluded_by": [
+        "no_pending_work",
+        "pending_work_fully_drained",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "真正空任务启动问题用CTL-EMPTY；缺wait依赖与跳过待完成任务按首错分开。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N17.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "真正空任务启动问题用CTL-EMPTY；缺wait依赖与跳过待完成任务按首错分开。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "pending_work_needs_drain": "存在先前发起且合同要求完成的在途工作",
+          "empty_iteration_skips_drain": "旧退出把无新任务误作无待完成工作而跳过排空",
+          "pending_result_not_completed": "已有工作的结果因此未完成/未回写"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "CTL-TAIL-01": {
+      "version": "0.5",
+      "parent": "plan",
+      "title": "整除余数被误作末个整块有效长度",
+      "definition": "有效域非空且恰好整除块长时，旧控制将余数零直接用于最后整块，丢失其完整有效长度。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N17"
+      ],
+      "wrong_action": "有效域非空且恰好整除块长时，旧控制将余数零直接用于最后整块，丢失其完整有效长度。",
+      "correct_contract": "既定任务应按规定次数、有效长度和完成义务执行，流水末尾应排空已有任务。",
+      "failed_relation": "有效域非空且恰好整除块长时，旧控制将余数零直接用于最后整块，丢失其完整有效长度。",
+      "operation_fact": "zero_remainder_used_as_empty_tail",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "last_block_full_on_exact_division",
+        "zero_remainder_used_as_empty_tail",
+        "wrong_tail_length_consumed"
+      ],
+      "excluded_by": [
+        "zero_tail_means_no_allocated_block",
+        "full_last_block_length_preserved",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "空的附加尾块可合法长度0；必须区分它与最后一个真实整块。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N17.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "空的附加尾块可合法长度0；必须区分它与最后一个真实整块。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "last_block_full_on_exact_division": "当前切分约定下整除时最后块应为完整有效块",
+          "zero_remainder_used_as_empty_tail": "旧控制将整除余数0当作该末块有效长度0",
+          "wrong_tail_length_consumed": "错误长度用于末块执行/搬运"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "CTL-ELIDE-01": {
+      "version": "0.5",
+      "parent": "control",
+      "title": "快捷条件错误消去必需运算",
+      "definition": "输入属性满足部分identity条件但不满足全部语义前提时，旧快捷分支省略仍需执行的运算。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N26"
+      ],
+      "wrong_action": "输入属性满足部分identity条件但不满足全部语义前提时，旧快捷分支省略仍需执行的运算。",
+      "correct_contract": "已经正确取得的普通合法模式参数须按接口改变实际操作，不能被忽略或反转。",
+      "failed_relation": "输入属性满足部分identity条件但不满足全部语义前提时，旧快捷分支省略仍需执行的运算。",
+      "operation_fact": "partial_identity_guard_elides_operation",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "operation_still_required_under_control",
+        "partial_identity_guard_elides_operation",
+        "elision_changes_target_result"
+      ],
+      "excluded_by": [
+        "operation_identity_for_all_relevant_controls",
+        "required_operation_executed_elsewhere",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "N26的INT32/负decimals需核完整语义；P2误解释特殊参数状态和已有模板能力选错分别保留。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N26.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "N26的INT32/负decimals需核完整语义；P2误解释特殊参数状态和已有模板能力选错分别保留。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "operation_still_required_under_control": "已正确取得的控制值下该运算仍是非identity",
+          "partial_identity_guard_elides_operation": "旧条件只检查部分identity前提便消去运算",
+          "elision_changes_target_result": "合法区分输入下跳过运算改变目标结果"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "BUF-LIFE-01": {
+      "version": "0.5",
+      "parent": "lifetime",
+      "title": "活跃值在最后消费前被覆写",
+      "definition": "同一缓冲区尚有必需消费者时被分配给另一值或提前覆写，使消费者读取了错误代内容。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N22"
+      ],
+      "wrong_action": "同一缓冲区尚有必需消费者时被分配给另一值或提前覆写，使消费者读取了错误代内容。",
+      "correct_contract": "后备存储在最后合法消费者完成前须保留该逻辑值，不能被别的活跃对象覆盖或结束生存期。",
+      "failed_relation": "同一缓冲区尚有必需消费者时被分配给另一值或提前覆写，使消费者读取了错误代内容。",
+      "operation_fact": "live_buffer_overwritten",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "live_value_has_future_consumer",
+        "live_buffer_overwritten",
+        "overwritten_value_consumed"
+      ],
+      "excluded_by": [
+        "last_consumer_completed_before_reuse",
+        "buffers_do_not_alias",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "只有共享地址或复用不证明；缺同步导致的生命周期越界须绑定对应责任动作。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N22.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "只有共享地址或复用不证明；缺同步导致的生命周期越界须绑定对应责任动作。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "live_value_has_future_consumer": "该值在覆写时仍有合法必需消费者",
+          "live_buffer_overwritten": "旧实现复用/写入相同存储破坏仍活跃值",
+          "overwritten_value_consumed": "后续消费者取到错误内容或无法取得原值"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "FORM-COEF-01": {
+      "version": "0.5",
+      "parent": "formula",
+      "title": "数学公式的必需系数或变换遗漏",
+      "definition": "旧公式遗漏合同所要求的非中性系数或必要变换，在精确算术下也与目标函数不等价。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N25"
+      ],
+      "wrong_action": "旧公式遗漏合同所要求的非中性系数或必要变换，在精确算术下也与目标函数不等价。",
+      "correct_contract": "实现的精确数学函数、系数、中性元或权重必须与规定函数等价。",
+      "failed_relation": "旧公式遗漏合同所要求的非中性系数或必要变换，在精确算术下也与目标函数不等价。",
+      "operation_fact": "required_formula_term_missing",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "exact_formula_contract",
+        "required_formula_term_missing",
+        "formula_inequivalent_on_valid_input",
+        "wrong_formula_consumed"
+      ],
+      "excluded_by": [
+        "formula_transformation_equivalent",
+        "difference_only_from_floating_rounding",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "计算项参与账本与公式乘法系数分开；仅浮点重排差异不能归精确公式遗漏。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N25.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "计算项参与账本与公式乘法系数分开；仅浮点重排差异不能归精确公式遗漏。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "exact_formula_contract": "同版目标函数/梯度及其系数或必要变换可推导",
+          "required_formula_term_missing": "旧公式未执行该必要系数/变换",
+          "formula_inequivalent_on_valid_input": "存在实际适用的区分输入，精确公式即不等价",
+          "wrong_formula_consumed": "错误公式实际决定目标结果"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "VALID-DOMAIN-01": {
+      "version": "0.5",
+      "parent": "validation",
+      "title": "输入合法性校验使用错误语义域",
+      "definition": "合法性应依据合同指定的逻辑或物理域，旧谓词改用不等价的另一域，造成错误拒绝或接受。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "N21"
+      ],
+      "wrong_action": "合法性应依据合同指定的逻辑或物理域，旧谓词改用不等价的另一域，造成错误拒绝或接受。",
+      "correct_contract": "合法性判断使用目标版本合同指定的域：逻辑shape合同使用逻辑域，物理TMA字节对齐合同使用物理存储域。不能预设逻辑域总是正确，也不能仅凭字段不同判定违约。",
+      "failed_relation": "合法性应依据合同指定的逻辑或物理域，旧谓词改用不等价的另一域，造成错误拒绝或接受。",
+      "operation_fact": "validation_uses_wrong_domain",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "validation_domain_contract",
+        "validation_uses_wrong_domain",
+        "wrong_domain_changes_acceptance"
+      ],
+      "excluded_by": [
+        "validation_domain_equivalent",
+        "input_rejection_required",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "直接从错误参数槽读值可同时需要P1比较，但必须按同一首错动作归并。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N21.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "直接从错误参数槽读值可同时需要P1比较，但必须按同一首错动作归并。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "validation_domain_contract": "同版合同指定合法性应依据的逻辑/物理域明确",
+          "validation_uses_wrong_domain": "旧谓词使用与合同指定域不等价的另一逻辑、存储或内部域",
+          "wrong_domain_changes_acceptance": "区分输入下改变规定的接受/拒绝结果"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "REP-TRANS-01": {
+      "version": "0.5",
+      "parent": "representation",
+      "title": "显式数据重排映射违约",
+      "definition": "显式布局转换把已知源逻辑值写入不符合目标布局合同的位置或填充。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "research_definition",
+      "classification_enabled": false,
+      "source_ids": [
+        "FM-07"
+      ],
+      "wrong_action": "显式布局转换把已知源逻辑值写入不符合目标布局合同的位置或填充。",
+      "correct_contract": "显式格式重排应保持逻辑元素、规定填充值和目标坐标的对应。",
+      "failed_relation": "显式布局转换把已知源逻辑值写入不符合目标布局合同的位置或填充。",
+      "operation_fact": "layout_transform_mapping_wrong",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "layout_transform_contract",
+        "layout_transform_mapping_wrong",
+        "wrong_transformed_layout_consumed"
+      ],
+      "excluded_by": [
+        "layout_transform_correct",
+        "only_descriptor_wrong",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "定义可恢复，当前历史代表旧路径未闭合；保留研究项，不自动匹配。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-07.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "定义可恢复，当前历史代表旧路径未闭合；保留研究项，不自动匹配。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "layout_transform_contract": "源到目标显式重排合同明确",
+          "layout_transform_mapping_wrong": "旧写入/填充映射违反该合同",
+          "wrong_transformed_layout_consumed": "错误目标布局被消费"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "SYNC-DET-01": {
+      "version": "0.5",
+      "parent": "synchronization",
+      "title": "规定确定性未被执行策略保持",
+      "definition": "在明确的确定性合同下，旧执行策略允许导致结果不一致的调度/原子配对自由度。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "research_definition",
+      "classification_enabled": false,
+      "source_ids": [
+        "FM-13"
+      ],
+      "wrong_action": "在明确的确定性合同下，旧执行策略允许导致结果不一致的调度/原子配对自由度。",
+      "correct_contract": "仅在该版本明确承诺的模式和后端上，同条件重复执行才必须满足确定性约束。",
+      "failed_relation": "在明确的确定性合同下，旧执行策略允许导致结果不一致的调度/原子配对自由度。",
+      "operation_fact": "nondeterministic_execution_source_bound",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "determinism_required",
+        "nondeterministic_execution_source_bound",
+        "nondeterminism_violates_required_level"
+      ],
+      "excluded_by": [
+        "nondeterminism_permitted",
+        "difference_within_required_determinism_level",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "仅重复执行位差不足以确定根因；历史首错未闭合，保留研究项。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-13.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "仅重复执行位差不足以确定根因；历史首错未闭合，保留研究项。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "determinism_required": "当前模式明确要求规定级别的确定性",
+          "nondeterministic_execution_source_bound": "具体调度或原子次序来源已定位",
+          "nondeterminism_violates_required_level": "该来源实际违反合同要求"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "ADR-FLOAT-01": {
+      "version": "0.5",
+      "parent": "address",
+      "title": "精确整数地址经浮点中转丢位",
+      "definition": "要求精确保留的整数地址经不足有效位的浮点格式中转后再还原，丢位地址被消费。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "research_definition",
+      "classification_enabled": false,
+      "source_ids": [
+        "FM-29"
+      ],
+      "wrong_action": "要求精确保留的整数地址经不足有效位的浮点格式中转后再还原，丢位地址被消费。",
+      "correct_contract": "精确整数位置经浮点中转再转回时仍须保留正确地址所需的整数信息。",
+      "failed_relation": "要求精确保留的整数地址经不足有效位的浮点格式中转后再还原，丢位地址被消费。",
+      "operation_fact": "integer_float_roundtrip_loses_bits",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "exact_integer_address_required",
+        "integer_float_roundtrip_loses_bits",
+        "distorted_address_consumed"
+      ],
+      "excluded_by": [
+        "integer_float_roundtrip_exact",
+        "integer_range_loss",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "与整数表示范围失真为不同子机制；历史实际还原消费链不足，保留研究项。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/FM-29.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "与整数表示范围失真为不同子机制；历史实际还原消费链不足，保留研究项。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "exact_integer_address_required": "该中间量语义是需精确保留的整数位置或偏移，明确数学整数关系及其地址用途。",
+          "integer_float_roundtrip_loses_bits": "固定类型的整数到浮点再返回整数确丢低位",
+          "distorted_address_consumed": "同一路径的指针形成、gather/scatter/load/store实际消费失真量；死值或被正确回退替换不满足。"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "CTL-COUNT-01": {
+      "version": "0.5",
+      "parent": "control",
+      "title": "控制计数器表示范围失真",
+      "definition": "循环或协议计数器在要求精确保留时超出整数表示范围，并改变控制流或完成条件。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "research_definition",
+      "classification_enabled": false,
+      "source_ids": [
+        "N27"
+      ],
+      "wrong_action": "循环或协议计数器在要求精确保留时超出整数表示范围，并改变控制流或完成条件。",
+      "correct_contract": "长期通信/执行控制计数的实际整数表示应维持状态机和等待协议所需的代际含义。",
+      "failed_relation": "循环或协议计数器在要求精确保留时超出整数表示范围，并改变控制流或完成条件。",
+      "operation_fact": "control_count_range_loss",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "exact_control_count_required",
+        "control_count_range_loss",
+        "wrong_count_controls_execution"
+      ],
+      "excluded_by": [
+        "control_count_representable",
+        "count_is_only_address_offset",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        "本轮恢复窄历史条款，尚不能证明原实际首回绕；不并入地址消费者叶。"
+      ],
+      "scope_note": "Necessary conditions refer to one responsible operation and target version; source identity or a matched title is not case evidence.",
+      "source_cards": [
+        "history/normalized_mode_cards/N27.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          "本轮恢复窄历史条款，尚不能证明原实际首回绕；不并入地址消费者叶。"
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "exact_control_count_required": "循环/协议要求精确控制计数",
+          "control_count_range_loss": "实际整数计数在更新或转换时失真",
+          "wrong_count_controls_execution": "失真计数改变分支/终止/完成"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    },
+    "ADR-INT-01": {
+      "version": "0.5",
+      "parent": "address",
+      "title": "整数地址表示范围不足",
+      "definition": "合法逻辑位置所需的精确整数地址量，在实际整数运算或转换中超出表示范围而失真，并被同一路径的地址消费者使用。",
+      "definition_level": "implementation_error",
+      "knowledge_status": "reviewed_definition",
+      "classification_enabled": true,
+      "source_ids": [
+        "FM-16"
+      ],
+      "wrong_action": "选用不足范围的整数操作数/结果或窄化位置，使正确应有的整数位置在访存前第一次失真。",
+      "correct_contract": "接口许可的逻辑位置应在地址生成全链条保留精确整数关系；单位、对象和几何关系独立核定。",
+      "failed_relation": "合法逻辑坐标到实际内存位置的精确映射，在整数表示阶段被破坏。",
+      "operation_fact": "integer_range_loss",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "exact_integer_address_required",
+        "actual_integer_type_bound",
+        "integer_range_loss",
+        "distorted_address_consumed",
+        "same_mapping_preserved_by_widening"
+      ],
+      "excluded_by": [
+        "address_contract_inapplicable",
+        "integer_representation_exact",
+        "float_mediated_address_rounding",
+        "damaged_address_not_consumed",
+        "mapping_error_survives_unbounded_integer_arithmetic",
+        "state_role_is_nonaddress_numeric_accumulation",
+        "compliant",
+        "contract_inapplicable"
+      ],
+      "exclusions": [
+        {
+          "key": "address_contract_inapplicable",
+          "meaning": "合同外索引或该路径明确不支持并正确拒绝。",
+          "neighbor_route": "inapplicable",
+          "scope": "same_responsible_action"
+        },
+        {
+          "key": "integer_representation_exact",
+          "meaning": "被评动作的所有整数中间值完整可表示；只有最终对象越界。",
+          "neighbor_route": "address_or_allocation_neighbor",
+          "scope": "same_responsible_action"
+        },
+        {
+          "key": "float_mediated_address_rounding",
+          "meaning": "精确整数经浮点中转丢位，整数范围本身足够。",
+          "neighbor_route": "FM-29_research",
+          "scope": "same_responsible_action"
+        },
+        {
+          "key": "damaged_address_not_consumed",
+          "meaning": "错误量未交付目标访问，或消费前已正确重新计算/回退。",
+          "neighbor_route": "insufficient_for_address_fault",
+          "scope": "same_responsible_action"
+        },
+        {
+          "key": "mapping_error_survives_unbounded_integer_arithmetic",
+          "meaning": "同一责任错误由单位、几何、基址或对象绑定造成，加宽仍保持错误。",
+          "neighbor_route": "L2_L1_or_other_address",
+          "scope": "same_responsible_action"
+        },
+        {
+          "key": "state_role_is_nonaddress_numeric_accumulation",
+          "meaning": "目标是受精度约定约束的运行数值累加，尚无精确地址消费。",
+          "neighbor_route": "NUM-01_or_numeric_neighbor",
+          "scope": "same_responsible_action"
+        }
+      ],
+      "source_cards": [
+        "reviews/integer_address_range/MODE_CARD.json",
+        "history/normalized_mode_cards/FM-16.json"
+      ],
+      "representative_cases": [],
+      "test_design": {
+        "positive": "Construct one target-version operation satisfying every necessary relation; bind contract, actual operation and consumer/rejection effect independently.",
+        "negative": [
+          {
+            "key": "address_contract_inapplicable",
+            "meaning": "合同外索引或该路径明确不支持并正确拒绝。",
+            "neighbor_route": "inapplicable",
+            "scope": "same_responsible_action"
+          },
+          {
+            "key": "integer_representation_exact",
+            "meaning": "被评动作的所有整数中间值完整可表示；只有最终对象越界。",
+            "neighbor_route": "address_or_allocation_neighbor",
+            "scope": "same_responsible_action"
+          },
+          {
+            "key": "float_mediated_address_rounding",
+            "meaning": "精确整数经浮点中转丢位，整数范围本身足够。",
+            "neighbor_route": "FM-29_research",
+            "scope": "same_responsible_action"
+          },
+          {
+            "key": "damaged_address_not_consumed",
+            "meaning": "错误量未交付目标访问，或消费前已正确重新计算/回退。",
+            "neighbor_route": "insufficient_for_address_fault",
+            "scope": "same_responsible_action"
+          },
+          {
+            "key": "mapping_error_survives_unbounded_integer_arithmetic",
+            "meaning": "同一责任错误由单位、几何、基址或对象绑定造成，加宽仍保持错误。",
+            "neighbor_route": "L2_L1_or_other_address",
+            "scope": "same_responsible_action"
+          },
+          {
+            "key": "state_role_is_nonaddress_numeric_accumulation",
+            "meaning": "目标是受精度约定约束的运行数值累加，尚无精确地址消费。",
+            "neighbor_route": "NUM-01_or_numeric_neighbor",
+            "scope": "same_responsible_action"
+          }
+        ],
+        "decisive_observation": {
+          "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+          "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+          "exact_integer_address_required": "该中间量语义是需精确保留的整数位置或偏移，明确数学整数关系及其地址用途。",
+          "actual_integer_type_bound": "绑定每个参与操作数、提升、运算结果、窄写的实际整数宽度/符号；不能只看最终变量。",
+          "integer_range_loss": "同一合法路径的精确整数在该整数表示范围内不可保持，定位首个乘法/加法/转换失真。浮点中介舍入不充当此事实。",
+          "distorted_address_consumed": "同一路径的指针形成、gather/scatter/load/store实际消费失真量；死值或被正确回退替换不满足。",
+          "same_mapping_preserved_by_widening": "在首损失之前保证足够整数范围或采用等价合法回退可保留同一逻辑映射；对照保持单位、几何、对象和作用域。允许静态证明。"
+        },
+        "execution_status": "Definition-level design; real-case audit records are retained locally."
+      },
+      "validation_limit": "Reviewed development definition, not a cross-operator accuracy guarantee. Real case-to-mode answers and source excerpts are not included in this public projection."
+    }
+  },
+  "semantic_index": [
+    {
+      "operator": "EmbeddingBag",
+      "roles": [
+        "padding_idx",
+        "可选状态 None / -1",
+        "include_last_offset",
+        "索引成员"
+      ],
+      "contract_context": "区分是否存在过滤行、末行实际索引、可选末偏移字段和归约成员。按版本核对槽位及有效状态。",
+      "reference": "N24"
+    },
+    {
+      "operator": "QkvRmsNormRopeCache",
+      "roles": [
+        "epsilon",
+        "AICore launcher",
+        "属性数值类型"
+      ],
+      "contract_context": "区分保留 epsilon 来源与参数值的类型转换，检查调用分支所需类型。",
+      "reference": "N07"
+    },
+    {
+      "operator": "Concat",
+      "roles": [
+        "输入视图",
+        "逻辑列数",
+        "各输入行 stride",
+        "分块源起点"
+      ],
+      "contract_context": "支持的非连续视图应使用各输入实际行 stride，同时核对块基址、块内行起点及行间拷贝间隔各自使用的量。",
+      "reference": "N20"
+    },
+    {
+      "operator": "RMSNorm / GEMM",
+      "roles": [
+        "输入与输出视图",
+        "矩阵逻辑坐标",
+        "rstdOut",
+        "物理行 stride"
+      ],
+      "contract_context": "对读版本接纳条件与实际读写映射；故障期和后期合同各自绑定，读写共用视图映射语义。",
+      "reference": "开发材料 #8663、vLLM #55534"
+    },
+    {
+      "operator": "ExtendConvTranspose",
+      "roles": [
+        "分组量化 scale",
+        "组内通道偏移",
+        "组基址"
+      ],
+      "contract_context": "VECTOR_QUANT 含分组基址，SCALAR_QUANT 使用共享起点。",
+      "reference": "N06"
+    },
+    {
+      "operator": "foreach_lerp_list",
+      "roles": [
+        "逻辑元素偏移",
+        "Compare 打包掩码",
+        "字节寻址"
+      ],
+      "contract_context": "核对同一批起点在逻辑数据和掩码中的单位，区分掩码字节地址与元素地址。",
+      "reference": "N10"
+    },
+    {
+      "operator": "row_max",
+      "roles": [
+        "有效域",
+        "部分块 padding",
+        "max 的中性填充值"
+      ],
+      "contract_context": "valid_shape 限定候选元素。核对无效位置是否通过屏蔽或 max 的中性值退出本次结果的候选集合。",
+      "reference": "PyPTO 教程 Case 3"
+    },
+    {
+      "operator": "PadV3Grad edge",
+      "roles": [
+        "中心映射",
+        "边界复制",
+        "反向贡献区间"
+      ],
+      "contract_context": "目标梯度的贡献区间由边界复制语义决定。中心索引越界时仍应检查区间是否非空，区间为空才允许按空和写零。",
+      "reference": "N23"
+    },
+    {
+      "operator": "SGLang MoE",
+      "roles": [
+        "原始 TP 贡献",
+        "TP 完整和",
+        "ReduceScatterV 接收副本"
+      ],
+      "contract_context": "从目标结果追溯每个逻辑 TP 来源，区别独立部分结果和同组完整副本。实际重复合并及责任阶段需要各自证据。",
+      "reference": "SGLang #37187 / #37199"
+    }
+  ],
+  "changes": [
+    "Normalize historical identities without promoting unresolved definitions",
+    "Add reviewed root-mechanism distinctions",
+    "Keep existing action graph and evidence gates"
+  ],
+  "admitted_modes": [
+    "NUM-01",
+    "NUM-02"
+  ],
+  "inherits": {
+    "catalog": "../mech_v04/catalog.json",
+    "sha256": "2f10349dd63d996b8870666849c1742923168bc04f706a2685c32c74fb5ef288"
+  },
+  "release_scope": "Versioned development knowledge and evidence-bound rules; not an independent generalization certificate",
+  "inherited_namespace": "MECH-v0.4",
+  "inherited_mode_ids": [
+    "P1",
+    "P2",
+    "L1",
+    "L2",
+    "C1",
+    "C2",
+    "C3",
+    "NUM-01",
+    "NUM-02"
+  ],
+  "fact_definitions": {
+    "applicable_contract": "同版本路径接纳该合法输入，逻辑对象、坐标、布局和单位已绑定。",
+    "implementation_action": "定位同一责任动作的类型选择/窄化/乘加与首个整数表示损失，不把补丁效果当作动作证明。",
+    "distorted_value_consumed": "失真值被目标计算实际消费",
+    "causal_role": "该错误动作的因果角色有单独证据",
+    "control_semantics_violation": "已用目标版本合同与实际动作证明控制与分支关系违约，非由检索标签推定",
+    "task_plan_violation": "已用目标版本合同与实际动作证明任务规划关系违约，非由检索标签推定",
+    "buffer_contract_violation": "已用目标版本合同与实际动作证明缓冲区与数据传递关系违约，非由检索标签推定",
+    "representation_contract_violation": "已用目标版本合同与实际动作证明生产消费表示契约关系违约，非由检索标签推定",
+    "ordering_protocol_violation": "已用目标版本合同与实际动作证明同步与生命周期关系违约，非由检索标签推定",
+    "lifetime_contract_violation": "已用目标版本合同与实际动作证明活跃值生命周期关系违约，非由检索标签推定",
+    "result_metadata_violation": "已用目标版本合同与实际动作证明逻辑结果元数据关系违约，非由检索标签推定",
+    "exact_formula_violation": "已用目标版本合同与实际动作证明精确数学公式关系违约，非由检索标签推定",
+    "input_validation_violation": "已用目标版本合同与实际动作证明合法性与支持域校验关系违约，非由检索标签推定",
+    "data_value_semantics_violation": "已用目标版本合同与实际动作证明特殊数值语义关系违约，非由检索标签推定",
+    "zero_work_legal": "本次零工作输入合法且确无有效任务",
+    "zero_work_entry_unsupported": "实际进入的调度入口不支持零工作",
+    "zero_work_entry_taken": "旧路径在零工作时确实启动该入口",
+    "pending_work_needs_drain": "存在先前发起且合同要求完成的在途工作",
+    "empty_entry_supported": "排除事实 empty_entry_supported：按目标版本举证；无新工作但仍有在途任务要排空，不是本模式；空输出物化义务单列。",
+    "expected_output_shape_bound": "从同版合同逐轴确定正确输出元数据",
+    "wrong_output_shape": "实际生成元数据与该合同不符",
+    "wrong_shape_consumed": "错误元数据确由分配或下游消费",
+    "output_shape_correct": "排除事实 output_shape_correct：按目标版本举证；shape正确而地址公式错用L类；合法输入被拒绝需审校验谓词。",
+    "only_address_formula_wrong": "排除事实 only_address_formula_wrong：按目标版本举证；shape正确而地址公式错用L类；合法输入被拒绝需审校验谓词。",
+    "required_task_domain_bound": "合同所需任务域及不可拆单位明确",
+    "planned_task_domain_wrong": "旧任务数、切分边界或原子性与所需任务域不符",
+    "wrong_plan_executed": "错误计划实际决定工作执行",
+    "task_domain_preserved": "排除事实 task_domain_preserved：按目标版本举证；容量预算错误单列BUF-CAP；遗漏或重复贡献是另需举证的局部关系，不能直接增加根数。",
+    "only_buffer_capacity_wrong": "排除事实 only_buffer_capacity_wrong：按目标版本举证；容量预算错误单列BUF-CAP；遗漏或重复贡献是另需举证的局部关系，不能直接增加根数。",
+    "expected_geometry_bound": "逻辑位置到当前对象地址的必要几何项明确",
+    "wrong_geometry_term": "实际公式遗漏或错置这些项",
+    "address_units_consistent": "元素、bit、byte单位换算本身正确",
+    "address_representation_exact": "相关整数结果仍精确保留",
+    "not_dense_layout_substitution": "首错不是密排公式替代原视图步长",
+    "distorted_address_consumed": "同一路径的指针形成、gather/scatter/load/store实际消费失真量；死值或被正确回退替换不满足。",
+    "geometry_mapping_correct": "排除事实 geometry_mapping_correct：按目标版本举证；L1密排替代、L2单位误换和ADR-INT表示失真分别比较；越界不是必要条件。",
+    "contiguous_formula": "排除事实 contiguous_formula：按目标版本举证；L1密排替代、L2单位误换和ADR-INT表示失真分别比较；越界不是必要条件。",
+    "wrong_conversion": "排除事实 wrong_conversion：按目标版本举证；L1密排替代、L2单位误换和ADR-INT表示失真分别比较；越界不是必要条件。",
+    "cache_ownership_contract": "当前逻辑对象的缓存物理归属明确",
+    "wrong_cache_owner": "实际选择其他对象的缓存映射或物理槽",
+    "wrong_owner_storage_consumed": "实际缓存访问使用错误归属",
+    "cache_owner_correct": "排除事实 cache_owner_correct：按目标版本举证；正确对象内的地址项错误用ADR-GEOM；接口参数读错槽位用P1，需按责任动作拆分。",
+    "only_geometry_term_wrong": "排除事实 only_geometry_term_wrong：按目标版本举证；正确对象内的地址项错误用ADR-GEOM；接口参数读错槽位用P1，需按责任动作拆分。",
+    "required_ordering_protocol": "同版流水/事件/屏障合同明确要求先后、代际或参与关系",
+    "ordering_protocol_violated": "旧生效路径未等待、误配代际或缺少必需参与者",
+    "unsynchronized_consumer_reachable": "违约状态可到达真实消费者或阻止规定完成",
+    "ordering_protocol_satisfied": "排除事实 ordering_protocol_satisfied：按目标版本举证；加屏障后通过不能单独证明；尚有在途任务被早退丢弃用SYNC-DRAIN比较。",
+    "only_barrier_patch_success": "排除事实 only_barrier_patch_success：按目标版本举证；加屏障后通过不能单独证明；尚有在途任务被早退丢弃用SYNC-DRAIN比较。",
+    "needed_precision_before_operation": "后续必要运算及适用精度合同仍需要转换前信息",
+    "premature_narrowing": "旧路径在该运算前先窄化",
+    "not_loop_carried_narrow_state": "所审首错不是连续更新之间保存运行累加状态",
+    "narrowing_loss_consumed": "转换损失确影响后续必要运算",
+    "deferred_narrowing_preserves_contract": "固定输入/操作的推迟窄化对照保留约定结果",
+    "narrowing_allowed_at_this_boundary": "排除事实 narrowing_allowed_at_this_boundary：按目标版本举证；合法最终输出转换不命中；NUM-01专门表示循环携带累加状态。",
+    "loop_carried_narrow_state": "排除事实 loop_carried_narrow_state：按目标版本举证；合法最终输出转换不命中；NUM-01专门表示循环携带累加状态。",
+    "same_terms_and_precision": "两条表达式保持输入数学项与工作精度",
+    "small_term_absorbed_before_nonlinearity": "旧加法先使小量信息消失，再执行对该信息敏感的非线性操作",
+    "stable_expression_preserves_small_result": "同精度稳定表达式保留合同所需结果",
+    "variance_from_raw_moment_difference": "排除事实 variance_from_raw_moment_difference：按目标版本举证；NUM-02仅是原始矩差方差；实数域公式本就不等价不能称有限精度吸收。",
+    "expression_meets_error_contract": "排除事实 expression_meets_error_contract：按目标版本举证；NUM-02仅是原始矩差方差；实数域公式本就不等价不能称有限精度吸收。",
+    "same_contribution_ledger": "相同逻辑项均按约定次数参与",
+    "required_accumulation_order_or_budget": "合同明确要求特定累加/舍入次序或误差预算",
+    "accumulation_order_violates_contract": "旧加法树或逐步舍入实际违反该要求",
+    "order_difference_consumed": "顺序差异传到目标结果",
+    "order_difference_within_contract": "排除事实 order_difference_within_contract：按目标版本举证；合法的浮点不结合性不是缺陷；缺项、重复项和状态过窄分别审查。",
+    "required_execution_semantics": "当前合法输入要求的计算/融合语义明确",
+    "selected_branch_incompatible": "所选分支不具备该语义或能力",
+    "incompatible_branch_taken": "旧条件确将当前输入导向此分支",
+    "selected_branch_satisfies_contract": "排除事实 selected_branch_satisfies_contract：按目标版本举证；仅不同分支结果不同不足以成立；不支持输入按合同拒绝是合规。",
+    "input_outside_promised_support": "排除事实 input_outside_promised_support：按目标版本举证；仅不同分支结果不同不足以成立；不支持输入按合同拒绝是合规。",
+    "rejection_required_for_configuration": "同版合同明确要求拒绝此后端配置",
+    "required_guard_missing": "旧守卫未拦截该配置",
+    "unsupported_configuration_executed": "不受支持配置实际交付后端执行",
+    "configuration_supported": "排除事实 configuration_supported：按目标版本举证；合法支持域内选错模板用CTL-DISPATCH；没有拒绝义务不能仅凭失败反推守卫缺陷。",
+    "unsupported_configuration_rejected": "排除事实 unsupported_configuration_rejected：按目标版本举证；合法支持域内选错模板用CTL-DISPATCH；没有拒绝义务不能仅凭失败反推守卫缺陷。",
+    "finite_input_target_representable": "合法有限输入具有合同允许且可表示的目标结果",
+    "actual_working_format_bound": "首溢出运算的真实工作格式和有效路径已固定",
+    "intermediate_nonfinite_created": "该运算首先产生范围溢出的非有限或饱和值",
+    "overflow_result_consumed": "该失真中间值被目标路径实际消费",
+    "input_already_nonfinite": "排除事实 input_already_nonfinite：按目标版本举证；整数地址回绕不同；仅出现NaN不证明首溢出位置；合法目标本就越界单列。",
+    "target_mathematically_out_of_range": "排除事实 target_mathematically_out_of_range：按目标版本举证；整数地址回绕不同；仅出现NaN不证明首溢出位置；合法目标本就越界单列。",
+    "overflow_path_not_consumed": "排除事实 overflow_path_not_consumed：按目标版本举证；整数地址回绕不同；仅出现NaN不证明首溢出位置；合法目标本就越界单列。",
+    "memory_object_extent_bound": "目标对象的合法分配/有效访问区间明确",
+    "memory_start_correct": "旧起始对象和地址正确",
+    "transfer_extent_exceeds_object": "实际长度或向量足迹超出合法区间",
+    "out_of_extent_access_executed": "该越界足迹在所审路径执行",
+    "transfer_extent_within_object": "排除事实 transfer_extent_within_object：按目标版本举证；错起址单列地址类；分配容量低估是上游独立关系，不能把后果再数一根。",
+    "only_address_start_wrong": "排除事实 only_address_start_wrong：按目标版本举证；错起址单列地址类；分配容量低估是上游独立关系，不能把后果再数一根。",
+    "actual_payload_layout_bound": "实际payload格式和逻辑view合同明确",
+    "layout_descriptor_mismatch": "交付的描述字段属于不同布局/格式",
+    "mismatched_descriptor_consumed": "下游确用该描述解释现有payload",
+    "descriptor_matches_payload": "排除事实 descriptor_matches_payload：按目标版本举证；显式重排把值写错位置另审；仅输出shape推导错用META-SHAPE。",
+    "only_result_shape_derivation_wrong": "排除事实 only_result_shape_derivation_wrong：按目标版本举证；显式重排把值写错位置另审；仅输出shape推导错用META-SHAPE。",
+    "contribution_domain_contract": "各贡献应处的变换域及前后顺序明确",
+    "contribution_inserted_in_wrong_domain": "旧代码在错误变换域插入贡献",
+    "domain_mismatch_changes_formula": "固定相同项/次数后精确公式仍不等价",
+    "wrong_domain_result_consumed": "错误域结果实际用于目标输出",
+    "domain_order_contract_satisfied": "排除事实 domain_order_contract_satisfied：按目标版本举证；读错组scale是寻址/来源问题；同域有限精度损失与此不同。",
+    "only_scale_source_wrong": "排除事实 only_scale_source_wrong：按目标版本举证；读错组scale是寻址/来源问题；同域有限精度损失与此不同。",
+    "initial_state_required": "当前调用的状态初值合同明确",
+    "required_initial_state_missing": "旧路径未建立该初值或仅初始化部分相关状态",
+    "uninitialized_state_consumed": "消费发生在完整覆盖之前并使用遗留状态",
+    "all_slots_written_before_read": "排除事实 all_slots_written_before_read：按目标版本举证；仅缺memset不证明；全覆盖前写后读可以合规。无效数值是否入算另核C1。",
+    "previous_state_is_valid_initial_state": "排除事实 previous_state_is_valid_initial_state：按目标版本举证；仅缺memset不证明；全覆盖前写后读可以合规。无效数值是否入算另核C1。",
+    "empty_update_requires_output": "空更新合同仍要求可读的规定输出",
+    "empty_branch_skips_materialization": "旧分支直接返回而缺复制/物化步骤",
+    "missing_output_postcondition": "返回状态未满足该输出后置条件",
+    "empty_output_already_materialized": "排除事实 empty_output_already_materialized：按目标版本举证；已满足别名/输出合同可早退；真正零任务调度入口问题另审。",
+    "output_alias_permitted_and_satisfied": "排除事实 output_alias_permitted_and_satisfied：按目标版本举证；已满足别名/输出合同可早退；真正零任务调度入口问题另审。",
+    "producer_consumer_representation_contract": "实际生产类型与消费者所需数值类型明确",
+    "required_numeric_conversion_missing": "应有的数值转换边界在旧路径缺失",
+    "unconverted_value_consumed": "消费者实际取得未经规定转换的值",
+    "numeric_conversion_correct": "排除事实 numeric_conversion_correct：按目标版本举证；宽N07的错槽/状态/数量不自动归此叶；读宽错误及显式保位误算分别比较。",
+    "different_logical_object_selected": "排除事实 different_logical_object_selected：按目标版本举证；宽N07的错槽/状态/数量不自动归此叶；读宽错误及显式保位误算分别比较。",
+    "conversion_not_required": "排除事实 conversion_not_required：按目标版本举证；宽N07的错槽/状态/数量不自动归此叶；读宽错误及显式保位误算分别比较。",
+    "producer_storage_format_bound": "生产者实际写入格式和存储宽度已固定",
+    "consumer_storage_width_wrong": "消费者实际读宽/解码类型与存储合同不符",
+    "wrong_width_value_consumed": "错读所得数值进入消费者计算",
+    "producer_consumer_widths_match": "排除事实 producer_consumer_widths_match：按目标版本举证；只看到输出声明dtype不足；同宽BF16/FP16误解释可落REP-REINTERPRET，不据此假设写宽。",
+    "producer_actual_write_width_unknown": "排除事实 producer_actual_write_width_unknown：按目标版本举证；只看到输出声明dtype不足；同宽BF16/FP16误解释可落REP-REINTERPRET，不据此假设写宽。",
+    "numeric_value_conversion_required": "该边界要求保持数值而非按位搬运",
+    "bit_reinterpretation_used_as_conversion": "旧操作仅改类型解释而未转换数值编码",
+    "reinterpreted_numeric_value_consumed": "不同编码解释所得值实际参与算术",
+    "bit_preserving_transport_required": "排除事实 bit_preserving_transport_required：按目标版本举证；用于合法纯搬运的reinterpret可以合规；必须跟踪后续是否按重解释类型做算术。",
+    "sign_bit_semantics_required": "同版合同要求符号位而非数值负性",
+    "numeric_comparison_replaces_signbit": "旧实现以x<0等比较替代符号位提取",
+    "distinguishing_signed_value_consumed": "负零/相应NaN等区分值进入该路径并影响输出",
+    "numeric_sign_comparison_is_contract": "排除事实 numeric_sign_comparison_is_contract：按目标版本举证；普通正负判断不自动要求符号位；正确性依据来自算子合同。",
+    "signbit_extraction_correct": "排除事实 signbit_extraction_correct：按目标版本举证；普通正负判断不自动要求符号位；正确性依据来自算子合同。",
+    "output_index_coordinate_contract": "输出索引的轴、坐标系和编号合同明确",
+    "output_index_mapping_wrong": "旧路径用不同轴序/尾轴规则计算输出索引",
+    "wrong_index_returned": "错误逻辑索引写入规定结果",
+    "output_index_mapping_correct": "排除事实 output_index_mapping_correct：按目标版本举证；输出索引语义与实际存储寻址分开，不将所有索引错误均归L类。",
+    "only_memory_address_wrong": "排除事实 only_memory_address_wrong：按目标版本举证；输出索引语义与实际存储寻址分开，不将所有索引错误均归L类。",
+    "live_buffer_demand_bound": "给定合同和路径的最大并存容量需求明确",
+    "buffer_capacity_underestimated": "旧预算截断/漏计需求造成容量不足",
+    "undersized_buffer_used": "不足容量的分配被所需操作实际使用",
+    "buffer_capacity_sufficient": "排除事实 buffer_capacity_sufficient：按目标版本举证；容量足够而搬运过长用BUF-EXTENT；只有冗余分配不能认定本精度故障。",
+    "only_transfer_length_wrong": "排除事实 only_transfer_length_wrong：按目标版本举证；容量足够而搬运过长用BUF-EXTENT；只有冗余分配不能认定本精度故障。",
+    "rounding_saturation_contract": "转换点的舍入和饱和约定明确",
+    "wrong_rounding_or_saturation_mode": "旧生效配置使用不同规则",
+    "rounding_distinguishing_input_consumed": "能区分规则的合法输入实际到达该转换",
+    "rounding_mode_permitted": "排除事实 rounding_mode_permitted：按目标版本举证；单纯两算法末位不同不证明；负decimals错误identity分支优先定位CTL-DISPATCH。",
+    "rounding_controls_equivalent_for_input": "排除事实 rounding_controls_equivalent_for_input：按目标版本举证；单纯两算法末位不同不证明；负decimals错误identity分支优先定位CTL-DISPATCH。",
+    "nonfinite_propagation_contract": "所审算子的NaN/Inf传播或屏蔽规则明确",
+    "existing_nonfinite_value": "非有限值在所审动作之前已经存在",
+    "nonfinite_handling_violates_contract": "旧本地处理违反其规则且被输出消费",
+    "nonfinite_handling_allowed": "排除事实 nonfinite_handling_allowed：按目标版本举证；范围溢出首次生成Inf用NUM-RANGE；内部状态标记不能套用普通数据传播合同。",
+    "nonfinite_is_internal_marker": "排除事实 nonfinite_is_internal_marker：按目标版本举证；范围溢出首次生成Inf用NUM-RANGE；内部状态标记不能套用普通数据传播合同。",
+    "first_nonfinite_created_by_overflow": "排除事实 first_nonfinite_created_by_overflow：按目标版本举证；范围溢出首次生成Inf用NUM-RANGE；内部状态标记不能套用普通数据传播合同。",
+    "empty_iteration_skips_drain": "旧退出把无新任务误作无待完成工作而跳过排空",
+    "pending_result_not_completed": "已有工作的结果因此未完成/未回写",
+    "no_pending_work": "排除事实 no_pending_work：按目标版本举证；真正空任务启动问题用CTL-EMPTY；缺wait依赖与跳过待完成任务按首错分开。",
+    "pending_work_fully_drained": "排除事实 pending_work_fully_drained：按目标版本举证；真正空任务启动问题用CTL-EMPTY；缺wait依赖与跳过待完成任务按首错分开。",
+    "last_block_full_on_exact_division": "当前切分约定下整除时最后块应为完整有效块",
+    "zero_remainder_used_as_empty_tail": "旧控制将整除余数0当作该末块有效长度0",
+    "wrong_tail_length_consumed": "错误长度用于末块执行/搬运",
+    "zero_tail_means_no_allocated_block": "排除事实 zero_tail_means_no_allocated_block：按目标版本举证；空的附加尾块可合法长度0；必须区分它与最后一个真实整块。",
+    "full_last_block_length_preserved": "排除事实 full_last_block_length_preserved：按目标版本举证；空的附加尾块可合法长度0；必须区分它与最后一个真实整块。",
+    "operation_still_required_under_control": "已正确取得的控制值下该运算仍是非identity",
+    "partial_identity_guard_elides_operation": "旧条件只检查部分identity前提便消去运算",
+    "elision_changes_target_result": "合法区分输入下跳过运算改变目标结果",
+    "operation_identity_for_all_relevant_controls": "排除事实 operation_identity_for_all_relevant_controls：按目标版本举证；N26的INT32/负decimals需核完整语义；P2误解释特殊参数状态和已有模板能力选错分别保留。",
+    "required_operation_executed_elsewhere": "排除事实 required_operation_executed_elsewhere：按目标版本举证；N26的INT32/负decimals需核完整语义；P2误解释特殊参数状态和已有模板能力选错分别保留。",
+    "live_value_has_future_consumer": "该值在覆写时仍有合法必需消费者",
+    "live_buffer_overwritten": "旧实现复用/写入相同存储破坏仍活跃值",
+    "overwritten_value_consumed": "后续消费者取到错误内容或无法取得原值",
+    "last_consumer_completed_before_reuse": "排除事实 last_consumer_completed_before_reuse：按目标版本举证；只有共享地址或复用不证明；缺同步导致的生命周期越界须绑定对应责任动作。",
+    "buffers_do_not_alias": "排除事实 buffers_do_not_alias：按目标版本举证；只有共享地址或复用不证明；缺同步导致的生命周期越界须绑定对应责任动作。",
+    "exact_formula_contract": "同版目标函数/梯度及其系数或必要变换可推导",
+    "required_formula_term_missing": "旧公式未执行该必要系数/变换",
+    "formula_inequivalent_on_valid_input": "存在实际适用的区分输入，精确公式即不等价",
+    "wrong_formula_consumed": "错误公式实际决定目标结果",
+    "formula_transformation_equivalent": "排除事实 formula_transformation_equivalent：按目标版本举证；计算项参与账本与公式乘法系数分开；仅浮点重排差异不能归精确公式遗漏。",
+    "difference_only_from_floating_rounding": "排除事实 difference_only_from_floating_rounding：按目标版本举证；计算项参与账本与公式乘法系数分开；仅浮点重排差异不能归精确公式遗漏。",
+    "validation_domain_contract": "同版合同指定合法性应依据的逻辑/物理域明确",
+    "validation_uses_wrong_domain": "旧谓词使用与合同指定域不等价的另一逻辑、存储或内部域",
+    "wrong_domain_changes_acceptance": "区分输入下改变规定的接受/拒绝结果",
+    "validation_domain_equivalent": "排除事实 validation_domain_equivalent：按目标版本举证；直接从错误参数槽读值可同时需要P1比较，但必须按同一首错动作归并。",
+    "input_rejection_required": "排除事实 input_rejection_required：按目标版本举证；直接从错误参数槽读值可同时需要P1比较，但必须按同一首错动作归并。",
+    "layout_transform_contract": "源到目标显式重排合同明确",
+    "layout_transform_mapping_wrong": "旧写入/填充映射违反该合同",
+    "wrong_transformed_layout_consumed": "错误目标布局被消费",
+    "layout_transform_correct": "排除事实 layout_transform_correct：按目标版本举证；定义可恢复，当前历史代表旧路径未闭合；保留研究项，不自动匹配。",
+    "only_descriptor_wrong": "排除事实 only_descriptor_wrong：按目标版本举证；定义可恢复，当前历史代表旧路径未闭合；保留研究项，不自动匹配。",
+    "determinism_required": "当前模式明确要求规定级别的确定性",
+    "nondeterministic_execution_source_bound": "具体调度或原子次序来源已定位",
+    "nondeterminism_violates_required_level": "该来源实际违反合同要求",
+    "nondeterminism_permitted": "排除事实 nondeterminism_permitted：按目标版本举证；仅重复执行位差不足以确定根因；历史首错未闭合，保留研究项。",
+    "difference_within_required_determinism_level": "排除事实 difference_within_required_determinism_level：按目标版本举证；仅重复执行位差不足以确定根因；历史首错未闭合，保留研究项。",
+    "exact_integer_address_required": "该中间量语义是需精确保留的整数位置或偏移，明确数学整数关系及其地址用途。",
+    "integer_float_roundtrip_loses_bits": "固定类型的整数到浮点再返回整数确丢低位",
+    "integer_float_roundtrip_exact": "排除事实 integer_float_roundtrip_exact：按目标版本举证；与整数表示范围失真为不同子机制；历史实际还原消费链不足，保留研究项。",
+    "integer_range_loss": "同一合法路径的精确整数在该整数表示范围内不可保持，定位首个乘法/加法/转换失真。浮点中介舍入不充当此事实。",
+    "exact_control_count_required": "循环/协议要求精确控制计数",
+    "control_count_range_loss": "实际整数计数在更新或转换时失真",
+    "wrong_count_controls_execution": "失真计数改变分支/终止/完成",
+    "control_count_representable": "排除事实 control_count_representable：按目标版本举证；本轮恢复窄历史条款，尚不能证明原实际首回绕；不并入地址消费者叶。",
+    "count_is_only_address_offset": "排除事实 count_is_only_address_offset：按目标版本举证；本轮恢复窄历史条款，尚不能证明原实际首回绕；不并入地址消费者叶。",
+    "actual_integer_type_bound": "绑定每个参与操作数、提升、运算结果、窄写的实际整数宽度/符号；不能只看最终变量。",
+    "same_mapping_preserved_by_widening": "在首损失之前保证足够整数范围或采用等价合法回退可保留同一逻辑映射；对照保持单位、几何、对象和作用域。允许静态证明。",
+    "address_contract_inapplicable": "合同外索引或该路径明确不支持并正确拒绝。",
+    "integer_representation_exact": "被评动作的所有整数中间值完整可表示；只有最终对象越界。",
+    "float_mediated_address_rounding": "精确整数经浮点中转丢位，整数范围本身足够。",
+    "damaged_address_not_consumed": "错误量未交付目标访问，或消费前已正确重新计算/回退。",
+    "mapping_error_survives_unbounded_integer_arithmetic": "同一责任错误由单位、几何、基址或对象绑定造成，加宽仍保持错误。",
+    "state_role_is_nonaddress_numeric_accumulation": "目标是受精度约定约束的运行数值累加，尚无精确地址消费。",
+    "compliant": "在所评版本和作用域内符合约定",
+    "contract_inapplicable": "所选约定对所评对象或路径不适用"
+  },
+  "history_identity_count": 53,
+  "definition_counts": {
+    "inherited_v04": 9,
+    "reviewed_definition": 31,
+    "research_definition": 5
+  },
+  "retrieval_policy": "Historical and external matches only propose candidates; target-version contract/action/consumer must independently satisfy the rule.",
+  "same_action_descriptions": [
+    {
+      "mode_ids": [
+        "C2",
+        "PLAN-SPLIT-01"
+      ],
+      "primary_description": "PLAN-SPLIT-01",
+      "requirement": "Both rules complete; the action and both operation predicates share an admitted exact source span in the same scope",
+      "counting": "One action, not an additional root"
+    },
+    {
+      "mode_ids": [
+        "P1",
+        "VALID-DOMAIN-01"
+      ],
+      "primary_description": "P1",
+      "requirement": "Both rules complete; the action and both operation predicates share an admitted exact source span in the same scope",
+      "counting": "One action, not an additional root"
+    }
+  ],
+  "publication": {
+    "source_audit_commit": "5740b3513cc898e002ccba1283e1533234341596",
+    "parent_public_commit": "1cb47b7331458fe837cde25f02aad6dfe0af3f76",
+    "profile": "definitions_and_code_without_case_answers",
+    "omitted": [
+      "new representative-case bindings",
+      "raw evidence anchors",
+      "post-lock case-specific review",
+      "local source paths"
+    ],
+    "unchanged": [
+      "all nine inherited mode dictionaries",
+      "necessary and excluded predicates",
+      "operation facts",
+      "fact meanings",
+      "parents",
+      "same-action compatibility rules"
+    ],
+    "retrieval_note": "Redacting evidence metadata changes the search corpus and may change rankings/prompts. Published aggregates describe the local audit, not a fresh model run on this public projection."
+  }
+}

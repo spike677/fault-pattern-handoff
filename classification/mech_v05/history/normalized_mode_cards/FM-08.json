@@ -1,0 +1,40 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-08",
+  "title": "计算精度策略或类型转换路径不当",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "NUM-01",
+      "title": "运行累加状态过窄",
+      "definition": "同一运行累加状态在连续更新之间被保存至不足以满足适用约定的窄类型，后续消费该失真状态。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "contribution_set_preserved",
+        "distorted_value_consumed",
+        "loop_carried_narrow_state",
+        "wider_state_preserves_same_updates"
+      ],
+      "enabled": true
+    },
+    {
+      "id": "NUM-NARROW-01",
+      "title": "非循环状态在必要运算前过早窄化",
+      "definition": "在后续必要运算仍需原信息时先窄化输入或一次性中间值，使信息不可恢复地丢失并被消费。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "needed_precision_before_operation",
+        "premature_narrowing",
+        "not_loop_carried_narrow_state",
+        "narrowing_loss_consumed",
+        "deferred_narrowing_preserves_contract"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

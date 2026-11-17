@@ -1,0 +1,24 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-07",
+  "title": "数据排布转换错误",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "REP-TRANS-01",
+      "title": "显式数据重排映射违约",
+      "definition": "显式布局转换把已知源逻辑值写入不符合目标布局合同的位置或填充。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "layout_transform_contract",
+        "layout_transform_mapping_wrong",
+        "wrong_transformed_layout_consumed"
+      ],
+      "enabled": false
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-24",
+  "title": "输入强制降精度导致精度丢失",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "NUM-NARROW-01",
+      "title": "非循环状态在必要运算前过早窄化",
+      "definition": "在后续必要运算仍需原信息时先窄化输入或一次性中间值，使信息不可恢复地丢失并被消费。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "needed_precision_before_operation",
+        "premature_narrowing",
+        "not_loop_carried_narrow_state",
+        "narrowing_loss_consumed",
+        "deferred_narrowing_preserves_contract"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}

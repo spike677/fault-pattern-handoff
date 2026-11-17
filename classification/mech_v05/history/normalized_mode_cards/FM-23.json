@@ -1,0 +1,25 @@
+{
+  "schema": "MECH-v0.5/public-history-index@1",
+  "source_id": "FM-23",
+  "title": "融合算子反量化位置不当",
+  "status": "NORMALIZED",
+  "publication_scope": "Identity and conditional definition projections only; full normalized evidence card stays local.",
+  "candidate_definitions": [
+    {
+      "id": "NUM-DOMAIN-01",
+      "title": "贡献项放入错误缩放或变换域",
+      "definition": "应在指定实值域消费的贡献被放到另一缩放/变换域，使其数学权重即使在精确算术中也错误。",
+      "necessary": [
+        "applicable_contract",
+        "implementation_action",
+        "contribution_domain_contract",
+        "contribution_inserted_in_wrong_domain",
+        "domain_mismatch_changes_formula",
+        "wrong_domain_result_consumed"
+      ],
+      "enabled": true
+    }
+  ],
+  "counting": "A historical identity is not an automatic alias, a proved case label or an additional root.",
+  "source_evidence": "Local audit only; no raw source, excerpt, EX association, answer or representative-case mapping is published."
+}
